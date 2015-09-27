@@ -4,7 +4,9 @@ config/console-local.php
 /vendor/
 .env
 /bower_components/
+/node_modules/
 /web/static/
+/.idea/
 
 *.swp
 .vimrc
