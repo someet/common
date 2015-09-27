@@ -171,4 +171,9 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+
+    public function actionT()
+    {
+        return $this->renderPartial('t.php');
+    }
 }

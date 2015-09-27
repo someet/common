@@ -3,6 +3,8 @@ config/console-local.php
 /docker-compose.yml
 /vendor/
 .env
+/bower_components/
+/web/static/
 
 *.swp
 .vimrc
