@@ -14,9 +14,13 @@ function($routeProvider) {
           templateUrl: '/partial/activity/index.html',
           controller: 'ActivityCtrl'
       })
-      .when('/activity/type', {
-        templateUrl: '/partial/activity/type.html',
+      .when('/activity-type', {
+        templateUrl: '/partial/activity-type/index.html',
         controller: 'ActivityTypeCtrl'
+      })
+      .when('/activity-type/:id', {
+        templateUrl: '/partial/activity-type/view.html',
+        controller: 'ActivityTypeViewCtrl'
       })
     .otherwise({
       redirectTo: '/dashboard'
