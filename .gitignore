@@ -6,6 +6,7 @@ config/console-local.php
 /bower_components/
 /node_modules/
 /web/static/
+/web/partial/
 /.idea/
 
 *.swp

@@ -1,5 +1,6 @@
 // 引入 gulp 
 var gulp = require('gulp');
+var del = require('del');
 
 // 引入组件
 var jshint = require('gulp-jshint');
@@ -7,6 +8,7 @@ var sass = require('gulp-sass');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
+var changed = require('gulp-changed');
 
 // 检查脚本
 gulp.task('lint', function() {
@@ -22,25 +24,35 @@ gulp.task('sass', function() {
     .pipe(gulp.dest('./web/static/style'));
 });
 
-gulp.task('copy', function(){
+gulp.task('copy-bundle', function(){
   gulp.src(['./bower_components/angular-material/angular-material.min.css'])
+   .pipe(concat('bundle.css'))
    .pipe(gulp.dest('./web/static/style'));
 
   gulp.src([
       './bower_components/angular/angular.min.js',
       './bower_components/angular-animate/angular-animate.min.js',
       './bower_components/angular-aria/angular-aria.min.js',
-      './bower_components/angular-material/angular-material.min.js'
+      './bower_components/angular-material/angular-material.min.js',
+      './bower_components/angular-route/angular-route.min.js'
     ])
+    .pipe(concat('bundle.js'))
     .pipe(gulp.dest('./web/static/js'));
+});
 
+gulp.task('copy-other', function() {
   gulp.src('./client/other/*')
     .pipe(gulp.dest('./web/static/other'));
 });
 
+gulp.task('copy-image', function() {
+  gulp.src('./client/image/*')
+    .pipe(gulp.dest('./web/static/image'));
+});
+
 // 合并，压缩文件
 gulp.task('script', function(){
-  gulp.src('./client/script/*.js')
+  gulp.src('./client/script/**/*.js')
     .pipe(concat('all.js'))
     .pipe(gulp.dest('./web/static/js'))
     .pipe(rename('all.min.js'))
@@ -48,11 +60,35 @@ gulp.task('script', function(){
     .pipe(gulp.dest('./web/static/js'))
 });
 
+gulp.task('template', function(){
+  gulp.src('./client/partial/**/*.html')
+    .pipe(gulp.dest('./web/partial'));
+});
+
+gulp.task('clean:app', function(cb) {
+  del(['./web/static/*'], cb);
+});
+
 // 默认任务
 gulp.task('default', function() {
-  gulp.run('lint', 'sass', 'script', 'copy');
+  gulp.run('dist', 'watch');
+});
 
-  gulp.watch(['./client/**/*'], function(){
-    gulp.run('lint', 'sass', 'script', 'copy');
-  });
-})
+gulp.task('watch', function() {
+  gulp.watch('./client/script/**/*.js', ['script']);
+  gulp.watch('./client/style/**/*.scss', ['sass']);
+  gulp.watch('./client/other/*', ['copy-other']);
+  gulp.watch('./client/image/*', ['copy-image']);
+  gulp.watch('./client/partial/*', ['template']);
+});
+
+gulp.task('dist', [
+  'clean:app',
+  'lint',
+  'sass',
+  'script',
+  'copy-bundle',
+  'copy-other',
+  'copy-image',
+  'template'
+]);
