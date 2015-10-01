@@ -79,7 +79,7 @@ gulp.task('watch', function() {
   gulp.watch('./client/style/**/*.scss', ['sass']);
   gulp.watch('./client/other/*', ['copy-other']);
   gulp.watch('./client/image/*', ['copy-image']);
-  gulp.watch('./client/partial/*', ['template']);
+  gulp.watch('./client/partial/**/*.html', ['template']);
 });
 
 gulp.task('dist', [
