@@ -10,6 +10,14 @@ function($routeProvider) {
       templateUrl: '/partial/user/add.html',
       controller: 'UserAddCtrl'
     })
+      .when('/activity', {
+          templateUrl: '/partial/activity/index.html',
+          controller: 'ActivityCtrl'
+      })
+      .when('/activity/type', {
+        templateUrl: '/partial/activity/type.html',
+        controller: 'ActivityTypeCtrl'
+      })
     .otherwise({
       redirectTo: '/dashboard'
     });

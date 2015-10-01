@@ -21,7 +21,10 @@
           md-is-locked-open="$mdMedia('gt-sm')">
           <md-list>
             <md-list-item>
-              fsddfsfsd
+              <a href="/#/activity/type">活动类型管理</a>
+            </md-list-item>
+            <md-list-item>
+              <a href="/#/activity">活动管理</a>
             </md-list-item>
             <md-list-item>
               fsddfsfsd
