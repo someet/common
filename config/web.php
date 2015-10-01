@@ -33,7 +33,7 @@ $config = [
                 [
                     'class' => 'codemix\streamlog\Target',
                     'url' => 'php://stdout',
-                    'levels' => ['info','trace'],
+                    'levels' => ['info', 'trace'],
                     'logVars' => [],
                 ],
                 [
@@ -46,6 +46,13 @@ $config = [
         ],
         'request' => [
             'cookieValidationKey' => \DockerEnv::get('COOKIE_VALIDATION_KEY', null, !YII_ENV_TEST),
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ],
+        ],
+        'response' => [
+            'class' => 'yii\web\Response',
+            'on beforeSend' => require(__DIR__ . '/json-response-unity.php'),
         ],
         'urlManager' => [
             'enablePrettyUrl' => true,

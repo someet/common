@@ -29,8 +29,18 @@ class ActivityType extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
+            ['name', 'unique', 'message' => '{attribute}已存在'],
             [['displayorder', 'status'], 'integer'],
-            [['name'], 'string', 'max' => 255]
+            ['displayorder', 'default', 'value' => '99'],
+            ['status', 'default', 'value' => '10'],
+            [
+                'name',
+                'string',
+                'min' => 2,
+                'max' => 255,
+                'tooLong' => '{attribute}长度不得超过255个字符',
+                'tooShort' => '{attribute}最少含有2个字符',
+            ],
         ];
     }
 
@@ -41,8 +51,8 @@ class ActivityType extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'displayorder' => 'Displayorder',
+            'name' => '名称',
+            'displayorder' => '显示顺序',
             'status' => 'Status',
         ];
     }
