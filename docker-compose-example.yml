@@ -1,40 +1,22 @@
-# For *-apache base image
-web:
+# for *-php-fpm and *-hhvm base image
+app:
     build: ./
-    ports:
-        - "8080:80"
-    expose:
-        - "80"
     volumes:
         - ./:/var/www/html/
     links:
-        - db
+        - db:db
     environment:
         ENABLE_ENV_FILE: 1
-        ENABLE_LOCALCONF: 1
         API_TOKEN: "<YOUR GITHUB API TOKEN>"
 
-# for *-php-fpm and *-hhvm base image
-#app:
-#    build: ./
-#    expose:
-#        - "9000"
-#    volumes:
-#        - ./:/var/www/html/
-#    links:
-#        - db
-#    environment:
-#        ENABLE_ENV_FILE: 1
-#        API_TOKEN: "<YOUR GITHUB API TOKEN>"
-#
-#nginx:
-#    build: ./nginx
-#    ports:
-#        - "8080:80"
-#    links:
-#        - app
-#    volumes_from:
-#        - app
+nginx:
+    build: ./nginx
+    ports:
+        - "8080:80"
+    links:
+        - app
+    volumes_from:
+        - app
 
 db:
     image: mysql:5.6
@@ -47,4 +29,3 @@ db:
         MYSQL_DATABASE: web
         MYSQL_USER: web
         MYSQL_PASSWORD: web
-
