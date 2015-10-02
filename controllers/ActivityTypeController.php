@@ -14,8 +14,6 @@ use yii\web\ServerErrorHttpException;
 class ActivityTypeController extends Controller
 {
 
-    public $enableCsrfValidation = false;
-
     /**
      * @inheritdoc
      */
