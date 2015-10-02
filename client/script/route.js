@@ -6,6 +6,10 @@ function($routeProvider) {
       templateUrl: '/partial/dashboard.html',
       controller: 'DashboardCtrl'
     })
+    .when('/user', {
+      templateUrl: '/partial/user/list.html',
+      controller: 'UserListCtrl'
+    })
     .when('/user/add', {
       templateUrl: '/partial/user/add.html',
       controller: 'UserAddCtrl'
@@ -34,6 +38,14 @@ function($routeProvider) {
         templateUrl: '/partial/activity-type/view.html',
         controller: 'ActivityTypeViewCtrl'
       })
+    .when('/user/update/:id', {
+      templateUrl: '/partial/user/update.html',
+      controller: 'UserUpdateCtrl'
+    })
+    .when('/user/delete/:id', {
+      templateUrl: '/partial/user/add.html',
+      controller: 'UserDeleteCtrl'
+    })
     .otherwise({
       redirectTo: '/dashboard'
     });

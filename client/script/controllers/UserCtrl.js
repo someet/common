@@ -36,4 +36,27 @@ angular.module('controllers')
       $scope.checkUserResult = "两次密码不一致！";
     }
   }
-}]);
+}])
+  .controller('UserListCtrl', ['$scope', '$userManage', function($scope, $userManage){
+    $userManage.fetch().then(function(data) {
+      $scope.userList = data;
+    });
+
+    $scope.remove = remove;
+
+    function remove($index, $event) {
+      var user = $scope.userList[$index],
+        uid = parseInt(user.id, 10);
+
+      $userManage.delete(uid).then(function() {
+        $scope.userList.splice($index, 1);
+      });
+    }
+
+  }])
+  .controller('UserUpdateCtrl', ['$scope', '$userManage', function($scope, $userManage){
+    $userManage.fetch().then(function(data) {
+      $scope.userList = data;
+    });
+  }])
+;
