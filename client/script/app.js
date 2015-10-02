@@ -1,8 +1,10 @@
 var app = angular.module('SomeetBackendApp', [
   'ngMaterial',
   'ngRoute',
-  'controllers'
+  'controllers',
+  'backendServices'
 ]);
 
 // init submodule
 angular.module('controllers', []);
+angular.module('backendServices', []);
