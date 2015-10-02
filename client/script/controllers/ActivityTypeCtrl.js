@@ -1,73 +1,59 @@
 angular.module('controllers')
-    .controller('ActivityTypeCtrl',
-    ['$scope', '$http', '$location',
-        function($scope, $http, $location){
-        var p = $http({
-            method: 'GET',
-            url: '/activity-type/index'
-        });
-        p.success(function(response, status, headers, config){
-            console.log(response.data);
-           $scope.list = response.data;
-        });
+  .controller('ActivityTypeCtrl',
+  ['$scope', '$http', '$location', '$activityTypeManage',
+    function ($scope, $http, $location, $activityTypeManage) {
 
-        $scope.update= function (type) {
-            $location.path('/activity-type/' + type.id);
+      $activityTypeManage.fetch().then(function (data) {
+        $scope.list = data;
+      }, function (err) {
+        alert(err);
+      });
+
+      $scope.update = function (type) {
+        $location.path('/activity-type/' + type.id);
+      };
+
+      $scope.delete = function (type) {
+        $activityTypeManage.delete(type).then(function (data) {
+          alert('删除成功');
+          var index = $scope.list.indexOf(type);
+          $scope.list.splice(index, 1)
+        }, function (err) {
+          alert(err);
+        });
+      };
+
+      $scope.create = function () {
+        var newType = {
+          name: $scope.name
         };
-
-        $scope.delete = function(type) {
-            $http.post('/activity-type/delete?id=' + type.id ).success(function(response, status){
-                if(response.success=="1"){
-                   alert('删除成功');
-                    var index = $scope.list.indexOf(type);
-                    $scope.list.splice(index, 1)
-                } else {
-                    alert('删除失败');
-                }
-            })
-        }
-
-        $scope.create= function() {
-            $scope.url = '/activity-type/create';
-            var name = $scope.name;
-            $http.post($scope.url, {name: name},  {'Content-Type': 'application/json;charset=utf-8'}).success(function(data){
-                if(data.success=="1"){
-                    alert('添加成功');
-                    $scope.list.push(data.data);
-                } else {
-                    alert('添加失败');
-                }
-            });
-        }
+        $activityTypeManage.create(newType).then(function (data) {
+          alert('添加成功');
+          $scope.list.push(data);
+        }, function (err) {
+          alert(err);
+        });
+      };
     }])
-    .controller('ActivityTypeViewCtrl',
-    ['$scope', '$http', '$routeParams', '$location',
-    function($scope, $http, $routeParams, $location){
-        var id = $routeParams.id;
+  .controller('ActivityTypeViewCtrl',
+  ['$scope', '$http', '$routeParams', '$location', '$activityTypeManage',
+    function ($scope, $http, $routeParams, $location, $activityTypeManage) {
+      var id = $routeParams.id;
 
-        $http({
-            method: 'GET',
-            url: '/activity-type/view?id=' + id
-        }).success(function(response){
-            if(response.success=="1"){
-                $scope.typeContent = response.data;
-            }else {
-               $location.path('/activity-type');
-            }
-        });
-        $scope.save = function () {
-            var type = $scope.typeContent;
-            $http.post(
-                '/activity-type/update?id=' + type.id,
-                {name: type.name, displayorder: type.displayorder}
-            ).success(function(response) {
-                if(response.success=="1") {
-                    alert('修改成功');
-                    $location.path('/activity-type');
-                } else {
-                    alert('修改失败: ' + response.errmsg);
-                }
-            });
-        };
+      $activityTypeManage.fetch(id).then(function (data) {
+        $scope.typeContent = data;
+      }, function (err) {
+        $location.path('/activity-type');
+      });
+
+      $scope.save = function () {
+        var type = $scope.typeContent;
+        var newType = {name: type.name, displayorder: type.displayorder};
+        $activityTypeManage.update(type.id, newType).then(function (data) {
+          alert('修改成功');
+          $location.path('/activity-type');
+        }, function (err){
+          alert(err);
+        })
+      };
     }]);
-
