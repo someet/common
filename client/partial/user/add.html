@@ -1,10 +1,32 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-  <meta charset="UTF-8">
-  <title></title>
-</head>
-<body>
-
-</body>
-</html>
+<div layout="column" flex id="content" ng-controller="UserAddCtrl">
+  <div class="user-li">
+    用户名：
+    <input type="text" name="userName" ng-model="user.username" required>
+  </div>
+  <div class="user-li">
+    密 码：
+    <input type="password" name="password" ng-model="user.password" required>
+  </div>
+  <div class="user-li">
+    确认密码：
+    <input type="password" name="password1" ng-model="user.password1" required>
+  </div>
+  <div class="user-li">
+    角 色：<br>
+    <label>
+      <input type="radio" name="rule" value="12" ng-model="user.rule">
+      管理员：
+    </label>
+    <label>
+      <input type="radio" name="rule" value="11" ng-model="user.rule">
+      编辑：
+    </label>
+    <label>
+      <input type="radio" name="rule" value="12" ng-model="user.rule">
+      普通用户：
+    </label>
+  </div>
+  <div class="user-li">
+    <button ng-click="createUser()">添加用户</button>
+  </div>
+</div>
