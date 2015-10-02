@@ -1,6 +1,7 @@
 var app = angular.module('SomeetBackendApp', [
   'ngMaterial',
   'ngRoute',
+  'ngLodash',
   'controllers',
   'backendServices'
 ]);

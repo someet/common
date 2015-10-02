@@ -1,7 +1,7 @@
 angular.module('controllers')
   .controller('ActivityTypeCtrl',
-  ['$scope', '$http', '$location', '$activityTypeManage',
-    function ($scope, $http, $location, $activityTypeManage) {
+  ['$scope', '$http', '$location', '$activityTypeManage', 'lodash',
+    function ($scope, $http, $location, $activityTypeManage, lodash) {
 
       $activityTypeManage.fetch().then(function (data) {
         $scope.list = data;
@@ -16,8 +16,9 @@ angular.module('controllers')
       $scope.delete = function (type) {
         $activityTypeManage.delete(type).then(function (data) {
           alert('删除成功');
-          var index = $scope.list.indexOf(type);
-          $scope.list.splice(index, 1)
+          lodash.remove($scope.list, function(tmpRow) {
+            return tmpRow == type;
+          });
         }, function (err) {
           alert(err);
         });
