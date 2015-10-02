@@ -1,0 +1,25 @@
+<div layout="column" flex id="content" ng-controller="ActivityTypeCtrl">
+    <h1>活动类型管理</h1>
+    <table border="1" width="100%">
+        <tr>
+            <td> ID </td>
+            <td> 类型 </td>
+            <td> 操作 </td>
+        </tr>
+        <tr ng-repeat="type in list | orderBy: 'displayOrder' ">
+            <td>{{type.id}}</td>
+            <td>{{type.name}}</td>
+            <td>
+                <input type="button" value="修改" ng-click="update(type)"/>
+                <input type="button" value="删除" ng-click="delete(type)"/>
+            </td>
+        </tr>
+    </table>
+
+    <br />
+
+    <form method="post" ng-submit="create()">
+        <div>类型名称: <input type="text" ng-model="name" /> </div>
+        <div><input type="submit" value="添加" /></div>
+    </form>
+</div>

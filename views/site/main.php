@@ -1,9 +1,13 @@
+<?php
+use yii\helpers\Html;
+?>
 <!DOCTYPE html>
 <html lang="en" ng-app="SomeetBackendApp">
   <head>
     <link rel="stylesheet" href="/static/style/bundle.css">
     <meta name="viewport" content="initial-scale=1" />
     <link rel="stylesheet" href="/static/style/pages/site-t.css">
+    <?= Html::csrfMetaTags() ?>
   </head>
   <body layout="column" ng-controller="MainCtrl">
     <md-toolbar layout="row">
@@ -21,7 +25,10 @@
           md-is-locked-open="$mdMedia('gt-sm')">
           <md-list>
             <md-list-item>
-              fsddfsfsd
+              <a href="/#/activity-type">活动类型管理</a>
+            </md-list-item>
+            <md-list-item>
+              <a href="/#/activity">活动管理</a>
             </md-list-item>
             <md-list-item>
               fsddfsfsd

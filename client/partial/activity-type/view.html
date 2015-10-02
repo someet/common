@@ -1,0 +1,7 @@
+<div layout="column" flex id="content" ng-controller="ActivityTypeViewCtrl">
+    <h1>活动类型</h1>
+    <p>ID {{typeContent.id}}
+    <p>名称 <input type="text" ng-model="typeContent.name" value="{{typeContent.name}}" /> </p>
+    <p>排序 <input type="text" ng-model="typeContent.displayorder" value="{{typeContent.displayorder}}" /> </p>
+    <p><button ng-click="save()">保存</button></p>
+</div>
