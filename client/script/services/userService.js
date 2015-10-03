@@ -1,5 +1,5 @@
 angular.module('backendServices')
-  .factory('$userManage', ['$http', '$q', '$rootScope', function($http, $q, $rootScope) {
+  .factory('$userManage', ['$http', '$q', function($http, $q) {
     return {
       fetch: function(params) {
         return $http.get('/user', {

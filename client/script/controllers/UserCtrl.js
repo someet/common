@@ -1,10 +1,10 @@
 angular.module('controllers')
 .controller('UserAddCtrl', ['$scope', '$location', '$userManage', function($scope, $location, $userManage){
   $scope.user = {
-    username: "langshuang",
-    email: "langshuang997@163.com",
-    password: "langshuang",
-    password1: "langshuang"
+    username: "",
+    email: "",
+    password: "",
+    password1: ""
   };
   $scope.checkUserResult = '';
 
@@ -67,7 +67,8 @@ angular.module('controllers')
       $scope.updateUser = function() {
         var userData = {
           email: $scope.user.email
-        }
+        };
+
         $userManage.update(userId, userData).then(function(data){
           alert();
           if(success == 1){
