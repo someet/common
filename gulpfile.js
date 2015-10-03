@@ -25,7 +25,10 @@ gulp.task('sass', function() {
 });
 
 gulp.task('copy-bundle', function(){
-  gulp.src(['./bower_components/angular-material/angular-material.min.css'])
+  gulp.src([
+    './bower_components/angular-material/angular-material.min.css',
+    'client/style/font-awesome.min.css'
+    ])
    .pipe(concat('bundle.css'))
    .pipe(gulp.dest('./web/static/style'));
 
@@ -44,6 +47,11 @@ gulp.task('copy-bundle', function(){
 gulp.task('copy-other', function() {
   gulp.src('./client/other/*')
     .pipe(gulp.dest('./web/static/other'));
+});
+
+gulp.task('copy-font', function() {
+  gulp.src('./client/fonts/**/*')
+    .pipe(gulp.dest('./web/static/fonts'));
 });
 
 gulp.task('copy-image', function() {
@@ -91,5 +99,6 @@ gulp.task('dist', [
   'copy-bundle',
   'copy-other',
   'copy-image',
+  'copy-font',
   'template'
 ]);

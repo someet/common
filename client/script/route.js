@@ -26,6 +26,10 @@ function($routeProvider) {
         templateUrl: '/partial/activity-type/index.html',
         controller: 'ActivityTypeCtrl'
       })
+      .when('/activity-type/add', {
+        templateUrl: '/partial/activity-type/add.html',
+        controller: 'ActivityTypeAddCtrl'
+      })
       .when('/activity-type/:id', {
         templateUrl: '/partial/activity-type/view.html',
         controller: 'ActivityTypeViewCtrl'

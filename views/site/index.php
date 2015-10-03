@@ -12,7 +12,7 @@ use yii\helpers\Html;
   <body layout="column" ng-controller="MainCtrl">
     <md-toolbar layout="row">
       <div class="md-toolbar-tools">
-        <md-button hide-lg ng-click="toggleSidenav('left')">
+        <md-button hide-gt-md ng-click="toggleSidenav('left')">
           <md-icon aria-label="Menu" md-svg-icon="https://s3-us-west-2.amazonaws.com/s.cdpn.io/68133/menu.svg"></md-icon>
           <h1>Someet Backend</h1>
         </md-button>
@@ -23,21 +23,18 @@ use yii\helpers\Html;
         <md-sidenav layout="column"
           class="md-sidenav-left md-whiteframe-z2"
           md-component-id="left"
-          md-is-locked-open="$mdMedia('lg')">
+          md-is-locked-open="$mdMedia('gt-md')">
           <md-list>
             <md-list-item>
-              <a href="/#/activity-type">活动类型管理</a>
+              <md-button ng-href="/#/activity-type">活动类型管理</md-button>
             </md-list-item>
             <md-list-item>
-              <a href="/#/activity">活动管理</a>
-            </md-list-item>
-            <md-list-item>
-              fsddfsfsd
+              <md-button ng-href="/#/activity">活动管理</md-button>
             </md-list-item>
           </md-list>
         </md-sidenav>
         <!--div layout="column" flex id="content"-->
-        <div ng-view></div>
+        <div style="margin-top: 10px; margin-left: 10px;" ng-view></div>
     </div>
     <script src="/static/js/bundle.js"></script>
     <script src="/static/js/all.js"></script>
