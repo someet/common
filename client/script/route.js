@@ -11,8 +11,16 @@ function($routeProvider) {
       controller: 'UserAddCtrl'
     })
       .when('/activity', {
-          templateUrl: '/partial/activity/index.html',
-          controller: 'ActivityCtrl'
+        templateUrl: '/partial/activity/index.html',
+        controller: 'ActivityCtrl'
+      })
+      .when('/activity/add', {
+        templateUrl: '/partial/activity/view.html',
+        controller: 'ActivityViewCtrl'
+      })
+      .when('/activity/:id', {
+          templateUrl: '/partial/activity/view.html',
+          controller: 'ActivityViewCtrl'
       })
       .when('/activity-type', {
         templateUrl: '/partial/activity-type/index.html',

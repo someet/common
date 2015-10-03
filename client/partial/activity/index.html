@@ -1,3 +1,32 @@
 <div layout="column" flex id="content" ng-controller="ActivityCtrl">
     <h1>活动管理</h1>
+    <md-button ng-href="/#/activity/add">添加活动</md-button>
+    <table border="1" width="100%">
+        <tr>
+            <td> ID </td>
+            <td> 标题 </td>
+            <td> 描述 </td>
+            <td> 海报 </td>
+            <td> 详情 </td>
+            <td> 地址 </td>
+            <td> 区域 </td>
+            <td> 分类 </td>
+            <td> 操作 </td>
+        </tr>
+        <tr ng-repeat="activity in list | orderBy: 'displayOrder' ">
+            <td>{{activity.id}}</td>
+            <td>{{activity.title}}</td>
+            <td>{{activity.desc}}</td>
+            <td>{{activity.details}}</td>
+            <td>{{activity.poster}}</td>
+            <td>{{activity.address}}</td>
+            <td>{{activity.area}}</td>
+            <td>{{activity.type_id}}</td>
+            <td>
+                <input type="button" value="修改" ng-click="update(activity)"/>
+                <input type="button" value="删除" ng-click="delete(activity)"/>
+            </td>
+        </tr>
+    </table>
+
 </div>

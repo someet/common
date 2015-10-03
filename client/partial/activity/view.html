@@ -1,0 +1,19 @@
+<div layout="column" flex id="content" ng-controller="ActivityViewCtrl">
+    <h1>活动</h1>
+    <form method="post" ng-submit="save()">
+        <input type="hidden" ng-model="id" />
+        <div>标题: <input type="text" ng-model="title" /> </div>
+        <div>经度: <input type="number" ng-model="longitude" /> </div>
+        <div>纬度: <input type="number" ng-model="latitude" /> </div>
+        <div>群二维码: <input type="text" ng-model="groupcode" /> </div>
+        <div>详情: <input type="text" ng-model="details" /> </div>
+        <div>地址: <input type="text" ng-model="address" /> </div>
+        <div>区域: <input type="text" ng-model="area" /> </div>
+        <div>描述: <input type="text" ng-model="desc" /> </div>
+        <div>海报: <input type="file" ng-model="poster" ng-file-select="onFileSelect($files)"/> </div>
+        <div>
+            分类: <select ng-model="type_id" ng-options="value.id as value.name for value in typelist"></select>
+        </div>
+        <div><input type="submit" value="保存" /></div>
+    </form>
+</div>
