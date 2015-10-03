@@ -1,3 +1,13 @@
 <div layout="column" flex id="content" ng-controller="DashboardCtrl">
   <button ng-click="clickMe()">Click me!</button>
+
+  <div><h1>Dialog 示例：</h1></div>
+  <div class="dialog-demo-content" layout="row" layout-wrap="">
+    <md-button class="md-primary md-raised" ng-click="showAlert($event)" flex="" flex-md="100">
+      弹出框
+    </md-button>
+    <md-button class="md-primary" ng-click="showConfirm($event)" flex="" flex-md="100">
+      确认框
+    </md-button>
+  </div>
 </div>
