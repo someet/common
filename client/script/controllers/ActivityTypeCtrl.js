@@ -3,6 +3,7 @@ angular.module('controllers')
   ['$scope', '$http', '$location', '$activityTypeManage', 'lodash',
     function ($scope, $http, $location, $activityTypeManage, lodash) {
 
+      $scope.$parent.pageName = '活动类型管理';
       $activityTypeManage.fetch().then(function (data) {
         $scope.list = data;
       }, function (err) {
@@ -41,6 +42,7 @@ angular.module('controllers')
     function ($scope, $http, $routeParams, $location, $activityTypeManage) {
       var id = $routeParams.id;
 
+      $scope.$parent.pageName = '活动类型详情';
       $activityTypeManage.fetch(id).then(function (data) {
         $scope.typeContent = data;
       }, function (err) {

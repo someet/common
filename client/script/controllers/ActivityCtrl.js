@@ -3,6 +3,7 @@ angular.module('controllers')
     ['$scope', '$location', '$activityManage',
         function ($scope, $location, $activityManage) {
 
+            $scope.$parent.pageName = '活动管理';
             $activityManage.fetch().then(function (data) {
                 $scope.list = data;
             }, function (err) {
@@ -27,6 +28,7 @@ angular.module('controllers')
     .controller('ActivityViewCtrl',
     ['$scope', '$routeParams', '$location', '$activityManage', '$activityTypeManage',
         function ($scope, $routeParams, $location, $activityManage, $activityTypeManage) {
+            $scope.$parent.pageName = '活动详情';
             var id = $routeParams.id;
             console.log(id);
             console.log(id>0);

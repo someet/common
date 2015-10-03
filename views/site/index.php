@@ -26,13 +26,10 @@ use yii\helpers\Html;
           md-is-locked-open="$mdMedia('lg')">
           <md-list>
             <md-list-item>
-              <a href="/#/activity-type">活动类型管理</a>
+              <md-button ng-href="/#/activity-type">活动类型管理</md-button>
             </md-list-item>
             <md-list-item>
-              <a href="/#/activity">活动管理</a>
-            </md-list-item>
-            <md-list-item>
-              fsddfsfsd
+              <md-button ng-href="/#/activity">活动管理</md-button>
             </md-list-item>
           </md-list>
         </md-sidenav>
