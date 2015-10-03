@@ -1,4 +1,23 @@
 <div layout="column" flex id="content" ng-controller="DashboardCtrl">
-  <h1>Dashboard</h1>
   <button ng-click="clickMe()">Click me!</button>
+
+  <div><h1>Dialog 示例：</h1></div>
+  <div class="dialog-demo-content" layout="row" layout-wrap="">
+    <md-button class="md-primary md-raised" ng-click="showAlert($event)" flex="" flex-md="100">
+      弹出框
+    </md-button>
+    <md-button class="md-primary" ng-click="showConfirm($event)" flex="" flex-md="100">
+      确认框
+    </md-button>
+  </div>
+  <div><h1>Toast 示例：</h1></div>
+  <div layout="row" layout-sm="column" layout-align="space-around">
+    <div style="width:50px"></div>
+    <md-button ng-click="showSimpleToast()">
+      Show Simple
+    </md-button>
+    <md-button class="md-raised" ng-click="showActionToast()">
+      Show With Action
+    </md-button>
+  </div>
 </div>

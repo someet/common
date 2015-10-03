@@ -1,51 +1,45 @@
 <?php
-/* @var yii\web\View $this */
-$this->title = 'My Yii Application';
+use yii\helpers\Html;
 ?>
-<div class="site-index">
-
-    <div class="jumbotron">
-        <h1>Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
+<!DOCTYPE html>
+<html lang="en" ng-app="SomeetBackendApp">
+  <head>
+    <link rel="stylesheet" href="/static/style/bundle.css">
+    <meta name="viewport" content="initial-scale=1" />
+    <link rel="stylesheet" href="/static/style/pages/site-t.css">
+    <?= Html::csrfMetaTags() ?>
+  </head>
+  <body layout="column" ng-controller="MainCtrl">
+    <md-toolbar layout="row">
+      <div class="md-toolbar-tools">
+        <md-button hide-lg ng-click="toggleSidenav('left')">
+          <md-icon aria-label="Menu" md-svg-icon="https://s3-us-west-2.amazonaws.com/s.cdpn.io/68133/menu.svg"></md-icon>
+          <h1>Someet Backend</h1>
+        </md-button>
+        <h3>{{pageName}}</h3>
+      </div>
+    </md-toolbar>
+    <div layout="row" flex>
+        <md-sidenav layout="column"
+          class="md-sidenav-left md-whiteframe-z2"
+          md-component-id="left"
+          md-is-locked-open="$mdMedia('lg')">
+          <md-list>
+            <md-list-item>
+              <a href="/#/activity-type">活动类型管理</a>
+            </md-list-item>
+            <md-list-item>
+              <a href="/#/activity">活动管理</a>
+            </md-list-item>
+            <md-list-item>
+              fsddfsfsd
+            </md-list-item>
+          </md-list>
+        </md-sidenav>
+        <!--div layout="column" flex id="content"-->
+        <div ng-view></div>
     </div>
-
-    <div class="body-content">
-
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-default" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
-        </div>
-
-    </div>
-</div>
+    <script src="/static/js/bundle.js"></script>
+    <script src="/static/js/all.js"></script>
+  </body>
+</html>
