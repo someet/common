@@ -1,7 +1,7 @@
 angular.module('controllers')
   .controller('ActivityTypeCtrl',
-  ['$scope', '$http', '$location', '$activityTypeManage', 'lodash',
-    function ($scope, $http, $location, $activityTypeManage, lodash) {
+  ['$scope', '$http', '$location', '$activityTypeManage', 'lodash', '$mdToast', '$mdDialog',
+    function ($scope, $http, $location, $activityTypeManage, lodash, $mdToast, $mdDialog) {
 
       $scope.$parent.pageName = '活动类型管理';
       $activityTypeManage.fetch().then(function (data) {
@@ -15,31 +15,40 @@ angular.module('controllers')
       };
 
       $scope.delete = function (type) {
-        $activityTypeManage.delete(type).then(function (data) {
-          alert('删除成功');
-          lodash.remove($scope.list, function(tmpRow) {
-            return tmpRow == type;
-          });
-        }, function (err) {
-          alert(err);
-        });
-      };
 
-      $scope.create = function () {
-        var newType = {
-          name: $scope.name
-        };
-        $activityTypeManage.create(newType).then(function (data) {
-          alert('添加成功');
-          $scope.list.push(data);
-        }, function (err) {
-          alert(err);
+        var confirm = $mdDialog.confirm()
+          .title('确定要删除活动类型“' + type.name + '”吗？')
+          .ariaLabel('delete activity item')
+          .ok('确定删除')
+          .cancel('手滑点错了，不删');
+
+        $mdDialog.show(confirm).then(function () {
+          $activityTypeManage.delete(type).then(function (data) {
+
+            lodash.remove($scope.list, function (tmpRow) {
+              return tmpRow == type;
+            });
+
+            $mdToast.show($mdToast.simple()
+              .content('删除活动类型“' + type.name + '”成功')
+              .hideDelay(5000)
+              .position("top right"));
+
+          }, function (err) {
+            $mdToast.show($mdToast.simple()
+              .content(err.toString())
+              .hideDelay(5000)
+              .position("top right"));
+          });
         });
       };
+      $scope.createActivityTypePage = function () {
+        $location.path('/activity-type/add');
+      }
     }])
   .controller('ActivityTypeViewCtrl',
-  ['$scope', '$http', '$routeParams', '$location', '$activityTypeManage',
-    function ($scope, $http, $routeParams, $location, $activityTypeManage) {
+  ['$scope', '$http', '$routeParams', '$location', '$activityTypeManage', '$mdToast',
+    function ($scope, $http, $routeParams, $location, $activityTypeManage, $mdToast) {
       var id = $routeParams.id;
 
       $scope.$parent.pageName = '活动类型详情';
@@ -53,10 +62,45 @@ angular.module('controllers')
         var type = $scope.typeContent;
         var newType = {name: type.name, displayorder: type.displayorder};
         $activityTypeManage.update(type.id, newType).then(function (data) {
-          alert('修改成功');
+
           $location.path('/activity-type');
-        }, function (err){
-          alert(err);
+          $mdToast.show($mdToast.simple()
+            .content('修改成功')
+            .hideDelay(5000)
+            .position("top right"));
+        }, function (err) {
+          $mdToast.show($mdToast.simple()
+            .content(err.toString())
+            .hideDelay(5000)
+            .position("top right"));
         })
       };
+
+      $scope.cancel = function () {
+        $location.path('/activity-type');
+      }
+    }])
+  .controller('ActivityTypeAddCtrl',
+  ['$scope', '$http', '$routeParams', '$location', '$activityTypeManage', '$mdToast',
+    function ($scope, $http, $routeParams, $location, $activityTypeManage, $mdToast) {
+      $scope.$parent.pageName = '添加活动类型';
+
+      $scope.create = function () {
+        var newType = $scope.activityType;
+        $activityTypeManage.create(newType).then(function (data) {
+
+          $location.path('/activity-type');
+          $mdToast.show($mdToast.simple()
+            .content('添加活动类型成功')
+            .hideDelay(5000)
+            .position("top right"));
+
+        }, function (err) {
+          $mdToast.show($mdToast.simple()
+            .content(err.toString())
+            .hideDelay(5000)
+            .position("top right"));
+        });
+      };
     }]);
+
