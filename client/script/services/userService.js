@@ -18,6 +18,14 @@ angular.module('backendServices')
         return $http.post('/user/update?id='+userId, userInfo).then(function(data){
           return data;
         });
+      },
+      delete: function(userId) {
+        var userInfo = {
+          status: 0
+        }
+        return $http.post('/user/update?id='+userId, userInfo).then(function(data){
+          return data;
+        });
       }
     };
   }]);

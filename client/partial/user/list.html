@@ -7,7 +7,7 @@
   <div class="user-li" ng-repeat="user in userList">
     用户名：{{ user.username }}
     <div class="user-list-handle">
-      <a href="#/user/{{ user.id }}">管理</a> <a href="#/user/delete/{{ user.id}}">删除</a>
+      <a href="#/user/{{ user.id }}">管理</a> <a href="javascript:;" ng-click="remove($index,$event)">删除</a>
     </div>
   </div>
 </div>

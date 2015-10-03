@@ -52,6 +52,7 @@ class UserController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         $query = User::find()
+            ->where(['status' => User::STATUS_ACTIVE])
             ->orderBy(['id' => SORT_DESC]);
         if ($id != null) {
             $users = $query->where(['id' => $id])
@@ -78,16 +79,25 @@ class UserController extends Controller
 
     }
 
-    public function actionUpdate($id){
+    public function actionUpdate($id)
+    {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = $this->findOne($id);
         $post = Yii::$app->request->post();
-        if(isset($post['email'])){
+        if (isset($post['email'])) {
             $model->email = $post['email'];
 //            if(!$model->validation('email')){
 //                throw new DataValidationFailedException($model->getFirstError('email'));
 //            }
-            if(!$model->save()){
+            if (!$model->save()) {
+                throw new ServerErrorHttpException();
+            }
+
+            return $this->findOne($id);
+        }
+        if (isset($post['status'])) {
+            $model->status = $post['status'];
+            if (!$model->save()) {
                 throw new ServerErrorHttpException();
             }
 
@@ -95,11 +105,12 @@ class UserController extends Controller
         }
     }
 
-    public function findOne($id){
+    public function findOne($id)
+    {
         $model = User::findOne($id);
-        if(isset($model)){
+        if (isset($model)) {
             return $model;
-        }else{
+        } else {
             throw new NotFoundHttpException('该用户不存在');
         }
     }
