@@ -63,6 +63,8 @@ angular.module('controllers')
     }
     $userManage.fetch(params).then(function(data) {
       $scope.user = data;
+    }, function (err) {
+      alert(err);
     });
 
     $scope.updateUser = function() {
@@ -71,7 +73,9 @@ angular.module('controllers')
       };
 
       $userManage.update(userId, userData).then(function(data){
-        $scope.user = data
+        alert("修改成功");
+      }, function (err) {
+        alert(err);
       });
     }
   }])
