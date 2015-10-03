@@ -1,0 +1,57 @@
+<?php
+
+namespace app\models;
+
+use Yii;
+
+/**
+ * This is the model class for table "question_item".
+ *
+ * @property integer $id
+ * @property integer $question_id
+ * @property integer $type_id
+ * @property string $label
+ * @property string $desc
+ * @property string $extra
+ * @property integer $listorder
+ * @property integer $status
+ */
+class QuestionItem extends \yii\db\ActiveRecord
+{
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return 'question_item';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['question_id', 'type_id', 'label', 'desc'], 'required'],
+            [['question_id', 'type_id', 'listorder', 'status'], 'integer'],
+            [['label', 'desc', 'extra'], 'string', 'max' => 255]
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'question_id' => '问题ID',
+            'type_id' => '类型ID',
+            'label' => '标题',
+            'desc' => '简介',
+            'extra' => '多选框, 下拉菜单这种字段的 多个值, 以分号分割的字符串信息',
+            'listorder' => '问题项排序',
+            'status' => '冗余扩展',
+        ];
+    }
+}
