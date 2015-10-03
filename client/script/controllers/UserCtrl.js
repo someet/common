@@ -1,10 +1,10 @@
 angular.module('controllers')
-.controller('UserAddCtrl', ['$scope', '$userManage', function($scope, $userManage){
+.controller('UserAddCtrl', ['$scope', '$location', '$userManage', function($scope, $location, $userManage){
   $scope.user = {
     username: "langshuang",
-    password: "",
-    password1: "",
-    rule: ""
+    email: "langshuang997@163.com",
+    password: "langshuang",
+    password1: "langshuang"
   };
   $scope.checkUserResult = '';
 
@@ -12,8 +12,8 @@ angular.module('controllers')
 
     var newUser = {
       username: $scope.user.username,
-      password: $scope.user.password,
-      rule: $scope.user.rule
+      email: $scope.user.email,
+      password: $scope.user.password
     };
 
     if($scope.checkUserResult == ''){
@@ -54,9 +54,29 @@ angular.module('controllers')
     }
 
   }])
-  .controller('UserUpdateCtrl', ['$scope', '$userManage', function($scope, $userManage){
-    $userManage.fetch().then(function(data) {
-      $scope.userList = data;
+  .controller('UserUpdateCtrl', ['$scope', '$routeParams', '$userManage', function($scope, $routeParams, $userManage){
+    var userId = $routeParams.id;
+    if(userId != null){
+      var params = {
+       id: userId
+      }
+    }
+    $userManage.fetch(params).then(function(data) {
+      $scope.user = data;
+
+      $scope.updateUser = function() {
+        var userData = {
+          email: $scope.user.email
+        }
+        $userManage.update(userId, userData).then(function(data){
+          alert();
+          if(success == 1){
+            alert("修改成功");
+          } else {
+            alert("修改失败");
+          }
+        });
+      }
     });
   }])
 ;
