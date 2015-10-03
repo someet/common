@@ -102,5 +102,8 @@ angular.module('controllers')
             .position("top right"));
         });
       };
+      $scope.cancel = function () {
+        $location.path('/activity-type');
+      }
     }]);
 
