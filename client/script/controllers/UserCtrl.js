@@ -63,21 +63,16 @@ angular.module('controllers')
     }
     $userManage.fetch(params).then(function(data) {
       $scope.user = data;
-
-      $scope.updateUser = function() {
-        var userData = {
-          email: $scope.user.email
-        };
-
-        $userManage.update(userId, userData).then(function(data){
-          alert();
-          if(success == 1){
-            alert("修改成功");
-          } else {
-            alert("修改失败");
-          }
-        });
-      }
     });
+
+    $scope.updateUser = function() {
+      var userData = {
+        email: $scope.user.email
+      };
+
+      $userManage.update(userId, userData).then(function(data){
+        $scope.user = data
+      });
+    }
   }])
 ;
