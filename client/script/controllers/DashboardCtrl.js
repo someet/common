@@ -1,6 +1,6 @@
 angular.module('controllers').controller('DashboardCtrl', [
-  '$scope', '$mdDialog',
-  function ($scope, $mdDialog) {
+  '$scope', '$mdDialog', '$mdToast',
+  function ($scope, $mdDialog, $mdToast) {
     $scope.$parent.pageName = 'Dashboard';
 
     $scope.clickMe = function () {
@@ -25,10 +25,34 @@ angular.module('controllers').controller('DashboardCtrl', [
         .targetEvent(event)
         .ok('确定')
         .cancel('手滑点错了');
-      $mdDialog.show(confirm).then(function() {
+      $mdDialog.show(confirm).then(function () {
         alert('确定删除')
-      }, function() {
+      }, function () {
         alert('不删除')
+      });
+    };
+
+
+    $scope.showSimpleToast = function () {
+      $mdToast.show(
+        $mdToast.simple()
+          .content('Simple Toast!')
+          .position("top right")
+          .hideDelay(3000)
+      );
+    };
+
+    $scope.showActionToast = function () {
+      var toast = $mdToast.simple()
+        .content('Action Toast!')
+        .action('OK')
+        .highlightAction(false)
+        .position("top right");
+
+      $mdToast.show(toast).then(function (response) {
+        if (response == 'ok') {
+          alert('You clicked \'OK\'.');
+        }
       });
     };
   }]);
