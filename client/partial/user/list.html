@@ -1,12 +1,20 @@
 <div layout="column" flex id="content" ng-controller="UserListCtrl">
-  <div class="user-li" ng-repeat="user in userList">
-    用户名：{{ user.username }}
-    <div class="user-list-handle">
-      <a href="#/user/{{ user.id }}">管理</a> <a href="javascript:;" ng-click="remove($index,$event)">删除</a>
-    </div>
-  </div>
-
   <md-button class="user-dialog-btn md-fab" ng-click="createUserPage()" aria-label="add user">
     <i class="fa fa-plus"></i>
   </md-button>
+  <md-list>
+    <md-list-item>
+      <p flex="10"> ID </p>
+      <p> 用户名 </p>
+    </md-list-item>
+    <md-list-item ng-repeat="user in userList">
+      <p flex="10"> {{user.id}} </p>
+      <p> {{user.username}} </p>
+      <p layout="row">
+        <md-button class="md-raised" ng-href="/#/user/{{user.id}}">管理</md-button>
+        <md-button class="md-raised md-warn" ng-click="remove($index, $event)">删除</md-button>
+      </p>
+    </md-list-item>
+  </md-list>
+
 </div>
