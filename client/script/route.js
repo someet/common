@@ -30,6 +30,10 @@ function($routeProvider) {
       templateUrl: '/partial/activity-type/view.html',
       controller: 'ActivityTypeViewCtrl'
     })
+    .when('/answer/:id',{
+      templateUrl: '/partial/answer/add.html',
+      controller: 'AnswerAddCtrl'
+    })
     .when('/user', {
       templateUrl: '/partial/user/list.html',
       controller: 'UserListCtrl'
