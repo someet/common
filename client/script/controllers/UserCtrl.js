@@ -37,10 +37,14 @@ angular.module('controllers')
     }
   }
 }])
-  .controller('UserListCtrl', ['$scope', '$userManage', function($scope, $userManage){
+  .controller('UserListCtrl', ['$scope', '$location', '$userManage', function($scope, $location, $userManage){
     $userManage.fetch().then(function(data) {
       $scope.userList = data;
     });
+
+    $scope.createUserPage = function() {
+      $location.path('/user/add');
+    }
 
     $scope.remove = remove;
 
