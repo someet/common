@@ -21,9 +21,13 @@ angular.module('controllers')
             })
           } else {
             // 添加一个表单主表
+            var newE = {
+              activity_id: $scope.activityid,
+              title: $scope.title,
+              desc: $scope.desc,
+            };
             $questionManage.create(newE).then(function(data){
               // 添加三个问题
-
               var questionList = [$scope.q1, $scope.q2, $scope.q3];
               for (var k in questionList ){
                 var newQI = {
