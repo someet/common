@@ -91,4 +91,9 @@ class Activity extends \yii\db\ActiveRecord
             'status' => '20 删除 40 草稿 60 审核不通过 80 审核通过 100 进行中 120 已结束 ',
         ];
     }
+
+    public function getType()
+    {
+        return $this->hasOne(ActivityType::className(), ['id' => 'type_id']);
+    }
 }

@@ -53,14 +53,18 @@ class ActivityController extends Controller
     public function actionIndex()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $types = Activity::find()
+        $activities = Activity::find()
+            ->with([
+                'type'
+            ])
             ->orderBy([
                 'created_at' => SORT_ASC,
                 'id' => SORT_ASC,
             ])
+            ->asArray()
             ->all();
 
-        return $types;
+        return $activities;
     }
 
     /**
@@ -70,8 +74,7 @@ class ActivityController extends Controller
      *
      * ~~~
      * {
-     *   "name": <string: 活动名称>,
-     *   "displayorder": <int: 排序，此字段为空为默认值 99>
+     *   "title": <string: 活动名称>,
      * }
      * ~~~
      *
@@ -129,8 +132,7 @@ class ActivityController extends Controller
      *
      * ~~~
      * {
-     *   "name": "户外1",
-     *   "displayorder": 96
+     *   "title": "户外1",
      * }
      * ~~~
      *
@@ -145,8 +147,7 @@ class ActivityController extends Controller
      *   "success": "1",
      *   "data": {
      *     "id": 10,
-     *     "name": "户外1",
-     *     "displayorder": 96,
+     *     "title": "户外1",
      *     "status": 10
      *   },
      *   "status_code": 200
