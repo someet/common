@@ -1,31 +1,33 @@
 <div layout="column" flex id="content" ng-controller="ActivityCtrl">
-    <md-button ng-href="/#/activity/add">添加活动</md-button>
-    <table border="1" width="100%">
-        <tr>
-            <td> ID </td>
-            <td> 标题 </td>
-            <td> 描述 </td>
-            <td> 海报 </td>
-            <td> 详情 </td>
-            <td> 地址 </td>
-            <td> 区域 </td>
-            <td> 分类 </td>
-            <td> 操作 </td>
-        </tr>
-        <tr ng-repeat="activity in list | orderBy: 'displayOrder' ">
-            <td>{{activity.id}}</td>
-            <td>{{activity.title}}</td>
-            <td>{{activity.desc}}</td>
-            <td>{{activity.details}}</td>
-            <td>{{activity.poster}}</td>
-            <td>{{activity.address}}</td>
-            <td>{{activity.area}}</td>
-            <td>{{activity.type_id}}</td>
-            <td>
-                <input type="button" value="修改" ng-click="update(activity)"/>
-                <input type="button" value="删除" ng-click="delete(activity)"/>
-            </td>
-        </tr>
-    </table>
+    <md-button class="activity-dialog-btn md-fab" ng-click="createActivityPage()" aria-label="add activity type">
+        <i class="fa fa-plus"></i>
+    </md-button>
+    <md-list>
+        <md-list-item>
+            <p> ID </p>
+            <p> 标题 </p>
+            <p> 描述 </p>
+            <p> 海报 </p>
+            <p> 详情 </p>
+            <p> 地址 </p>
+            <p> 区域 </p>
+            <p> 分类 </p>
+            <p> 操作 </p>
+        </md-list-item>
+        <md-list-item ng-repeat="activity in list | orderBy: 'displayOrder' ">
+            <p>{{activity.id}}</p>
+            <p>{{activity.title}}</p>
+            <p>{{activity.desc}}</p>
+            <p>{{activity.details}}</p>
+            <p>{{activity.poster}}</p>
+            <p>{{activity.address}}</p>
+            <p>{{activity.area}}</p>
+            <p>{{activity.type.name}}</p>
+            <p>
+                <md-button ng-click="update(activity)">修改活动</md-button>
+                <md-button ng-click="delete(activity)">删除活动</md-button>
+            </p>
+        </md-list-item>
+    </md-list>
 
 </div>

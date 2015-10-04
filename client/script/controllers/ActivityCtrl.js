@@ -5,6 +5,7 @@ angular.module('controllers')
 
             $scope.$parent.pageName = '活动管理';
             $activityManage.fetch().then(function (data) {
+                console.log(data);
                 $scope.list = data;
             }, function (err) {
                 alert(err);
@@ -23,6 +24,9 @@ angular.module('controllers')
                     alert(err);
                 });
             };
+            $scope.createActivityPage = function() {
+                $location.path('/activity/add');
+            }
 
         }])
     .controller('ActivityViewCtrl',

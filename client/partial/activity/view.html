@@ -1,18 +1,53 @@
 <div layout="column" flex id="content" ng-controller="ActivityViewCtrl">
     <form method="post" ng-submit="save()">
         <input type="hidden" ng-model="id" />
-        <div>标题: <input type="text" ng-model="title" /> </div>
-        <div>经度: <input type="number" ng-model="longitude" /> </div>
-        <div>纬度: <input type="number" ng-model="latitude" /> </div>
-        <div>群二维码: <input type="text" ng-model="groupcode" /> </div>
-        <div>详情: <input type="text" ng-model="details" /> </div>
-        <div>地址: <input type="text" ng-model="address" /> </div>
-        <div>区域: <input type="text" ng-model="area" /> </div>
-        <div>描述: <input type="text" ng-model="desc" /> </div>
-        <div>海报: <input type="file" ng-model="poster" ng-file-select="onFileSelect($files)"/> </div>
-        <div>
-            分类: <select ng-model="type_id" ng-options="value.id as value.name for value in typelist"></select>
-        </div>
+        <md-input-container>
+            <label>标题</label>
+            <input type="text" ng-model="title" />
+        </md-input-container>
+
+        <md-input-container>
+            <label>经度</label>
+            <input type="text" ng-model="longitude" />
+        </md-input-container>
+
+        <md-input-container>
+            <label>纬度</label>
+            <input type="text" ng-model="latitude" />
+        </md-input-container>
+
+        <md-input-container>
+            <label>群二维码</label>
+            <input type="text" ng-model="groupcode" />
+        </md-input-container>
+
+        <md-input-container>
+            <label>详情</label>
+            <input type="text" ng-model="details" />
+        </md-input-container>
+
+        <md-input-container>
+            <label>地址</label>
+            <input type="text" ng-model="address" />
+        </md-input-container>
+
+        <md-input-container>
+            <label>区域</label>
+            <input type="text" ng-model="area" />
+        </md-input-container>
+
+        <md-input-container>
+            <label>描述</label>
+            <input type="text" ng-model="desc" />
+        </md-input-container>
+
+        <md-input-container>
+            <label>海报</label>
+            <input type="text" ng-model="poster" />
+        </md-input-container>
+
+            <label>分类</label>
+            <select ng-model="type_id" ng-options="value.id as value.name for value in typelist"></select>
         <div><input type="submit" value="保存" /></div>
     </form>
 </div>
