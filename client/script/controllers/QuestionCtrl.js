@@ -28,7 +28,6 @@ angular.module('controllers')
               // 添加三个问题
               var questionList = [$scope.q1, $scope.q2, $scope.q3];
               for (var k in questionList ){
-                alert(questionList[k]);
                 var newQI = {
                   label: questionList[k],
                   question_id: data.id
