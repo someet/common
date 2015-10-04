@@ -15,7 +15,7 @@ use yii\web\ServerErrorHttpException;
 
 class UserController extends Controller
 {
-
+    public $enableCsrfValidation = false;
     /**
      * @inheritdoc
      */
@@ -70,12 +70,16 @@ class UserController extends Controller
         $post = Yii::$app->request->post();
 
         $user = new User();
-        $user->username = $post['username'];
-        $user->setPassword($post['password']);
-        $user->generateAuthKey();
-        $user->email = $post['email'];
-        $user->role = User::ROLE_USER;
-        $user->save();
+        $user->setScenario('signup');
+
+        if ($user->load($post, '') && $user->save()) {
+            return User::findOne($user->id);
+        } elseif ($user->hasErrors()) {
+            $errors = $user->getFirstErrors();
+            throw new DataValidationFailedException(array_pop($errors));
+        } else {
+            throw new ServerErrorHttpException();
+        }
 
     }
 

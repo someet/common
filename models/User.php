@@ -1,12 +1,12 @@
 <?php
 namespace app\models;
 
+use yii\behaviors\TimestampBehavior;
+use app\models\queries\UserQuery;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-use app\models\behaviors\TimestampBehavior;
-use app\models\queries\UserQuery;
 
 /**
  * User model
@@ -30,7 +30,6 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
 
-    const ROLE_USER = 10;
 
     /**
      * @var string|null the current password value from form input
@@ -65,9 +64,6 @@ class User extends ActiveRecord implements IdentityInterface
 
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
-
-            ['role', 'default', 'value' => self::ROLE_USER],
-            ['role', 'in', 'range' => [self::ROLE_USER]],
 
             ['username', 'filter', 'filter' => 'trim'],
             ['username', 'unique'],
@@ -210,7 +206,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function generateEmailConfirmationToken($save = false)
     {
-        $this->email_confirmation_token = Yii::$app->security->generateRandomString() . '_' . time();
+        //$this->email_confirmation_token = Yii::$app->security->generateRandomString() . '_' . time();
         if ($save) {
             return $this->save();
         }
@@ -247,8 +243,8 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function confirmEmail()
     {
-        $this->email_confirmation_token = null;
-        $this->is_email_verified = 1;
+        //$this->email_confirmation_token = null;
+        //$this->is_email_verified = 1;
         return $this->save();
     }
 }

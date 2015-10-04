@@ -15,6 +15,6 @@ class TimestampBehavior extends BaseTimestampBehavior
     public function init()
     {
         parent::init();
-        $this->value = new Expression('NOW()');
+        $this->value = new Expression('UNIX_TIMESTAMP()');
     }
 }
