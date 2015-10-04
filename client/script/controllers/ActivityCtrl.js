@@ -77,14 +77,13 @@ angular.module('controllers')
                     newActivity.id = $scope.id;
                     console.log(newActivity);
                     $activityManage.update($scope.id, newActivity).then(function(data) {
-                       alert('修改成功');
+                       alert('保存成功');
                         $location.path('/activity');
                     });
                 } else {
-                    console.log(newActivity);
                     $activityManage.create(newActivity).then(function (data) {
-                        alert('保存成功');
-                        $location.path('/activity');
+                        alert('添加成功');
+                        $location.path('/question/add/'+data.id);
                     }, function (err) {
                         alert(err);
                     });

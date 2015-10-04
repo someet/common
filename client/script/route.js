@@ -30,6 +30,10 @@ function($routeProvider) {
       templateUrl: '/partial/activity-type/view.html',
       controller: 'ActivityTypeViewCtrl'
     })
+    .when('/answer/:id',{
+      templateUrl: '/partial/answer/add.html',
+      controller: 'AnswerAddCtrl'
+    })
     .when('/user', {
       templateUrl: '/partial/user/list.html',
       controller: 'UserListCtrl'
@@ -45,6 +49,10 @@ function($routeProvider) {
     .when('/user/delete/:id', {
       templateUrl: '/partial/user/add.html',
       controller: 'UserDeleteCtrl'
+    })
+    .when('/question/add/:activityid', {
+      templateUrl: '/partial/question/add.html',
+      controller: 'QuestionAddCtrl'
     })
     .otherwise({
       redirectTo: '/dashboard'
