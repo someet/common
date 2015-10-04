@@ -22,6 +22,7 @@ angular.module('controllers')
       $userManage.add(newUser).then(function() {
         $location.path('/user');
       }, function(err) {
+        console.log(err);
         $scope.syncing = false;
       });
     } else {
