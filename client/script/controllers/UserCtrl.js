@@ -1,6 +1,8 @@
 angular.module('controllers')
 .controller('UserAddCtrl', ['$scope', '$location', '$userManage', function($scope, $location, $userManage){
-  $scope.user = {
+    $scope.$parent.pageName = '添加用户';
+
+    $scope.user = {
     username: "",
     email: "",
     password: "",
@@ -37,10 +39,16 @@ angular.module('controllers')
     }
   }
 }])
-  .controller('UserListCtrl', ['$scope', '$userManage', function($scope, $userManage){
+  .controller('UserListCtrl', ['$scope', '$location', '$userManage', function($scope, $location, $userManage){
+    $scope.$parent.pageName = '用户管理';
+
     $userManage.fetch().then(function(data) {
       $scope.userList = data;
     });
+
+    $scope.createUserPage = function() {
+      $location.path('/user/add');
+    }
 
     $scope.remove = remove;
 
@@ -55,6 +63,8 @@ angular.module('controllers')
 
   }])
   .controller('UserUpdateCtrl', ['$scope', '$routeParams', '$userManage', function($scope, $routeParams, $userManage){
+    $scope.$parent.pageName = '用户详情';
+
     var userId = $routeParams.id;
     if(userId != null){
       var params = {
