@@ -48,10 +48,12 @@ class Activity extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['type_id', 'title', 'desc', 'poster', 'area', 'address', 'details', 'groupcode', 'longitude', 'latitude'], 'required'],
+            [['type_id', 'title', 'desc', 'poster', 'area', 'address', 'details' ], 'required'],
             [['type_id', 'week', 'starttime', 'endtime', 'cost', 'peoples', 'isvolume', 'isdigest', 'responsi', 'created_at', 'created_by', 'updated_at', 'updated_by', 'status'], 'integer'],
             [['details'], 'string'],
             [['longitude', 'latitude'], 'number'],
+            [['longitude', 'latitude'], 'default', 'value' => 0],
+            ['groupcode', 'default', 'value' => '0'],
             [['title'], 'string', 'max' => 80],
             [['desc', 'poster', 'address'], 'string', 'max' => 255],
             [['area'], 'string', 'max' => 10],

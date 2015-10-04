@@ -1,24 +1,15 @@
 <div layout="column" flex id="content" ng-controller="ActivityViewCtrl">
-    <form method="post" ng-submit="save()">
         <input type="hidden" ng-model="id" />
+
+        <md-input-container>
+            <md-select ng-model="type_id" placeholder="选择分类">
+                <md-option ng-value="opt.id" ng-repeat="opt in typelist">{{ opt.name }}</md-option>
+            </md-select>
+        </md-input-container>
+
         <md-input-container>
             <label>标题</label>
             <input type="text" ng-model="title" />
-        </md-input-container>
-
-        <md-input-container>
-            <label>经度</label>
-            <input type="text" ng-model="longitude" />
-        </md-input-container>
-
-        <md-input-container>
-            <label>纬度</label>
-            <input type="text" ng-model="latitude" />
-        </md-input-container>
-
-        <md-input-container>
-            <label>群二维码</label>
-            <input type="text" ng-model="groupcode" />
         </md-input-container>
 
         <md-input-container>
@@ -27,13 +18,13 @@
         </md-input-container>
 
         <md-input-container>
-            <label>地址</label>
-            <input type="text" ng-model="address" />
+            <label>区域</label>
+            <input type="text" ng-model="area" />
         </md-input-container>
 
         <md-input-container>
-            <label>区域</label>
-            <input type="text" ng-model="area" />
+            <label>地址</label>
+            <input type="text" ng-model="address" />
         </md-input-container>
 
         <md-input-container>
@@ -46,8 +37,8 @@
             <input type="text" ng-model="poster" />
         </md-input-container>
 
-            <label>分类</label>
-            <select ng-model="type_id" ng-options="value.id as value.name for value in typelist"></select>
-        <div><input type="submit" value="保存" /></div>
-    </form>
+        <md-input-container layout="row">
+            <md-button class="md-raised md-primary" ng-click="create()">添加</md-button>
+            <md-button class="md-raised md-warn" ng-click="cancel()">取消</md-button>
+        </md-input-container>
 </div>

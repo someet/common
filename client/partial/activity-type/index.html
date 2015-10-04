@@ -1,5 +1,7 @@
 <div layout="column" flex id="content" ng-controller="ActivityTypeCtrl">
-
+  <md-button class="activity-dialog-btn md-fab" ng-click="createActivityTypePage()" aria-label="add activity type">
+    <i class="fa fa-plus"></i>
+  </md-button>
   <md-list style="width: 400px;">
     <md-list-item>
       <p flex="10"> ID </p>
@@ -15,7 +17,4 @@
       </p>
     </md-list-item>
   </md-list>
-  <md-button class="activity-dialog-btn md-fab" ng-click="createActivityTypePage()" aria-label="add activity type">
-    <i class="fa fa-plus"></i>
-  </md-button>
 </div>

@@ -28,6 +28,7 @@ use yii\helpers\Html;
     </md-sidenav>
     <div class="flex md-layout-column">
       <md-toolbar tabindex="-1" layout="row" role="main" >
+          
         <md-button hide-gt-md ng-click="toggleSidenav('left')">
           <md-icon aria-label="Menu" md-svg-icon="https://s3-us-west-2.amazonaws.com/s.cdpn.io/68133/menu.svg"></md-icon>
         </md-button>
