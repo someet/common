@@ -53,4 +53,10 @@ class Question extends \yii\db\ActiveRecord
             'status' => '0 删除 10 草稿 20 正常',
         ];
     }
+
+
+    public function getQuestionList()
+    {
+        return $this->hasMany(QuestionItem::className(), ['question_id' => 'id']);
+    }
 }
