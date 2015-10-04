@@ -32,7 +32,7 @@ class QuestionItem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['question_id', 'type_id', 'label'], 'required'],
+            [['question_id', 'label'], 'required'],
             ['desc', 'default', 'value' => '0'],
             ['type_id', 'default', 'value' => '0'],
             [['question_id', 'type_id', 'listorder', 'status'], 'integer'],

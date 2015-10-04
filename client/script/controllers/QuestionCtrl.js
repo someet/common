@@ -8,7 +8,11 @@ angular.module('controllers')
         $scope.activityid = activityid;
 
         $scope.save = function(){
-          /*
+          var newE = {
+            activity_id: $scope.activityid,
+            title: $scope.title,
+            desc: $scope.desc,
+          };
           if ($scope.id > 0) {
             newE.id = $scope.id;
             $questionManage.update($scope.id, newE).then(function(data) {
@@ -16,25 +20,17 @@ angular.module('controllers')
               $location.path('/activity');
             })
           } else {
-          */
             // 添加一个表单主表
-            var newE = {
-              activity_id: $scope.activityid,
-              title: $scope.title,
-              desc: $scope.desc,
-              questionList: [$scope.q1, $scope.q2, $scope.q3],
-            };
             $questionManage.create(newE).then(function(data){
               // 添加三个问题
 
-              for (var q in [{v:$scope.q1}, {v:$scope.q2}, {v:$scope.q3}] ){
+              var questionList = [$scope.q1, $scope.q2, $scope.q3];
+              for (var k in questionList ){
                 var newQI = {
-                  label: q.v,
+                  label: questionList[k],
                   question_id: data.id
                 };
-                console.log(newQI);
                 $questionItemManage.create(newQI).then(function(data){
-                  alert(data);
                 }), function(err){
                   alert(err);
                 }
@@ -42,6 +38,6 @@ angular.module('controllers')
             }, function(err){
               alert(err);
             })
-          //}
+          }
         };
     }]);
