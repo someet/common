@@ -92,6 +92,7 @@ class QuestionItemController extends Controller
 
         $data = $request->post();
         $model = new QuestionItem;
+        $model->type_id = 0;
 
         if ($model->load($data, '') && $model->save()) {
             return QuestionItem::findOne($model->id);

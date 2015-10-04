@@ -22,14 +22,15 @@ angular.module('controllers')
               activity_id: $scope.activityid,
               title: $scope.title,
               desc: $scope.desc,
-              questionList: [$scope.q1, $scope.q2, $scope.q3],
+              questionList: [$scope.q1, $scope.q2, $scope.q3]
             };
             $questionManage.create(newE).then(function(data){
               // 添加三个问题
-
-              for (var q in [{v:$scope.q1}, {v:$scope.q2}, {v:$scope.q3}] ){
+              var questionList = [$scope.q1, $scope.q2, $scope.q3];
+              for (var k in questionList ){
+                alert(questionList[k]);
                 var newQI = {
-                  label: q.v,
+                  label: questionList[k],
                   question_id: data.id
                 };
                 console.log(newQI);
