@@ -1,10 +1,10 @@
 angular.module('controllers')
-.controller('UserAddCtrl', ['$scope', '$userManage', function($scope, $userManage){
+.controller('UserAddCtrl', ['$scope', '$location', '$userManage', function($scope, $location, $userManage){
   $scope.user = {
-    username: "langshuang",
+    username: "",
+    email: "",
     password: "",
-    password1: "",
-    rule: ""
+    password1: ""
   };
   $scope.checkUserResult = '';
 
@@ -12,8 +12,8 @@ angular.module('controllers')
 
     var newUser = {
       username: $scope.user.username,
-      password: $scope.user.password,
-      rule: $scope.user.rule
+      email: $scope.user.email,
+      password: $scope.user.password
     };
 
     if($scope.checkUserResult == ''){
@@ -36,4 +36,47 @@ angular.module('controllers')
       $scope.checkUserResult = "两次密码不一致！";
     }
   }
-}]);
+}])
+  .controller('UserListCtrl', ['$scope', '$userManage', function($scope, $userManage){
+    $userManage.fetch().then(function(data) {
+      $scope.userList = data;
+    });
+
+    $scope.remove = remove;
+
+    function remove($index, $event) {
+      var user = $scope.userList[$index],
+        uid = parseInt(user.id, 10);
+
+      $userManage.delete(uid).then(function() {
+        $scope.userList.splice($index, 1);
+      });
+    }
+
+  }])
+  .controller('UserUpdateCtrl', ['$scope', '$routeParams', '$userManage', function($scope, $routeParams, $userManage){
+    var userId = $routeParams.id;
+    if(userId != null){
+      var params = {
+       id: userId
+      }
+    }
+    $userManage.fetch(params).then(function(data) {
+      $scope.user = data;
+    }, function (err) {
+      alert(err);
+    });
+
+    $scope.updateUser = function() {
+      var userData = {
+        email: $scope.user.email
+      };
+
+      $userManage.update(userId, userData).then(function(data){
+        alert("修改成功");
+      }, function (err) {
+        alert(err);
+      });
+    }
+  }])
+;

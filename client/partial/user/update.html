@@ -1,0 +1,13 @@
+<div layout="column" flex id="content" ng-controller="UserUpdateCtrl">
+  <div class="user-li">
+    用户名：
+    <input type="text" name="userName" ng-model="user.username" readonly required>
+  </div>
+  <div class="user-li">
+    邮 箱：
+    <input type="text" name="email" ng-model="user.email" required>
+  </div>
+  <div class="user-li">
+    <button ng-click="updateUser()">修改用户</button>
+  </div>
+</div>

@@ -30,9 +30,27 @@ use yii\helpers\Html;
         <md-button hide-gt-md ng-click="toggleSidenav('left')">
           <md-icon aria-label="Menu" md-svg-icon="https://s3-us-west-2.amazonaws.com/s.cdpn.io/68133/menu.svg"></md-icon>
         </md-button>
-        <h3 class="md-toolbar-tools">{{pageName}}</h3>
-        </md-toolbar>
-        <div style="margin-left: 10px; margin-top: 5px;" ng-view></div>
+        <h3>{{pageName}}</h3>
+      </md-toolbar>
+    <div layout="row" flex>
+        <md-sidenav layout="column"
+          class="md-sidenav-left md-whiteframe-z2"
+          md-component-id="left"
+          md-is-locked-open="$mdMedia('gt-md')">
+          <md-list>
+            <md-list-item>
+              <md-button ng-href="/#/activity-type">活动类型管理</md-button>
+            </md-list-item>
+            <md-list-item>
+              <md-button ng-href="/#/activity">活动管理</md-button>
+            </md-list-item>
+            <md-list-item>
+              <md-button ng-href="/#/user">用户管理</md-button>
+            </md-list-item>
+          </md-list>
+        </md-sidenav>
+        <!--div layout="column" flex id="content"-->
+        <div style="margin-top: 10px; margin-left: 10px;" ng-view></div>
     </div>
     <script src="/static/js/bundle.js"></script>
     <script src="/static/js/all.js"></script>
