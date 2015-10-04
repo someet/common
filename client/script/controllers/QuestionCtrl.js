@@ -1,11 +1,16 @@
 angular.module('controllers')
     .controller('QuestionAddCtrl',
-    ['$scope', '$location', '$routeParams', '$questionManage', '$questionItemManage',
-      function ($scope, $location, $routeParams, $questionManage, $questionItemManage) {
+    ['$scope', '$location', '$routeParams', '$questionManage', '$questionItemManage', '$mdToast',
+      function ($scope, $location, $routeParams, $questionManage, $questionItemManage, $mdToast) {
           //$location.path('/question/add');
 
+        $scope.$parent.pageName = '添加活动报名表单';
         var activityid = $routeParams.activityid;
         $scope.activityid = activityid;
+
+        $scope.cancel = function() {
+          $location.path('/activity/');
+        };
 
         $scope.save = function(){
           /*
@@ -34,11 +39,17 @@ angular.module('controllers')
                 };
                 console.log(newQI);
                 $questionItemManage.create(newQI).then(function(data){
-                  alert(data);
                 }), function(err){
                   alert(err);
                 }
               }
+
+              $mdToast.show($mdToast.simple()
+                  .content('表单添加成功')
+                  .hideDelay(5000)
+                  .position("top right"));
+
+              $location.path('/activity/');
             }, function(err){
               alert(err);
             })
