@@ -34,6 +34,10 @@ function($routeProvider) {
         templateUrl: '/partial/activity-type/view.html',
         controller: 'ActivityTypeViewCtrl'
       })
+      .when('/question/add/:activityid', {
+        templateUrl: '/partial/question/add.html',
+        controller: 'QuestionAddCtrl'
+      })
     .otherwise({
       redirectTo: '/dashboard'
     });
