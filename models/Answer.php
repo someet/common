@@ -54,4 +54,9 @@ class Answer extends \yii\db\ActiveRecord
             'status' => '0 删除 10 正常',
         ];
     }
+
+    public function getAnswerList()
+    {
+        return $this->hasMany(AnswerItem::className(), ['question_id' => 'question_id']);
+    }
 }
