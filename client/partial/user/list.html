@@ -16,5 +16,7 @@
       </p>
     </md-list-item>
   </md-list>
-
+  <div ng-show="userPagination" class="someet-pagination user-pagination">
+    <pagination total-items="userPagination.totalItems" ng-model="userPagination.currentPage" ng-change="userPagination.pageChange()" items-per-page="userPagination.itemsPerPage" max-size="userPagination.maxSize" class="pagination-sm" boundary-links="false" rotate="false" num-pages=""></pagination>
+  </div>
 </div>

@@ -26,6 +26,27 @@ angular.module('backendServices')
         return $http.post('/user/update?id='+id, entity).then(function(data){
           return data;
         });
+      },
+      userPageMeta: function() {
+        return $http.get('/user?scenario=total').then(function(data) {
+          return data.total;
+        });
+      },
+      fetchPage: function(page) {
+        page = page || 1;
+
+        var params = {
+          'page': page,
+          'per-page': 2
+        };
+
+        return $http.get('/user?scenario=page', {
+          params: params
+        }).then(function(data) {
+
+          return data;
+        });
+
       }
     };
   }]);

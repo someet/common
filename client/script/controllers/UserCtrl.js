@@ -43,9 +43,12 @@ angular.module('controllers')
   .controller('UserListCtrl', ['$scope', '$location', '$userManage', function($scope, $location, $userManage){
     $scope.$parent.pageName = '用户管理';
 
-    $userManage.fetch().then(function(data) {
-      $scope.userList = data;
-    });
+    $scope.userList = [];
+    $scope.userPageList = [];
+
+    //$userManage.fetchPage().then(function(data) {
+    //  $scope.userList = data;
+    //});
 
     $scope.createUserPage = function() {
       $location.path('/user/add');
@@ -62,6 +65,31 @@ angular.module('controllers')
       });
     }
 
+    normalPagination();
+
+    function normalPagination() {
+      $scope.userPagination = {
+        totalItems: 0,
+        currentPage: 1,
+        maxSize: 5,
+        itemsPerPage: 2,
+        pageChange: function() {
+          fetchPage(this.currentPage);
+        }
+      };
+
+      $userManage.userPageMeta().then(function(total) {
+        $scope.userPagination.totalItems = total;
+      });
+
+      $scope.userList = fetchPage($scope.userPagination.currentPage);
+    }
+
+    function fetchPage(page) {
+      $userManage.fetchPage(page).then(function (userList) {
+        $scope.userList = userList;
+      });
+    }
   }])
   .controller('UserUpdateCtrl', ['$scope', '$routeParams', '$userManage', function($scope, $routeParams, $userManage){
     $scope.$parent.pageName = '用户详情';
