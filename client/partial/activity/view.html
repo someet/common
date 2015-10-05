@@ -32,10 +32,14 @@
             <input type="text" ng-model="desc" />
         </md-input-container>
 
-        <md-input-container>
-            <label>海报</label>
-            <input type="text" ng-model="poster" />
-        </md-input-container>
+        <div layout="row">
+          <div ng-file-select="onFileSelect($files)" data-multiple="false" title="select file" onclick="this.value = null"
+             class="btn btn-upload">
+             点击此处选择海报
+          </div>
+          <p> {{ selectFile.progress.p }}% <button ng-click="abort()">x</button> </p>
+          <img src="{{poster}}" />
+        </div>
 
         <md-input-container layout="row">
             <md-button class="md-raised md-primary" ng-click="create()">添加</md-button>

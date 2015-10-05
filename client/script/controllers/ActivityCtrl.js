@@ -49,9 +49,49 @@ angular.module('controllers')
 
         }])
     .controller('ActivityViewCtrl',
-    ['$scope', '$routeParams', '$location', '$activityManage', '$activityTypeManage', '$mdToast',
-        function ($scope, $routeParams, $location, $activityManage, $activityTypeManage, $mdToast) {
+    ['$scope', '$routeParams', '$location', '$activityManage', '$activityTypeManage', '$qupload', '$qiniuManage', '$mdToast',
+        function ($scope, $routeParams, $location, $activityManage, $activityTypeManage, $qupload, $qiniuManage, $mdToast) {
             $scope.$parent.pageName = '活动详情';
+
+          // qiniu upload start //
+          $scope.selectFile = null ;
+
+          var start = function () {
+            $qiniuManage.fetchUploadToken().then(function (token) {
+
+              $qupload.upload({
+                key: '',
+                file: $scope.selectFile.file,
+                token: token
+              }).then(function (response) {
+                console.log(response);
+                $qiniuManage.completelyUrl(response.key).then(function(url) {
+                  $scope.poster = url;
+                });
+              }, function (response) {
+                console.log(response);
+              }, function (evt) {
+                if($scope.selectFile !== null){
+                  $scope.selectFile.progress.p = Math.floor(100 * evt.loaded / evt.totalSize);
+                }
+              });
+
+            });
+          };
+
+          $scope.abort = function () {
+            $scope.selectFile.upload.abort();
+            $scope.selectFile = null;
+          };
+
+          $scope.onFileSelect = function ($files) {
+            $scope.selectFile = {
+              file: $files[0],
+              progress: {p: 0}
+            };
+            start();
+          };
+          // qiniu upload end //
             var id = $routeParams.id;
             if(id>0) {
               $activityManage.fetch(id).then(function (data) {
