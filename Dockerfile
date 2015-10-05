@@ -15,7 +15,7 @@ RUN apt-get update \
   && npm install -g bower gulp-cli \
   && gem install compass \
   && npm install \
-  && bower install \
+  && bower install --allow-root --config.interactive=false \
   && gulp dist \
   # clean
   && rm -rf /npmjs.install.sh \
