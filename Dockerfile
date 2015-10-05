@@ -1,4 +1,4 @@
-FROM codemix/yii2-base:2.0.6-php-fpm
+FROM daocloud.io/someetinc/backend-base:devops-e31c397
 
 # Copy the working dir to the image's web root
 COPY . /var/www/html
