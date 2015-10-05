@@ -72,12 +72,4 @@ class SiteController extends Controller
 
         return $this->goHome();
     }
-
-    public function actionTqiniu()
-    {
-        /* @var \app\components\QiniuComponent $qiniu */
-        $qiniu = Yii::$app->qiniu;
-        $token = $qiniu->getUploadToken();
-        echo $token;
-    }
 }
