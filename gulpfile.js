@@ -39,7 +39,6 @@ gulp.task('copy-bundle', function(){
       './bower_components/angular-material/angular-material.min.js',
       './bower_components/angular-route/angular-route.min.js',
       './bower_components/ng-lodash/build/ng-lodash.min.js',
-      './bower_components/angular-qiniu-upload/src/qupload.js',
       './bower_components/angular-local-storage/dist/angular-local-storage.min.js'
     ])
     .pipe(concat('bundle.js'))
