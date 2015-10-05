@@ -65,6 +65,11 @@ $config = [
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
+        'qiniu' => [
+            'class' => 'app\components\QiniuComponent',
+            'accessKey' =>  \DockerEnv::get('QINIU_ACCESS_KEY'),
+            'secretKey' =>  \DockerEnv::get('QINIU_SECRET_KEY'),
+        ],
     ],
     'params' => require('/var/www/html/config/params.php'),
 ];

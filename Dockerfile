@@ -1,5 +1,7 @@
 FROM codemix/yii2-base:2.0.6-php-fpm
 
+# use China proxy
+RUN composer config -g repositories.packagist composer http://packagist.phpcomposer.com
 # Copy the working dir to the image's web root
 COPY . /var/www/html
 RUN composer install --no-progress
