@@ -1,4 +1,4 @@
-FROM daocloud.io/someetinc/backend-base:devops-e31c397
+FROM daocloud.io/someetinc/backend-base:docker-base.0.0.1
 
 # use China proxy
 RUN composer config -g repositories.packagist composer http://packagist.phpcomposer.com
