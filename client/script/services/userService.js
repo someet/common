@@ -27,9 +27,10 @@ angular.module('backendServices')
           return data;
         });
       },
-      userPageMeta: function() {
-        return $http.get('/user?scenario=total').then(function(data) {
-          return data.total;
+      userPageMeta: function(pageNum) {
+
+        return $http.get('/user?scenario=total&perPage='+pageNum).then(function(data) {
+          return data;
         });
       },
       fetchPage: function(page) {

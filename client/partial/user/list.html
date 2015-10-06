@@ -17,6 +17,12 @@
     </md-list-item>
   </md-list>
   <div ng-show="userPagination" class="someet-pagination user-pagination">
-    <pagination total-items="userPagination.totalItems" ng-model="userPagination.currentPage" ng-change="userPagination.pageChange()" items-per-page="userPagination.itemsPerPage" max-size="userPagination.maxSize" class="pagination-sm" boundary-links="false" rotate="false" num-pages=""></pagination>
+    <pagination total-items="userPagination.totalItems" ng-model="userPagination.currentPage" ng-change="userPagination.pageChange()" items-per-page="userPagination.itemsPerPage" max-size="userPagination.maxSize" class="pagination-sm" boundary-links="false" rotate="false" num-pages="">
+          <a href="javascript:void(0)" ng-click="userPagination.currentPage=1;changePage(1)">首页</a>
+          <a href="javascript:void(0);" ng-click="prev()">上一页</a>
+          <a href="javascript:void(0);" ng-click="changePage(page)" ng-repeat="page in pages">{{ page }}</a>
+          <a href="javascript:void(0);" ng-click="next()">下一页</a>
+          <a href="javascript:void(0)" ng-click="userPagination.currentPage=userPagination.totalItems;changePage(userPagination.totalItems)">末页</a>
+    </pagination>
   </div>
 </div>

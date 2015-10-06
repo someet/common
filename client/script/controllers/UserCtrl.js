@@ -78,18 +78,59 @@ angular.module('controllers')
         }
       };
 
-      $userManage.userPageMeta().then(function(total) {
+      $userManage.userPageMeta($scope.userPagination.itemsPerPage).then(function(total) {
         $scope.userPagination.totalItems = total;
       });
 
       $scope.userList = fetchPage($scope.userPagination.currentPage);
     }
 
+    $scope.changePage = function(page) {
+      fetchPage(page);
+    }
+    $scope.prev = function () {
+      var page = $scope.userPagination.currentPage - 1;
+      if(page < 1){
+        page = 1;
+      }
+      fetchPage(page);
+    }
+    $scope.next = function(){
+      var page = $scope.userPagination.currentPage + 1;
+      if(page > $scope.userPagination.totalItems){
+        page = $scope.userPagination.totalItems;
+      }
+      fetchPage(page);
+    }
+
     function fetchPage(page) {
       $userManage.fetchPage(page).then(function (userList) {
         $scope.userList = userList;
+        $scope.userPagination.currentPage = page;
+        //纯js分页
+        if ($scope.userPagination.currentPage > 1 && $scope.userPagination.currentPage < $scope.userPagination.totalItems) {
+          $scope.pages = [
+            $scope.userPagination.currentPage - 1,
+            $scope.userPagination.currentPage,
+            $scope.userPagination.currentPage + 1
+          ];
+        } else if ($scope.userPagination.currentPage <= 1 && $scope.userPagination.totalItems > 1) {
+          $scope.userPagination.currentPage = 1;
+          $scope.pages = [
+            $scope.userPagination.currentPage,
+            $scope.userPagination.currentPage + 1
+          ];
+        } else if ($scope.userPagination.currentPage >= $scope.userPagination.totalItems && $scope.userPagination.totalItems > 1) {
+          $scope.userPagination.currentPage = $scope.userPagination.totalItems;
+          $scope.pages = [
+            $scope.userPagination.currentPage - 1,
+            $scope.userPagination.currentPage
+          ];
+        }
       });
     }
+
+
   }])
   .controller('UserUpdateCtrl', ['$scope', '$routeParams', '$userManage', function($scope, $routeParams, $userManage){
     $scope.$parent.pageName = '用户详情';

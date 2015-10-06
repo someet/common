@@ -51,14 +51,19 @@ class UserController extends Controller
     public function actionIndex($id = null, $scenario = null, $perPage = 20)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-
         $query = User::find()
             ->where(['status' => User::STATUS_ACTIVE])
             ->orderBy(['id' => SORT_DESC]);
         if ($id != null) {
             $users = $this->findOne($id);
         } elseif ($scenario == "total") {
-            $users = $query->count();
+            $countQuery = clone $query;
+            $pagination = new Pagination([
+                'totalCount' => $countQuery->count(),
+                'defaultPageSize' => $perPage
+            ]);
+
+            return $pagination->pageCount;
         } elseif ($scenario == "page") {
             $countQuery = clone $query;
             $pagination = new Pagination([
