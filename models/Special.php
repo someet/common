@@ -11,8 +11,9 @@ use Yii;
  * @property string $title
  * @property string $desc
  * @property string $poster
- * @property integer $displayorder
- * @property integer $sharetimes
+ * @property integer $is_top
+ * @property integer $display_order
+ * @property integer $share_times
  * @property integer $created_at
  * @property integer $updated_at
  * @property integer $status
@@ -38,10 +39,10 @@ class Special extends \yii\db\ActiveRecord
     {
         return [
             [['title', 'poster'], 'required'],
-            ['displayorder', 'default', 'value' => '99'],
+            ['display_order', 'default', 'value' => '99'],
             ['status', 'default', 'value' => '10'],
-            [['displayorder', 'sharetimes', 'created_at', 'updated_at', 'status'], 'integer'],
-            [['title', 'desc', 'poster'], 'string', 'max' => 45]
+            [['is_top', 'display_order', 'share_times', 'created_at', 'updated_at', 'status'], 'integer'],
+            [['title', 'desc', 'poster'], 'string', 'max' => 255]
         ];
     }
 
@@ -55,8 +56,9 @@ class Special extends \yii\db\ActiveRecord
             'title' => '标题',
             'desc' => '描述',
             'poster' => '海报',
-            'displayorder' => '显示排序',
-            'sharetimes' => '分享次数',
+            'is_top' => '置顶',
+            'display_order' => '显示排序',
+            'share_times' => '分享次数',
             'created_at' => '制作时间',
             'updated_at' => 'Updated At',
             'status' => '0 删除 10 草稿 20 正常',

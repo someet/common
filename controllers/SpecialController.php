@@ -13,8 +13,6 @@ use yii\web\ServerErrorHttpException;
 
 class SpecialController extends Controller
 {
-
-    public $enableCsrfValidation = false;
     /**
      * @inheritdoc
      */
@@ -54,14 +52,15 @@ class SpecialController extends Controller
     public function actionIndex()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $types = Special::find()
+        $entities = Special::find()
+            ->where(['>', 'status', 0])
             ->orderBy([
-                'displayorder' => SORT_ASC,
-                'id' => SORT_ASC,
+                'is_top' => SORT_DESC,
+                'updated_at' => SORT_DESC,
             ])
             ->all();
 
-        return $types;
+        return $entities;
     }
 
     /**
@@ -74,7 +73,7 @@ class SpecialController extends Controller
      *   "title": <string: 专题标题>,
      *   "desc": <string: 专题副标题>,
      *   "poster": <string: 专题海报>,
-     *   "displayorder": <int: 排序，此字段为空为默认值 99>
+     *   "display_order": <int: 排序，此字段为空为默认值 99>
      * }
      * ~~~
      *
@@ -97,7 +96,7 @@ class SpecialController extends Controller
      * "data": {
      *   "id": 10,
      *   "title": "国庆专题",
-     *   "displayorder": 99,
+     *   "display_order": 99,
      *   "status": 20
      * },
      * "status_code": 200
@@ -133,7 +132,7 @@ class SpecialController extends Controller
      * ~~~
      * {
      *   "title": "国庆专题2",
-     *   "displayorder": 96
+     *   "display_order": 96
      * }
      * ~~~
      *
@@ -149,7 +148,7 @@ class SpecialController extends Controller
      *   "data": {
      *     "id": 10,
      *     "title": "国庆专题2",
-     *     "displayorder": 96,
+     *     "display_order": 96,
      *     "status": 20
      *   },
      *   "status_code": 200
@@ -197,10 +196,17 @@ class SpecialController extends Controller
             }
         }
 
-        if (isset($data['displayorder'])) {
-            $model->displayorder = $data['displayorder'];
-            if (!$model->validate('displayorder')) {
-                throw new DataValidationFailedException($model->getFirstError('displayorder'));
+        if (isset($data['is_top'])) {
+            $model->is_top = $data['is_top'];
+            if (!$model->validate('is_top')) {
+                throw new DataValidationFailedException($model->getFirstError('is_top'));
+            }
+        }
+
+        if (isset($data['display_order'])) {
+            $model->display_order = $data['display_order'];
+            if (!$model->validate('display_order')) {
+                throw new DataValidationFailedException($model->getFirstError('display_order'));
             }
         }
 
@@ -261,7 +267,7 @@ class SpecialController extends Controller
 
     /**
      * @param $id
-     * @return ActivityType
+     * @return Special
      * @throws NotFoundHttpException
      */
     public function findModel($id)
