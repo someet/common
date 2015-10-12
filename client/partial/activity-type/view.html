@@ -3,6 +3,10 @@
     <label>类型名称</label>
     <input type="text" ng-model="typeContent.name" value="{{typeContent.name}}">
   </md-input-container>
+  <md-input-container>
+    <label>类型排序</label>
+    <input type="number" ng-model="typeContent.displayorder" />
+  </md-input-container>
   <div layout="row">
     <md-button class="md-raised md-primary" ng-click="save()">保存</md-button>
     <md-button class="md-raised md-warn" ng-click="cancel()">取消</md-button>

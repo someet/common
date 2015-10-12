@@ -3,8 +3,10 @@
 namespace app\controllers;
 
 use app\components\DataValidationFailedException;
+use app\models\Activity;
 use app\models\ActivityType;
 use Yii;
+use yii\base\Exception;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -56,7 +58,7 @@ class ActivityTypeController extends Controller
         $types = ActivityType::find()
             ->orderBy([
                 'displayorder' => SORT_ASC,
-                'id' => SORT_ASC,
+                'id' => SORT_DESC,
             ])
             ->all();
 
@@ -226,6 +228,12 @@ class ActivityTypeController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = $this->findModel($id);
+
+        // 检查该类型下是否有活动, 如果有则提示不能删除
+        if (Activity::findOne(['type_id' => $id])) {
+            throw new ServerErrorHttpException('当前分类下还有活动, 无法删除');
+        }
+
         if ($model->delete() === false) {
             throw new ServerErrorHttpException('删除失败');
         }

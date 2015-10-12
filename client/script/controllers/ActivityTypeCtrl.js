@@ -87,6 +87,7 @@ angular.module('controllers')
 
       $scope.create = function () {
         var newType = $scope.activityType;
+
         $activityTypeManage.create(newType).then(function (data) {
 
           $location.path('/activity-type');
