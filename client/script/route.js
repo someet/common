@@ -54,6 +54,18 @@ function($routeProvider) {
       templateUrl: '/partial/question/add.html',
       controller: 'QuestionAddCtrl'
     })
+    .when('/special', {
+      templateUrl: '/partial/special/index.html',
+      controller: 'SpecialCtrl'
+    })
+    .when('/special/add', {
+      templateUrl: '/partial/special/view.html',
+      controller: 'SpecialViewCtrl'
+    })
+    .when('/special/:id', {
+      templateUrl: '/partial/special/view.html',
+      controller: 'SpecialViewCtrl'
+    })
     .otherwise({
       redirectTo: '/dashboard'
     });
