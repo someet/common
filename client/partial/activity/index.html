@@ -5,29 +5,26 @@
     <md-list>
         <md-list-item>
             <p flex="10"> ID </p>
-            <p>标题</p>
-            <p>描述</p>
-            <p>海报</p>
-            <p>详情</p>
-            <p>地址</p>
-            <p>区域</p>
             <p>分类</p>
+            <p>标题</p>
+            <p>海报</p>
+            <p>区域</p>
             <p>操作</p>
         </md-list-item>
         <md-list-item ng-repeat="entity in list | orderBy: 'display_order' ">
             <p flex="10">{{entity.id}}</p>
-            <p>{{entity.title}}</p>
-            <p>{{entity.desc}}</p>
-            <p>{{entity.details}}</p>
-            <p><img width="50" src="{{entity.poster}}" /></p>
-            <p>{{entity.address}}</p>
-            <p>{{entity.area}}</p>
             <p>{{entity.type.name}}</p>
+            <p>{{entity.title}}</p>
+            <p><img width="50" src="{{entity.poster}}" /></p>
+            <p>{{entity.area}}</p>
             <p layout="row">
                 <md-button class="md-raised" ng-if="entity.is_top==1" ng-click="top(entity, 0)">取消置顶</md-button>
                 <md-button class="md-raised" ng-if="entity.is_top==0" ng-click="top(entity, 1)">置顶</md-button>
                 <md-button class="md-raised" ng-click="update(entity)">修改</md-button>
                 <md-button class="md-raised md-warn" ng-click="delete(entity)">删除</md-button>
+                <md-button ng-click="viewQuestion(entity)">设置问题</md-button>
+                <md-button ng-click="previewQuestion(entity)">预览问题</md-button>
+                <md-button ng-click="viewAnswer(entity)">查看报名结果</md-button>
             </p>
         </md-list-item>
     </md-list>

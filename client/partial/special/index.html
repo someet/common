@@ -13,7 +13,7 @@
             <p> 添加时间 </p>
             <p> 操作 </p>
         </md-list-item>
-        <md-list-item ng-repeat="entity in list | orderBy: 'display_order'">
+        <md-list-item ng-repeat="entity in list">
             <p flex="10"> {{entity.id}} </p>
             <p> {{entity.title}} </p>
             <p> {{entity.desc}} </p>

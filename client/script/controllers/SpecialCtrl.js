@@ -15,11 +15,11 @@ angular.module('controllers')
           var newEntity = entity;
           newEntity.is_top = is_top > 0 ? 1 : 0; // 是否置顶
           $specialManage.update(entity.id, newEntity).then(function(data){
+            $location.path('/special');
             $mdToast.show($mdToast.simple()
                 .content('置顶成功')
                 .hideDelay(5000)
                 .position("top right"));
-            $location.path('/special');
           }, function(err) {
             $mdToast.show($mdToast.simple()
                 .content(err.toString())

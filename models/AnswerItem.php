@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "answer_item".
  *
  * @property integer $id
+ * @property integer $user_id
  * @property integer $question_item_id
  * @property integer $question_id
  * @property string $question_label
@@ -31,7 +32,7 @@ class AnswerItem extends \yii\db\ActiveRecord
     {
         return [
             [['question_item_id', 'question_id', 'question_label', 'question_value'], 'required'],
-            [['question_item_id', 'question_id', 'status'], 'integer'],
+            [['question_item_id', 'question_id', 'user_id', 'status'], 'integer'],
             [['question_label', 'question_value'], 'string', 'max' => 255]
         ];
     }
@@ -43,6 +44,7 @@ class AnswerItem extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'user_id' => '用户ID',
             'question_item_id' => '问题项ID',
             'question_id' => '问题项ID',
             'question_label' => '问题标题, 为了保留历史记录',

@@ -18,6 +18,13 @@ use Yii;
  */
 class Answer extends \yii\db\ActiveRecord
 {
+    /* 未审核 */
+    const STATUS_REVIEW_YET     = 10;
+    /* 审核通过 */
+    const STATUS_REVIEW_PASS    = 20;
+    /* 审核拒绝 */
+    const STATUS_REVIEW_REJECT  = 30;
+
     /**
      * @inheritdoc
      */
@@ -34,7 +41,7 @@ class Answer extends \yii\db\ActiveRecord
         return [
             [['question_id'], 'required'],
             [['question_id', 'activity_id', 'user_id', 'is_finish', 'created_at', 'updated_at', 'status'], 'integer'],
-            [['question_id'], 'unique']
+            [['question_id', 'user_id'], 'unique', 'targetAttribute' => ['question_id', 'user_id'], 'message' => 'The combination of 问题ID and 用户ID has already been taken.']
         ];
     }
 
@@ -55,8 +62,25 @@ class Answer extends \yii\db\ActiveRecord
         ];
     }
 
-    public function getAnswerList()
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
     {
-        return $this->hasMany(AnswerItem::className(), ['question_id' => 'question_id']);
+        return [
+            'timestamp' => [
+                'class' => behaviors\TimestampBehavior::className(),
+            ],
+        ];
+    }
+
+    public function getAnswerItemList()
+    {
+        return $this->hasMany(AnswerItem::className(), ['question_id' => 'question_id', 'user_id' => 'user_id']);
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 }

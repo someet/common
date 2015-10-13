@@ -96,6 +96,18 @@ class Activity extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => behaviors\TimestampBehavior::className(),
+            ],
+        ];
+    }
+
     public function getType()
     {
         return $this->hasOne(ActivityType::className(), ['id' => 'type_id']);

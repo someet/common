@@ -1,57 +1,87 @@
 angular.module('controllers')
-    .controller('QuestionAddCtrl',
-    ['$scope', '$location', '$routeParams', '$questionManage', '$questionItemManage', '$mdToast',
-      function ($scope, $location, $routeParams, $questionManage, $questionItemManage, $mdToast) {
-          //$location.path('/question/add');
-
-        $scope.$parent.pageName = '添加活动报名表单';
+    .controller('QuestionViewCtrl',
+    ['$scope', '$location', '$routeParams', '$questionManage', '$mdToast',
+      function ($scope, $location, $routeParams, $questionManage, $mdToast) {
+        $scope.$parent.pageName = '查看问题';
         var activity_id = $routeParams.activity_id;
         $scope.activity_id = activity_id;
 
+
+        $scope.status_list = [
+          {
+            id: 0,
+            title: "关闭",
+          },
+          {
+            id: 10,
+            title: "草稿",
+          },
+          {
+            id: 20,
+            title: "打开",
+          },
+        ];
+
+        $questionManage.fetchByActivityId(activity_id).then(function(data) {
+          $scope.entity = data;
+        }, function(err) {
+
+        });
+
         $scope.cancel = function() {
-          $location.path('/activity/');
+          $location.path('/activity');
         };
 
+        // 添加/修改问题
         $scope.save = function(){
-          /*
-          if ($scope.id > 0) {
-            newE.id = $scope.id;
-            $questionManage.update($scope.id, newE).then(function(data) {
-              alert('保存成功');
-              $location.path('/activity');
-            })
-          } else {
-          */
-            // 添加一个表单主表
-            var newE = {
-              activity_id: $scope.activity_id,
-              title: $scope.title,
-              desc: $scope.desc,
-              questionList: [$scope.q1, $scope.q2, $scope.q3]
-            };
-            $questionManage.create(newE).then(function(data){
-              // 添加三个问题
-              var questionList = [$scope.q1, $scope.q2, $scope.q3];
-              for (var k in questionList ){
-                var newQI = {
-                  label: questionList[k],
-                  question_id: data.id
-                };
-                $questionItemManage.create(newQI).then(function(data){
-                }), function(err){
-                  alert(err);
-                }
-              }
+          var newEntity = {
+            activity_id: $scope.activity_id,
+            title: $scope.entity.title,
+            desc: $scope.entity.desc,
+            status: $scope.entity.status,
+            questionItemList: [],
+          };
 
+          if ($scope.entity.id > 0) { // 更新
+
+            newEntity.id = $scope.entity.id;
+            for(var k in $scope.entity.questionItemList) {
+              var questionItem = {
+                question_id: newEntity.id,
+                id: $scope.entity.questionItemList[k].id,
+                label: $scope.entity.questionItemList[k].label,
+              };
+              newEntity.questionItemList.push(questionItem);
+            }
+
+            $questionManage.update($scope.entity.id, newEntity).then(function(data) {
+              $location.path('/activity');
               $mdToast.show($mdToast.simple()
-                  .content('表单添加成功')
+                  .content('问题保存成功')
                   .hideDelay(5000)
                   .position("top right"));
-
-              $location.path('/activity/');
-            }, function(err){
+            }, function(err) {
               alert(err);
-            })
-          //}
+            });
+          } else { // 新建
+            var questionItem1 = {
+              label: $scope.entity.q1,
+            };
+            var questionItem2 = {
+              label: $scope.entity.q2,
+            };
+            var questionItem3 = {
+              label: $scope.entity.q3,
+            };
+            newEntity.questionItemList.push(questionItem1);
+            newEntity.questionItemList.push(questionItem2);
+            newEntity.questionItemList.push(questionItem3);
+            $questionManage.create(newEntity).then(function (data) {
+              alert("添加成功");
+            }, function(err) {
+              alert(err);
+            });
+          }
         };
-    }]);
+
+      }]);

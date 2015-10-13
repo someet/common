@@ -2,13 +2,13 @@
   <input type="hidden" ng-model="activity_id" />
   <md-input-container>
     <label>标题</label>
-    <input type="text" ng-model="questions.title">
+    <input type="text" ng-model="entity.title">
   </md-input-container>
   <md-input-container>
     <label>描述</label>
-    <input type="text" ng-model="questions.desc">
+    <input type="text" ng-model="entity.desc">
   </md-input-container>
-  <md-input-container ng-repeat="question in questions.questionList">
+  <md-input-container ng-repeat="question in entity.questionItemList">
     <label>{{ question.label }}</label>
     <input type="text" ng-model="question.answer">
   </md-input-container>

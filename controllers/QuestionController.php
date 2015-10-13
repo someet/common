@@ -41,19 +41,22 @@ class QuestionController extends Controller
                     'update' => ['post'],
                     'delete' => ['post'],
                     'view' => ['get'],
+                    'viewByActivityId' => ['get'],
                 ],
             ],
         ];
     }
 
     /**
-     * 添加一个报名表单
+     * 添加一个问题, 包括主表和问题项
      *
      * POST 请求 /question/create
      *
      * ~~~
      * {
-     *   "q1": <string: 问题1>,
+     *   "questionItemList": {
+     *      <string: 问题1>,
+     *    }
      * }
      * ~~~
      *
@@ -90,10 +93,30 @@ class QuestionController extends Controller
         $response->format = Response::FORMAT_JSON;
 
         $data = $request->post();
+        $questionItemList = $data['questionItemList'];
         $model = new Question;
 
         if ($model->load($data, '') && $model->save()) {
-            return Question::findOne($model->id);
+            $question_id = $model->id;
+            if (!empty($questionItemList)) {
+                foreach ($questionItemList as $questionItem) {
+                    $questionItemModel = new QuestionItem();
+                    $questionItemModel->question_id = $question_id;
+                    if ($questionItemModel->load($questionItem, '') && $questionItemModel->save()) {
+
+                    } elseif ($questionItemModel->hasErrors()) {
+                        $errors = $model->getFirstErrors();
+                        throw new DataValidationFailedException(array_pop($errors));
+                    } else {
+                        throw new ServerErrorHttpException();
+                    }
+                }
+            }
+            return Question::find()
+                ->where(['id' => $model->id])
+                ->asArray()
+                ->with('questionItemList')
+                ->one();
         } elseif ($model->hasErrors()) {
             $errors = $model->getFirstErrors();
             throw new DataValidationFailedException(array_pop($errors));
@@ -150,11 +173,19 @@ class QuestionController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = $this->findModel($id);
         $data = Yii::$app->getRequest()->post();
+        $questionItemList = $data['questionItemList'];
 
         if (isset($data['title'])) {
             $model->title = $data['title'];
             if (!$model->validate('title')) {
                 throw new DataValidationFailedException($model->getFirstError('title'));
+            }
+        }
+
+        if (isset($data['desc'])) {
+            $model->desc = $data['desc'];
+            if (!$model->validate('desc')) {
+                throw new DataValidationFailedException($model->getFirstError('desc'));
             }
         }
 
@@ -169,7 +200,25 @@ class QuestionController extends Controller
             throw new ServerErrorHttpException();
         }
 
-        return $this->findModel($id);
+        if (!empty($questionItemList)) {
+            foreach ($questionItemList as $questionItem) {
+                $questionItemModel = QuestionItem::findOne($questionItem['id']);
+                $questionItemModel->label = $questionItem['label'];
+                if ($questionItemModel->save()) {
+                } elseif ($questionItemModel->hasErrors()) {
+                    $errors = $model->getFirstErrors();
+                    throw new DataValidationFailedException(array_pop($errors));
+                } else {
+                    throw new ServerErrorHttpException();
+                }
+            }
+        }
+
+        return Question::find()
+            ->where(['id' => $model->id])
+            ->asArray()
+            ->with('questionItemList')
+            ->one();
     }
 
     /**
@@ -207,7 +256,24 @@ class QuestionController extends Controller
     public function actionView($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $model = $this->findModel($id);
+        $model = Question::find()
+            ->where(['id' => $id])
+            ->asArray()
+            ->with('questionItemList')
+            ->one();
+
+        return $model;
+    }
+
+
+    public function actionViewByActivityId($activity_id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $model = Question::find()
+            ->where(['activity_id' => $activity_id])
+            ->asArray()
+            ->with('questionItemList')
+            ->one();
 
         return $model;
     }
