@@ -13,7 +13,11 @@ angular.module('controllers')
         };
 
         $scope.save = function(){
-          /*
+          var newE = {
+            activity_id: $scope.activityid,
+            title: $scope.title,
+            desc: $scope.desc,
+          };
           if ($scope.id > 0) {
             newE.id = $scope.id;
             $questionManage.update($scope.id, newE).then(function(data) {
@@ -21,7 +25,6 @@ angular.module('controllers')
               $location.path('/activity');
             })
           } else {
-          */
             // 添加一个表单主表
             var newE = {
               activity_id: $scope.activity_id,
@@ -52,6 +55,6 @@ angular.module('controllers')
             }, function(err){
               alert(err);
             })
-          //}
+          }
         };
     }]);
