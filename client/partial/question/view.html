@@ -1,16 +1,37 @@
 <div layout="column" flex id="content" ng-controller="QuestionViewCtrl">
-    <input type="hidden" ng-model="question.activityid" />
+    <input type="hidden" ng-model="activity_id" />
+    <input type="hidden" ng-model="entity.id" />
+    <md-input-container>
+        <md-select ng-model="entity.status" placeholder="状态">
+            <md-option ng-value="opt.id" ng-repeat="opt in status_list">{{ opt.title }}</md-option>
+        </md-select>
+    </md-input-container>
     <md-input-container>
         <label>表单标题</label>
-        <input type="text" ng-model="question.title">
+        <input type="text" ng-model="entity.title">
     </md-input-container>
     <md-input-container>
         <label>表单描述</label>
-        <input type="text" ng-model="question.desc">
+        <input type="text" ng-model="entity.desc">
     </md-input-container>
-    <md-input-container ng-repeat="(k, questionItem) in question.questionList">
+    <span ng-repeat="(k, questionItem) in entity.questionItemList">
+        <input type="hidden" ng-model="questionItem.id">
+    </span>
+    <md-input-container ng-repeat="(k, questionItem) in entity.questionItemList">
         <label>问题{{k+1}}</label>
         <input type="text" ng-model="questionItem.label">
+    </md-input-container>
+    <md-input-container ng-if="!entity.id">
+        <label>问题1</label>
+        <input type="text" ng-model="entity.q1">
+    </md-input-container>
+    <md-input-container ng-if="!entity.id">
+        <label>问题2</label>
+        <input type="text" ng-model="entity.q2">
+    </md-input-container>
+    <md-input-container ng-if="!entity.id">
+        <label>问题3</label>
+        <input type="text" ng-model="entity.q3">
     </md-input-container>
     <md-input-container layout="row">
         <md-button class="md-raised md-primary" ng-click="save()">保存</md-button>

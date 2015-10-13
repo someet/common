@@ -58,6 +58,10 @@ function($routeProvider) {
       templateUrl: '/partial/question/add.html',
       controller: 'QuestionAddCtrl'
     })
+    .when('/question/view/:activity_id', {
+      templateUrl: '/partial/question/view.html',
+      controller: 'QuestionViewCtrl'
+    })
     .when('/special', {
       templateUrl: '/partial/special/index.html',
       controller: 'SpecialCtrl'

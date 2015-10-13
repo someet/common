@@ -55,6 +55,18 @@ class Answer extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => behaviors\TimestampBehavior::className(),
+            ],
+        ];
+    }
+
     public function getAnswerList()
     {
         return $this->hasMany(AnswerItem::className(), ['question_id' => 'question_id']);

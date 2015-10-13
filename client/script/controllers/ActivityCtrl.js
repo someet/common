@@ -63,7 +63,8 @@ angular.module('controllers')
             $scope.createPage = function() {
                 $location.path('/activity/add');
             }
-          // 报名表单
+
+          // 设置问题
           $scope.viewQuestion = function(activity) {
             $location.path('/question/view/' + activity.id);
           }
@@ -128,7 +129,7 @@ angular.module('controllers')
 
           // 列表
             $activityTypeManage.fetch().then(function(data){
-                $scope.typelist = data;
+                $scope.type_list = data;
             });
 
           // 取消
@@ -138,7 +139,7 @@ angular.module('controllers')
 
             $scope.save = function () {
                 var newEntity = $scope.entity;
-                if (newEntity.id > 0 ) {
+                if (newEntity.id > 0 ) { // 更新活动
                     $activityManage.update(newEntity.id, newEntity).then(function(data) {
                         $mdToast.show($mdToast.simple()
                             .content('活动保存成功')
@@ -151,13 +152,13 @@ angular.module('controllers')
                             .hideDelay(5000)
                             .position("top right"));
                     });
-                } else {
+                } else { // 添加活动
                     $activityManage.create(newEntity).then(function (data) {
+                      $location.path('/activity');
                         $mdToast.show($mdToast.simple()
                             .content('活动添加成功')
                             .hideDelay(5000)
                             .position("top right"));
-                        $location.path('/question/add/'+data.id);
                     }, function (err) {
                         $mdToast.show($mdToast.simple()
                             .content(err.toString())

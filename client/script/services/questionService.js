@@ -23,8 +23,8 @@ angular.module('backendServices')
             return data;
           });
         },
-        fetchByActivityid: function(activityid) {
-          return $http.get('/question/view-by-activityid?activityid=' + activityid).then(function(data) {
+        fetchByActivityId: function(activity_id) {
+          return $http.get('/question/view-by-activity-id?activity_id=' + activity_id).then(function(data) {
             return data;
           });
         }

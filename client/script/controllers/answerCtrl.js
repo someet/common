@@ -17,12 +17,12 @@ angular.module('controllers')
             answerList: []
           };
 
-          for(var k in $scope.questions.questionList) {
+          for(var k in $scope.questions.questionItemList) {
             var answer = {
-              question_item_id: $scope.questions.questionList[k].id,
+              question_item_id: $scope.questions.questionItemList[k].id,
               question_id: answerData.question_id,
-              question_label: $scope.questions.questionList[k].label,
-              question_value: $scope.questions.questionList[k].answer
+              question_label: $scope.questions.questionItemList[k].label,
+              question_value: $scope.questions.questionItemList[k].answer
             };
             answerData.answerList.push(answer);
           }
