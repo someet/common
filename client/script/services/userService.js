@@ -8,22 +8,22 @@ angular.module('backendServices')
           return userList;
         });
       },
-      add: function(newUser) {
-        return $http.post('/user/create', newUser).then(function(data) {
+      add: function(newEntity) {
+        return $http.post('/user/create', newEntity).then(function(data) {
           return data;
         });
       },
-      update: function(userId, userInfo) {
+      update: function(id, entity) {
 
-        return $http.post('/user/update?id='+userId, userInfo).then(function(data){
+        return $http.post('/user/update?id='+id, entity).then(function(data){
           return data;
         });
       },
-      delete: function(userId) {
-        var userInfo = {
+      delete: function(id) {
+        var entity = {
           status: 0
         }
-        return $http.post('/user/update?id='+userId, userInfo).then(function(data){
+        return $http.post('/user/update?id='+id, entity).then(function(data){
           return data;
         });
       }

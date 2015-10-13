@@ -13,19 +13,20 @@ use Yii;
  * @property string $desc
  * @property string $poster
  * @property integer $week
- * @property integer $starttime
- * @property integer $endtime
+ * @property integer $start_time
+ * @property integer $end_time
  * @property string $area
  * @property string $address
  * @property string $details
- * @property string $groupcode
+ * @property string $group_code
  * @property double $longitude
  * @property double $latitude
  * @property integer $cost
  * @property integer $peoples
- * @property integer $isvolume
- * @property integer $isdigest
- * @property integer $responsi
+ * @property integer $is_volume
+ * @property integer $is_digest
+ * @property integer $is_top
+ * @property integer $principal
  * @property integer $created_at
  * @property integer $created_by
  * @property integer $updated_at
@@ -49,15 +50,15 @@ class Activity extends \yii\db\ActiveRecord
     {
         return [
             [['type_id', 'title', 'desc', 'poster', 'area', 'address', 'details' ], 'required'],
-            [['type_id', 'week', 'starttime', 'endtime', 'cost', 'peoples', 'isvolume', 'isdigest', 'responsi', 'created_at', 'created_by', 'updated_at', 'updated_by', 'status'], 'integer'],
+            [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'created_at', 'created_by', 'updated_at', 'updated_by', 'status'], 'integer'],
             [['details'], 'string'],
             [['longitude', 'latitude'], 'number'],
             [['longitude', 'latitude'], 'default', 'value' => 0],
-            ['groupcode', 'default', 'value' => '0'],
+            ['group_code', 'default', 'value' => '0'],
             [['title'], 'string', 'max' => 80],
             [['desc', 'poster', 'address'], 'string', 'max' => 255],
             [['area'], 'string', 'max' => 10],
-            [['groupcode'], 'string', 'max' => 45]
+            [['group_code'], 'string', 'max' => 45]
         ];
     }
 
@@ -73,19 +74,20 @@ class Activity extends \yii\db\ActiveRecord
             'desc' => '描述',
             'poster' => '海报',
             'week' => '星期 按照活动时间自动计算',
-            'starttime' => '活动开始时间',
-            'endtime' => '活动结束时间',
+            'start_time' => '活动开始时间',
+            'end_time' => '活动结束时间',
             'area' => '范围, 比如雍和宫',
             'address' => '活动详细地址',
             'details' => '活动详情',
-            'groupcode' => '群二维码',
+            'group_code' => '群二维码',
             'longitude' => '经度',
             'latitude' => '纬度',
             'cost' => '0 免费 大于0 则收费',
             'peoples' => '0 不限制 >1 则为限制人数',
-            'isvolume' => '0 非系列 1 系列活动',
-            'isdigest' => '0 非精华 1 精华',
-            'responsi' => '负责人 0为未设置',
+            'is_volume' => '0 非系列 1 系列活动',
+            'is_digest' => '0 非精华 1 精华',
+            'is_top' => '0 正常 1 置顶',
+            'principal' => '负责人 0为未设置',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',

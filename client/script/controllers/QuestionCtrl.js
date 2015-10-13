@@ -5,8 +5,8 @@ angular.module('controllers')
           //$location.path('/question/add');
 
         $scope.$parent.pageName = '添加活动报名表单';
-        var activityid = $routeParams.activityid;
-        $scope.activityid = activityid;
+        var activity_id = $routeParams.activity_id;
+        $scope.activity_id = activity_id;
 
         $scope.cancel = function() {
           $location.path('/activity/');
@@ -24,7 +24,7 @@ angular.module('controllers')
           */
             // 添加一个表单主表
             var newE = {
-              activity_id: $scope.activityid,
+              activity_id: $scope.activity_id,
               title: $scope.title,
               desc: $scope.desc,
               questionList: [$scope.q1, $scope.q2, $scope.q3]
@@ -37,7 +37,6 @@ angular.module('controllers')
                   label: questionList[k],
                   question_id: data.id
                 };
-                console.log(newQI);
                 $questionItemManage.create(newQI).then(function(data){
                 }), function(err){
                   alert(err);

@@ -58,8 +58,9 @@ class ActivityController extends Controller
                 'type'
             ])
             ->orderBy([
-                'created_at' => SORT_ASC,
-                'id' => SORT_ASC,
+                'is_top' => SORT_DESC,
+                'updated_at' => SORT_DESC,
+                'id' => SORT_DESC,
             ])
             ->asArray()
             ->all();
@@ -173,6 +174,13 @@ class ActivityController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = $this->findModel($id);
         $data = Yii::$app->getRequest()->post();
+
+        if (isset($data['is_top'])) {
+            $model->is_top = $data['is_top'];
+            if (!$model->validate('is_top')) {
+                throw new DataValidationFailedException($model->getFirstError('is_top'));
+            }
+        }
 
         if (isset($data['title'])) {
             $model->title = $data['title'];

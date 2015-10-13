@@ -5,33 +5,50 @@ angular.module('controllers')
 
             $scope.$parent.pageName = '活动管理';
             $activityManage.fetch().then(function (data) {
-                console.log(data);
                 $scope.list = data;
             }, function (err) {
                 alert(err);
             });
 
-            $scope.update = function (activity) {
-                $location.path('/activity/' + activity.id);
+          // 置顶/取消置顶
+          $scope.top = function(entity, is_top) {
+            var newEntity = entity;
+            newEntity.is_top = is_top > 0 ? 1 : 0; // 是否置顶
+            $activityManage.update(entity.id, newEntity).then(function(data){
+              $mdToast.show($mdToast.simple()
+                  .content('置顶成功')
+                  .hideDelay(5000)
+                  .position("top right"));
+              $location.path('/activity');
+            }, function(err) {
+              $mdToast.show($mdToast.simple()
+                  .content(err.toString())
+                  .hideDelay(5000)
+                  .position("top right"));
+            })
+          }
+
+            $scope.update = function (entity) {
+                $location.path('/activity/' + entity.id);
             };
 
-            $scope.delete = function (activity) {
+            $scope.delete = function (entity) {
 
                 var confirm = $mdDialog.confirm()
-                    .title('确定要删除活动“' + activity.title + '”吗？')
+                    .title('确定要删除活动“' + entity.title + '”吗？')
                     .ariaLabel('delete activity item')
                     .ok('确定删除')
                     .cancel('手滑点错了，不删');
 
                 $mdDialog.show(confirm).then(function () {
-                    $activityManage.delete(activity).then(function (data) {
+                    $activityManage.delete(entity).then(function (data) {
 
                         lodash.remove($scope.list, function (tmpRow) {
-                            return tmpRow == activity;
+                            return tmpRow == entity;
                         });
 
                         $mdToast.show($mdToast.simple()
-                            .content('删除活动类型“' + activity.title + '”成功')
+                            .content('删除活动类型“' + entity.title + '”成功')
                             .hideDelay(5000)
                             .position("top right"));
 
@@ -43,7 +60,7 @@ angular.module('controllers')
                     });
                 });
             };
-            $scope.createActivityPage = function() {
+            $scope.createPage = function() {
                 $location.path('/activity/add');
             }
 
@@ -64,9 +81,8 @@ angular.module('controllers')
                 file: $scope.selectFile.file,
                 token: token
               }).then(function (response) {
-                console.log(response);
                 $qiniuManage.completelyUrl(response.key).then(function(url) {
-                  $scope.poster = url;
+                  $scope.entity.poster = url;
                 });
               }, function (response) {
                 console.log(response);
@@ -95,16 +111,7 @@ angular.module('controllers')
             var id = $routeParams.id;
             if(id>0) {
               $activityManage.fetch(id).then(function (data) {
-                  console.log(data);
-                  $scope.id = data.id;
-                  $scope.title = data.title;
-                  $scope.groupcode = data.groupcode;
-                  $scope.details = data.details;
-                  $scope.type_id = data.type_id;
-                  $scope.desc = data.desc;
-                  $scope.poster = data.poster;
-                  $scope.area = data.area;
-                  $scope.address = data.address;
+                $scope.entity = data;
               }, function (err) {
                   $location.path('/activity');
               });
@@ -112,29 +119,16 @@ angular.module('controllers')
 
             $activityTypeManage.fetch().then(function(data){
                 $scope.typelist = data;
-                console.log(data);
             });
 
             $scope.cancel = function() {
                 $location.path('/activity/');
             }
 
-            $scope.create = function () {
-                var newActivity = {
-                    title: $scope.title,
-                    desc: $scope.desc,
-                    type_id: $scope.type_id,
-                    groupcode: $scope.groupcode,
-                    details: $scope.details,
-                    address: $scope.address,
-                    area: $scope.area,
-                    poster: $scope.poster,
-                };
-                console.log(newActivity);
-                if ($scope.id > 0 ) {
-                    newActivity.id = $scope.id;
-                    console.log(newActivity);
-                    $activityManage.update($scope.id, newActivity).then(function(data) {
+            $scope.save = function () {
+                var newEntity = $scope.entity;
+                if (newEntity.id > 0 ) {
+                    $activityManage.update(newEntity.id, newEntity).then(function(data) {
                         $mdToast.show($mdToast.simple()
                             .content('活动保存成功')
                             .hideDelay(5000)
@@ -147,7 +141,7 @@ angular.module('controllers')
                             .position("top right"));
                     });
                 } else {
-                    $activityManage.create(newActivity).then(function (data) {
+                    $activityManage.create(newEntity).then(function (data) {
                         $mdToast.show($mdToast.simple()
                             .content('活动添加成功')
                             .hideDelay(5000)

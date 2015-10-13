@@ -1,11 +1,11 @@
 <div layout="column" flex id="content" ng-controller="ActivityTypeViewCtrl">
   <md-input-container>
     <label>类型名称</label>
-    <input type="text" ng-model="typeContent.name" value="{{typeContent.name}}">
+    <input type="text" ng-model="entity.name" >
   </md-input-container>
   <md-input-container>
     <label>类型排序</label>
-    <input type="number" ng-model="typeContent.displayorder" />
+    <input type="number" ng-model="entity.display_order" />
   </md-input-container>
   <div layout="row">
     <md-button class="md-raised md-primary" ng-click="save()">保存</md-button>
