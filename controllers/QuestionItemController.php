@@ -105,9 +105,9 @@ class QuestionItemController extends Controller
     }
 
     /**
-     * 修改 类型
+     * 修改 问题项
      *
-     * POST 提交到 /activity-type/update?id=10
+     * POST 提交到 /question-item/update?id=10
      *
      * ~~~
      * {
@@ -184,8 +184,8 @@ class QuestionItemController extends Controller
     }
 
     /**
-     * 删除活动
-     * POST 请求 /activity-type/delete?id=10
+     * 删除问题项
+     * POST 请求 /question-item/delete?id=10
      *
      * @param $id
      * @return array

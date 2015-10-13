@@ -9,7 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $name
- * @property integer $displayorder
+ * @property integer $display_order
  * @property integer $status
  */
 class ActivityType extends \yii\db\ActiveRecord
@@ -30,8 +30,8 @@ class ActivityType extends \yii\db\ActiveRecord
         return [
             [['name'], 'required'],
             ['name', 'unique', 'message' => '{attribute}已存在'],
-            [['displayorder', 'status'], 'integer'],
-            ['displayorder', 'default', 'value' => '99'],
+            [['display_order', 'status'], 'integer'],
+            ['display_order', 'default', 'value' => '99'],
             ['status', 'default', 'value' => '10'],
             [
                 'name',
@@ -52,7 +52,7 @@ class ActivityType extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => '名称',
-            'displayorder' => '显示顺序',
+            'display_order' => '显示顺序',
             'status' => 'Status',
         ];
     }

@@ -57,7 +57,7 @@ class ActivityTypeController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
         $types = ActivityType::find()
             ->orderBy([
-                'displayorder' => SORT_ASC,
+                'display_order' => SORT_ASC,
                 'id' => SORT_DESC,
             ])
             ->all();
@@ -73,7 +73,7 @@ class ActivityTypeController extends Controller
      * ~~~
      * {
      *   "name": <string: 活动名称>,
-     *   "displayorder": <int: 排序，此字段为空为默认值 99>
+     *   "display_order": <int: 排序，此字段为空为默认值 99>
      * }
      * ~~~
      *
@@ -96,7 +96,7 @@ class ActivityTypeController extends Controller
      * "data": {
      *   "id": 10,
      *   "name": "户外",
-     *   "displayorder": 99,
+     *   "display_order": 99,
      *   "status": 10
      * },
      * "status_code": 200
@@ -132,7 +132,7 @@ class ActivityTypeController extends Controller
      * ~~~
      * {
      *   "name": "户外1",
-     *   "displayorder": 96
+     *   "display_order": 96
      * }
      * ~~~
      *
@@ -148,7 +148,7 @@ class ActivityTypeController extends Controller
      *   "data": {
      *     "id": 10,
      *     "name": "户外1",
-     *     "displayorder": 96,
+     *     "display_order": 96,
      *     "status": 10
      *   },
      *   "status_code": 200
@@ -182,10 +182,10 @@ class ActivityTypeController extends Controller
             }
         }
 
-        if (isset($data['displayorder'])) {
-            $model->displayorder = $data['displayorder'];
-            if (!$model->validate('displayorder')) {
-                throw new DataValidationFailedException($model->getFirstError('displayorder'));
+        if (isset($data['display_order'])) {
+            $model->display_order = $data['display_order'];
+            if (!$model->validate('display_order')) {
+                throw new DataValidationFailedException($model->getFirstError('display_order'));
             }
         }
 

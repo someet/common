@@ -1,35 +1,35 @@
 <div layout="column" flex id="content" ng-controller="ActivityViewCtrl">
-        <input type="hidden" ng-model="id" />
+        <input type="hidden" ng-model="entity.id" />
 
         <md-input-container>
-            <md-select ng-model="type_id" placeholder="选择分类">
+            <md-select ng-model="entity.type_id" placeholder="选择分类">
                 <md-option ng-value="opt.id" ng-repeat="opt in typelist">{{ opt.name }}</md-option>
             </md-select>
         </md-input-container>
 
         <md-input-container>
             <label>标题</label>
-            <input type="text" ng-model="title" />
+            <input type="text" ng-model="entity.title" />
         </md-input-container>
 
         <md-input-container>
             <label>详情</label>
-            <input type="text" ng-model="details" />
+            <input type="text" ng-model="entity.details" />
         </md-input-container>
 
         <md-input-container>
             <label>区域</label>
-            <input type="text" ng-model="area" />
+            <input type="text" ng-model="entity.area" />
         </md-input-container>
 
         <md-input-container>
             <label>地址</label>
-            <input type="text" ng-model="address" />
+            <input type="text" ng-model="entity.address" />
         </md-input-container>
 
         <md-input-container>
             <label>描述</label>
-            <input type="text" ng-model="desc" />
+            <input type="text" ng-model="entity.desc" />
         </md-input-container>
 
         <div layout="row">
@@ -38,11 +38,11 @@
              点击此处选择海报
           </div>
           <p> {{ selectFile.progress.p }}% <button ng-click="abort()">x</button> </p>
-          <img src="{{poster}}" />
+          <img src="{{entity.poster}}" />
         </div>
 
         <md-input-container layout="row">
-            <md-button class="md-raised md-primary" ng-click="create()">添加</md-button>
+            <md-button class="md-raised md-primary" ng-click="save()">保存</md-button>
             <md-button class="md-raised md-warn" ng-click="cancel()">取消</md-button>
         </md-input-container>
 </div>

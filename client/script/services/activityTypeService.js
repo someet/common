@@ -1,18 +1,18 @@
 angular.module('backendServices')
   .factory('$activityTypeManage', ['$http', '$q', '$rootScope', function ($http, $q, $rootScope) {
     return {
-      create: function (newType) {
-        return $http.post('/activity-type/create', newType).then(function (data) {
+      create: function (newEntity) {
+        return $http.post('/activity-type/create', newEntity).then(function (data) {
           return data;
         });
       },
-      delete: function (type) {
-        return $http.post('/activity-type/delete?id=' + type.id, {}).success(function (data) {
+      delete: function (entity) {
+        return $http.post('/activity-type/delete?id=' + entity.id, {}).success(function (data) {
           return data;
         });
       },
-      update: function (typeId, newType) {
-        return $http.post('/activity-type/update?id=' + typeId, newType).then(function (data) {
+      update: function (id, newEntity) {
+        return $http.post('/activity-type/update?id=' + id, newEntity).then(function (data) {
           return data;
         });
       },

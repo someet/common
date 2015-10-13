@@ -23,8 +23,8 @@ function($routeProvider) {
       controller: 'ActivityTypeCtrl'
     })
     .when('/activity-type/add', {
-      templateUrl: '/partial/activity-type/add.html',
-      controller: 'ActivityTypeAddCtrl'
+      templateUrl: '/partial/activity-type/view.html',
+      controller: 'ActivityTypeViewCtrl'
     })
     .when('/activity-type/:id', {
       templateUrl: '/partial/activity-type/view.html',
@@ -50,7 +50,7 @@ function($routeProvider) {
       templateUrl: '/partial/user/add.html',
       controller: 'UserDeleteCtrl'
     })
-    .when('/question/add/:activityid', {
+    .when('/question/add/:activity_id', {
       templateUrl: '/partial/question/add.html',
       controller: 'QuestionAddCtrl'
     })

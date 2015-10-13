@@ -1,5 +1,5 @@
 <div layout="column" flex id="content" ng-controller="ActivityTypeCtrl">
-  <md-button class="activity-dialog-btn md-fab" ng-click="createActivityTypePage()" aria-label="add activity type">
+  <md-button class="activity-dialog-btn md-fab" ng-click="createPage()" aria-label="add activity type">
     <i class="fa fa-plus"></i>
   </md-button>
   <md-list style="width: 400px;">
@@ -9,13 +9,13 @@
       <p> 排序 </p>
       <p> 操作 </p>
     </md-list-item>
-    <md-list-item ng-repeat="type in list | orderBy: 'displayorder'">
-      <p flex="10"> {{type.id}} </p>
-      <p> {{type.name}} </p>
-      <p> {{type.displayorder}} </p>
+    <md-list-item ng-repeat="entity in list | orderBy: 'display_order'">
+      <p flex="10"> {{entity.id}} </p>
+      <p> {{entity.name}} </p>
+      <p> {{entity.display_order}} </p>
       <p layout="row">
-        <md-button class="md-raised" ng-click="update(type)">修改</md-button>
-        <md-button class="md-raised md-warn" ng-click="delete(type)">删除</md-button>
+        <md-button class="md-raised" ng-click="update(entity)">修改</md-button>
+        <md-button class="md-raised md-warn" ng-click="delete(entity)">删除</md-button>
       </p>
     </md-list-item>
   </md-list>

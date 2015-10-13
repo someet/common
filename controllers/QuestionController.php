@@ -75,8 +75,6 @@ class QuestionController extends Controller
      * "success": "1",
      * "data": {
      *   "id": 10,
-     *   "name": "户外",
-     *   "displayorder": 99,
      *   "status": 10
      * },
      * "status_code": 200
@@ -105,14 +103,13 @@ class QuestionController extends Controller
     }
 
     /**
-     * 修改 类型
+     * 修改 问题
      *
-     * POST 提交到 /activity-type/update?id=10
+     * POST 提交到 /question/update?id=10
      *
      * ~~~
      * {
      *   "name": "户外1",
-     *   "displayorder": 96
      * }
      * ~~~
      *
@@ -128,7 +125,6 @@ class QuestionController extends Controller
      *   "data": {
      *     "id": 10,
      *     "name": "户外1",
-     *     "displayorder": 96,
      *     "status": 10
      *   },
      *   "status_code": 200
@@ -155,17 +151,10 @@ class QuestionController extends Controller
         $model = $this->findModel($id);
         $data = Yii::$app->getRequest()->post();
 
-        if (isset($data['name'])) {
-            $model->name = $data['name'];
-            if (!$model->validate('name')) {
-                throw new DataValidationFailedException($model->getFirstError('name'));
-            }
-        }
-
-        if (isset($data['displayorder'])) {
-            $model->displayorder = $data['displayorder'];
-            if (!$model->validate('displayorder')) {
-                throw new DataValidationFailedException($model->getFirstError('displayorder'));
+        if (isset($data['title'])) {
+            $model->title = $data['title'];
+            if (!$model->validate('title')) {
+                throw new DataValidationFailedException($model->getFirstError('title'));
             }
         }
 
@@ -184,8 +173,8 @@ class QuestionController extends Controller
     }
 
     /**
-     * 删除活动
-     * POST 请求 /activity-type/delete?id=10
+     * 删除问题
+     * POST 请求 /question/delete?id=10
      *
      * @param $id
      * @return array
@@ -225,17 +214,17 @@ class QuestionController extends Controller
 
     /**
      * @param $id
-     * @return ActivityType
+     * @return Question
      * @throws NotFoundHttpException
      */
     public function findModel($id)
     {
-        $model = ActivityType::findOne($id);
+        $model = Question::findOne($id);
 
         if (isset($model)) {
             return $model;
         } else {
-            throw new NotFoundHttpException("类型不存在");
+            throw new NotFoundHttpException("问题不存在");
         }
     }
 }

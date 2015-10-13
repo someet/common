@@ -116,7 +116,7 @@ class AnswerController extends Controller
         if (isset($model)) {
             return $model;
         } else {
-            throw new NotFoundHttpException("类型不存在");
+            throw new NotFoundHttpException("答案不存在");
         }
     }
 }
