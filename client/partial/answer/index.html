@@ -1,0 +1,60 @@
+<div layout="column" flex id="content" ng-controller="AnswerCtrl">
+
+    未审核
+    <md-list style="width: 600px; ">
+        <md-list-item>
+            <p flex="10"> ID </p>
+            <p> 用户名 </p>
+            <p> 操作 </p>
+        </md-list-item>
+        <md-list-item ng-repeat="entity in list | filter: {status: '10'}" ng-click="view(entity)">
+            <p flex="10"> {{entity.id}} </p>
+            <p> {{entity.user.username}} </p>
+            <p layout="row">
+                <md-button class="md-raised" ng-click="pass(entity)">通过</md-button>
+                <md-button class="md-raised" ng-click="reject(entity)">不通过</md-button>
+            </p>
+        </md-list-item>
+    </md-list>
+
+    审核通过列表
+    <md-list style="width: 600px; ">
+        <md-list-item>
+            <p flex="10"> ID </p>
+            <p> 用户名 </p>
+            <p> 操作 </p>
+        </md-list-item>
+        <md-list-item ng-repeat="entity in list | filter: {status: 20}" ng-click="view(entity)">
+            <p flex="10"> {{entity.id}} </p>
+            <p> {{entity.user.username}} </p>
+            <p layout="row">
+                <md-button class="md-raised" ng-click="reject(entity)">不通过</md-button>
+                <md-button class="md-raised" ng-click="remove(entity)">移除</md-button>
+            </p>
+        </md-list-item>
+    </md-list>
+
+    审核不通过列表
+    <md-list style="width: 700px; ">
+        <md-list-item>
+            <p flex="10"> ID </p>
+            <p> 用户名 </p>
+            <p> 操作 </p>
+        </md-list-item>
+        <md-list-item ng-repeat="entity in list | filter: {status: 30}" ng-click="view(entity)">
+            <p flex="10"> {{entity.id}} </p>
+            <p> {{entity.user.username}} </p>
+            <p layout="row">
+                <md-button class="md-raised" ng-click="pass(entity)">通过</md-button>
+                <md-button class="md-raised" ng-click="remove(entity)">移除</md-button>
+            </p>
+        </md-list-item>
+    </md-list>
+
+    <md-list>
+        <md-list-item ng-repeat="answer in answerItemList">
+            {{answer.question_label}} : {{answer.question_value}}
+        </md-list-item>
+    </md-list>
+
+</div>

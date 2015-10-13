@@ -28,6 +28,11 @@ angular.module('controllers')
             })
           }
 
+          // 预览问题
+          $scope.previewQuestion = function(entity) {
+            $location.path('/answer/view/'+entity.id);
+          }
+
             $scope.update = function (entity) {
                 $location.path('/activity/' + entity.id);
             };
@@ -70,7 +75,7 @@ angular.module('controllers')
           }
 
           $scope.viewAnswer = function(activity) {
-            $location.path('/answer//' + activity.id);
+            $location.path('/answer/' + activity.id);
           }
 
         }])
