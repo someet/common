@@ -22,6 +22,11 @@ angular.module('backendServices')
           return $http.get(url).then(function (data) {
             return data;
           });
+        },
+        fetchByActivityid: function(activityid) {
+          return $http.get('/question/view-by-activityid?activityid=' + activityid).then(function(data) {
+            return data;
+          });
         }
       };
     }]);

@@ -1,4 +1,49 @@
 angular.module('controllers')
+    .controller('QuestionViewCtrl',
+    ['$scope', '$location', '$routeParams', '$questionManage', '$questionItemManage', '$mdToast',
+      function ($scope, $location, $routeParams, $questionManage, $questionItemManage, $mdToast) {
+        $scope.$parent.pageName = '修改问题';
+        var activityid = $routeParams.activityid;
+        $scope.activityid = activityid;
+        console.log(activityid);
+
+        $questionManage.fetchByActivityid(activityid).then(function(data){
+          $scope.question = data;
+
+          var questionData = {
+            question_id: $scope.question.id,
+            activity_id: $scope.question.activity_id,
+            answerList: []
+          };
+
+          for(var k in $scope.question.questionList) {
+            var question = {
+              question_item_id: $scope.question.questionList[k].id,
+              question_id: answerData.question_id,
+              question_label: $scope.question.questionList[k].label,
+              question_value: $scope.question.questionList[k].answer
+            };
+            questionData.answerList.push(question);
+          }
+        });
+
+
+        $scope.save = function(){
+          var newE = {
+            activity_id: $scope.question.activityid,
+            title: $scope.question.title,
+            desc: $scope.question.desc,
+          };
+          if ($scope.id > 0) {
+            newE.id = $scope.id;
+            $questionManage.update($scope.id, newE).then(function(data) {
+              alert('保存成功');
+              $location.path('/activity');
+            })
+          }
+        };
+
+      }])
     .controller('QuestionAddCtrl',
     ['$scope', '$location', '$routeParams', '$questionManage', '$questionItemManage', '$mdToast',
       function ($scope, $location, $routeParams, $questionManage, $questionItemManage, $mdToast) {

@@ -34,6 +34,10 @@ function($routeProvider) {
       templateUrl: '/partial/answer/add.html',
       controller: 'AnswerAddCtrl'
     })
+    .when('/answer/:activityid',{
+      templateUrl: '/partial/answer/add.html',
+      controller: 'AnswerAddCtrl'
+    })
     .when('/user', {
       templateUrl: '/partial/user/list.html',
       controller: 'UserListCtrl'

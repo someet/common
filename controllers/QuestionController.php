@@ -41,6 +41,7 @@ class QuestionController extends Controller
                     'update' => ['post'],
                     'delete' => ['post'],
                     'view' => ['get'],
+                    'viewByActivityid' => ['get'],
                 ],
             ],
         ];
@@ -207,7 +208,24 @@ class QuestionController extends Controller
     public function actionView($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $model = $this->findModel($id);
+        $model = Question::find()
+            ->where(['id' => $id])
+            ->asArray()
+            ->with('questionList')
+            ->one();
+
+        return $model;
+    }
+
+
+    public function actionViewByActivityid($activityid)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $model = Question::find()
+            ->where(['activity_id' => $activityid])
+            ->asArray()
+            ->with('questionList')
+            ->one();
 
         return $model;
     }

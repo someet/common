@@ -1,0 +1,19 @@
+<div layout="column" flex id="content" ng-controller="QuestionViewCtrl">
+    <input type="hidden" ng-model="question.activityid" />
+    <md-input-container>
+        <label>表单标题</label>
+        <input type="text" ng-model="question.title">
+    </md-input-container>
+    <md-input-container>
+        <label>表单描述</label>
+        <input type="text" ng-model="question.desc">
+    </md-input-container>
+    <md-input-container ng-repeat="(k, questionItem) in question.questionList">
+        <label>问题{{k+1}}</label>
+        <input type="text" ng-model="questionItem.label">
+    </md-input-container>
+    <md-input-container layout="row">
+        <md-button class="md-raised md-primary" ng-click="save()">保存</md-button>
+        <md-button class="md-raised md-warn" ng-click="cancel()">取消</md-button>
+    </md-input-container>
+</div>

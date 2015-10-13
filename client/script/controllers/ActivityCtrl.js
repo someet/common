@@ -63,6 +63,14 @@ angular.module('controllers')
             $scope.createPage = function() {
                 $location.path('/activity/add');
             }
+          // 报名表单
+          $scope.viewQuestion = function(activity) {
+            $location.path('/question/view/' + activity.id);
+          }
+
+          $scope.viewAnswer = function(activity) {
+            $location.path('/answer//' + activity.id);
+          }
 
         }])
     .controller('ActivityViewCtrl',
@@ -107,6 +115,7 @@ angular.module('controllers')
             };
             start();
           };
+
           // qiniu upload end //
             var id = $routeParams.id;
             if(id>0) {
@@ -117,10 +126,12 @@ angular.module('controllers')
               });
             }
 
+          // 列表
             $activityTypeManage.fetch().then(function(data){
                 $scope.typelist = data;
             });
 
+          // 取消
             $scope.cancel = function() {
                 $location.path('/activity/');
             }

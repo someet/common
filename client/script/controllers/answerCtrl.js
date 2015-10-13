@@ -24,7 +24,7 @@ angular.module('controllers')
               question_label: $scope.questions.questionList[k].label,
               question_value: $scope.questions.questionList[k].answer
             };
-            answerData.answerList.push(answer)
+            answerData.answerList.push(answer);
           }
 
           $answerManage.create(answerData).then(function(data) {
@@ -33,8 +33,5 @@ angular.module('controllers')
             alert(err);
           });
         };
-
-
-
 
     }]);
