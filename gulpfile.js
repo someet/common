@@ -9,10 +9,12 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 var changed = require('gulp-changed');
+var plumber = require('gulp-plumber');
 
 // 检查脚本
 gulp.task('lint', function() {
   gulp.src('./client/script/*.js')
+    .pipe(plumber())
     .pipe(jshint())
     .pipe(jshint.reporter('default'));
 });
@@ -20,6 +22,7 @@ gulp.task('lint', function() {
 // 编译 sass
 gulp.task('sass', function() {
   gulp.src(['./client/style/**/*.scss'])
+    .pipe(plumber())
     .pipe(sass())
     .pipe(gulp.dest('./web/static/style'));
 });
@@ -41,6 +44,7 @@ gulp.task('copy-bundle', function(){
       './bower_components/ng-lodash/build/ng-lodash.min.js',
       './bower_components/angular-local-storage/dist/angular-local-storage.min.js'
     ])
+    .pipe(plumber())
     .pipe(concat('bundle.js'))
     .pipe(gulp.dest('./web/static/js'));
 });
@@ -63,6 +67,7 @@ gulp.task('copy-image', function() {
 // 合并，压缩文件
 gulp.task('script', function(){
   gulp.src('./client/script/**/*.js')
+    .pipe(plumber())
     .pipe(concat('all.js'))
     .pipe(gulp.dest('./web/static/js'))
     .pipe(rename('all.min.js'))
