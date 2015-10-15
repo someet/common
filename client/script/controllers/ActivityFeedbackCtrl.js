@@ -20,7 +20,7 @@ angular.module('controllers')
       $scope.delete = function (feedback) {
         var confirm = $mdDialog.confirm()
           .title('确定要删除活动反馈“' + feedback.feedback + '”吗？')
-          .ariaLabel('delete activity item')
+          .ariaLabel('delete activity feedback')
           .ok('确定删除')
           .cancel('手滑点错了，不删');
 
