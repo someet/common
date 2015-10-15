@@ -108,8 +108,15 @@ class Activity extends \yii\db\ActiveRecord
         ];
     }
 
+    // 活动的类型
     public function getType()
     {
         return $this->hasOne(ActivityType::className(), ['id' => 'type_id']);
+    }
+
+    // 活动反馈列表
+    public function getFeedbackList()
+    {
+        return $this->hasOne(ActivityFeedback::className(), ['activity_id' => 'id']);
     }
 }
