@@ -92,6 +92,21 @@ function($routeProvider) {
       templateUrl: '/partial/answer/index.html',
       controller: 'AnswerCtrl'
     })
+    //消息模板列表
+    .when('/sms-template', {
+      templateUrl: '/partial/sms-template/index.html',
+      controller: 'SmsTemplateCtrl'
+    })
+    //添加消息模板
+    .when('/sms-template/add', {
+      templateUrl: '/partial/sms-template/view.html',
+      controller: 'SmsTemplateViewCtrl'
+    })
+    //查看消息模板
+    .when('/sms-template/:id', {
+      templateUrl: '/partial/sms-template/view.html',
+      controller: 'SmsTemplateViewCtrl'
+    })
     .otherwise({
       redirectTo: '/dashboard'
     });

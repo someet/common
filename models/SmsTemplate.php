@@ -49,8 +49,8 @@ class SmsTemplate extends \yii\db\ActiveRecord
                 'string',
                 'min' => 10,
                 'max' => 255,
-                'tooLong' => '{attribute}长度不得超过10个字符',
-                'tooShort' => '{attribute}最少含有2个字符',
+                'tooLong' => '{attribute}长度不得超过255个字符',
+                'tooShort' => '{attribute}最少含有10个字符',
             ],
         ];
     }
