@@ -22,6 +22,21 @@ function($routeProvider) {
       templateUrl: '/partial/activity-type/view.html',
       controller: 'ActivityTypeViewCtrl'
     })
+    //活动类型列表
+    .when('/activity-tag', {
+      templateUrl: '/partial/activity-tag/index.html',
+      controller: 'ActivityTagCtrl'
+    })
+    //添加活动标签
+    .when('/activity-tag/add', {
+      templateUrl: '/partial/activity-tag/view.html',
+      controller: 'ActivityTagViewCtrl'
+    })
+    //查看活动标签
+    .when('/activity-tag/:id', {
+      templateUrl: '/partial/activity-tag/view.html',
+      controller: 'ActivityTagViewCtrl'
+    })
     //活动列表
     .when('/activity', {
       templateUrl: '/partial/activity/index.html',
