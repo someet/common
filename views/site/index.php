@@ -26,6 +26,7 @@ use yii\helpers\Html;
         <md-button ng-href="/#/special">专题管理</md-button>
         <md-button ng-href="/#/user">用户管理</md-button>
         <md-button ng-href="/#/sms-template">消息模板管理</md-button>
+        <md-button ng-href="/#/activity-feedback">用户反馈</md-button>
       </md-content>
     </md-sidenav>
     <div class="flex md-layout-column">

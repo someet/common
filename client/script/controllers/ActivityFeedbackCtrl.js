@@ -1,0 +1,105 @@
+angular.module('controllers')
+  .controller('ActivityFeedbackCtrl',
+  ['$scope', '$http', '$location', '$activityFeedbackManage', 'lodash', '$mdToast', '$mdDialog',
+    function ($scope, $http, $location, $activityFeedbackManage, lodash, $mdToast, $mdDialog) {
+
+      $scope.$parent.pageName = '活动反馈管理';
+      // 活动反馈列表
+      $activityFeedbackManage.fetch().then(function (data) {
+        $scope.list = data;
+      }, function (err) {
+        alert(err);
+      });
+
+      // 跳转到更新反馈页面
+      $scope.update = function (feedback) {
+        $location.path('/activity-feedback/' + feedback.id);
+      };
+
+      // 删除活动反馈
+      $scope.delete = function (feedback) {
+        var confirm = $mdDialog.confirm()
+          .title('确定要删除活动反馈“' + feedback.name + '”吗？')
+          .ariaLabel('delete activity item')
+          .ok('确定删除')
+          .cancel('手滑点错了，不删');
+
+        $mdDialog.show(confirm).then(function () {
+          $activityFeedbackManage.delete(feedback).then(function (data) {
+            lodash.remove($scope.list, function (tmpRow) {
+              return tmpRow == feedback;
+            });
+
+            $mdToast.show($mdToast.simple()
+              .content('删除活动反馈“' + feedback.name + '”成功')
+              .hideDelay(5000)
+              .position("top right"));
+
+          }, function (err) {
+            $mdToast.show($mdToast.simple()
+              .content(err.toString())
+              .hideDelay(5000)
+              .position("top right"));
+          });
+        });
+      };
+
+      // 跳转到添加页面
+      // $scope.createPage = function () {
+      //   $location.path('/activity-feedback/add');
+      // }
+    }])
+  .controller('ActivityFeedbackViewCtrl',
+  ['$scope', '$http', '$routeParams', '$location', '$activityFeedbackManage', '$mdToast',
+    function ($scope, $http, $routeParams, $location, $activityFeedbackManage, $mdToast) {
+
+      // 获取GET参数的id
+      var id = $routeParams.id;
+
+      $scope.$parent.pageName = id>0 ? "更新活动反馈" : "添加活动反馈";
+      // 查看单个活动反馈
+      $activityFeedbackManage.fetch(id).then(function (data) {
+        $scope.entity = data;
+      }, function (err) {
+        $location.path('/activity-feedback');
+      });
+
+      // 保存活动反馈
+      $scope.save = function () {
+        var entity = $scope.entity;
+        var newEntity = {name: entity.name, star: entity.star, feedback: entity.feedback, status: entity.status};
+        if (entity.id > 0) { // 更新
+          $activityFeedbackManage.update(entity.id, newEntity).then(function (data) {
+            $location.path('/activity-feedback');
+            $mdToast.show($mdToast.simple()
+                .content('修改成功')
+                .hideDelay(5000)
+                .position("top right"));
+          }, function (err) {
+            $mdToast.show($mdToast.simple()
+                .content(err.toString())
+                .hideDelay(5000)
+                .position("top right"));
+          })
+        } else { // 添加
+          // $activityFeedbackManage.create(newEntity).then(function (data) {
+          //   $location.path('/activity-feedback');
+          //   $mdToast.show($mdToast.simple()
+          //       .content('添加活动反馈成功')
+          //       .hideDelay(5000)
+          //       .position("top right"));
+          // }, function (err) {
+          //   $mdToast.show($mdToast.simple()
+          //       .content(err.toString())
+          //       .hideDelay(5000)
+          //       .position("top right"));
+          // });
+        }
+      };
+
+      // 在修改页面点击取消
+      $scope.cancel = function () {
+        $location.path('/activity-feedback');
+      }
+    }]);
+
