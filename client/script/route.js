@@ -113,10 +113,25 @@ function($routeProvider) {
       controller: 'ActivityFeedbackCtrl'
     })
     //查看反馈
-    .when('/activity-feedback/:id', {
-      templateUrl: '/partial/activity-feedback/view.html',
-      controller: 'ActivityFeedbackViewCtrl'
-    })
+      .when('/activity-feedback/:id', {
+        templateUrl: '/partial/activity-feedback/view.html',
+        controller: 'ActivityFeedbackViewCtrl'
+      })
+    //消息模板列表
+      .when('/sms-template', {
+        templateUrl: '/partial/sms-template/index.html',
+        controller: 'SmsTemplateCtrl'
+      })
+    //添加消息模板
+      .when('/sms-template/add', {
+        templateUrl: '/partial/sms-template/view.html',
+        controller: 'SmsTemplateViewCtrl'
+      })
+    //查看消息模板
+      .when('/sms-template/:id', {
+        templateUrl: '/partial/sms-template/view.html',
+        controller: 'SmsTemplateViewCtrl'
+      })
     .otherwise({
       redirectTo: '/dashboard'
     });
