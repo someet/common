@@ -107,20 +107,15 @@ function($routeProvider) {
       templateUrl: '/partial/answer/index.html',
       controller: 'AnswerCtrl'
     })
-    //消息模板列表
-    .when('/sms-template', {
-      templateUrl: '/partial/sms-template/index.html',
-      controller: 'SmsTemplateCtrl'
+    //活动反馈列表
+    .when('/activity-feedback', {
+      templateUrl: '/partial/activity-feedback/index.html',
+      controller: 'ActivityFeedbackCtrl'
     })
-    //添加消息模板
-    .when('/sms-template/add', {
-      templateUrl: '/partial/sms-template/view.html',
-      controller: 'SmsTemplateViewCtrl'
-    })
-    //查看消息模板
-    .when('/sms-template/:id', {
-      templateUrl: '/partial/sms-template/view.html',
-      controller: 'SmsTemplateViewCtrl'
+    //查看反馈
+    .when('/activity-feedback/:id', {
+      templateUrl: '/partial/activity-feedback/view.html',
+      controller: 'ActivityFeedbackViewCtrl'
     })
     .otherwise({
       redirectTo: '/dashboard'
