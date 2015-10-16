@@ -19,8 +19,8 @@ angular.module('controllers')
       // 删除活动反馈
       $scope.delete = function (feedback) {
         var confirm = $mdDialog.confirm()
-          .title('确定要删除活动反馈“' + feedback.feedback + '”吗？')
-          .ariaLabel('delete activity feedback')
+          .title('确定要删除活动反馈“' + feedback.name + '”吗？')
+          .ariaLabel('delete activity item')
           .ok('确定删除')
           .cancel('手滑点错了，不删');
 
@@ -31,7 +31,7 @@ angular.module('controllers')
             });
 
             $mdToast.show($mdToast.simple()
-              .content('删除活动反馈“' + feedback.feedback + '”成功')
+              .content('删除活动反馈“' + feedback.name + '”成功')
               .hideDelay(5000)
               .position("top right"));
 
