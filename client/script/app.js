@@ -3,7 +3,8 @@ var app = angular.module('SomeetBackendApp', [
   'ngRoute',
   'ngLodash',
   'controllers',
-  'angularQFileUpload',
+  'ui.bootstrap',
+  'someetPagination',
   'backendServices'
 ]);
 

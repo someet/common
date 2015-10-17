@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\components\DataValidationFailedException;
 use app\models\User;
 use Yii;
+use yii\data\Pagination;
 use yii\filters\VerbFilter;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -47,18 +48,32 @@ class UserController extends Controller
         ];
     }
 
-    public function actionIndex($id = null)
+    public function actionIndex($id = null, $scenario = null, $perPage = 20)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-
         $query = User::find()
             ->where(['status' => User::STATUS_ACTIVE])
             ->orderBy(['id' => SORT_DESC]);
         if ($id != null) {
-            $users = $query->where(['id' => $id])
-                ->one();
-        } else {
-            $users = $query->all();
+            $users = $this->findOne($id);
+        } elseif ($scenario == "total") {
+            $countQuery = clone $query;
+            $pagination = new Pagination([
+                'totalCount' => $countQuery->count(),
+                'defaultPageSize' => $perPage
+            ]);
+
+            return $pagination->pageCount;
+        } elseif ($scenario == "page") {
+            $countQuery = clone $query;
+            $pagination = new Pagination([
+                'totalCount' => $countQuery->count(),
+                'defaultPageSize' => $perPage
+            ]);
+
+            $users = $query->offset($pagination->offset)
+                ->limit($pagination->limit)
+                ->all();
         }
 
         return $users;
