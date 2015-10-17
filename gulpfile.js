@@ -30,6 +30,7 @@ gulp.task('sass', function() {
 gulp.task('copy-bundle', function(){
   gulp.src([
     './bower_components/angular-material/angular-material.min.css',
+    './bower_components/textAngular/dist/textAngular.css',
     'client/style/font-awesome.min.css'
     ])
     .pipe(plumber())
@@ -42,9 +43,12 @@ gulp.task('copy-bundle', function(){
       './bower_components/angular-aria/angular-aria.min.js',
       './bower_components/angular-material/angular-material.min.js',
       './bower_components/angular-route/angular-route.min.js',
-      './bower_components/ng-lodash/build/ng-lodash.min.js',
       './bower_components/angular-local-storage/dist/angular-local-storage.min.js',
-      './bower_components/angular-bootstrap/ui-bootstrap.min.js'
+      './bower_components/angular-bootstrap/ui-bootstrap.min.js',
+      './bower_components/ng-lodash/build/ng-lodash.min.js',
+      './bower_components/textAngular/dist/textAngular-rangy.min.js',
+      './bower_components/textAngular/dist/textAngular-sanitize.min.js',
+      './bower_components/textAngular/dist/textAngular.min.js'
     ])
     .pipe(plumber())
     .pipe(concat('bundle.js'))
