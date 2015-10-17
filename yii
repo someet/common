@@ -8,7 +8,8 @@ defined('STDOUT') or define('STDOUT', fopen('php://stdout', 'w'));
 require('/var/www/html/helpers/DockerEnv.php');
 \DockerEnv::init();
 $config = \DockerEnv::consoleConfig();
-
 $application = new yii\console\Application($config);
+\Yii::setAlias('common', __DIR__ . '/packages/someet-common/');
+
 $exitCode = $application->run();
 exit($exitCode);
