@@ -4,7 +4,7 @@ namespace tests\codeception\unit\models\behaviors;
 use Yii;
 use yii\codeception\DbTestCase;
 use tests\codeception\fixtures\UserFixture;
-use app\models\User;
+use someet\common\models\User;
 
 class TimestampBehaviorTest extends DbTestCase
 {
