@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b64aeea9c445dce5de042944bfe0e79f",
+    "hash": "08e426d786d9e1259896c73eb2d7b023",
+    "content-hash": "d4db660c719591657f3a9a642550a6df",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -430,6 +431,29 @@
                 "storage"
             ],
             "time": "2015-07-24 01:24:17"
+        },
+        {
+            "name": "someet/common",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "./packages/someet-common/",
+                "reference": "",
+                "shasum": null
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "someet\\common\\": "."
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "someet common repo"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -1204,7 +1228,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "someet/common": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
