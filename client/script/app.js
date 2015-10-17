@@ -5,7 +5,6 @@ var app = angular.module('SomeetBackendApp', [
   'controllers',
   'ui.bootstrap',
   'someetPagination',
-  'someetTextAngular',
   'backendServices'
 ]);
 
