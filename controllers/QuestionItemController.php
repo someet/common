@@ -42,6 +42,9 @@ class QuestionItemController extends Controller
                     'view' => ['get'],
                 ],
             ],
+            'access' => [
+                'class' => '\app\components\AccessControl',
+            ],
         ];
     }
 
