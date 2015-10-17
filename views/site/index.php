@@ -35,7 +35,7 @@ use yii\helpers\Html;
         <md-button hide-gt-md ng-click="toggleSidenav('left')">
           <md-icon aria-label="Menu" md-svg-icon="https://s3-us-west-2.amazonaws.com/s.cdpn.io/68133/menu.svg"></md-icon>
         </md-button>
-        <h3>{{pageName}}</h3>
+        <p style="margin: 0; padding-top: 18px; padding-left: 3px;">{{pageName}}</p>
       </md-toolbar>
     <div layout="row" flex>
         <!--div layout="column" flex id="content"-->
