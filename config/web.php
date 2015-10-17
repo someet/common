@@ -1,6 +1,6 @@
 <?php
 $config = [
-    'id' => 'basic',
+    'id' => 'backend',
     'basePath' => '/var/www/html',
     'vendorPath' => '/var/www/vendor',
     'timeZone'=>'Asia/Chongqing',
