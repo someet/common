@@ -18,8 +18,15 @@ class SiteController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    'logout' => ['post', 'get'],
                 ],
+            ],
+            'access' => [
+                'class' => '\app\components\AccessControl',
+                'allowActions' => [
+                    'error',
+                    'logout',
+                ]
             ],
         ];
     }
@@ -42,25 +49,6 @@ class SiteController extends Controller
     public function actionIndex()
     {
         return $this->renderPartial('index');
-    }
-
-    /**
-     * User login
-     */
-    public function actionLogin()
-    {
-        if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        } else {
-            return $this->render('login', [
-                'model' => $model,
-            ]);
-        }
     }
 
     /**

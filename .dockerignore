@@ -6,3 +6,4 @@ runtime
 web/assets
 bower_components
 node_modules
+vendor

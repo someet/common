@@ -14,7 +14,9 @@
 		"vlucas/phpdotenv": "1.0.*",
 		"codemix/yii2-streamlog": "0.0.1",
 		"qiniu/php-sdk": "^7.0",
-		"someet/common": "*@dev"
+		"someet/common": "*@dev",
+		"dektrium/yii2-user": "*@dev",
+		"dektrium/yii2-rbac": "*@dev"
 	},
 	"require-dev": {
 		"yiisoft/yii2-debug": "~2.0.0",
@@ -36,6 +38,14 @@
 		{
 			"type": "path",
 			"url": "./packages/someet-common/"
+		},
+		{
+			"type": "path",
+			"url": "./packages/yii2-user"
+		},
+		{
+			"type": "path",
+			"url": "./packages/yii2-rbac"
 		}
 	]
 }

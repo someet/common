@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "08e426d786d9e1259896c73eb2d7b023",
-    "content-hash": "d4db660c719591657f3a9a642550a6df",
+    "hash": "1a1f379063ed6dc2925899d3cb600665",
+    "content-hash": "13e0f3bd5a384d026ae8620248d307db",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -338,6 +338,114 @@
             "time": "2015-03-05 09:58:16"
         },
         {
+            "name": "dektrium/yii2-rbac",
+            "version": "dev-userAndRbac",
+            "dist": {
+                "type": "path",
+                "url": "./packages/yii2-rbac/",
+                "reference": "",
+                "shasum": null
+            },
+            "require": {
+                "kartik-v/yii2-widget-select2": "*",
+                "yiisoft/yii2": "2.0.*"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "bootstrap": "dektrium\\rbac\\Bootstrap"
+            },
+            "autoload": {
+                "psr-4": {
+                    "dektrium\\rbac\\": ""
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dmitry Erofeev",
+                    "email": "dmeroff@gmail.com",
+                    "homepage": "http://dmeroff.ru"
+                }
+            ],
+            "description": "RBAC management module for Yii2",
+            "keywords": [
+                "dektrium",
+                "rbac gui",
+                "rbac management",
+                "rbac module",
+                "yii rbac",
+                "yii2",
+                "yii2-rbac"
+            ],
+            "support": {
+                "issues": "https://github.com/dektrium/yii2-rbac/issues?state=open",
+                "source": "https://github.com/dektrium/yii2-rbac"
+            }
+        },
+        {
+            "name": "dektrium/yii2-user",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "./packages/yii2-user/",
+                "reference": "",
+                "shasum": null
+            },
+            "require": {
+                "yiisoft/yii2": "~2.0",
+                "yiisoft/yii2-authclient": "~2.0",
+                "yiisoft/yii2-bootstrap": "~2.0",
+                "yiisoft/yii2-jui": "~2.0",
+                "yiisoft/yii2-swiftmailer": "~2.0"
+            },
+            "require-dev": {
+                "codeception/aspect-mock": "*",
+                "codeception/specify": "*",
+                "codeception/verify": "*",
+                "yiisoft/yii2-codeception": "~2.0"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "bootstrap": "dektrium\\user\\Bootstrap",
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                },
+                "asset-installer-paths": {
+                    "npm-asset-library": "vendor/npm",
+                    "bower-asset-library": "vendor/bower"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "dektrium\\user\\": ""
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dmitry Erofeev",
+                    "email": "dmeroff@gmail.com",
+                    "homepage": "http://dmeroff.ru"
+                }
+            ],
+            "description": "Flexible user registration and authentication module for Yii2",
+            "keywords": [
+                "dektrium",
+                "user management",
+                "yii2",
+                "yii2-user"
+            ],
+            "support": {
+                "issues": "https://github.com/dektrium/yii2-user/issues?state=open",
+                "forum": "https://gitter.im/dektrium/yii2-user",
+                "source": "https://github.com/dektrium/yii2-user"
+            }
+        },
+        {
             "name": "ezyang/htmlpurifier",
             "version": "v4.6.0",
             "source": {
@@ -380,6 +488,100 @@
                 "html"
             ],
             "time": "2013-11-30 08:25:19"
+        },
+        {
+            "name": "kartik-v/yii2-krajee-base",
+            "version": "v1.7.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-krajee-base.git",
+                "reference": "c0adff9d9762f4fd3bf0e7cd0000fcab0bf00f19"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://packagist.phpcomposer.com/files/kartik-v/yii2-krajee-base/c0adff9d9762f4fd3bf0e7cd0000fcab0bf00f19.zip",
+                "reference": "c0adff9d9762f4fd3bf0e7cd0000fcab0bf00f19",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2-bootstrap": "@dev"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "kartik\\base\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "Base library and foundation components for all Yii2 Krajee extensions.",
+            "homepage": "https://github.com/kartik-v/yii2-krajee-base",
+            "keywords": [
+                "base",
+                "extension",
+                "foundation",
+                "krajee",
+                "widget",
+                "yii2"
+            ],
+            "time": "2015-06-16 05:19:57"
+        },
+        {
+            "name": "kartik-v/yii2-widget-select2",
+            "version": "v2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-widget-select2.git",
+                "reference": "e72880e7e8dfc845c112ed7df275bf1c929be6db"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://packagist.phpcomposer.com/files/kartik-v/yii2-widget-select2/e72880e7e8dfc845c112ed7df275bf1c929be6db.zip",
+                "reference": "e72880e7e8dfc845c112ed7df275bf1c929be6db",
+                "shasum": ""
+            },
+            "require": {
+                "kartik-v/yii2-krajee-base": "~1.7"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "kartik\\select2\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "Enhanced Yii2 wrapper for the Select2 jQuery plugin (sub repo split from yii2-widgets).",
+            "homepage": "https://github.com/kartik-v/yii2-widget-select2",
+            "keywords": [
+                "dropdown",
+                "extension",
+                "form",
+                "jquery",
+                "plugin",
+                "select2",
+                "widget",
+                "yii2"
+            ],
+            "time": "2015-09-12 19:56:48"
         },
         {
             "name": "qiniu/php-sdk",
@@ -720,6 +922,54 @@
                 "yii2"
             ],
             "time": "2015-08-05 22:00:30"
+        },
+        {
+            "name": "yiisoft/yii2-authclient",
+            "version": "2.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yiisoft/yii2-authclient.git",
+                "reference": "22910bfe0000538f5b3ca1102cd3de0b5d14a0e2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://packagist.phpcomposer.com/files/yiisoft/yii2-authclient/22910bfe0000538f5b3ca1102cd3de0b5d14a0e2.zip",
+                "reference": "22910bfe0000538f5b3ca1102cd3de0b5d14a0e2",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "yiisoft/yii2": ">=2.0.4"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "yii\\authclient\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Paul Klimov",
+                    "email": "klimov.paul@gmail.com"
+                }
+            ],
+            "description": "External authentication via OAuth and OpenID for the Yii framework",
+            "keywords": [
+                "OpenId",
+                "auth",
+                "oauth",
+                "yii2"
+            ],
+            "time": "2015-09-23 17:26:02"
         },
         {
             "name": "yiisoft/yii2-bootstrap",
@@ -1229,7 +1479,9 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "someet/common": 20
+        "someet/common": 20,
+        "dektrium/yii2-user": 20,
+        "dektrium/yii2-rbac": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use yii\helpers\Url;
 ?>
 <!DOCTYPE html>
 <html lang="en" ng-app="SomeetBackendApp">
@@ -27,6 +28,7 @@ use yii\helpers\Html;
         <md-button ng-href="/#/user">用户管理</md-button>
         <md-button ng-href="/#/sms-template">消息模板</md-button>
         <md-button ng-href="/#/activity-feedback">活动反馈</md-button>
+        <md-button ng-href="<?= Url::to(['/site/logout']); ?>" data-method="post">退出</md-button>
       </md-content>
     </md-sidenav>
     <div class="flex md-layout-column">
@@ -35,7 +37,7 @@ use yii\helpers\Html;
         <md-button hide-gt-md ng-click="toggleSidenav('left')">
           <md-icon aria-label="Menu" md-svg-icon="https://s3-us-west-2.amazonaws.com/s.cdpn.io/68133/menu.svg"></md-icon>
         </md-button>
-        <h3>{{pageName}}</h3>
+        <p style="margin: 0; padding-top: 18px; padding-left: 3px;">{{pageName}}</p>
       </md-toolbar>
     <div layout="row" flex>
         <!--div layout="column" flex id="content"-->

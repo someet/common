@@ -1,9 +1,9 @@
 <?php
 $config = [
-    'id' => 'basic',
+    'id' => 'backend',
     'basePath' => '/var/www/html',
     'vendorPath' => '/var/www/vendor',
-    'timeZone'=>'Asia/Chongqing',
+    'timeZone' => 'Asia/Chongqing',
     'language' => 'zh-CN',
     'components' => [
         'cache' => [
@@ -61,7 +61,8 @@ $config = [
             'showScriptName' => false,
         ],
         'user' => [
-            'identityClass' => 'app\models\User',
+            'identityClass' => 'dektrium\user\models\User',
+            'loginUrl' => ['user/login'],
             'enableAutoLogin' => true,
         ],
         'authManager' => [
@@ -69,8 +70,21 @@ $config = [
         ],
         'qiniu' => [
             'class' => 'app\components\QiniuComponent',
-            'accessKey' =>  \DockerEnv::get('QINIU_ACCESS_KEY'),
-            'secretKey' =>  \DockerEnv::get('QINIU_SECRET_KEY'),
+            'accessKey' => \DockerEnv::get('QINIU_ACCESS_KEY'),
+            'secretKey' => \DockerEnv::get('QINIU_SECRET_KEY'),
+        ],
+    ],
+    'modules' => [
+        'rbac' => [
+            'class' => 'dektrium\rbac\Module',
+        ],
+        'user' => [
+            'class' => 'dektrium\user\Module',
+            'enableRegistration' => false,
+            'enableConfirmation' => false,
+            'enableUnconfirmedLogin' => true,
+            'confirmWithin' => 21600,
+            'admins' => ['admin'],
         ],
     ],
     'params' => require('/var/www/html/config/params.php'),
