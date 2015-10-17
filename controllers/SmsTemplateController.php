@@ -43,6 +43,9 @@ class SmsTemplateController extends Controller
                     'view' => ['get'],
                 ],
             ],
+            'access' => [
+                'class' => '\app\components\AccessControl',
+            ],
         ];
     }
 

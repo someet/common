@@ -44,6 +44,9 @@ class QuestionController extends Controller
                     'viewByActivityId' => ['get'],
                 ],
             ],
+            'access' => [
+                'class' => '\app\components\AccessControl',
+            ],
         ];
     }
 
