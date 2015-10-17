@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use app\components\DataValidationFailedException;
-use app\models\User;
+use someet\common\models\User;
 use Yii;
 use yii\data\Pagination;
 use yii\filters\VerbFilter;

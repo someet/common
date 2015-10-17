@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use app\components\DataValidationFailedException;
-use app\models\SmsTemplate;
+use someet\common\models\SmsTemplate;
 use Yii;
 use yii\base\Exception;
 use yii\filters\VerbFilter;

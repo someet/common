@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use app\components\DataValidationFailedException;
-use app\models\Activity;
+use someet\common\models\Activity;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;

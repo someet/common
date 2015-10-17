@@ -3,7 +3,7 @@ namespace tests\codeception\unit\models;
 
 use Yii;
 use yii\codeception\DbTestCase;
-use app\models\User;
+use someet\common\models\User;
 use tests\codeception\fixtures\UserFixture;
 
 class UserTest extends DbTestCase

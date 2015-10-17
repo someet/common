@@ -3,8 +3,8 @@
 namespace app\controllers;
 
 use app\components\DataValidationFailedException;
-use app\models\ActivityTag;
-use app\models\RTagActivity;
+use someet\common\models\ActivityTag;
+use someet\common\models\RTagActivity;
 use Yii;
 use yii\base\Exception;
 use yii\filters\VerbFilter;

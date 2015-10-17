@@ -1,5 +1,5 @@
 <?php
-namespace app\models\behaviors;
+namespace someet\common\models\behaviors;
 
 use yii\db\ActiveRecord;
 use yii\db\Expression;

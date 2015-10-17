@@ -366,7 +366,7 @@ class FunctionalTester extends \Codeception\Actor
      *
      * ``` php
      * <?php
-     * $user_id = $I->haveRecord('app\models\User', array('name' => 'Davert'));
+     * $user_id = $I->haveRecord('someet\common\models\User', array('name' => 'Davert'));
      * ?>
      * ```
      *
@@ -386,7 +386,7 @@ class FunctionalTester extends \Codeception\Actor
      * Checks that record exists in database.
      *
      * ``` php
-     * $I->seeRecord('app\models\User', array('name' => 'davert'));
+     * $I->seeRecord('someet\common\models\User', array('name' => 'davert'));
      * ```
      *
      * @param $model
@@ -403,7 +403,7 @@ class FunctionalTester extends \Codeception\Actor
      * Checks that record exists in database.
      *
      * ``` php
-     * $I->seeRecord('app\models\User', array('name' => 'davert'));
+     * $I->seeRecord('someet\common\models\User', array('name' => 'davert'));
      * ```
      *
      * @param $model
@@ -421,7 +421,7 @@ class FunctionalTester extends \Codeception\Actor
      * Checks that record does not exist in database.
      *
      * ``` php
-     * $I->dontSeeRecord('app\models\User', array('name' => 'davert'));
+     * $I->dontSeeRecord('someet\common\models\User', array('name' => 'davert'));
      * ```
      *
      * @param $model
@@ -438,7 +438,7 @@ class FunctionalTester extends \Codeception\Actor
      * Checks that record does not exist in database.
      *
      * ``` php
-     * $I->dontSeeRecord('app\models\User', array('name' => 'davert'));
+     * $I->dontSeeRecord('someet\common\models\User', array('name' => 'davert'));
      * ```
      *
      * @param $model
@@ -456,7 +456,7 @@ class FunctionalTester extends \Codeception\Actor
      * Retrieves record from database
      *
      * ``` php
-     * $category = $I->grabRecord('app\models\User', array('name' => 'davert'));
+     * $category = $I->grabRecord('someet\common\models\User', array('name' => 'davert'));
      * ```
      *
      * @param $model
