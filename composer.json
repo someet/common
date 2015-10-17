@@ -13,7 +13,8 @@
 		"yiisoft/yii2-swiftmailer": "~2.0.0",
 		"vlucas/phpdotenv": "1.0.*",
 		"codemix/yii2-streamlog": "0.0.1",
-		"qiniu/php-sdk": "^7.0"
+		"qiniu/php-sdk": "^7.0",
+		"someet/common": "*@dev"
 	},
 	"require-dev": {
 		"yiisoft/yii2-debug": "~2.0.0",
@@ -30,5 +31,11 @@
 			"npm-asset-library": "/var/www/vendor/npm",
 			"bower-asset-library": "/var/www/vendor/bower"
 		}
-	}
+	},
+	"repositories": [
+		{
+			"type": "path",
+			"url": "./packages/someet-common/"
+		}
+	]
 }
