@@ -18,8 +18,15 @@ class SiteController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    'logout' => ['post', 'get'],
                 ],
+            ],
+            'access' => [
+                'class' => '\app\components\AccessControl',
+                'allowActions' => [
+                    'error',
+                    'logout',
+                ]
             ],
         ];
     }

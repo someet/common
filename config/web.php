@@ -3,7 +3,7 @@ $config = [
     'id' => 'backend',
     'basePath' => '/var/www/html',
     'vendorPath' => '/var/www/vendor',
-    'timeZone'=>'Asia/Chongqing',
+    'timeZone' => 'Asia/Chongqing',
     'language' => 'zh-CN',
     'components' => [
         'cache' => [
@@ -62,6 +62,7 @@ $config = [
         ],
         'user' => [
             'identityClass' => 'dektrium\user\models\User',
+            'loginUrl' => ['user/login'],
             'enableAutoLogin' => true,
         ],
         'authManager' => [
@@ -79,7 +80,7 @@ $config = [
         ],
         'user' => [
             'class' => 'dektrium\user\Module',
-            'enableRegistration' => true,
+            'enableRegistration' => false,
             'enableConfirmation' => false,
             'enableUnconfirmedLogin' => true,
             'confirmWithin' => 21600,
