@@ -24,6 +24,9 @@ class QiniuController extends Controller
                     'create-completely-url' => ['post'],
                 ],
             ],
+            'access' => [
+                'class' => '\app\components\AccessControl',
+            ],
         ];
     }
 
