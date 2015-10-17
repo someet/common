@@ -5,7 +5,8 @@ RUN composer config -g repositories.packagist composer http://packagist.phpcompo
 # Copy the working dir to the image's web root
 COPY . /var/www/html
 
-RUN composer install --no-progress \
+RUN composer self-update \
+  && composer install --no-progress \
   # install bower gulp
   && npm install gulp \
   && npm install \
