@@ -4,6 +4,7 @@ var app = angular.module('SomeetBackendApp', [
   'ngLodash',
   'controllers',
   'ui.bootstrap',
+  'someetPagination',
   'backendServices'
 ]);
 
