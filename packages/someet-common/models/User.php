@@ -1,8 +1,8 @@
 <?php
-namespace app\models;
+namespace someet\common\models;
 
 use yii\behaviors\TimestampBehavior;
-use app\models\queries\UserQuery;
+use someet\common\models\queries\UserQuery;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
@@ -113,7 +113,7 @@ class User extends ActiveRecord implements IdentityInterface
                     ->setSubject('Complete registration with ' . Yii::$app->name)
                     ->send();
             } catch(\Exception $e) {
-                Yii::warning('Failed to send confirmation email to new user. No SMTP server configured?','app\models\User');
+                Yii::warning('Failed to send confirmation email to new user. No SMTP server configured?','someet\common\models\User');
             }
         }
         parent::afterSave($insert, $changedAttributes);

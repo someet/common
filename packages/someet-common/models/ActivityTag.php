@@ -1,25 +1,24 @@
 <?php
 
-namespace app\models;
+namespace someet\common\models;
 
 use Yii;
 
 /**
- * This is the model class for table "activity_type".
+ * This is the model class for table "activity_tag".
  *
  * @property integer $id
- * @property string $name
- * @property integer $display_order
+ * @property string $label
  * @property integer $status
  */
-class ActivityType extends \yii\db\ActiveRecord
+class ActivityTag extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'activity_type';
+        return 'activity_tag';
     }
 
     /**
@@ -28,13 +27,12 @@ class ActivityType extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
-            ['name', 'unique', 'message' => '{attribute}已存在'],
-            [['display_order', 'status'], 'integer'],
-            ['display_order', 'default', 'value' => '99'],
-            ['status', 'default', 'value' => '10'],
+            [['label'], 'required'],
+            [['status'], 'integer'],
+            [['label'], 'string', 'max' => 255],
+            [['label'], 'unique', 'message' => '{attribute}已存在'],
             [
-                'name',
+                'label',
                 'string',
                 'min' => 2,
                 'max' => 10,
@@ -51,9 +49,8 @@ class ActivityType extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => '名称',
-            'display_order' => '显示顺序',
-            'status' => 'Status',
+            'label' => '标签',
+            'status' => '冗余扩展',
         ];
     }
 }
