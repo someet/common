@@ -3,9 +3,9 @@
 namespace app\controllers;
 
 use app\components\DataValidationFailedException;
-use app\models\Answer;
-use app\models\AnswerItem;
-use app\models\Question;
+use someet\common\models\Answer;
+use someet\common\models\AnswerItem;
+use someet\common\models\Question;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
