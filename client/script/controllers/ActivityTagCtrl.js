@@ -19,7 +19,7 @@ angular.module('controllers')
       // 删除活动标签
       $scope.delete = function (tag) {
         var confirm = $mdDialog.confirm()
-          .title('确定要删除活动标签“' + tag.label + '”吗？')
+          .title('确定要删除活动标签“' + tag.name + '”吗？')
           .ariaLabel('delete activity item')
           .ok('确定删除')
           .cancel('手滑点错了，不删');
@@ -31,7 +31,7 @@ angular.module('controllers')
             });
 
             $mdToast.show($mdToast.simple()
-              .content('删除活动标签“' + tag.label + '”成功')
+              .content('删除活动标签“' + tag.name + '”成功')
               .hideDelay(5000)
               .position("top right"));
 
@@ -67,7 +67,7 @@ angular.module('controllers')
       // 保存活动标签
       $scope.save = function () {
         var entity = $scope.entity;
-        var newEntity = {label: entity.label, status: entity.status};
+        var newEntity = {name: entity.name, status: entity.status};
         if (entity.id > 0) { // 更新
           $activityTagManage.update(entity.id, newEntity).then(function (data) {
             $location.path('/activity-tag');
