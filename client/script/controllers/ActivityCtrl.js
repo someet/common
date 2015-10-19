@@ -1,4 +1,4 @@
-angular.module('controllers')
+angular.module('controllers', ['ngTagsInput'])
     .controller('ActivityCtrl',
     ['$scope', '$location', '$activityManage', '$mdDialog', 'lodash', '$mdToast',
         function ($scope, $location, $activityManage, $mdDialog, lodash, $mdToast) {
@@ -84,6 +84,13 @@ angular.module('controllers')
         function ($scope, $routeParams, $location, $activityManage, $activityTypeManage, $qupload, $qiniuManage, $mdToast) {
             $scope.$parent.pageName = '活动详情';
 
+          // 标签
+          $scope.tags = [];
+          // 标签搜索功能
+          $scope.loadTags = function(query) {
+            return $activityManage.tags(query);
+          };
+
           // qiniu upload start //
           $scope.selectFile = null ;
 
@@ -127,6 +134,14 @@ angular.module('controllers')
             if(id>0) {
               $activityManage.fetch(id).then(function (data) {
                 $scope.entity = data;
+
+                var tags = [];
+                for(var k in data.tags) {
+                  var tag = data.tags[k].name;
+                  tags.push(tag);
+                }
+                $scope.tags = tags;
+
               }, function (err) {
                   $location.path('/activity');
               });
@@ -144,6 +159,14 @@ angular.module('controllers')
 
             $scope.save = function () {
                 var newEntity = $scope.entity;
+
+                var tags = [];
+                for(var k in $scope.tags) {
+                  var tag = $scope.tags[k].text;
+                  tags.push(tag);
+                }
+                newEntity.tagNames = tags.join();
+
                 if (newEntity.id > 0 ) { // 更新活动
                     $activityManage.update(newEntity.id, newEntity).then(function(data) {
                         $mdToast.show($mdToast.simple()
@@ -172,4 +195,5 @@ angular.module('controllers')
                     });
                 }
             };
+
         }]);
