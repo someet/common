@@ -8,6 +8,12 @@
         </md-input-container>
 
         <md-input-container>
+            <tags-input ng-model="tags">
+                <auto-complete source="loadTags($query)"></auto-complete>
+            </tags-input>
+        </md-input-container>
+
+        <md-input-container>
             <label>标题</label>
             <input type="text" ng-model="entity.title" />
         </md-input-container>
@@ -46,3 +52,5 @@
             <md-button class="md-raised md-warn" ng-click="cancel()">取消</md-button>
         </md-input-container>
 </div>
+
+
