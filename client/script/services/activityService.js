@@ -22,6 +22,9 @@ angular.module('backendServices')
           return $http.get(url).then(function (data) {
             return data;
           });
-        }
+        },
+        tags: function(query) {
+          return $http.get('/activity-tag/list?query=' + query);
+        },
       };
     }]);
