@@ -4,6 +4,7 @@ namespace someet\common\models;
 
 use Yii;
 
+
 /**
  * This is the model class for table "activity".
  *
@@ -37,6 +38,9 @@ use Yii;
  */
 class Activity extends \yii\db\ActiveRecord
 {
+
+    // 标签名, 用于标签行为使用此属性
+    public $tagNames;
     /**
      * @inheritdoc
      */
@@ -58,9 +62,11 @@ class Activity extends \yii\db\ActiveRecord
             [['longitude', 'latitude'], 'default', 'value' => 0],
             ['group_code', 'default', 'value' => '0'],
             [['title'], 'string', 'max' => 80],
-            [['desc', 'poster', 'address', 'cost_list'], 'string', 'max' => 255],
+            [['desc', 'poster', 'address', 'cost_list', 'tagNames'], 'string', 'max' => 255],
             [['area'], 'string', 'max' => 10],
-            [['group_code'], 'string', 'max' => 45]
+            [['tagNames'], 'safe'],
+            [['group_code'], 'string', 'max' => 45],
+            [['status'], 'default', 'value' => 10]
         ];
     }
 
@@ -109,6 +115,7 @@ class Activity extends \yii\db\ActiveRecord
             'timestamp' => [
                 'class' => behaviors\TimestampBehavior::className(),
             ],
+            behaviors\TaggableBehavior::className(),
         ];
     }
 
@@ -116,6 +123,13 @@ class Activity extends \yii\db\ActiveRecord
     public function getType()
     {
         return $this->hasOne(ActivityType::className(), ['id' => 'type_id']);
+    }
+
+    // 活动标签
+    public function getTags()
+    {
+        // 和第三张表关联
+        return $this->hasMany(ActivityTag::className(), ['id' => 'tag_id'])->viaTable('r_tag_activity', ['activity_id' => 'id']);
     }
 
     // 活动反馈列表
