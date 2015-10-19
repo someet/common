@@ -15,7 +15,7 @@
             <p flex="10">{{entity.id}}</p>
             <p>{{entity.type.name}}</p>
             <p>{{entity.title}}</p>
-            <p><img width="50" src="{{entity.poster}}" /></p>
+            <p><img width="50" ng-src="{{entity.poster || 'default.png'}}" /></p>
             <p>{{entity.area}}</p>
             <p layout="row">
                 <md-button class="md-raised" ng-if="entity.is_top==1" ng-click="top(entity, 0)">取消置顶</md-button>

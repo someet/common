@@ -44,7 +44,7 @@
              点击此处选择海报
           </div>
           <p> {{ selectFile.progress.p }}% <button ng-click="abort()">x</button> </p>
-          <img src="{{entity.poster}}" />
+          <img ng-src="{{entity.poster || 'default.png'}}" />
         </div>
 
         <md-input-container layout="row">
