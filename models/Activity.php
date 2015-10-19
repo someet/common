@@ -22,11 +22,13 @@ use Yii;
  * @property double $longitude
  * @property double $latitude
  * @property integer $cost
+ * @property string $cost_list
  * @property integer $peoples
  * @property integer $is_volume
  * @property integer $is_digest
  * @property integer $is_top
  * @property integer $principal
+ * @property integer $review
  * @property integer $created_at
  * @property integer $created_by
  * @property integer $updated_at
@@ -51,12 +53,12 @@ class Activity extends \yii\db\ActiveRecord
         return [
             [['type_id', 'title', 'desc', 'poster', 'area', 'address', 'details' ], 'required'],
             [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'created_at', 'created_by', 'updated_at', 'updated_by', 'status'], 'integer'],
-            [['details'], 'string'],
+            [['details', 'review'], 'string'],
             [['longitude', 'latitude'], 'number'],
             [['longitude', 'latitude'], 'default', 'value' => 0],
             ['group_code', 'default', 'value' => '0'],
             [['title'], 'string', 'max' => 80],
-            [['desc', 'poster', 'address'], 'string', 'max' => 255],
+            [['desc', 'poster', 'address', 'cost_list'], 'string', 'max' => 255],
             [['area'], 'string', 'max' => 10],
             [['group_code'], 'string', 'max' => 45]
         ];
@@ -83,6 +85,8 @@ class Activity extends \yii\db\ActiveRecord
             'longitude' => '经度',
             'latitude' => '纬度',
             'cost' => '0 免费 大于0 则收费',
+            'cost_list' => '收费明细 当收费模式有值',
+            'review' => '活动回顾',
             'peoples' => '0 不限制 >1 则为限制人数',
             'is_volume' => '0 非系列 1 系列活动',
             'is_digest' => '0 非精华 1 精华',
