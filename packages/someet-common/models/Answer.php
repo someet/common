@@ -12,6 +12,8 @@ use Yii;
  * @property integer $activity_id
  * @property integer $user_id
  * @property integer $is_finish
+ * @property integer $is_send
+ * @property integer $send_at
  * @property integer $created_at
  * @property integer $updated_at
  * @property integer $status
@@ -40,7 +42,7 @@ class Answer extends \yii\db\ActiveRecord
     {
         return [
             [['question_id'], 'required'],
-            [['question_id', 'activity_id', 'user_id', 'is_finish', 'created_at', 'updated_at', 'status'], 'integer'],
+            [['question_id', 'activity_id', 'user_id', 'is_finish', 'is_send', 'send_at', 'created_at', 'updated_at', 'status'], 'integer'],
             [['question_id', 'user_id'], 'unique', 'targetAttribute' => ['question_id', 'user_id'], 'message' => 'The combination of 问题ID and 用户ID has already been taken.']
         ];
     }
@@ -56,6 +58,8 @@ class Answer extends \yii\db\ActiveRecord
             'activity_id' => '活动ID',
             'user_id' => '用户ID',
             'is_finish' => '0 进行中 1 已完成',
+            'is_send' => '是否已经发送',
+            'send_at' => '发送通知的时间',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'status' => '0 删除 10 正常',

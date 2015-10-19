@@ -12,4 +12,6 @@ return [
     'qiniu.upload_token_expires' => \DockerEnv::get('QINIU_UPLOAD_TOKEN_EXPIRES', 3600),
     'qiniu.access_domain' => \DockerEnv::get('QINIU_ACCESS_DOMAIN'),
     'qiniu.bucket' => \DockerEnv::get('QINIU_BUCKET'),
+
+    'yunpian.api_key' => \DockerEnv::get('YUNPIAN_API_KEY'),
 ];

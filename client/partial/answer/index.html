@@ -5,11 +5,14 @@
         <md-list-item>
             <p flex="10"> ID </p>
             <p> 用户名 </p>
+            <p> 状态 </p>
             <p> 操作 </p>
         </md-list-item>
         <md-list-item ng-repeat="entity in list | filter: {status: '10'}" ng-click="view(entity)">
             <p flex="10"> {{entity.id}} </p>
             <p> {{entity.user.username}} </p>
+            <p ng-if="entity.is_send==0">未发通知</p>
+            <p ng-if="entity.is_send==1">通知发送于 {{entity.send_at|date}}</p>
             <p layout="row">
                 <md-button class="md-raised" ng-click="pass(entity)">通过</md-button>
                 <md-button class="md-raised" ng-click="reject(entity)">不通过</md-button>
@@ -22,11 +25,14 @@
         <md-list-item>
             <p flex="10"> ID </p>
             <p> 用户名 </p>
+            <p> 状态 </p>
             <p> 操作 </p>
         </md-list-item>
         <md-list-item ng-repeat="entity in list | filter: {status: 20}" ng-click="view(entity)">
             <p flex="10"> {{entity.id}} </p>
             <p> {{entity.user.username}} </p>
+            <p ng-if="entity.is_send==0">未发通知</p>
+            <p ng-if="entity.is_send==1">通知发送于 {{entity.send_at|date}}</p>
             <p layout="row">
                 <md-button class="md-raised" ng-click="reject(entity)">不通过</md-button>
                 <md-button class="md-raised" ng-click="remove(entity)">移除</md-button>
@@ -39,11 +45,14 @@
         <md-list-item>
             <p flex="10"> ID </p>
             <p> 用户名 </p>
+            <p> 状态 </p>
             <p> 操作 </p>
         </md-list-item>
         <md-list-item ng-repeat="entity in list | filter: {status: 30}" ng-click="view(entity)">
             <p flex="10"> {{entity.id}} </p>
             <p> {{entity.user.username}} </p>
+            <p ng-if="entity.is_send==0">未发通知</p>
+            <p ng-if="entity.is_send==1">通知发送于 {{entity.send_at|date}}</p>
             <p layout="row">
                 <md-button class="md-raised" ng-click="pass(entity)">通过</md-button>
                 <md-button class="md-raised" ng-click="remove(entity)">移除</md-button>
