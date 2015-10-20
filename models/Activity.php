@@ -35,6 +35,9 @@ use Yii;
  */
 class Activity extends \yii\db\ActiveRecord
 {
+
+    // 标签名, 用于标签行为使用此属性
+    public $tagNames;
     /**
      * @inheritdoc
      */
@@ -106,7 +109,14 @@ class Activity extends \yii\db\ActiveRecord
             'timestamp' => [
                 'class' => behaviors\TimestampBehavior::className(),
             ],
+            behaviors\TaggableBehavior::className(),
         ];
+    }
+
+    // 活动标签
+    public function getTags()
+    {
+        return $this->hasMany(ActivityTag::className(), ['id' => 'tag_id'])->viaTable('r_tag_activity', ['activity_id' => 'id']);
     }
 
     // 活动的类型
