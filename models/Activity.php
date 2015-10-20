@@ -109,7 +109,6 @@ class Activity extends \yii\db\ActiveRecord
             'timestamp' => [
                 'class' => behaviors\TimestampBehavior::className(),
             ],
-            behaviors\TaggableBehavior::className(),
         ];
     }
 
