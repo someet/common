@@ -9,6 +9,12 @@
         </md-input-container>
 
         <md-input-container>
+            <tags-input ng-model="tags">
+                <auto-complete source="loadTags($query)"></auto-complete>
+            </tags-input>
+        </md-input-container>
+
+        <md-input-container>
             <label>标题</label>
             <input type="text" ng-model="entity.title" required ng-minlength="5" ng-maxlength="50"/>
         </md-input-container>
@@ -65,8 +71,13 @@
              class="btn btn-upload">
              选择海报
           </div>
+<<<<<<< HEAD
           <p> {{ selectPoster.progress.p }}% <button ng-click="posterAbort()">x</button> </p>
           <img ng-src="{{entity.poster}}" />
+=======
+          <p> {{ selectFile.progress.p }}% <button ng-click="abort()">x</button> </p>
+          <img ng-src="{{entity.poster || 'default.png'}}" />
+>>>>>>> master
         </div>
 
         <div layout="row">
@@ -89,3 +100,5 @@
         </md-input-container>
     </form>
 </div>
+
+

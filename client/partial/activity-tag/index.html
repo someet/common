@@ -6,12 +6,14 @@
     <md-list-item>
       <p flex="10"> ID </p>
       <p> 类型 </p>
+      <p> 频率 </p>
       <p> 排序 </p>
       <p> 操作 </p>
     </md-list-item>
     <md-list-item ng-repeat="entity in list ">
       <p flex="10"> {{entity.id}} </p>
-      <p> {{entity.label}} </p>
+      <p> {{entity.name}} </p>
+      <p> {{entity.frequency}} </p>
       <p> {{entity.status}} </p>
       <p layout="row">
         <md-button class="md-raised" ng-click="update(entity)">修改</md-button>

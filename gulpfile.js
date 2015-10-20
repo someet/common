@@ -31,6 +31,7 @@ gulp.task('copy-bundle', function(){
   gulp.src([
     './bower_components/angular-material/angular-material.min.css',
     './bower_components/textAngular/dist/textAngular.css',
+    './bower_components/ng-tags-input/ng-tags-input.min.css',
     'client/style/font-awesome.min.css'
     ])
     .pipe(plumber())
@@ -48,7 +49,8 @@ gulp.task('copy-bundle', function(){
       './bower_components/ng-lodash/build/ng-lodash.min.js',
       './bower_components/textAngular/dist/textAngular-rangy.min.js',
       './bower_components/textAngular/dist/textAngular-sanitize.min.js',
-      './bower_components/textAngular/dist/textAngular.min.js'
+      './bower_components/textAngular/dist/textAngular.min.js',
+      './bower_components/ng-tags-input/ng-tags-input.min.js'
     ])
     .pipe(plumber())
     .pipe(concat('bundle.js'))

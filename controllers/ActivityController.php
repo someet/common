@@ -58,14 +58,14 @@ class ActivityController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
         $activities = Activity::find()
             ->with([
-                'type'
+                'type',
+                'tags',
             ])
             ->orderBy([
                 'is_top' => SORT_DESC,
                 'updated_at' => SORT_DESC,
                 'id' => SORT_DESC,
             ])
-            ->asArray()
             ->all();
 
         return $activities;
@@ -177,6 +177,13 @@ class ActivityController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = $this->findModel($id);
         $data = Yii::$app->getRequest()->post();
+
+        if (isset($data['tagNames'])) {
+            $model->tagNames = $data['tagNames'];
+            if (!$model->validate('tagNames')) {
+                throw new DataValidationFailedException($model->getFirstError('tagNames'));
+            }
+        }
 
         if (isset($data['is_top'])) {
             $model->is_top = $data['is_top'];
@@ -297,7 +304,8 @@ class ActivityController extends Controller
     public function actionView($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $model = $this->findModel($id);
+
+        $model = Activity::find()->where(['id' => $id])->with('type', 'tags')->asArray()->one();
 
         return $model;
     }
