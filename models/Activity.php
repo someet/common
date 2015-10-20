@@ -58,9 +58,8 @@ class Activity extends \yii\db\ActiveRecord
             [['longitude', 'latitude'], 'default', 'value' => 0],
             ['group_code', 'default', 'value' => '0'],
             [['title'], 'string', 'max' => 80],
-            [['desc', 'poster', 'address', 'cost_list'], 'string', 'max' => 255],
+            [['desc', 'poster', 'group_code', 'address', 'cost_list'], 'string', 'max' => 255],
             [['area'], 'string', 'max' => 10],
-            [['group_code'], 'string', 'max' => 45]
         ];
     }
 
