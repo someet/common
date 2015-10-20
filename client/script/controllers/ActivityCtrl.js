@@ -103,7 +103,7 @@ angular.module('controllers', ['ngTagsInput'])
                 token: token
               }).then(function (response) {
                 $qiniuManage.completelyUrl(response.key).then(function(url) {
-                  $scope.entity.poster = url;
+                  $scope.poster = url;
                 });
               }, function (response) {
                 console.log(response);
@@ -142,7 +142,7 @@ angular.module('controllers', ['ngTagsInput'])
                 token: token
               }).then(function (response) {
                 $qiniuManage.completelyUrl(response.key).then(function(url) {
-                  $scope.entity.group_code = url;
+                  $scope.group_code = url;
                 });
               }, function (response) {
                 console.log(response);
@@ -173,6 +173,8 @@ angular.module('controllers', ['ngTagsInput'])
             if(id>0) {
               $activityManage.fetch(id).then(function (data) {
                 $scope.entity = data;
+                $scope.poster = data.poster;
+                $scope.group_code = data.group_code;
 
                 var tags = [];
                 for(var k in data.tags) {
@@ -198,6 +200,8 @@ angular.module('controllers', ['ngTagsInput'])
 
             $scope.save = function () {
                 var newEntity = $scope.entity;
+                newEntity.poster = $scope.poster;
+                newEntity.group_code = $scope.group_code;
 
                 var tags = [];
                 for(var k in $scope.tags) {
