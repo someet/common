@@ -84,8 +84,6 @@ angular.module('controllers', ['ngTagsInput'])
         function ($scope, $routeParams, $location, $activityManage, $activityTypeManage, $qupload, $qiniuManage, $mdToast) {
             $scope.$parent.pageName = '活动详情';
 
-          // qiniu upload poster start //
-          $scope.selectPoster = null ;
           // 标签
           $scope.tags = [];
           // 标签搜索功能
@@ -93,7 +91,8 @@ angular.module('controllers', ['ngTagsInput'])
             return $activityManage.tags(query);
           };
 
-          // qiniu upload start //
+          // qiniu upload poster start //
+          $scope.selectPoster = null ;
 
           var startPoster = function () {
             $qiniuManage.fetchUploadToken().then(function (token) {
@@ -130,6 +129,7 @@ angular.module('controllers', ['ngTagsInput'])
             startPoster();
           };
           // qiniu upload poster end //
+
           // qiniu upload code start //
           $scope.selectCode = null ;
 
