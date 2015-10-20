@@ -84,15 +84,15 @@ angular.module('controllers')
         function ($scope, $routeParams, $location, $activityManage, $activityTypeManage, $qupload, $qiniuManage, $mdToast) {
             $scope.$parent.pageName = '活动详情';
 
-          // qiniu upload start //
-          $scope.selectFile = null ;
+          // qiniu upload poster start //
+          $scope.selectPoster = null ;
 
-          var start = function () {
+          var startPoster = function () {
             $qiniuManage.fetchUploadToken().then(function (token) {
 
               $qupload.upload({
                 key: '',
-                file: $scope.selectFile.file,
+                file: $scope.selectPoster.file,
                 token: token
               }).then(function (response) {
                 $qiniuManage.completelyUrl(response.key).then(function(url) {
@@ -101,28 +101,66 @@ angular.module('controllers')
               }, function (response) {
                 console.log(response);
               }, function (evt) {
-                if($scope.selectFile !== null){
-                  $scope.selectFile.progress.p = Math.floor(100 * evt.loaded / evt.totalSize);
+                if($scope.selectPoster !== null){
+                  $scope.selectPoster.progress.p = Math.floor(100 * evt.loaded / evt.totalSize);
                 }
               });
 
             });
           };
 
-          $scope.abort = function () {
-            $scope.selectFile.upload.abort();
-            $scope.selectFile = null;
+          $scope.posterAbort = function () {
+            $scope.selectPoster.upload.abort();
+            $scope.selectPoster = null;
           };
 
-          $scope.onFileSelect = function ($files) {
-            $scope.selectFile = {
+          $scope.onPosterSelect = function ($files) {
+            $scope.selectPoster = {
               file: $files[0],
               progress: {p: 0}
             };
-            start();
+            startPoster();
+          };
+          // qiniu upload poster end //
+          // qiniu upload code start //
+          $scope.selectCode = null ;
+
+          var startCode = function () {
+            $qiniuManage.fetchUploadToken().then(function (token) {
+
+              $qupload.upload({
+                key: '',
+                file: $scope.selectCode.file,
+                token: token
+              }).then(function (response) {
+                $qiniuManage.completelyUrl(response.key).then(function(url) {
+                  $scope.entity.group_code = url;
+                });
+              }, function (response) {
+                console.log(response);
+              }, function (evt) {
+                if($scope.selectCode !== null){
+                  $scope.selectCode.progress.p = Math.floor(100 * evt.loaded / evt.totalSize);
+                }
+              });
+
+            });
           };
 
-          // qiniu upload end //
+          $scope.codeAbort = function () {
+            $scope.selectCode.upload.abort();
+            $scope.selectCode = null;
+          };
+
+          $scope.onCodeSelect = function ($files) {
+            $scope.selectCode = {
+              file: $files[0],
+              progress: {p: 0}
+            };
+            startCode();
+          };
+          // qiniu upload group code end //
+
             var id = $routeParams.id;
             if(id>0) {
               $activityManage.fetch(id).then(function (data) {
