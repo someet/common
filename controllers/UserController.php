@@ -47,6 +47,9 @@ class UserController extends Controller
             ],
             'access' => [
                 'class' => '\app\components\AccessControl',
+                'allowActions' => [
+                    'index',
+                ]
             ],
         ];
     }

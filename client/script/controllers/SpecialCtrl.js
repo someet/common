@@ -82,7 +82,7 @@ angular.module('controllers')
             }).then(function (response) {
               console.log(response);
               $qiniuManage.completelyUrl(response.key).then(function(url) {
-                $scope.entity.poster = url;
+                $scope.poster = url;
               });
             }, function (response) {
               console.log(response);
@@ -119,6 +119,7 @@ angular.module('controllers')
         // 新建或修改
         $scope.save = function () {
           var entity = $scope.entity;
+          entity.poster = $scope.poster;
           var newEntity = {title: entity.title, desc: entity.desc, poster: entity.poster, display_order: entity.display_order};
           if (entity.id > 0) {
             $specialManage.update(entity.id, newEntity).then(function (data) {
