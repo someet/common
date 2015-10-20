@@ -64,6 +64,7 @@ class ActivityTagController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
         $entities = ActivityTag::find()
             ->orderBy([
+                'frequency' => SORT_DESC,
                 'id' => SORT_DESC,
             ])
             ->all();

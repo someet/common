@@ -178,6 +178,97 @@ class ActivityController extends Controller
         $model = $this->findModel($id);
         $data = Yii::$app->getRequest()->post();
 
+        if (isset($data['title'])) {
+            $model->title = $data['title'];
+            if (!$model->validate('title')) {
+                throw new DataValidationFailedException($model->getFirstError('title'));
+            }
+        }
+
+        if (isset($data['desc'])) {
+            $model->desc = $data['desc'];
+            if (!$model->validate('desc')) {
+                throw new DataValidationFailedException($model->getFirstError('desc'));
+            }
+        }
+
+        if (isset($data['peoples'])) {
+            $model->peoples = $data['peoples'];
+            if (!$model->validate('peoples')) {
+                throw new DataValidationFailedException($model->getFirstError('peoples'));
+            }
+        }
+
+        if (isset($data['cost'])) {
+            $model->cost = $data['cost'];
+            if (!$model->validate('cost')) {
+                throw new DataValidationFailedException($model->getFirstError('cost'));
+            }
+        }
+
+        if (isset($data['cost_list'])) {
+            $model->cost_list = $data['cost_list'];
+            if (!$model->validate('cost_list')) {
+                throw new DataValidationFailedException($model->getFirstError('cost_list'));
+            }
+        }
+
+        if (isset($data['start_time'])) {
+            $model->start_time = $data['start_time'];
+            if (!$model->validate('start_time')) {
+                throw new DataValidationFailedException($model->getFirstError('start_time'));
+            }
+        }
+
+        if (isset($data['end_time'])) {
+            $model->end_time = $data['end_time'];
+            if (!$model->validate('end_time')) {
+                throw new DataValidationFailedException($model->getFirstError('end_time'));
+            }
+        }
+
+        if (isset($data['area'])) {
+            $model->area = $data['area'];
+            if (!$model->validate('area')) {
+                throw new DataValidationFailedException($model->getFirstError('area'));
+            }
+        }
+
+        if (isset($data['address'])) {
+            $model->address = $data['address'];
+            if (!$model->validate('address')) {
+                throw new DataValidationFailedException($model->getFirstError('address'));
+            }
+        }
+
+        if (isset($data['details'])) {
+            $model->details = $data['details'];
+            if (!$model->validate('details')) {
+                throw new DataValidationFailedException($model->getFirstError('details'));
+            }
+        }
+
+        if (isset($data['poster'])) {
+            $model->poster = $data['poster'];
+            if (!$model->validate('poster')) {
+                throw new DataValidationFailedException($model->getFirstError('poster'));
+            }
+        }
+
+        if (isset($data['group_code'])) {
+            $model->group_code = $data['group_code'];
+            if (!$model->validate('group_code')) {
+                throw new DataValidationFailedException($model->getFirstError('group_code'));
+            }
+        }
+
+        if (isset($data['review'])) {
+            $model->review = $data['review'];
+            if (!$model->validate('review')) {
+                throw new DataValidationFailedException($model->getFirstError('review'));
+            }
+        }
+
         if (isset($data['tagNames'])) {
             $model->tagNames = $data['tagNames'];
             if (!$model->validate('tagNames')) {
@@ -192,12 +283,6 @@ class ActivityController extends Controller
             }
         }
 
-        if (isset($data['title'])) {
-            $model->title = $data['title'];
-            if (!$model->validate('title')) {
-                throw new DataValidationFailedException($model->getFirstError('title'));
-            }
-        }
 
         if (isset($data['longitude'])) {
             $model->longitude = $data['longitude'];
@@ -213,52 +298,10 @@ class ActivityController extends Controller
             }
         }
 
-        if (isset($data['groupcode'])) {
-            $model->groupcode = $data['groupcode'];
-            if (!$model->validate('groupcode')) {
-                throw new DataValidationFailedException($model->getFirstError('groupcode'));
-            }
-        }
-
-        if (isset($data['details'])) {
-            $model->details = $data['details'];
-            if (!$model->validate('details')) {
-                throw new DataValidationFailedException($model->getFirstError('details'));
-            }
-        }
-
         if (isset($data['type_id'])) {
             $model->type_id = $data['type_id'];
             if (!$model->validate('type_id')) {
                 throw new DataValidationFailedException($model->getFirstError('type_id'));
-            }
-        }
-
-        if (isset($data['desc'])) {
-            $model->desc = $data['desc'];
-            if (!$model->validate('desc')) {
-                throw new DataValidationFailedException($model->getFirstError('desc'));
-            }
-        }
-
-        if (isset($data['area'])) {
-            $model->area = $data['area'];
-            if (!$model->validate('area')) {
-                throw new DataValidationFailedException($model->getFirstError('area'));
-            }
-        }
-
-        if (isset($data['poster'])) {
-            $model->poster = $data['poster'];
-            if (!$model->validate('poster')) {
-                throw new DataValidationFailedException($model->getFirstError('poster'));
-            }
-        }
-
-        if (isset($data['address'])) {
-            $model->address = $data['address'];
-            if (!$model->validate('address')) {
-                throw new DataValidationFailedException($model->getFirstError('address'));
             }
         }
 

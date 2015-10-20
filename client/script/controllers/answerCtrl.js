@@ -93,7 +93,12 @@ angular.module('controllers')
           }
 
           $answerManage.create(answerData).then(function(data) {
-            $location.path('/answer');
+            $location.path('/activity');
+            $mdToast.show($mdToast.simple()
+                .content('报名活动成功')
+                .hideDelay(5000)
+                .position("top right"));
+
           }, function(err){
             alert(err);
           });

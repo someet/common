@@ -46,6 +46,10 @@ class AnswerController extends Controller
             ],
             'access' => [
                 'class' => '\app\components\AccessControl',
+                'allowActions' => [
+                    'create',
+                    'view-by-activity-id',
+                ]
             ],
         ];
     }

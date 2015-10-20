@@ -77,7 +77,11 @@ angular.module('controllers')
             newEntity.questionItemList.push(questionItem2);
             newEntity.questionItemList.push(questionItem3);
             $questionManage.create(newEntity).then(function (data) {
-              alert("添加成功");
+              $location.path('/activity');
+              $mdToast.show($mdToast.simple()
+                  .content('问题添加成功')
+                  .hideDelay(5000)
+                  .position("top right"));
             }, function(err) {
               alert(err);
             });
