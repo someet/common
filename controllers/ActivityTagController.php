@@ -46,6 +46,9 @@ class ActivityTagController extends Controller
             ],
             'access' => [
                 'class' => '\app\components\AccessControl',
+                'allowActions' => [
+                    'list',
+                ]
             ],
         ];
 
@@ -239,6 +242,23 @@ class ActivityTagController extends Controller
         $model = $this->findModel($id);
 
         return $model;
+    }
+
+    /**
+     * 返回json格式符合条件的标签列表
+     * @param $query
+     * @return array
+     */
+    public function actionList($query) {
+        $models = ActivityTag::find()->where(['like', 'name', $query])->all();
+        $items = [];
+
+        foreach ($models as $model) {
+            $items[] = ['text' => $model->name];
+        }
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        return $items;
     }
 
     /**

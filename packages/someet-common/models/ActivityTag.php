@@ -8,7 +8,8 @@ use Yii;
  * This is the model class for table "activity_tag".
  *
  * @property integer $id
- * @property string $label
+ * @property integer $frequency
+ * @property string $name
  * @property integer $status
  */
 class ActivityTag extends \yii\db\ActiveRecord
@@ -27,12 +28,12 @@ class ActivityTag extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['label'], 'required'],
-            [['status'], 'integer'],
-            [['label'], 'string', 'max' => 255],
-            [['label'], 'unique', 'message' => '{attribute}已存在'],
+            [['name'], 'required'],
+            [['frequency', 'status'], 'integer'],
+            [['name'], 'string', 'max' => 255],
+            [['name'], 'unique', 'message' => '{attribute}已存在'],
             [
-                'label',
+                'name',
                 'string',
                 'min' => 2,
                 'max' => 10,
@@ -49,7 +50,8 @@ class ActivityTag extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'label' => '标签',
+            'name' => '标签名称',
+            'frequency' => '频率',
             'status' => '冗余扩展',
         ];
     }

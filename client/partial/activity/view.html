@@ -8,6 +8,12 @@
         </md-input-container>
 
         <md-input-container>
+            <tags-input ng-model="tags">
+                <auto-complete source="loadTags($query)"></auto-complete>
+            </tags-input>
+        </md-input-container>
+
+        <md-input-container>
             <label>标题</label>
             <input type="text" ng-model="entity.title" />
         </md-input-container>
@@ -38,7 +44,7 @@
              点击此处选择海报
           </div>
           <p> {{ selectFile.progress.p }}% <button ng-click="abort()">x</button> </p>
-          <img src="{{entity.poster}}" />
+          <img ng-src="{{entity.poster || 'default.png'}}" />
         </div>
 
         <md-input-container layout="row">
@@ -46,3 +52,5 @@
             <md-button class="md-raised md-warn" ng-click="cancel()">取消</md-button>
         </md-input-container>
 </div>
+
+
