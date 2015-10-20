@@ -22,13 +22,11 @@ use Yii;
  * @property double $longitude
  * @property double $latitude
  * @property integer $cost
- * @property string $cost_list
  * @property integer $peoples
  * @property integer $is_volume
  * @property integer $is_digest
  * @property integer $is_top
  * @property integer $principal
- * @property integer $review
  * @property integer $created_at
  * @property integer $created_by
  * @property integer $updated_at

@@ -1,4 +1,5 @@
 <div layout="column" flex id="content" ng-controller="ActivityViewCtrl">
+    <form name="entityForm" ng-submit="save()">
         <input type="hidden" ng-model="entity.id" />
 
         <md-input-container>
@@ -15,42 +16,84 @@
 
         <md-input-container>
             <label>标题</label>
-            <input type="text" ng-model="entity.title" />
+            <input type="text" ng-model="entity.title" required ng-minlength="5" ng-maxlength="50"/>
         </md-input-container>
 
         <md-input-container>
-            <label>详情</label>
-            <input type="text" ng-model="entity.details" />
+            <label>副标题</label>
+            <input type="text" ng-model="entity.desc" />
         </md-input-container>
 
         <md-input-container>
-            <label>区域</label>
+            <label>人数限制</label>
+            <input type="number" ng-model="entity.peoples" required/>
+        </md-input-container>
+
+        <md-input-container>
+            <label>收费金额(0为免费)</label>
+            <input type="number" ng-model="entity.cost" />
+        </md-input-container>
+
+        <md-input-container ng-show="entity.cost">
+            <label>收费明细</label>
+            <textarea ng-model="entity.cost_list"></textarea>
+        </md-input-container>
+
+        <div layout="row">
+        <md-input-container>
+                <label>开始时间</label>
+                <input type="text" ng-model="entity.start_time" />
+        </md-input-container>
+
+        <md-input-container>
+            <label>结束时间</label>
+            <input type="text" ng-model="entity.end_time" />
+        </md-input-container>
+        </div>
+
+        <md-input-container>
+            <label>地区(商圈)</label>
             <input type="text" ng-model="entity.area" />
         </md-input-container>
 
         <md-input-container>
-            <label>地址</label>
-            <input type="text" ng-model="entity.address" />
+            <label>详细地址</label>
+            <textarea ng-model="entity.address"></textarea>
         </md-input-container>
 
         <md-input-container>
-            <label>描述</label>
-            <input type="text" ng-model="entity.desc" />
+            <label>活动详情</label>
+            <textarea ng-model="entity.details"></textarea>
         </md-input-container>
 
         <div layout="row">
-          <div ng-file-select="onFileSelect($files)" data-multiple="false" title="select file" onclick="this.value = null"
+          <div ng-file-select="onPosterSelect($files)" data-multiple="false" title="select file" onclick="this.value = null"
              class="btn btn-upload">
-             点击此处选择海报
+             选择海报
           </div>
-          <p> {{ selectFile.progress.p }}% <button ng-click="abort()">x</button> </p>
-          <img ng-src="{{entity.poster || 'default.png'}}" />
+          <p> {{ selectPoster.progress.p }}% <button ng-click="posterAbort()">x</button> </p>
+          <img ng-src="{{entity.poster}}" />
         </div>
 
+        <div layout="row">
+            <div ng-file-select="onCodeSelect($files)" data-multiple="false" title="select file" onclick="this.value = null"
+                 class="btn btn-upload">
+                选择活动群二维码
+            </div>
+            <p> {{ selectCode.progress.p }}% <button ng-click="codeAbort()">x</button> </p>
+            <img src="{{entity.group_code}}" />
+        </div>
+
+        <md-input-container>
+            <label>活动回顾</label>
+            <textarea ng-model="entity.review"></textarea>
+        </md-input-container>
+
         <md-input-container layout="row">
-            <md-button class="md-raised md-primary" ng-click="save()">保存</md-button>
+            <md-button class="md-raised md-primary"  ng-disabled="entityForm.$invalid">保存</md-button>
             <md-button class="md-raised md-warn" ng-click="cancel()">取消</md-button>
         </md-input-container>
+    </form>
 </div>
 
 
