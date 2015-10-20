@@ -51,14 +51,15 @@ class Activity extends \yii\db\ActiveRecord
         return [
             [['type_id', 'title', 'desc', 'poster', 'area', 'address', 'details' ], 'required'],
             [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'created_at', 'created_by', 'updated_at', 'updated_by', 'status'], 'integer'],
-            [['details'], 'string'],
+            [['details', 'review'], 'string'],
             [['longitude', 'latitude'], 'number'],
             [['longitude', 'latitude'], 'default', 'value' => 0],
             ['group_code', 'default', 'value' => '0'],
             [['title'], 'string', 'max' => 80],
-            [['desc', 'poster', 'address'], 'string', 'max' => 255],
+            [['desc', 'poster', 'group_code', 'address', 'cost_list', 'tagNames'], 'string', 'max' => 255],
             [['area'], 'string', 'max' => 10],
-            [['group_code'], 'string', 'max' => 45]
+            [['tagNames'], 'safe'],
+            [['status'], 'default', 'value' => 10]
         ];
     }
 
