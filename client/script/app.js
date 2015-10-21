@@ -1,5 +1,7 @@
 var app = angular.module('SomeetBackendApp', [
+  'ui.bootstrap.datetimepicker',
   'ngMaterial',
+  'ngMessages',
   'ngRoute',
   'ngLodash',
   'controllers',
