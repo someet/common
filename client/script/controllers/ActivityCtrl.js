@@ -84,6 +84,14 @@ angular.module('controllers', ['ngTagsInput'])
         function ($scope, $routeParams, $location, $activityManage, $activityTypeManage, $qupload, $qiniuManage, $mdToast) {
             $scope.$parent.pageName = '活动详情';
 
+          $scope.onStartTimeSet = function (newDate, oldDate) {
+            $scope.entity.start_time = getTimeByTimestamp(getTimestamp(newDate));
+          }
+
+          $scope.onStopTimeSet = function (newDate, oldDate) {
+            $scope.entity.end_time = getTimeByTimestamp(getTimestamp(newDate));
+          }
+
           // 标签
           $scope.tags = [];
           // 标签搜索功能
@@ -173,6 +181,8 @@ angular.module('controllers', ['ngTagsInput'])
             if(id>0) {
               $activityManage.fetch(id).then(function (data) {
                 $scope.entity = data;
+                $scope.entity.start_time = getTimeByTimestamp(data.start_time);
+                $scope.entity.end_time = getTimeByTimestamp(data.end_time);
                 $scope.poster = data.poster;
                 $scope.group_code = data.group_code;
 
@@ -198,8 +208,11 @@ angular.module('controllers', ['ngTagsInput'])
                 $location.path('/activity/');
             }
 
+
             $scope.save = function () {
                 var newEntity = $scope.entity;
+                newEntity.start_time = getTimestamp($scope.entity.start_time);
+                newEntity.end_time = getTimestamp($scope.entity.end_time);
                 newEntity.poster = $scope.poster;
                 newEntity.group_code = $scope.group_code;
 
