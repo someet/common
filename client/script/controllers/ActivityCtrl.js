@@ -84,6 +84,14 @@ angular.module('controllers', ['ngTagsInput'])
         function ($scope, $routeParams, $location, $activityManage, $activityTypeManage, $qupload, $qiniuManage, $mdToast) {
             $scope.$parent.pageName = '活动详情';
 
+          $scope.onStartTimeSet = function (newDate, oldDate) {
+            $scope.entity.start_time = getTimeByTimestamp(getTimestamp(newDate));
+          }
+
+          $scope.onStopTimeSet = function (newDate, oldDate) {
+            $scope.entity.end_time = getTimeByTimestamp(getTimestamp(newDate));
+          }
+
           // 标签
           $scope.tags = [];
           // 标签搜索功能

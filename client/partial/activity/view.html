@@ -89,7 +89,7 @@
                             </div>
                         </a>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-                            <datetimepicker  ng-model="entity.start_time"></datetimepicker>
+                            <datetimepicker data-on-set-time="onStartTimeSet(newDate, oldDate)" ng-model="entity.start_time"></datetimepicker>
                         </ul>
                     </div>
                 </md-input-container>
@@ -105,7 +105,7 @@
                             </div>
                         </a>
                         <ul class="dropdown-menu" role="menu" aria-labelledby="endLabel">
-                            <datetimepicker  ng-model="entity.end_time"></datetimepicker>
+                            <datetimepicker data-on-set-time="onStopTimeSet(newDate, oldDate)"  ng-model="entity.end_time"></datetimepicker>
                         </ul>
                     </div>
                 </md-input-container>
