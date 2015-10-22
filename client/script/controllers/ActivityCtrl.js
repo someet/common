@@ -173,6 +173,8 @@ angular.module('controllers', ['ngTagsInput'])
             if(id>0) {
               $activityManage.fetch(id).then(function (data) {
                 $scope.entity = data;
+                $scope.entity.start_time = getTimeByTimestamp(data.start_time);
+                $scope.entity.end_time = getTimeByTimestamp(data.end_time);
                 $scope.poster = data.poster;
                 $scope.group_code = data.group_code;
 
@@ -198,8 +200,11 @@ angular.module('controllers', ['ngTagsInput'])
                 $location.path('/activity/');
             }
 
+
             $scope.save = function () {
                 var newEntity = $scope.entity;
+                newEntity.start_time = getTimestamp($scope.entity.start_time);
+                newEntity.end_time = getTimestamp($scope.entity.end_time);
                 newEntity.poster = $scope.poster;
                 newEntity.group_code = $scope.group_code;
 
