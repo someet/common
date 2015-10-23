@@ -10,6 +10,7 @@ require('/var/www/html/helpers/DockerEnv.php');
 $config = \DockerEnv::consoleConfig();
 $application = new yii\console\Application($config);
 \Yii::setAlias('common', __DIR__ . '/packages/someet-common/');
+\Yii::setAlias('dektrium-user', __DIR__ . '/packages/yii2-user/');
 
 $exitCode = $application->run();
 exit($exitCode);
