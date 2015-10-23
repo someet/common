@@ -6,8 +6,8 @@
         <div layout="row">收费金额: {{entity.cost}}</div>
         <div layout="row" ng-show="entity.cost">收费明细: {{entity.cost_list}}</div>
         <div layout="row">
-            开始时间: {{entity.start_time}}
-            结束时间: {{entity.end_time}}
+            开始时间: {{entity.start_time_str}}
+            结束时间: {{entity.end_time_str}}
         </div>
         <div layout="row">地区: {{entity.area}}</div>
         <div layout="row">详细地址: {{entity.address}}</div>
@@ -77,13 +77,15 @@
                 <textarea ng-model="entity.cost_list"></textarea>
             </md-input-container>
 
+            <input type="hidden" class="input-large"  ng-model="entity.start_time">
+            <input type="hidden" class="input-large"  ng-model="entity.end_time">
             <div layout="row">
                 <md-input-container>
                     <label>开始时间</label>
                     <div class="dropdown">
                         <a class="dropdown-toggle my-toggle-select" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="">
                             <div class="input-append">
-                                <input type="text" class="input-large"  ng-model="entity.start_time">
+                                <input type="text" class="input-large"  ng-model="entity.start_time_str">
                                 <span class="add-on"> <i class="icon-calendar"></i>
                                 </span>
                             </div>
@@ -99,7 +101,7 @@
                     <div class="dropdown">
                         <a class="dropdown-toggle my-toggle-select" id="endLabel" role="button" data-toggle="dropdown" data-target="#" href="">
                             <div class="input-append">
-                                <input type="text" class="input-large"  ng-model="entity.end_time">
+                                <input type="text" class="input-large"  ng-model="entity.end_time_str">
                                 <span class="add-on"> <i class="icon-calendar"></i>
                                 </span>
                             </div>
