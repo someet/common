@@ -7,7 +7,10 @@ $config = [
     'language' => 'zh-CN',
     'components' => [
         'cache' => [
-            'class' => 'yii\caching\ApcCache',
+            'class' => 'yii\redis\Cache',
+        ],
+        'session' => [
+            'class' => 'yii\redis\Session',
         ],
         'db' => [
             'class' => 'yii\db\Connection',

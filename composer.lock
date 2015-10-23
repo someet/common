@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "79dd7fd15e6870c85d705d27ca49d885",
-    "content-hash": "7a97f0903793225eaba19a16af2ebba4",
+    "hash": "618b35772afc98b9e19de8946e12ed32",
+    "content-hash": "b4cb31c52114dea3696e2dac614a71a9",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -1376,6 +1376,54 @@
             "time": "2015-05-10 22:09:43"
         },
         {
+            "name": "yiisoft/yii2-redis",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "./packages/yii2-redis/",
+                "reference": "",
+                "shasum": null
+            },
+            "require": {
+                "yiisoft/yii2": ">=2.0.4"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "yii\\redis\\": ""
+                }
+            },
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Carsten Brandt",
+                    "email": "mail@cebe.cc"
+                }
+            ],
+            "description": "Redis Cache, Session and ActiveRecord for the Yii framework",
+            "keywords": [
+                "active-record",
+                "cache",
+                "redis",
+                "session",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/yiisoft/yii2-redis/issues",
+                "forum": "http://www.yiiframework.com/forum/",
+                "wiki": "http://www.yiiframework.com/wiki/",
+                "irc": "irc://irc.freenode.net/yii",
+                "source": "https://github.com/yiisoft/yii2-redis"
+            }
+        },
+        {
             "name": "yiisoft/yii2-swiftmailer",
             "version": "2.0.4",
             "source": {
@@ -1738,7 +1786,8 @@
     "stability-flags": {
         "someet/common": 20,
         "dektrium/yii2-user": 20,
-        "dektrium/yii2-rbac": 20
+        "dektrium/yii2-rbac": 20,
+        "yiisoft/yii2-redis": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
