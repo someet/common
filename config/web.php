@@ -24,6 +24,7 @@ $config = [
             'class' => 'yii\redis\Connection',
             'hostname' => \DockerEnv::get('REDIS_PORT_6379_TCP_ADDR'),
             'port' => 6379,
+            'password' => \DockerEnv::get('REDIS_1_ENV_REDIS_PASSWORD'),
             'database' => 0,
         ],
         'errorHandler' => [
