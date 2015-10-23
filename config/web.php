@@ -22,7 +22,7 @@ $config = [
         ],
         'redis' => [
             'class' => 'yii\redis\Connection',
-            'hostname' => \DockerEnv::get('REDIS_HOSTNAME'),
+            'hostname' => \DockerEnv::get('REDIS_PORT_6379_TCP_ADDR'),
             'port' => 6379,
             'database' => 0,
         ],
