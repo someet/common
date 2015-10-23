@@ -17,6 +17,12 @@ $config = [
             'charset' => 'utf8',
             'tablePrefix' => '',
         ],
+        'redis' => [
+            'class' => 'yii\redis\Connection',
+            'hostname' => \DockerEnv::get('REDIS_HOSTNAME'),
+            'port' => 6379,
+            'database' => 0,
+        ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],

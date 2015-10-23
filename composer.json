@@ -17,6 +17,7 @@
 		"someet/common": "*@dev",
 		"dektrium/yii2-user": "*@dev",
 		"dektrium/yii2-rbac": "*@dev",
+        "yiisoft/yii2-redis": "*@dev",
         "dcb9/yii2-yunpian": "0.0.1"
 	},
 	"require-dev": {
@@ -47,6 +48,10 @@
 		{
 			"type": "path",
 			"url": "./packages/yii2-rbac"
-		}
+		},
+        {
+          "type": "path",
+          "url": "./packages/yii2-redis"
+        }
 	]
 }
