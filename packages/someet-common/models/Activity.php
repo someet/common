@@ -112,6 +112,20 @@ class Activity extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->updated_by = $this->created_by = Yii::$app->user->getId();
+        } else {
+            $this->updated_by = Yii::$app->user->getId();
+        }
+
+        return parent::beforeSave($insert);
+    }
+
     // 活动标签
     public function getTags()
     {
