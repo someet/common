@@ -2,6 +2,7 @@
 namespace someet\common\models;
 
 use yii\behaviors\TimestampBehavior;
+
 use someet\common\models\queries\UserQuery;
 use Yii;
 use yii\base\NotSupportedException;
@@ -71,17 +72,7 @@ class User extends BaseUser
             ['email', 'filter', 'filter' => 'trim'],
             ['email', 'email'],
             ['email', 'unique'],
-        ];
-    }
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'timestamp' => [
-                'class' => TimestampBehavior::className(),
-            ],
+            ['mobile', 'unique'],
         ];
     }
 
