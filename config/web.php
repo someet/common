@@ -1,7 +1,6 @@
 <?php
 $config = [
     'id' => 'backend',
-    'name' => 'Someet活动平台',
     'basePath' => '/var/www/html',
     'vendorPath' => '/var/www/vendor',
     'timeZone' => 'Asia/Chongqing',
@@ -21,7 +20,7 @@ $config = [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        'mailer' => [
+        'mail' => [
             'class' => 'yii\swiftmailer\Mailer',
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
@@ -62,8 +61,7 @@ $config = [
             'showScriptName' => false,
         ],
         'user' => [
-            #'identityClass' => 'dektrium\user\models\User',
-            'identityClass' => 'someet\common\models\User',
+            'identityClass' => 'dektrium\user\models\User',
             'loginUrl' => ['user/login'],
             'enableAutoLogin' => true,
         ],
@@ -87,26 +85,11 @@ $config = [
         ],
         'user' => [
             'class' => 'dektrium\user\Module',
-            'enableFlashMessages' => true,
             'enableRegistration' => true,
-            'enableGeneratingPassword' => false,
-            'enableConfirmation' => true,
+            'enableConfirmation' => false,
             'enableUnconfirmedLogin' => true,
-            'enablePasswordRecovery' => true,
             'confirmWithin' => 21600,
-            'rememberFor' => 1209600,
-            'recoverWithin' => 21600,
-            'modelMap' => [
-                'User' => 'someet\common\models\User',
-            ],
-            'admins' => ['admin'], //只有用户名为admin这个用户可以管理用户和添加用户
-            'mailer' => [
-                'sender'                => 'dcj3sjt@126.com', // or ['no-reply@myhost.com' => 'Sender name']
-                'welcomeSubject'        => 'Welcome subject',
-                'confirmationSubject'   => 'Confirmation subject',
-                'reconfirmationSubject' => 'Email change subject',
-                'recoverySubject'       => 'Recovery subject',
-            ],
+            'admins' => ['admin'],
         ],
     ],
     'params' => require('/var/www/html/config/params.php'),
