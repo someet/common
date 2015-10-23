@@ -61,7 +61,8 @@ $config = [
             'showScriptName' => false,
         ],
         'user' => [
-            'identityClass' => 'dektrium\user\models\User',
+            #'identityClass' => 'dektrium\user\models\User',
+            'identityClass' => 'someet\common\models\User',
             'loginUrl' => ['user/login'],
             'enableAutoLogin' => true,
         ],
@@ -90,6 +91,9 @@ $config = [
             'enableUnconfirmedLogin' => true,
             'confirmWithin' => 21600,
             'admins' => ['admin'],
+            'modelMap' => [
+              'User' => 'someet\common\models\User',
+            ],
         ],
     ],
     'params' => require('/var/www/html/config/params.php'),
