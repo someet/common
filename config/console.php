@@ -28,6 +28,11 @@ return [
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
+        'yunpian' => [
+            'class' => 'dcb9\Yunpian\sdk\Yunpian',
+            'apiKey' => \DockerEnv::get('YUNPIAN_API_KEY'),
+            'useFileTransport' => true, // 如果该值为 true 则不会真正的发送短信，而是把内容写到文件里面，测试环境经常需要用到！
+        ],
     ],
     'params' => $web['params'],
 ];
