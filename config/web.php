@@ -7,7 +7,10 @@ $config = [
     'language' => 'zh-CN',
     'components' => [
         'cache' => [
-            'class' => 'yii\caching\ApcCache',
+            'class' => 'yii\redis\Cache',
+        ],
+        'session' => [
+            'class' => 'yii\redis\Session',
         ],
         'db' => [
             'class' => 'yii\db\Connection',
@@ -16,6 +19,12 @@ $config = [
             'password' => \DockerEnv::dbPassword(),
             'charset' => 'utf8',
             'tablePrefix' => '',
+        ],
+        'redis' => [
+            'class' => 'yii\redis\Connection',
+            'hostname' => \DockerEnv::get('REDIS_PORT_6379_TCP_ADDR'),
+            'port' => 6379,
+            'database' => 0,
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
