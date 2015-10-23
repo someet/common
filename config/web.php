@@ -23,7 +23,6 @@ $config = [
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
-            'useFileTransport' => false,
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
                 'host' => \DockerEnv::get('SMTP_HOST'),
@@ -63,7 +62,8 @@ $config = [
             'showScriptName' => false,
         ],
         'user' => [
-            'identityClass' => 'dektrium\user\models\User',
+            #'identityClass' => 'dektrium\user\models\User',
+            'identityClass' => 'someet\common\models\User',
             'loginUrl' => ['user/login'],
             'enableAutoLogin' => true,
         ],
@@ -96,6 +96,9 @@ $config = [
             'confirmWithin' => 21600,
             'rememberFor' => 1209600,
             'recoverWithin' => 21600,
+            'modelMap' => [
+                'User' => 'someet\common\models\User',
+            ],
             'admins' => ['admin'], //只有用户名为admin这个用户可以管理用户和添加用户
             'mailer' => [
                 'sender'                => 'dcj3sjt@126.com', // or ['no-reply@myhost.com' => 'Sender name']
