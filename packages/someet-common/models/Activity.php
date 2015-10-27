@@ -22,11 +22,13 @@ use Yii;
  * @property double $longitude
  * @property double $latitude
  * @property integer $cost
+ * @property string $cost_list
  * @property integer $peoples
  * @property integer $is_volume
  * @property integer $is_digest
  * @property integer $is_top
  * @property integer $principal
+ * @property integer $review
  * @property integer $created_at
  * @property integer $created_by
  * @property integer $updated_at
@@ -110,26 +112,6 @@ class Activity extends \yii\db\ActiveRecord
                 'class' => behaviors\TimestampBehavior::className(),
             ],
         ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function beforeSave($insert)
-    {
-        if ($this->isNewRecord) {
-            $this->updated_by = $this->created_by = Yii::$app->user->getId();
-        } else {
-            $this->updated_by = Yii::$app->user->getId();
-        }
-
-        return parent::beforeSave($insert);
-    }
-
-    // 活动标签
-    public function getTags()
-    {
-        return $this->hasMany(ActivityTag::className(), ['id' => 'tag_id'])->viaTable('r_tag_activity', ['activity_id' => 'id']);
     }
 
     // 活动的类型
