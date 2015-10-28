@@ -76,4 +76,10 @@ class Special extends \yii\db\ActiveRecord
             ],
         ];
     }
+
+    // 活动集
+    public function getActivities()
+    {
+        return $this->hasMany(Activity::className(), ['id' => 'activity_id'])->viaTable('r_special_activity', ['activity_id' => 'id']);
+    }
 }

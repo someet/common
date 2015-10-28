@@ -11,7 +11,7 @@ use Yii;
  * @property integer $special_id
  * @property integer $activity_id
  */
-class SpecialActivity extends \yii\db\ActiveRecord
+class RSpecialActivity extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
