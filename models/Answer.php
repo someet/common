@@ -43,7 +43,8 @@ class Answer extends \yii\db\ActiveRecord
         return [
             [['question_id'], 'required'],
             [['question_id', 'activity_id', 'user_id', 'is_finish', 'is_send', 'send_at', 'created_at', 'updated_at', 'status'], 'integer'],
-            [['question_id', 'user_id'], 'unique', 'targetAttribute' => ['question_id', 'user_id'], 'message' => 'The combination of 问题ID and 用户ID has already been taken.']
+            [['question_id', 'user_id'], 'unique', 'targetAttribute' => ['question_id', 'user_id'], 'message' => 'The combination of 问题ID and 用户ID has already been taken.'],
+            [['status'], 'default', 'value' => static::STATUS_REVIEW_YET]
         ];
     }
 
@@ -76,6 +77,18 @@ class Answer extends \yii\db\ActiveRecord
                 'class' => behaviors\TimestampBehavior::className(),
             ],
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            $this->user_id = Yii::$app->user->getId();
+        }
+
+        return parent::beforeSave($insert);
     }
 
     public function getAnswerItemList()
