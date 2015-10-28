@@ -111,22 +111,7 @@ class Activity extends \yii\db\ActiveRecord
             'timestamp' => [
                 'class' => behaviors\TimestampBehavior::className(),
             ],
-            behaviors\TaggableBehavior::className(),
         ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function beforeSave($insert)
-    {
-        if ($this->isNewRecord) {
-            $this->updated_by = $this->created_by = Yii::$app->user->getId();
-        } else {
-            $this->updated_by = Yii::$app->user->getId();
-        }
-
-        return parent::beforeSave($insert);
     }
 
     // 活动标签
@@ -135,7 +120,7 @@ class Activity extends \yii\db\ActiveRecord
         return $this->hasMany(ActivityTag::className(), ['id' => 'tag_id'])->viaTable('r_tag_activity', ['activity_id' => 'id']);
     }
 
-    // 发起人
+    // 用户
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'created_by']);
