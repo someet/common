@@ -129,11 +129,13 @@ angular.module('controllers', ['ngTagsInput'])
       $scope.$parent.pageName = '活动详情';
 
       $scope.onStartTimeSet = function(newDate, oldDate) {
-        $scope.entity.start_time = getTimeByTimestamp(getTimestamp(newDate));
+        $scope.start_time_str = getTimeByTimestamp(getTimestamp(newDate));
+        $scope.entity.start_time = getTimestamp(newDate);
       }
 
       $scope.onStopTimeSet = function(newDate, oldDate) {
-        $scope.entity.end_time = getTimeByTimestamp(getTimestamp(newDate));
+        $scope.end_time_str = getTimeByTimestamp(getTimestamp(newDate));
+        $scope.entity.end_time = getTimestamp(newDate);
       }
 
       // 标签
@@ -229,8 +231,8 @@ angular.module('controllers', ['ngTagsInput'])
       if (id > 0) {
         $activityManage.fetch(id).then(function(data) {
           $scope.entity = data;
-          $scope.entity.start_time = getTimeByTimestamp(data.start_time);
-          $scope.entity.end_time = getTimeByTimestamp(data.end_time);
+          $scope.start_time_str = getTimeByTimestamp(data.start_time);
+          $scope.end_time_str = getTimeByTimestamp(data.end_time);
           $scope.poster = data.poster;
           $scope.group_code = data.group_code;
 
@@ -259,8 +261,8 @@ angular.module('controllers', ['ngTagsInput'])
 
       $scope.save = function() {
         var newEntity = $scope.entity;
-        newEntity.start_time = getTimestamp($scope.entity.start_time);
-        newEntity.end_time = getTimestamp($scope.entity.end_time);
+        newEntity.start_time = $scope.entity.start_time;
+        newEntity.end_time = $scope.entity.end_time;
         newEntity.poster = $scope.poster;
         newEntity.group_code = $scope.group_code;
 
