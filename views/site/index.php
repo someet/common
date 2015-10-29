@@ -47,7 +47,7 @@ use yii\helpers\Url;
             <a href="#/special">专题</a>
           </li>
           <li>
-            <a href="#/activity">活动</a>
+            <a href="#/activity/list/0">活动</a>
           </li>
           <li>
             <a href="#/user">联系人</a>

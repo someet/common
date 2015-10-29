@@ -18,10 +18,10 @@
     <div>
         <ul class="nav nav-tabs">
             <li class="active">
-                <a href="#">全部</a>
+                <a href="#/activity/list/0">全部</a>
             </li>
             <li ng-repeat="entity in activityTypeList | orderBy: 'display_order' ">
-                <a href="#">{{entity.name}}</a>
+                <a href="#/activity/list/{{entity.id}}">{{entity.name}}</a>
             </li>
             <li>
                 <button ng-click="onTypeAddClicked()">
@@ -38,7 +38,7 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">
-                            <button type="button" class="btn btn-default " data-toggle="button">
+                            <button type="button" class="btn btn-default " data-toggle="button" >
                                 <span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true"></span>
                             </button>
                             {{entity.title}}
@@ -47,31 +47,26 @@
                                 <span class="badge">4</span>
                             </button>
                             <button class="btn btn-warning btn-float-right" type="button">
-                                报名（16/20）
+                                报名（16/{{entity.peoples}}）
                                 <span class="badge">10</span>
                             </button>
                         </h3>
                     </div>
                     <div class="panel-body">
                         <div class="btn-group">
+
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                本周活动
+                                {{entity.type.name}}
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a href="#">一日体验</a>
-                                </li>
-                                <li>
-                                    <a href="#">临时</a>
-                                </li>
-                                <li>
-                                    <a href="#">历史活动</a>
+                                <li ng-repeat="entity in activityTypeList | orderBy: 'display_order' ">
+                                    <a href="#">{{entity.name}}</a>
                                 </li>
                             </ul>
                         </div>
                         <button class="btn btn-info" type="button" >查看</button>
-                        <button class="btn btn-success" type="button">编辑</button>
+                        <a class="btn btn-success" href="#/activity/{{entity.id}}">编辑</a>
                         <button class="btn btn-warning" type="button">发布</button>
                         <div class="btn-group btn-float-right">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -80,7 +75,7 @@
                             </button>
                             <ul class="dropdown-menu" role="menu">
                                 <li>
-                                    <a href="#">删除活动</a>
+                                    <a ng-click="delete(entity)">删除活动</a>
                                 </li>
                                 <li>
                                     <a href="#">复制活动</a>

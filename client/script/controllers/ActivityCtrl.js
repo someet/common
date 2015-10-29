@@ -1,20 +1,33 @@
 angular.module('controllers', ['ngTagsInput'])
+    .controller('ActivityListCtrl', ['$scope', '$routeParams', '$location', '$activityManage', '$activityTypeManage', '$mdDialog', 'lodash', '$mdToast',
+      function($scope, $routeParams, $location, $activityManage, $activityTypeManage, $mdDialog, lodash, $mdToast) {
+
+        var type_id = $routeParams.type_id;
+        $activityManage.listByType(type_id).then(function(data) {
+          console.log(data);
+          $scope.list = data;
+
+        }, function(err) {
+          alert(err);
+        });
+
+        // 活动类型列表
+        $activityTypeManage.fetch().then(function(data) {
+          $scope.activityTypeList = data;
+        }, function(err) {
+          alert(err);
+        });
+      }])
   .controller('ActivityCtrl', ['$scope', '$location', '$activityManage', '$activityTypeManage', '$mdDialog', 'lodash', '$mdToast',
     function($scope, $location, $activityManage, $activityTypeManage, $mdDialog, lodash, $mdToast) {
 
       $scope.$parent.pageName = '活动管理';
-      $activityManage.fetch().then(function(data) {
+      $activityManage.listByType(0).then(function(data) {
         $scope.list = data;
       }, function(err) {
         alert(err);
       });
 
-      // 活动类型列表
-      $activityTypeManage.fetch().then(function(data) {
-        $scope.activityTypeList = data;
-      }, function(err) {
-        alert(err);
-      });
 
       $scope.onTypeAddClicked = function() {
         $scope.showAddForm = true;
