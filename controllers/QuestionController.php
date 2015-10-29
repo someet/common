@@ -179,7 +179,7 @@ class QuestionController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = $this->findModel($id);
         $data = Yii::$app->getRequest()->post();
-        $questionItemList = $data['questionItemList'];
+        // $questionItemList = $data['questionItemList'];
 
         if (isset($data['title'])) {
             $model->title = $data['title'];

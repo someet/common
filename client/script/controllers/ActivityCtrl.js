@@ -1,6 +1,6 @@
 angular.module('controllers', ['ngTagsInput'])
-    .controller('ActivityListCtrl', ['$scope', '$routeParams', '$location', '$activityManage', '$activityTypeManage', '$mdDialog', 'lodash', '$mdToast',
-      function($scope, $routeParams, $location, $activityManage, $activityTypeManage, $mdDialog, lodash, $mdToast) {
+    .controller('ActivityListCtrl', ['$scope', '$routeParams', '$location','$questionManage', '$activityManage', '$activityTypeManage', '$mdDialog', 'lodash', '$mdToast',
+      function($scope, $routeParams, $location,$questionManage, $activityManage, $activityTypeManage, $mdDialog, lodash, $mdToast) {
 
         var type_id = $routeParams.type_id;
         $activityManage.listByType(type_id).then(function(data) {
@@ -17,6 +17,41 @@ angular.module('controllers', ['ngTagsInput'])
         }, function(err) {
           alert(err);
         });
+
+        // 更新活动类型
+        $scope.onTypeChangeClick = function(activity, type_id){
+          var old_type_id = activity.type_id;
+          activity.type_id = type_id;
+          $activityManage.update(activity.id,activity).then(function(data){
+            $location.path('/activity/list/'+type_id);
+          }, function(err){
+            alert(err);
+          });
+        };
+
+        // 关闭报名表单
+        $scope.onApplyCloseClick = function(activity){
+          var new_question = activity.question;
+          console.log(new_question);
+          new_question.status = 0;
+          $questionManage.update(activity.question.id,new_question).then(function(data){
+            console.log(data);
+          }, function(err){
+            alert(err);
+          });
+        };
+
+        // 打开报名表单
+        $scope.onApplyOpenClick = function(activity){
+          var new_question = activity.question;          
+          new_question.status = 20;
+          $questionManage.update(activity.question.id,new_question).then(function(data){
+            
+          }, function(err){
+            alert(err);
+          });
+        };
+
       }])
   .controller('ActivityCtrl', ['$scope', '$location', '$activityManage', '$activityTypeManage', '$mdDialog', 'lodash', '$mdToast',
     function($scope, $location, $activityManage, $activityTypeManage, $mdDialog, lodash, $mdToast) {
