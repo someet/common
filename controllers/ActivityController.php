@@ -66,6 +66,9 @@ class ActivityController extends Controller
                 ->with([
                     'type',
                     'tags',
+                    'question',
+                    'answerList',
+                    'feedbackList'
                 ])
                 ->asArray()
                 ->orderBy([
@@ -79,6 +82,9 @@ class ActivityController extends Controller
                 ->with([
                     'type',
                     'tags',
+                    'question',
+                    'answerList',
+                    'feedbackList'
                 ])
                 ->asArray()
                 ->orderBy([

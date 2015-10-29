@@ -20,7 +20,7 @@
             <li class="active">
                 <a href="#/activity/list/0">全部</a>
             </li>
-            <li ng-repeat="entity in activityTypeList | orderBy: 'display_order' ">
+            <li ng-repeat="entity in activityTypeList | orderBy: 'display_order' " >
                 <a href="#/activity/list/{{entity.id}}">{{entity.name}}</a>
             </li>
             <li>
@@ -48,7 +48,7 @@
                             </button>
                             <button class="btn btn-warning btn-float-right" type="button">
                                 报名（16/{{entity.peoples}}）
-                                <span class="badge">10</span>
+                                <span class="badge">{{entity.feedbackList}}</span>
                             </button>
                         </h3>
                     </div>
