@@ -393,7 +393,7 @@
         },
         {
             "name": "dektrium/yii2-rbac",
-            "version": "dev-userAndRbac",
+            "version": "dev-master",
             "dist": {
                 "type": "path",
                 "url": "./packages/yii2-rbac/",

@@ -13,6 +13,7 @@
     "angular-messages": "1.4.7",
     "ng-tags-input": "~3.0.0",
     "angular-jquery": "~0.2.1"
+
   },
   "resolutions": {
     "angular": "1.4.6"

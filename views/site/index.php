@@ -43,13 +43,13 @@ use yii\helpers\Url;
       <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav h4">
           <li class="active">
-            <a href="#">专题</a>
+            <a href="#/special">专题</a>
           </li>
           <li>
-            <a href="#">活动</a>
+            <a href="#/activity">活动</a>
           </li>
           <li>
-            <a href="#">联系人</a>
+            <a href="#/user">联系人</a>
           </li>
         </ul>
 
