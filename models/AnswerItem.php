@@ -52,4 +52,16 @@ class AnswerItem extends \yii\db\ActiveRecord
             'status' => '冗余扩展',
         ];
     }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if ($insert) {
+                $this->user_id = Yii::$app->user && Yii::$app->user->id > 0 ? Yii::$app->user->id : 0;
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

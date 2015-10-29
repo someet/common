@@ -50,7 +50,7 @@ class User extends BaseUser
     public function scenarios()
     {
         return array_merge(parent::scenarios(), [
-            'signup' => ['username','email','password'],
+            'update'   => ['id'],
         ]);
     }
 
