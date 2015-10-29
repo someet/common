@@ -85,11 +85,11 @@ angular.module('controllers', ['ngTagsInput'])
             $scope.$parent.pageName = '活动详情';
 
           $scope.onStartTimeSet = function (newDate, oldDate) {
-            $scope.entity.start_time_str = getTimeByTimestamp(getTimestamp(newDate));
+            $scope.entity.start_time = getTimeByTimestamp(getTimestamp(newDate));
           }
 
           $scope.onStopTimeSet = function (newDate, oldDate) {
-            $scope.entity.end_time_str = getTimeByTimestamp(getTimestamp(newDate));
+            $scope.entity.end_time = getTimeByTimestamp(getTimestamp(newDate));
           }
 
           // 标签
@@ -181,8 +181,8 @@ angular.module('controllers', ['ngTagsInput'])
             if(id>0) {
               $activityManage.fetch(id).then(function (data) {
                 $scope.entity = data;
-                $scope.entity.start_time_str = getTimeByTimestamp(data.start_time);
-                $scope.entity.end_time_str = getTimeByTimestamp(data.end_time);
+                $scope.entity.start_time = getTimeByTimestamp(data.start_time);
+                $scope.entity.end_time = getTimeByTimestamp(data.end_time);
                 $scope.poster = data.poster;
                 $scope.group_code = data.group_code;
 
