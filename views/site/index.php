@@ -42,6 +42,7 @@ use yii\helpers\Url;
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav h4">
+          <?php echo Yii::$app->request->getQueryString(); ?>
           <li class="active">
             <a href="#/special">专题</a>
           </li>
@@ -57,7 +58,9 @@ use yii\helpers\Url;
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-              LukeYU <b class="caret"></b>
+              <?php $user = Yii::$app->user->identity; ?>
+              <?= $user->username ?> <b class="caret"></b>
+
             </a>
             <ul class="dropdown-menu">
               <li>
@@ -68,7 +71,7 @@ use yii\helpers\Url;
               </li>
               <li class="divider"></li>
               <li>
-                <a href="#">注销</a>
+                <a href="/site/logout">注销</a>
               </li>
             </ul>
           </li>
