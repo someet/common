@@ -59,11 +59,16 @@ class ActivityTypeController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $types = ActivityType::find()
+            ->with('activities')
             ->orderBy([
                 'display_order' => SORT_ASC,
                 'id' => SORT_DESC,
             ])
+            ->asArray()
             ->all();
+        foreach($types as $key => $type) {
+            $types[$key]['activity_count'] = count($type['activities']);
+        }
 
         return $types;
     }

@@ -191,10 +191,6 @@ angular.module('controllers', ['ngTagsInput'])
         $location.path('/answer/view/' + entity.id);
       }
 
-      $scope.update = function(entity) {
-        $location.path('/activity/' + entity.id);
-      };
-
       $scope.delete = function(entity) {
 
         var confirm = $mdDialog.confirm()

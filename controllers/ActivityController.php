@@ -94,6 +94,9 @@ class ActivityController extends Controller
                 ])
                 ->all();
         }
+        foreach($activities as $key => $activity) {
+            $activities[$key]['feedback_count'] = count($activity['feedbackList']);
+        }
 
         return $activities;
     }

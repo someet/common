@@ -30,30 +30,29 @@
             </ul>
         </div>
     </div>
-</div>
-<div class="activityList container">
+
+    <div class="activityList container">
     <ul class="activityListProperty">
         <li ng-repeat="entity in list | orderBy: 'display_order' ">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">
-                        <a type="button" class="btn btn-default" ng-click="setTop(entity)" ng-if="entity.is_top == 0">
-                            <span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true"></span>
-                        </a>
-                        <a type="button" class="btn btn-danger" ng-click="cancelTop(entity)" ng-if="entity.is_top >
-                            0">
-                            <span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true"></span>
-                        </a>
-                        {{entity.title}}
-                        <button class="btn btn-primary btn-float-right" type="button">
-                            反馈
-                            <span class="badge">4</span>
-                        </button>
-                        <button class="btn btn-warning btn-float-right" type="button">
-                            报名（16/{{entity.peoples}}）
-                            <span class="badge">{{entity.feedbackList}}</span>
-                        </button>
-                    </h3>
+                                        <h3 class="panel-title">
+                            <button type="button" class="btn btn-default " ng-if="entity.is_top==1" ng-click="top(entity, 0)" data-toggle="button" >
+                                <span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true">取消置顶</span>
+                            </button>
+                            <button type="button" class="btn btn-default " ng-if="entity.is_top==0" ng-click="top(entity, 1)" data-toggle="button" >
+                                <span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true">置顶</span>
+                            </button>
+                            {{entity.title}}
+                            <button class="btn btn-primary btn-float-right" type="button" ng-click="viewAnswer(entity)">
+                                反馈
+                                <span class="badge">{{entity.feedback_count}}</span>
+                            </button>
+                            <button class="btn btn-warning btn-float-right" type="button">
+                                报名（16/{{entity.peoples}}）
+                                <span class="badge"></span>
+                            </button>
+                        </h3>
                 </div>
                 <div class="panel-body">
                     <div class="btn-group">
@@ -71,30 +70,35 @@
                     <button class="btn btn-info" type="button" >查看</button>
                     <a class="btn btn-success" href="#/activity/{{entity.id}}">编辑</a>
                     <button class="btn btn-warning" type="button">发布</button>
+                        <button ng-if="!entity.question" class="btn" ng-click="viewQuestion(entity)">设置报名表单</button>
+                        <button ng-if="entity.question" class="btn" ng-click="viewQuestion(entity)">修改报名表单</button>
+                        <button ng-if="entity.question" class="btn" ng-click="previewQuestion(entity)">预览报名表单</button>
+                        
                     <div class="btn-group btn-float-right">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             更多
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" role="menu">
-                            <li>
-                                <a ng-click="delete(entity)">删除活动</a>
-                            </li>
-                            <li>
-                                <a href="#">复制活动</a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <a ng-click="onApplyCloseClick(entity)">关闭报名</a>
-                            </li>
-                            <li>
-                                <a ng-click="onApplyOpenClick(entity)">打开报名</a>
-                            </li>
-                            <li class="divider"></li>
-                            <li>
-                                <a href="#">结束活动</a>
-                            </li>
-                        </ul>
+                                <li>
+                                    <a ng-click="delete(entity)">删除活动</a>
+                                </li>
+                                <li>
+                                    <a href="#">复制活动</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a ng-click="onApplyCloseClick(entity)">关闭报名</a>
+                                </li>
+                                <li>
+                                    <a ng-click="onApplyOpenClick(entity)">打开报名</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="#">结束活动</a>
+                                </li>
+                            </ul>
+
                     </div>
                     <div class="btn-float-right">
                         <span ng-if="entity.question.status==0">关闭</span>
@@ -104,4 +108,5 @@
             </div>
         </li>
     </ul>
+</div>
 </div>
