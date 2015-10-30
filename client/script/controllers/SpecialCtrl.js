@@ -110,6 +110,7 @@ angular.module('controllers')
 
         $specialManage.fetch(id).then(function (data) {
           $scope.entity = data;
+          $scope.poster = data.poster;
         }, function (err) {
           $location.path('/special');
         });

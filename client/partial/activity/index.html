@@ -21,7 +21,7 @@
                 <a href="#/activity/list/0">全部</a>
             </li>
             <li ng-repeat="entity in activityTypeList | orderBy: 'display_order' " >
-                <a href="#/activity/list/{{entity.id}}">{{entity.name}}</a>
+                <a href="#/activity/list/{{entity.id}}">{{entity.name}} <span style="color: gray; font-size:12px">{{entity.activity_count}}</span></a>
             </li>
             <li>
                 <button ng-click="onTypeAddClicked()">
@@ -38,17 +38,20 @@
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <h3 class="panel-title">
-                            <button type="button" class="btn btn-default " data-toggle="button" >
-                                <span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true"></span>
+                            <button type="button" class="btn btn-default " ng-if="entity.is_top==1" ng-click="top(entity, 0)" data-toggle="button" >
+                                <span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true">取消置顶</span>
+                            </button>
+                            <button type="button" class="btn btn-default " ng-if="entity.is_top==0" ng-click="top(entity, 1)" data-toggle="button" >
+                                <span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true">置顶</span>
                             </button>
                             {{entity.title}}
-                            <button class="btn btn-primary btn-float-right" type="button">
+                            <button class="btn btn-primary btn-float-right" type="button" ng-click="viewAnswer(entity)">
                                 反馈
-                                <span class="badge">4</span>
+                                <span class="badge">{{entity.feedback_count}}</span>
                             </button>
                             <button class="btn btn-warning btn-float-right" type="button">
                                 报名（16/{{entity.peoples}}）
-                                <span class="badge">{{entity.feedbackList}}</span>
+                                <span class="badge"></span>
                             </button>
                         </h3>
                     </div>
@@ -68,6 +71,9 @@
                         <button class="btn btn-info" type="button" >查看</button>
                         <a class="btn btn-success" href="#/activity/{{entity.id}}">编辑</a>
                         <button class="btn btn-warning" type="button">发布</button>
+                        <button ng-if="!entity.question" class="btn" ng-click="viewQuestion(entity)">设置报名表单</button>
+                        <button ng-if="entity.question" class="btn" ng-click="viewQuestion(entity)">修改报名表单</button>
+                        <button ng-if="entity.question" class="btn" ng-click="previewQuestion(entity)">预览报名表单</button>
                         <div class="btn-group btn-float-right">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                 更多
@@ -99,3 +105,4 @@
         </ul>
     </div>
 </div>
+
