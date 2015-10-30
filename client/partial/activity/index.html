@@ -63,8 +63,8 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
-                                <li ng-repeat="entity in activityTypeList | orderBy: 'display_order' ">
-                                    <a href="#">{{entity.name}}</a>
+                                <li ng-repeat="type in activityTypeList | orderBy: 'display_order' ">
+                                    <a ng-click="onTypeChangeClick(entity,type.id)">{{type.name}}</a>
                                 </li>
                             </ul>
                         </div>
@@ -75,6 +75,10 @@
                         <button ng-if="entity.question" class="btn" ng-click="viewQuestion(entity)">修改报名表单</button>
                         <button ng-if="entity.question" class="btn" ng-click="previewQuestion(entity)">预览报名表单</button>
                         <div class="btn-group btn-float-right">
+                            <span
+  ng-if="entity.question.status==0">关闭</span>
+   <span
+  ng-if="entity.question.status==20">打开</span>
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                                 更多
                                 <span class="caret"></span>
@@ -88,10 +92,10 @@
                                 </li>
                                 <li class="divider"></li>
                                 <li>
-                                    <a href="#">关闭报名</a>
+                                    <a ng-click="onApplyCloseClick(entity)">关闭报名</a>
                                 </li>
                                 <li>
-                                    <a href="#">打开报名</a>
+                                    <a ng-click="onApplyOpenClick(entity)">打开报名</a>
                                 </li>
                                 <li class="divider"></li>
                                 <li>
