@@ -52,6 +52,71 @@ angular.module('controllers', ['ngTagsInput'])
           });
         };
 
+        // 置顶
+        $scope.setTop = function(entity) {          
+          var newEntity = entity;
+          newEntity.is_top = 1;
+          $activityManage.update(entity.id, newEntity).then(function(data) {
+            $mdToast.show($mdToast.simple()
+              .content('置顶成功')
+              .hideDelay(5000)
+              .position("top right"));
+            $location.path('/activity/list/' + entity.type_id);
+          }, function(err) {
+            $mdToast.show($mdToast.simple()
+              .content(err.toString())
+              .hideDelay(5000)
+              .position("top right"));
+          })
+        };
+
+        // 取消置顶
+        $scope.cancelTop = function(entity) {
+          var newEntity = entity;
+          newEntity.is_top = 0;          
+          $activityManage.update(entity.id, newEntity).then(function(data) {
+            $mdToast.show($mdToast.simple()
+              .content('取消置顶成功')
+              .hideDelay(5000)
+              .position("top right"));
+            $location.path('/activity/list/' + entity.type_id);
+          }, function(err) {
+            $mdToast.show($mdToast.simple()
+              .content(err.toString())
+              .hideDelay(5000)
+              .position("top right"));
+          })
+        };
+
+         $scope.delete = function(entity) {
+
+        var confirm = $mdDialog.confirm()
+          .title('确定要删除活动“' + entity.title + '”吗？')
+          .ariaLabel('delete activity item')
+          .ok('确定删除')
+          .cancel('手滑点错了，不删');
+
+        $mdDialog.show(confirm).then(function() {
+          $activityManage.delete(entity).then(function(data) {
+
+            lodash.remove($scope.list, function(tmpRow) {
+              return tmpRow == entity;
+            });
+
+            $mdToast.show($mdToast.simple()
+              .content('删除活动类型“' + entity.title + '”成功')
+              .hideDelay(5000)
+              .position("top right"));
+
+          }, function(err) {
+            $mdToast.show($mdToast.simple()
+              .content(err.toString())
+              .hideDelay(5000)
+              .position("top right"));
+          });
+        });
+      };
+
       }])
   .controller('ActivityCtrl', ['$scope', '$location', '$activityManage', '$activityTypeManage', '$mdDialog', 'lodash', '$mdToast',
     function($scope, $location, $activityManage, $activityTypeManage, $mdDialog, lodash, $mdToast) {
@@ -65,6 +130,7 @@ angular.module('controllers', ['ngTagsInput'])
 
 
       $scope.onTypeAddClicked = function() {
+        console.log("type add")
         $scope.showAddForm = true;
       };
 
@@ -85,7 +151,7 @@ angular.module('controllers', ['ngTagsInput'])
             alert(err);
           });
 
-          $location.path('/activity');
+          $location.path('/activity/list/0');
           $mdToast.show($mdToast.simple()
             .content('添加活动类型成功')
             .hideDelay(5000)
@@ -153,6 +219,7 @@ angular.module('controllers', ['ngTagsInput'])
           });
         });
       };
+
       $scope.createPage = function() {
         $location.path('/activity/add');
       }
