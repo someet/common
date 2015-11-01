@@ -43,13 +43,13 @@ use yii\helpers\Url;
       <div class="collapse navbar-collapse " id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav h4">
           <?php echo Yii::$app->request->getQueryString(); ?>
-          <li class="active">
+          <li ng-class="{active:isActive('/special')}">
             <a href="#/special">专题</a>
           </li>
-          <li>
+          <li ng-class="{active:isActive('/activity')}">
             <a href="#/activity/list/0">活动</a>
           </li>
-          <li>
+          <li ng-class="{active:isActive('/user')}">
             <a href="#/user">联系人</a>
           </li>
         </ul>

@@ -1,95 +1,48 @@
 angular.module('controllers', ['ngTagsInput'])
-    .controller('ActivityListCtrl', ['$scope', '$routeParams', '$location','$questionManage', '$activityManage', '$activityTypeManage', '$mdDialog', 'lodash', '$mdToast',
-      function($scope, $routeParams, $location,$questionManage, $activityManage, $activityTypeManage, $mdDialog, lodash, $mdToast) {
+  .controller('ActivityListCtrl', ['$scope', '$routeParams', '$location', '$questionManage', '$activityManage', '$activityTypeManage', '$mdDialog', 'lodash', '$mdToast',
+    function($scope, $routeParams, $location, $questionManage, $activityManage, $activityTypeManage, $mdDialog, lodash, $mdToast) {
 
-        var type_id = $routeParams.type_id;
-        $activityManage.listByType(type_id).then(function(data) {
+      var type_id = $routeParams.type_id;
+      $activityManage.listByType(type_id).then(function(data) {
+        console.log(data);
+        $scope.list = data;
+
+      }, function(err) {
+        alert(err);
+      });
+
+      // 活动类型列表
+      $activityTypeManage.fetch().then(function(data) {
+        $scope.activityTypeList = data;
+      }, function(err) {
+        alert(err);
+      });
+
+      // 更新活动类型
+      $scope.onTypeChangeClick = function(activity, type_id) {
+        var old_type_id = activity.type_id;
+        activity.type_id = type_id;
+        $activityManage.update(activity.id, activity).then(function(data) {
+          $location.path('/activity/list/' + type_id);
+        }, function(err) {
+          alert(err);
+        });
+      };
+
+      // 设置报名表单状态 0关闭 20打开
+      $scope.applyStatus = function(entity, status) {
+        var new_question = entity.question;
+        console.log(new_question);
+        new_question.status = status;
+        $questionManage.update(entity.question.id, new_question).then(function(data) {
           console.log(data);
-          $scope.list = data;
-
         }, function(err) {
           alert(err);
         });
+      };
 
-        // 活动类型列表
-        $activityTypeManage.fetch().then(function(data) {
-          $scope.activityTypeList = data;
-        }, function(err) {
-          alert(err);
-        });
-
-        // 更新活动类型
-        $scope.onTypeChangeClick = function(activity, type_id){
-          var old_type_id = activity.type_id;
-          activity.type_id = type_id;
-          $activityManage.update(activity.id,activity).then(function(data){
-            $location.path('/activity/list/'+type_id);
-          }, function(err){
-            alert(err);
-          });
-        };
-
-        // 关闭报名表单
-        $scope.onApplyCloseClick = function(activity){
-          var new_question = activity.question;
-          console.log(new_question);
-          new_question.status = 0;
-          $questionManage.update(activity.question.id,new_question).then(function(data){
-            console.log(data);
-          }, function(err){
-            alert(err);
-          });
-        };
-
-        // 打开报名表单
-        $scope.onApplyOpenClick = function(activity){
-          var new_question = activity.question;          
-          new_question.status = 20;
-          $questionManage.update(activity.question.id,new_question).then(function(data){
-            
-          }, function(err){
-            alert(err);
-          });
-        };
-
-        // 置顶
-        $scope.setTop = function(entity) {          
-          var newEntity = entity;
-          newEntity.is_top = 1;
-          $activityManage.update(entity.id, newEntity).then(function(data) {
-            $mdToast.show($mdToast.simple()
-              .content('置顶成功')
-              .hideDelay(5000)
-              .position("top right"));
-            $location.path('/activity/list/' + entity.type_id);
-          }, function(err) {
-            $mdToast.show($mdToast.simple()
-              .content(err.toString())
-              .hideDelay(5000)
-              .position("top right"));
-          })
-        };
-
-        // 取消置顶
-        $scope.cancelTop = function(entity) {
-          var newEntity = entity;
-          newEntity.is_top = 0;          
-          $activityManage.update(entity.id, newEntity).then(function(data) {
-            $mdToast.show($mdToast.simple()
-              .content('取消置顶成功')
-              .hideDelay(5000)
-              .position("top right"));
-            $location.path('/activity/list/' + entity.type_id);
-          }, function(err) {
-            $mdToast.show($mdToast.simple()
-              .content(err.toString())
-              .hideDelay(5000)
-              .position("top right"));
-          })
-        };
-
-         $scope.delete = function(entity) {
-
+      // 删除
+      $scope.delete = function(entity) {
         var confirm = $mdDialog.confirm()
           .title('确定要删除活动“' + entity.title + '”吗？')
           .ariaLabel('delete activity item')
@@ -117,7 +70,40 @@ angular.module('controllers', ['ngTagsInput'])
         });
       };
 
-      }])
+      // 置顶/取消置顶
+      $scope.top = function(entity, is_top) {
+        var newEntity = entity;
+        newEntity.is_top = is_top > 0 ? 1 : 0; // 是否置顶
+        $activityManage.update(entity.id, newEntity).then(function(data) {
+          $mdToast.show($mdToast.simple()
+            .content('置顶成功')
+            .hideDelay(5000)
+            .position("top right"));
+          $location.path('/activity/list/' + $routeParams.type_id);
+        }, function(err) {
+          $mdToast.show($mdToast.simple()
+            .content(err.toString())
+            .hideDelay(5000)
+            .position("top right"));
+        })
+      }
+
+      // 设置问题
+      $scope.viewQuestion = function(activity) {
+        $location.path('/question/view/' + activity.id);
+      }
+
+      $scope.viewAnswer = function(activity) {
+        $location.path('/answer/' + activity.id);
+      }
+
+      // 预览问题
+      $scope.previewQuestion = function(entity) {
+        $location.path('/answer/view/' + entity.id);
+      }
+
+    }
+  ])
   .controller('ActivityCtrl', ['$scope', '$location', '$activityManage', '$activityTypeManage', '$mdDialog', 'lodash', '$mdToast',
     function($scope, $location, $activityManage, $activityTypeManage, $mdDialog, lodash, $mdToast) {
 
@@ -128,7 +114,15 @@ angular.module('controllers', ['ngTagsInput'])
         alert(err);
       });
 
+      // tab
+      $scope.isActive = function(type_id) {
+        console.log(type_id);
+        var route = "/activity/list/"+type_id
+        return route === $location.path();
+        // return .indexOf(route) != -1;
+      }
 
+      //点击增加类型按钮
       $scope.onTypeAddClicked = function() {
         console.log("type add")
         $scope.showAddForm = true;
@@ -139,6 +133,12 @@ angular.module('controllers', ['ngTagsInput'])
         newType: ""
       };
 
+      // 取消增加新类型
+      $scope.cancelAddType = function() {
+        $scope.showAddForm = false;
+      };
+
+      // 增加新的类型
       $scope.commitTypeName = function(data) {
         var newEntity = {
           name: data,
@@ -168,71 +168,10 @@ angular.module('controllers', ['ngTagsInput'])
         };
       };
 
-      // 置顶/取消置顶
-      $scope.top = function(entity, is_top) {
-        var newEntity = entity;
-        newEntity.is_top = is_top > 0 ? 1 : 0; // 是否置顶
-        $activityManage.update(entity.id, newEntity).then(function(data) {
-          $mdToast.show($mdToast.simple()
-            .content('置顶成功')
-            .hideDelay(5000)
-            .position("top right"));
-          $location.path('/activity');
-        }, function(err) {
-          $mdToast.show($mdToast.simple()
-            .content(err.toString())
-            .hideDelay(5000)
-            .position("top right"));
-        })
-      }
-
-      // 预览问题
-      $scope.previewQuestion = function(entity) {
-        $location.path('/answer/view/' + entity.id);
-      }
-
-      $scope.delete = function(entity) {
-
-        var confirm = $mdDialog.confirm()
-          .title('确定要删除活动“' + entity.title + '”吗？')
-          .ariaLabel('delete activity item')
-          .ok('确定删除')
-          .cancel('手滑点错了，不删');
-
-        $mdDialog.show(confirm).then(function() {
-          $activityManage.delete(entity).then(function(data) {
-
-            lodash.remove($scope.list, function(tmpRow) {
-              return tmpRow == entity;
-            });
-
-            $mdToast.show($mdToast.simple()
-              .content('删除活动类型“' + entity.title + '”成功')
-              .hideDelay(5000)
-              .position("top right"));
-
-          }, function(err) {
-            $mdToast.show($mdToast.simple()
-              .content(err.toString())
-              .hideDelay(5000)
-              .position("top right"));
-          });
-        });
-      };
-
+      // 增加新活动
       $scope.createPage = function() {
         $location.path('/activity/add');
       }
-
-      // 设置问题
-      $scope.viewQuestion = function(activity) {
-        $location.path('/question/view/' + activity.id);
-      }
-
-      $scope.viewAnswer = function(activity) {
-        $location.path('/answer/' + activity.id);
-      }
-
     }
   ])
   .controller('ActivityViewCtrl', ['$scope', '$routeParams', '$location', '$activityManage', '$activityTypeManage', '$qupload', '$qiniuManage', '$mdToast',
@@ -368,7 +307,6 @@ angular.module('controllers', ['ngTagsInput'])
       $scope.cancel = function() {
         $location.path('/activity/');
       }
-
 
       $scope.save = function() {
         var newEntity = $scope.entity;
