@@ -8,7 +8,7 @@ var app = angular.module('SomeetBackendApp', [
   'ui.bootstrap',
   'someetPagination',
   'angularQFileUpload',
-  'backendServices'
+  'backendServices'  
 ]);
 
 // init submodule

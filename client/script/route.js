@@ -7,6 +7,7 @@ function($routeProvider) {
       templateUrl: '/partial/dashboard.html',
       controller: 'DashboardCtrl'
     })
+
     //活动类型列表
     .when('/activity-type', {
       templateUrl: '/partial/activity-type/index.html',
@@ -27,6 +28,7 @@ function($routeProvider) {
       templateUrl: '/partial/activity-tag/index.html',
       controller: 'ActivityTagCtrl'
     })
+
     //添加活动标签
     .when('/activity-tag/add', {
       templateUrl: '/partial/activity-tag/view.html',
@@ -36,6 +38,12 @@ function($routeProvider) {
     .when('/activity-tag/:id', {
       templateUrl: '/partial/activity-tag/view.html',
       controller: 'ActivityTagViewCtrl'
+    })
+
+    //根据分类id查询活动列表
+    .when('/activity/list/:type_id', {
+      templateUrl: '/partial/activity/index.html',
+      controller: 'ActivityListCtrl'
     })
     //活动列表
     .when('/activity', {
@@ -52,6 +60,7 @@ function($routeProvider) {
       templateUrl: '/partial/activity/view.html',
       controller: 'ActivityViewCtrl'
     })
+
     //专题列表
     .when('/special', {
       templateUrl: '/partial/special/index.html',

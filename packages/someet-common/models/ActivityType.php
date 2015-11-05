@@ -14,6 +14,7 @@ use Yii;
  */
 class ActivityType extends \yii\db\ActiveRecord
 {
+
     /**
      * @inheritdoc
      */
@@ -55,5 +56,14 @@ class ActivityType extends \yii\db\ActiveRecord
             'display_order' => '显示顺序',
             'status' => 'Status',
         ];
+    }
+
+    /**
+     * 获取对应活动
+     * @return int|string
+     */
+    public function getActivities()
+    {
+        return $this->hasMany(Activity::className(), ['type_id' => 'id']);
     }
 }

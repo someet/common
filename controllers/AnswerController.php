@@ -155,7 +155,8 @@ class AnswerController extends Controller
                 [
                     'answerItemList' => function ($q) {
                     },
-                    'user'
+                    'user',
+                    'user.profile',
                 ]
             )
             ->all();

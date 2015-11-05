@@ -44,8 +44,61 @@ class ActivityController extends Controller
             ],
             'access' => [
                 'class' => '\app\components\AccessControl',
+                'allowActions' => [
+                    'list-by-type-id',
+                ]
             ],
         ];
+    }
+
+    /**
+     * 根据活动类型查询活动列表
+     *
+     * @param $type_id
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function actionListByTypeId($type_id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        if ($type_id > 0) {
+            $activities = Activity::find()
+                ->where(['type_id' => $type_id])
+                ->with([
+                    'type',
+                    'tags',
+                    'question',
+                    'answerList',
+                    'feedbackList'
+                ])
+                ->asArray()
+                ->orderBy([
+                    'is_top' => SORT_DESC,
+                    'updated_at' => SORT_DESC,
+                    'id' => SORT_DESC,
+                ])
+                ->all();
+        } else {
+            $activities = Activity::find()
+                ->with([
+                    'type',
+                    'tags',
+                    'question',
+                    'answerList',
+                    'feedbackList'
+                ])
+                ->asArray()
+                ->orderBy([
+                    'is_top' => SORT_DESC,
+                    'updated_at' => SORT_DESC,
+                    'id' => SORT_DESC,
+                ])
+                ->all();
+        }
+        foreach($activities as $key => $activity) {
+            $activities[$key]['feedback_count'] = count($activity['feedbackList']);
+        }
+
+        return $activities;
     }
 
     /**

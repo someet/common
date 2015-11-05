@@ -23,6 +23,11 @@ angular.module('backendServices')
             return data;
           });
         },
+        listByType: function(type_id) {
+          return $http.get('/activity/list-by-type-id?type_id=' + type_id).then(function(data) {
+            return data;
+          });
+        },
         tags: function(query) {
           return $http.get('/activity-tag/list?query=' + query);
         },

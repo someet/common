@@ -1,6 +1,10 @@
 angular.module('controllers')
-.controller('MainCtrl', ['$scope', '$mdSidenav', function($scope, $mdSidenav){
+  .controller('MainCtrl', ['$scope', '$mdSidenav', '$location', function($scope, $mdSidenav, $location) {
     $scope.toggleSidenav = function(menuId) {
-        $mdSidenav(menuId).toggle();
+      $mdSidenav(menuId).toggle();
     };
-}]);
+
+    $scope.isActive = function(route) {
+      return $location.path().indexOf(route) != -1;
+    }
+  }]);

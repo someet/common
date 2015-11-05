@@ -146,9 +146,21 @@ class Activity extends \yii\db\ActiveRecord
         return $this->hasOne(ActivityType::className(), ['id' => 'type_id']);
     }
 
+    // 获取对应的问题
+    public function getQuestion()
+    {
+        return $this->hasOne(Question::className(), ['activity_id' => 'id']);
+    }
+
+    // 活动报名列表
+    public function getAnswerList()
+    {
+        return $this->hasMany(Answer::className(), ['activity_id' => 'id']);
+    }
+
     // 活动反馈列表
     public function getFeedbackList()
     {
-        return $this->hasOne(ActivityFeedback::className(), ['activity_id' => 'id']);
+        return $this->hasMany(ActivityFeedback::className(), ['activity_id' => 'id']);
     }
 }

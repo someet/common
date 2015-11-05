@@ -10,6 +10,43 @@ angular.module('controllers')
           alert(err);
         });
 
+                // 置顶
+        $scope.setTop = function(entity) {          
+          var newEntity = entity;
+          newEntity.is_top = 1;
+          $specialManage.update(entity.id, newEntity).then(function(data) {
+            $mdToast.show($mdToast.simple()
+              .content('置顶成功')
+              .hideDelay(5000)
+              .position("top right"));
+            $location.path('/special/' + entity.type_id);
+          }, function(err) {
+            $mdToast.show($mdToast.simple()
+              .content(err.toString())
+              .hideDelay(5000)
+              .position("top right"));
+          })
+        };
+
+        // 取消置顶
+        $scope.cancelTop = function(entity) {
+          var newEntity = entity;
+          newEntity.is_top = 0;          
+          $specialManage.update(entity.id, newEntity).then(function(data) {
+            $mdToast.show($mdToast.simple()
+              .content('取消置顶成功')
+              .hideDelay(5000)
+              .position("top right"));
+            $location.path('/special/' + entity.type_id);
+          }, function(err) {
+            $mdToast.show($mdToast.simple()
+              .content(err.toString())
+              .hideDelay(5000)
+              .position("top right"));
+          })
+        };
+
+
         // 置顶/取消置顶
         $scope.top = function(entity, is_top) {
           var newEntity = entity;
@@ -110,6 +147,7 @@ angular.module('controllers')
 
         $specialManage.fetch(id).then(function (data) {
           $scope.entity = data;
+          $scope.poster = data.poster;
         }, function (err) {
           $location.path('/special');
         });

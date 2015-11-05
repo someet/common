@@ -31,6 +31,7 @@ gulp.task('copy-bundle', function(){
   gulp.src([
     './bower_components/angular-material/angular-material.min.css',
     './bower_components/textAngular/dist/textAngular.css',
+
     './bower_components/ng-tags-input/ng-tags-input.min.css',
     './bower_components/angular-bootstrap/ui-bootstrap-csp.css',
     './bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css',
@@ -46,8 +47,10 @@ gulp.task('copy-bundle', function(){
       './bower_components/angular-aria/angular-aria.min.js',
       './bower_components/angular-material/angular-material.min.js',
       './bower_components/angular-route/angular-route.min.js',
+      './bower_components/angular-messages/angular-messages.min.js',
       './bower_components/angular-local-storage/dist/angular-local-storage.min.js',
       './bower_components/angular-bootstrap/ui-bootstrap.min.js',
+
       './bower_components/angular-messages/angular-messages.min.js',
       './bower_components/moment/min/moment.min.js',
       './bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js',
@@ -56,7 +59,9 @@ gulp.task('copy-bundle', function(){
       './bower_components/textAngular/dist/textAngular-rangy.min.js',
       './bower_components/textAngular/dist/textAngular-sanitize.min.js',
       './bower_components/textAngular/dist/textAngular.min.js',
-      './bower_components/ng-tags-input/ng-tags-input.min.js'
+
+      './bower_components/ng-tags-input/ng-tags-input.min.js',
+      './bower_components/angular-jquery/dist/angular-jquery.min.js'
     ])
     .pipe(plumber())
     .pipe(concat('bundle.js'))
