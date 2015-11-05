@@ -96,6 +96,11 @@ class Answer extends \yii\db\ActiveRecord
         return $this->hasMany(AnswerItem::className(), ['question_id' => 'question_id', 'user_id' => 'user_id']);
     }
 
+    public function getActivity()
+    {
+        return $this->hasOne(Activity::className(), ['id' => 'activity_id']);
+    }
+
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
