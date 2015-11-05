@@ -19,6 +19,8 @@ $config = [
             'password' => \DockerEnv::dbPassword(),
             'charset' => 'utf8',
             'tablePrefix' => '',
+            'enableSchemaCache' => true,
+            'schemaCacheDuration' => 86400, // time in seconds
         ],
         'redis' => [
             'class' => 'yii\redis\Connection',
