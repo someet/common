@@ -45,11 +45,6 @@ function($routeProvider) {
       templateUrl: '/partial/activity/index.html',
       controller: 'ActivityListCtrl'
     })
-    //活动列表
-    .when('/activity', {
-      templateUrl: '/partial/activity/index.html',
-      controller: 'ActivityCtrl'
-    })
     //添加活动
     .when('/activity/add', {
       templateUrl: '/partial/activity/view.html',

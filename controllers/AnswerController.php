@@ -96,6 +96,9 @@ class AnswerController extends Controller
         }
     }
 
+    public static function isTelNumber($number) {
+        return 0 < preg_match('/^\+?[0\s]*[\d]{0,4}[\-\s]?\d{4,12}$/', $number);
+    }
     /**
      * 更新答案的状态
      * @param $id
@@ -107,13 +110,23 @@ class AnswerController extends Controller
     public function actionUpdate($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $model = $this->findModel($id);
+        $model = Answer::find()->where(['id' => $id])->with(['user', 'activity'])->one();
         $data = Yii::$app->getRequest()->post();
 
         if (isset($data['status'])) {
             $model->status = $data['status'];
             if (!$model->validate('status')) {
                 throw new DataValidationFailedException($model->getFirstError('status'));
+            }
+        }
+
+        $mobile = $model->user->mobile;
+        $activityName = $model->activity->title;
+        if ($this->isTelNumber($mobile)) {
+            $r = Yii::$app->yunpian->sendSms($mobile, "【Someet活动平台】Someet用户您好，很抱歉您报名的“{$activityName}”活动未通过筛选。关于如何提高报名的成功率，这里有几个小tips，1.认真回答筛选问题； 2.尽早报名，每周二周三是活动推送时间，周四周五报名的成功概率会相对降低很多 3.自己发起活动，优质的发起人是有参与活动特权的哦~ 当然，您还可以添加我们的官方客服Someet小海豹（微信号：someetxhb）随时与我们联系。期待下次活动和你相遇。系统短信，请勿回复。");
+            if (!$r) {
+            } else {
+                Answer::updateAll(['is_send' => '1', 'send_at' => time()], ['id' => $model->id]);
             }
         }
 

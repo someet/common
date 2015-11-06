@@ -1,4 +1,4 @@
-<div ng-controller="ActivityCtrl">
+<div ng-controller="ActivityListCtrl">
     <div class="container">
         <button type="button" class="btn btn-success btn-lg" ng-click="createPage()">
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
@@ -46,11 +46,11 @@
                             <span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true">置顶</span>
                         </button>
                         {{entity.title}}
-                        <button class="btn btn-primary btn-float-right" type="button" ng-click="viewAnswer(entity)">
+                        <button class="btn btn-primary btn-float-right" type="button">
                             反馈
                             <span class="badge">{{entity.feedback_count}}</span>
                         </button>
-                        <button class="btn btn-warning btn-float-right" type="button">
+                        <button class="btn btn-warning btn-float-right" type="button" ng-click="viewAnswer(entity)">
                             报名（16/{{entity.peoples}}）
                             <span class="badge"></span>
                         </button>

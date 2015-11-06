@@ -26,6 +26,7 @@ class SiteController extends Controller
                 'allowActions' => [
                     'error',
                     'logout',
+                    'fetch'
                 ]
             ],
         ];

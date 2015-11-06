@@ -102,18 +102,6 @@ angular.module('controllers', ['ngTagsInput'])
         $location.path('/answer/view/' + entity.id);
       }
 
-    }
-  ])
-  .controller('ActivityCtrl', ['$scope', '$location', '$activityManage', '$activityTypeManage', '$mdDialog', 'lodash', '$mdToast',
-    function($scope, $location, $activityManage, $activityTypeManage, $mdDialog, lodash, $mdToast) {
-
-      $scope.$parent.pageName = '活动管理';
-      $activityManage.listByType(0).then(function(data) {
-        $scope.list = data;
-      }, function(err) {
-        alert(err);
-      });
-
       // tab
       $scope.isActive = function(type_id) {
         console.log(type_id);
@@ -153,14 +141,14 @@ angular.module('controllers', ['ngTagsInput'])
 
           $location.path('/activity/list/0');
           $mdToast.show($mdToast.simple()
-            .content('添加活动类型成功')
-            .hideDelay(5000)
-            .position("top right"));
+              .content('添加活动类型成功')
+              .hideDelay(5000)
+              .position("top right"));
         }, function(err) {
           $mdToast.show($mdToast.simple()
-            .content(err.toString())
-            .hideDelay(5000)
-            .position("top right"));
+              .content(err.toString())
+              .hideDelay(5000)
+              .position("top right"));
         });
         $scope.showAddForm = false;
         $scope.addForm = {
@@ -172,6 +160,7 @@ angular.module('controllers', ['ngTagsInput'])
       $scope.createPage = function() {
         $location.path('/activity/add');
       }
+
     }
   ])
   .controller('ActivityViewCtrl', ['$scope', '$routeParams', '$location', '$activityManage', '$activityTypeManage', '$qupload', '$qiniuManage', '$mdToast',
@@ -294,7 +283,7 @@ angular.module('controllers', ['ngTagsInput'])
           $scope.tags = tags;
 
         }, function(err) {
-          $location.path('/activity');
+          $location.path('/activity/list/0');
         });
       }
 
@@ -305,7 +294,7 @@ angular.module('controllers', ['ngTagsInput'])
 
       // 取消
       $scope.cancel = function() {
-        $location.path('/activity/');
+        $location.path('/activity/list/0');
       }
 
       $scope.save = function() {
@@ -328,7 +317,7 @@ angular.module('controllers', ['ngTagsInput'])
               .content('活动保存成功')
               .hideDelay(5000)
               .position("top right"));
-            $location.path('/activity');
+            $location.path('/activity/list/0');
           }, function(err) {
             $mdToast.show($mdToast.simple()
               .content(err.toString())
@@ -337,7 +326,7 @@ angular.module('controllers', ['ngTagsInput'])
           });
         } else { // 添加活动
           $activityManage.create(newEntity).then(function(data) {
-            $location.path('/activity');
+            $location.path('/activity/list/0');
             $mdToast.show($mdToast.simple()
               .content('活动添加成功')
               .hideDelay(5000)

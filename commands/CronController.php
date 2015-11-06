@@ -32,7 +32,7 @@ class CronController  extends \yii\console\Controller
             $activityName = $answer->activity->title;
             $wechat_id = 'cookie-song';
             if ($this->isTelNumber($mobile)) {
-                $r = Yii::$app->yunpian->sendSms($mobile, "【Someet活动平台】您好，恭喜您报名的“{$activityName}”活动已通过筛选。具体事宜请您添加工作人员微信（微信号：{$wechat_id}）后会进行说明。添加时请注明活动名称，期待与您共同玩耍，系统短信，请勿回复。");
+                $r = Yii::$app->yunpian->sendSms($mobile, "【Someet活动平台】您好，您报名的“#activity_title#”活动发起人正在筛选中，我们将会在24小时内短信给您最终筛选结果，请耐心等待。谢谢您的支持，系统短信，请勿回复。Someet活动平台】您好，恭喜您报名的“{$activityName}”活动已通过筛选。具体事宜请您添加工作人员微信（微信号：{$wechat_id}）后会进行说明。添加时请注明活动名称，期待与您共同玩耍，系统短信，请勿回复。");
                 if (!$r) {
                     echo '手机号: '.$mobile.', 审核通过的短信发送失败' ;
                     echo "\r\n";
@@ -43,6 +43,7 @@ class CronController  extends \yii\console\Controller
                 }
             }
         }
+        exit(0);
     }
 
     /**
@@ -67,10 +68,11 @@ class CronController  extends \yii\console\Controller
                 }
             }
         }
+        exit(0);
     }
 
     /**
-     * 发送短信通知审核未通过
+     * 发送短信通知等待
      */
     public function actionSendWaitSms()
     {
@@ -80,7 +82,7 @@ class CronController  extends \yii\console\Controller
             $mobile = $answer->user->mobile;
             $activityName = $answer->activity->title;
             if ($this->isTelNumber($mobile)) {
-                $r = Yii::$app->yunpian->sendSms($mobile, "【Someet活动平台】Someet用户您好，很抱歉您报名的“{$activityName}”活动未通过筛选。关于如何提高报名的成功率，这里有几个小tips，1.认真回答筛选问题； 2.尽早报名，每周二周三是活动推送时间，周四周五报名的成功概率会相对降低很多 3.自己发起活动，优质的发起人是有参与活动特权的哦~ 当然，您还可以添加我们的官方客服Someet小海豹（微信号：someetxhb）随时与我们联系。期待下次活动和你相遇。系统短信，请勿回复。");
+                $r = Yii::$app->yunpian->sendSms($mobile, "【Someet活动平台】您好，您报名的“{$activityName}”活动发起人正在筛选中，我们将会在24小时内短信给您最终筛选结果，请耐心等待。谢谢您的支持，系统短信，请勿回复。");
                 if (!$r) {
                     echo '手机号: '.$mobile.', 审核不通过的短信发送失败';
                     echo "\r\n";
@@ -92,6 +94,7 @@ class CronController  extends \yii\console\Controller
                 }
             }
         }
+        exit(0);
     }
 
     /**

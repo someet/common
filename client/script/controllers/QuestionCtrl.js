@@ -29,7 +29,7 @@ angular.module('controllers')
         });
 
         $scope.cancel = function() {
-          $location.path('/activity');
+          $location.path('/activity/list/0');
         };
 
         // 添加/修改问题
@@ -55,7 +55,7 @@ angular.module('controllers')
             }
 
             $questionManage.update($scope.entity.id, newEntity).then(function(data) {
-              $location.path('/activity');
+              $location.path('/activity/list/0');
               $mdToast.show($mdToast.simple()
                   .content('问题保存成功')
                   .hideDelay(5000)
@@ -77,7 +77,7 @@ angular.module('controllers')
             newEntity.questionItemList.push(questionItem2);
             newEntity.questionItemList.push(questionItem3);
             $questionManage.create(newEntity).then(function (data) {
-              $location.path('/activity');
+              $location.path('/activity/list/0');
               $mdToast.show($mdToast.simple()
                   .content('问题添加成功')
                   .hideDelay(5000)

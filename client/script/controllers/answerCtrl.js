@@ -93,7 +93,7 @@ angular.module('controllers')
           }
 
           $answerManage.create(answerData).then(function(data) {
-            $location.path('/activity');
+            $location.path('/activity/list/0');
             $mdToast.show($mdToast.simple()
                 .content('报名活动成功')
                 .hideDelay(5000)
