@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "618b35772afc98b9e19de8946e12ed32",
-    "content-hash": "b4cb31c52114dea3696e2dac614a71a9",
+    "hash": "cec33f3f0ccc340baf276f11f41dbd88",
+    "content-hash": "2da6ee9110a7b1057e3c83d4102381d8",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -500,6 +500,51 @@
             }
         },
         {
+            "name": "e96/yii2-sentry",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/E96/yii2-sentry.git",
+                "reference": "1f5c63054b086c050934b1a3da8a40e86f5fbd6b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://packagist.phpcomposer.com/files/E96/yii2-sentry/1f5c63054b086c050934b1a3da8a40e86f5fbd6b.zip",
+                "reference": "1f5c63054b086c050934b1a3da8a40e86f5fbd6b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "raven/raven": "~0.10",
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "e96\\sentry\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "m8rge",
+                    "email": "to.merge@gmail.com",
+                    "homepage": "http://aputilov.ru"
+                }
+            ],
+            "description": "A Yii2 client for Sentry (http://getsentry.com)",
+            "keywords": [
+                "log",
+                "raven",
+                "sentry",
+                "yii2"
+            ],
+            "time": "2015-05-08 05:51:30"
+        },
+        {
             "name": "ezyang/htmlpurifier",
             "version": "v4.6.0",
             "source": {
@@ -798,24 +843,24 @@
         },
         {
             "name": "qiniu/php-sdk",
-            "version": "v7.0.4",
+            "version": "v7.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/qiniu/php-sdk.git",
-                "reference": "a7c996cdf91e7059ce3da203ed9b246877f0a266"
+                "reference": "96850c80398ccaebe9d0923509145d1fb76459ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "http://packagist.phpcomposer.com/files/qiniu/php-sdk/a7c996cdf91e7059ce3da203ed9b246877f0a266.zip",
-                "reference": "a7c996cdf91e7059ce3da203ed9b246877f0a266",
+                "url": "http://packagist.phpcomposer.com/files/qiniu/php-sdk/96850c80398ccaebe9d0923509145d1fb76459ee.zip",
+                "reference": "96850c80398ccaebe9d0923509145d1fb76459ee",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3",
-                "squizlabs/php_codesniffer": "~2.3"
+                "php": ">=5.3.3"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.0"
+                "phpunit/phpunit": "~4.0",
+                "squizlabs/php_codesniffer": "~2.3"
             },
             "type": "library",
             "autoload": {
@@ -845,7 +890,61 @@
                 "sdk",
                 "storage"
             ],
-            "time": "2015-07-24 01:24:17"
+            "time": "2015-10-29 14:27:31"
+        },
+        {
+            "name": "raven/raven",
+            "version": "0.13.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/getsentry/raven-php.git",
+                "reference": "1d5be07afc001df98a3528d1f928eeb2241afce6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://packagist.phpcomposer.com/files/getsentry/raven-php/1d5be07afc001df98a3528d1f928eeb2241afce6.zip",
+                "reference": "1d5be07afc001df98a3528d1f928eeb2241afce6",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.2.4"
+            },
+            "require-dev": {
+                "fabpot/php-cs-fixer": "^1.8.0",
+                "phpunit/phpunit": "^4.6.6"
+            },
+            "bin": [
+                "bin/raven"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.13.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Raven_": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "authors": [
+                {
+                    "name": "David Cramer",
+                    "email": "dcramer@gmail.com"
+                }
+            ],
+            "description": "A PHP client for Sentry (http://getsentry.com)",
+            "homepage": "http://getsentry.com",
+            "keywords": [
+                "log",
+                "logging"
+            ],
+            "time": "2015-09-09 18:12:58"
         },
         {
             "name": "react/promise",
@@ -913,80 +1012,6 @@
                 "MIT"
             ],
             "description": "someet common repo"
-        },
-        {
-            "name": "squizlabs/php_codesniffer",
-            "version": "2.3.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "11a2545c44a5915f883e2e5ec12e14ed345e3ab2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "http://packagist.phpcomposer.com/files/squizlabs/PHP_CodeSniffer/11a2545c44a5915f883e2e5ec12e14ed345e3ab2.zip",
-                "reference": "11a2545c44a5915f883e2e5ec12e14ed345e3ab2",
-                "shasum": ""
-            },
-            "require": {
-                "ext-tokenizer": "*",
-                "ext-xmlwriter": "*",
-                "php": ">=5.1.2"
-            },
-            "bin": [
-                "scripts/phpcs",
-                "scripts/phpcbf"
-            ],
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0.x-dev"
-                }
-            },
-            "autoload": {
-                "classmap": [
-                    "CodeSniffer.php",
-                    "CodeSniffer/CLI.php",
-                    "CodeSniffer/Exception.php",
-                    "CodeSniffer/File.php",
-                    "CodeSniffer/Fixer.php",
-                    "CodeSniffer/Report.php",
-                    "CodeSniffer/Reporting.php",
-                    "CodeSniffer/Sniff.php",
-                    "CodeSniffer/Tokens.php",
-                    "CodeSniffer/Reports/",
-                    "CodeSniffer/Tokenizers/",
-                    "CodeSniffer/DocGenerators/",
-                    "CodeSniffer/Standards/AbstractPatternSniff.php",
-                    "CodeSniffer/Standards/AbstractScopeSniff.php",
-                    "CodeSniffer/Standards/AbstractVariableSniff.php",
-                    "CodeSniffer/Standards/IncorrectPatternException.php",
-                    "CodeSniffer/Standards/Generic/Sniffs/",
-                    "CodeSniffer/Standards/MySource/Sniffs/",
-                    "CodeSniffer/Standards/PEAR/Sniffs/",
-                    "CodeSniffer/Standards/PSR1/Sniffs/",
-                    "CodeSniffer/Standards/PSR2/Sniffs/",
-                    "CodeSniffer/Standards/Squiz/Sniffs/",
-                    "CodeSniffer/Standards/Zend/Sniffs/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Greg Sherwood",
-                    "role": "lead"
-                }
-            ],
-            "description": "PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
-            "homepage": "http://www.squizlabs.com/php-codesniffer",
-            "keywords": [
-                "phpcs",
-                "standards"
-            ],
-            "time": "2015-09-09 00:18:50"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -1787,7 +1812,8 @@
         "someet/common": 20,
         "dektrium/yii2-user": 20,
         "dektrium/yii2-rbac": 20,
-        "yiisoft/yii2-redis": 20
+        "yiisoft/yii2-redis": 20,
+        "e96/yii2-sentry": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

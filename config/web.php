@@ -5,6 +5,7 @@ $config = [
     'vendorPath' => '/var/www/vendor',
     'timeZone' => 'Asia/Chongqing',
     'language' => 'zh-CN',
+    'bootstrap' => ['log', 'raven'],
     'components' => [
         'cache' => [
             'class' => 'yii\redis\Cache',
@@ -41,6 +42,10 @@ $config = [
                 'password' => \DockerEnv::get('SMTP_PASSWORD'),
             ],
         ],
+        'raven' => [
+            'class' => 'e96\sentry\ErrorHandler',
+            'dsn' => \DockerEnv::get('SENTRY_DSN')
+        ],
         'log' => [
             'traceLevel' => \DockerEnv::get('YII_TRACELEVEL', 0),
             'targets' => [
@@ -56,6 +61,11 @@ $config = [
                     'levels' => ['error', 'warning'],
                     'logVars' => [],
                 ],
+                [
+                    'class' => 'e96\sentry\Target',
+                    'levels' => ['error', 'warning'],
+                    'dsn' => \DockerEnv::get('SENTRY_DSN'),
+                ]
             ],
         ],
         'request' => [

@@ -18,6 +18,7 @@
 		"dektrium/yii2-user": "*@dev",
 		"dektrium/yii2-rbac": "*@dev",
         "yiisoft/yii2-redis": "*@dev",
+        "e96/yii2-sentry": "dev-master",
         "dcb9/yii2-yunpian": "0.0.1"
 	},
 	"require-dev": {

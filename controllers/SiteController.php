@@ -2,10 +2,12 @@
 
 namespace app\controllers;
 
+use Exception;
 use someet\common\models\forms\LoginForm;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
+use e96\sentry\SentryHelper;
 
 class SiteController extends Controller
 {
@@ -26,6 +28,7 @@ class SiteController extends Controller
                 'allowActions' => [
                     'error',
                     'logout',
+                    'test-sentry',
                     'fetch'
                 ]
             ],
@@ -50,6 +53,18 @@ class SiteController extends Controller
     public function actionIndex()
     {
         return $this->renderPartial('index');
+    }
+
+    /**
+     * 测试sentry
+     */
+    public function actionTestSentry()
+    {
+        try {
+            throw new Exception('FAIL');
+        } catch (Exception $e) {
+            SentryHelper::captureWithMessage('Fail to save model', $e);
+        }
     }
 
     /**
