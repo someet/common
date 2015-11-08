@@ -41,6 +41,19 @@ angular.module('controllers', ['ngTagsInput'])
         });
       };
 
+      // 复制一个活动
+      $scope.copy = function(entity) {
+        console.log(entity);
+        var newEntity = entity;
+        newEntity.id = null;
+        $activityManage.create(newEntity).then(function(data){
+          $location.path('/activity/list/' + entity.type_id);
+          console.log(data);
+        },function(err){
+          alert(err);
+        });
+      };
+
       // 删除
       $scope.delete = function(entity) {
         var confirm = $mdDialog.confirm()
