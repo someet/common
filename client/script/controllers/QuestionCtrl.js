@@ -9,16 +9,12 @@ angular.module('controllers')
 
         $scope.status_list = [
           {
-            id: 0,
-            title: "关闭",
-          },
-          {
             id: 10,
-            title: "草稿",
+            title: "打开",
           },
           {
             id: 20,
-            title: "打开",
+            title: "关闭",
           },
         ];
 

@@ -2,17 +2,8 @@
     <input type="hidden" ng-model="activity_id" />
     <input type="hidden" ng-model="entity.id" />
     <md-input-container>
-        <md-select ng-model="entity.status" placeholder="状态">
-            <md-option ng-value="opt.id" ng-repeat="opt in status_list">{{ opt.title }}</md-option>
-        </md-select>
-    </md-input-container>
-    <md-input-container>
-        <label>表单标题</label>
-        <input type="text" ng-model="entity.title">
-    </md-input-container>
-    <md-input-container>
-        <label>表单描述</label>
-        <input type="text" ng-model="entity.desc">
+        <label>当前活动报名说明</label>
+        <textarea ng-model="entity.desc"></textarea>
     </md-input-container>
     <span ng-repeat="(k, questionItem) in entity.questionItemList">
         <input type="hidden" ng-model="questionItem.id">

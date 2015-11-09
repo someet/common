@@ -17,6 +17,10 @@ use Yii;
  */
 class Question extends \yii\db\ActiveRecord
 {
+    /* 打开 */
+    const STATUS_OPEN     = 10;
+    /* 关闭 */
+    const STATUS_CLOSE    = 20;
     /**
      * @inheritdoc
      */
@@ -31,7 +35,7 @@ class Question extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['activity_id', 'title', 'desc'], 'required'],
+            [['activity_id'], 'required'],
             [['activity_id', 'created_at', 'updated_at', 'status'], 'integer'],
             [['title', 'desc'], 'string', 'max' => 255],
             [['activity_id'], 'unique']
@@ -50,7 +54,7 @@ class Question extends \yii\db\ActiveRecord
             'desc' => '问题描述',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-            'status' => '0 删除 10 草稿 20 正常',
+            'status' => '10 打开 20 关闭',
         ];
     }
 

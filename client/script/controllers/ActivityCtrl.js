@@ -29,7 +29,7 @@ angular.module('controllers', ['ngTagsInput'])
         });
       };
 
-      // 设置报名表单状态 0关闭 20打开
+      // 设置报名表单状态 20关闭 10打开
       $scope.applyStatus = function(entity, status) {
         var new_question = entity.question;
         console.log(new_question);
@@ -46,6 +46,8 @@ angular.module('controllers', ['ngTagsInput'])
         console.log(entity);
         var newEntity = entity;
         newEntity.id = null;
+        newEntity.title = entity.title + " 副本";
+        newEntity.status = 10; //活动状态10为草稿
         $activityManage.create(newEntity).then(function(data){
           $location.path('/activity/list/' + entity.type_id);
           console.log(data);
@@ -53,6 +55,19 @@ angular.module('controllers', ['ngTagsInput'])
           alert(err);
         });
       };
+
+      // 发布活动
+      $scope.release = function(entity) {
+        console.log(entity);
+        var newEntity = entity;
+        newEntity.status = 20;//活动状态20为发布
+        $activityManage.update(newEntity.id, newEntity).then(function(data){
+          $location.path('/activity/list/' + entity.type_id);
+          console.log(data);
+        },function(err){
+          alert(err);
+        });
+      }
 
       // 删除
       $scope.delete = function(entity) {

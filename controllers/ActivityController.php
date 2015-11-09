@@ -358,6 +358,13 @@ class ActivityController extends Controller
             }
         }
 
+        if (isset($data['status'])) {
+            $model->status = $data['status'];
+            if (!$model->validate('status')) {
+                throw new DataValidationFailedException($model->getFirstError('status'));
+            }
+        }
+
         if (!$model->save()) {
             throw new ServerErrorHttpException();
         }

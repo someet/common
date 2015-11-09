@@ -1,19 +1,11 @@
 <div layout="column" flex id="content" ng-controller="AnswerAddCtrl">
   <input type="hidden" ng-model="activity_id" />
   <md-input-container>
-    <label>标题</label>
-    <input type="text" ng-model="entity.title">
-  </md-input-container>
-  <md-input-container>
     <label>描述</label>
     <input type="text" ng-model="entity.desc">
   </md-input-container>
   <md-input-container ng-repeat="question in entity.questionItemList">
     <label>{{ question.label }}</label>
     <input type="text" ng-model="question.answer">
-  </md-input-container>
-  <md-input-container layout="row">
-    <md-button class="md-raised md-primary" ng-click="createAnswer()">添加</md-button>
-    <md-button class="md-raised md-warn" ng-click="cancel()">取消</md-button>
   </md-input-container>
 </div>
