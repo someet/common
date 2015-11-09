@@ -38,6 +38,13 @@ use Yii;
 class Activity extends \yii\db\ActiveRecord
 {
 
+    /* 删除 */
+    const STATUS_DELETE     = 0;
+    /* 草稿 */
+    const STATUS_DRAFT    = 10;
+    /* 发布 */
+    const STATUS_RELEASE  = 20;
+
     // 标签名, 用于标签行为使用此属性
     public $tagNames;
     /**
@@ -98,7 +105,7 @@ class Activity extends \yii\db\ActiveRecord
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',
             'updated_by' => 'Updated By',
-            'status' => '20 删除 40 草稿 60 审核不通过 80 审核通过 100 进行中 120 已结束 ',
+            'status' => '0 删除 10 草稿 20 发布',
         ];
     }
 
