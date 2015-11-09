@@ -118,6 +118,8 @@ class QuestionController extends Controller
                     }
                 }
             }
+
+            \someet\common\models\AdminLog::saveLog($this->searchById($model->id), $model->primaryKey);
             return Question::find()
                 ->where(['id' => $model->id])
                 ->asArray()
@@ -220,6 +222,7 @@ class QuestionController extends Controller
             }
         }
 
+        \someet\common\models\AdminLog::saveLog($this->searchById($model->id), $model->primaryKey);
         return Question::find()
             ->where(['id' => $model->id])
             ->asArray()
@@ -297,6 +300,14 @@ class QuestionController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException("问题不存在");
+        }
+    }
+
+    public function searchById($id){
+        if (($model = Question::findOne($id)) !== null) {
+            return json_encode($model->toArray());
+        } else {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
     }
 }

@@ -64,10 +64,10 @@ use yii\helpers\Url;
             </a>
             <ul class="dropdown-menu">
               <li>
-                <a href="#">工作日志</a>
+                <a href="/admin-log/index">工作日志</a>
               </li>
               <li>
-                <a href="#">权限管理</a>
+                <a href="/rbac">权限管理</a>
               </li>
               <li class="divider"></li>
               <li>

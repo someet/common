@@ -123,6 +123,7 @@ class ActivityTypeController extends Controller
         $model = new ActivityType;
 
         if ($model->load($data, '') && $model->save()) {
+            \someet\common\models\AdminLog::saveLog($this->searchById($model->id), $model->primaryKey);
             return ActivityType::findOne($model->id);
         } elseif ($model->hasErrors()) {
             $errors = $model->getFirstErrors();
@@ -208,6 +209,7 @@ class ActivityTypeController extends Controller
             throw new ServerErrorHttpException();
         }
 
+        \someet\common\models\AdminLog::saveLog($this->searchById($model->id), $model->primaryKey);
         return $this->findModel($id);
     }
 
@@ -246,6 +248,7 @@ class ActivityTypeController extends Controller
             throw new ServerErrorHttpException('删除失败');
         }
 
+        \someet\common\models\AdminLog::saveLog($this->searchById($model->id), $model->primaryKey);
         return [];
     }
 
@@ -270,6 +273,14 @@ class ActivityTypeController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException("类型不存在");
+        }
+    }
+
+    public function searchById($id){
+        if (($model = ActivityType::findOne($id)) !== null) {
+            return json_encode($model->toArray());
+        } else {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
     }
 }
