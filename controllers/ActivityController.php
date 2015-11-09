@@ -11,7 +11,7 @@ use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
 
-class ActivityController extends Controller
+class ActivityController extends BackendController
 {
 
     /**
@@ -57,7 +57,7 @@ class ActivityController extends Controller
      * @param $type_id
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function actionListByTypeId($type_id)
+    public function actionListByTypeId($type_id=0)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         if ($type_id > 0) {
@@ -97,6 +97,7 @@ class ActivityController extends Controller
         foreach($activities as $key => $activity) {
             $activities[$key]['feedback_count'] = count($activity['feedbackList']);
         }
+
 
         return $activities;
     }
@@ -173,6 +174,8 @@ class ActivityController extends Controller
         $model = new Activity;
 
         if ($model->load($data, '') && $model->save()) {
+            // 保存操作记录
+            \someet\common\models\AdminLog::saveLog($this->searchById($model->id), $model->primaryKey);
             return Activity::findOne($model->id);
         } elseif ($model->hasErrors()) {
             $errors = $model->getFirstErrors();
@@ -368,6 +371,7 @@ class ActivityController extends Controller
         if (!$model->save()) {
             throw new ServerErrorHttpException();
         }
+        \someet\common\models\AdminLog::saveLog($this->searchById($model->id), $model->primaryKey);
 
         return $this->findModel($id);
     }
@@ -397,9 +401,11 @@ class ActivityController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = $this->findModel($id);
-        if ($model->delete() === false) {
+        $model->status = Activity::STATUS_DELETE;
+        if ($model->save() === false) {
             throw new ServerErrorHttpException('删除失败');
         }
+        \someet\common\models\AdminLog::saveLog($this->searchById($model->id), $model->primaryKey);
 
         return [];
     }
@@ -426,6 +432,14 @@ class ActivityController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException("活动不存在");
+        }
+    }
+
+    public function searchById($id){
+        if (($model = Activity::findOne($id)) !== null) {
+            return json_encode($model->toArray());
+        } else {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
     }
 }

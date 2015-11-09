@@ -27,6 +27,22 @@ gulp.task('sass', function() {
     .pipe(gulp.dest('./web/static/style'));
 });
 
+gulp.task('copy-js-map', function(){
+  gulp.src([
+    './bower_components/angular-messages/angular-messages.min.js.map',
+  ])
+  .pipe(plumber())
+  .pipe(gulp.dest('./web/static/js'));
+});
+
+gulp.task('copy-css-map', function(){
+  gulp.src([
+    './bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css.map',
+  ])
+  .pipe(plumber())
+  .pipe(gulp.dest('./web/static/style'));
+});
+
 gulp.task('copy-bundle', function(){
   gulp.src([
     './bower_components/angular-material/angular-material.min.css',
@@ -50,8 +66,6 @@ gulp.task('copy-bundle', function(){
       './bower_components/angular-messages/angular-messages.min.js',
       './bower_components/angular-local-storage/dist/angular-local-storage.min.js',
       './bower_components/angular-bootstrap/ui-bootstrap.min.js',
-
-      './bower_components/angular-messages/angular-messages.min.js',
       './bower_components/moment/min/moment.min.js',
       './bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js',
       './bower_components/angular-jquery/dist/angular-jquery.min.js',
@@ -129,5 +143,7 @@ gulp.task('dist', [
   'copy-other',
   'copy-image',
   'copy-font',
+  'copy-js-map',
+  'copy-css-map',
   'template'
 ]);

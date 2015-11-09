@@ -104,6 +104,7 @@ class SecurityController extends Controller
         $this->performAjaxValidation($model);
 
         if ($model->load(Yii::$app->getRequest()->post()) && $model->login()) {
+            \someet\common\models\AdminLog::saveLog('登录成功', Yii::$app->user->id);
             return $this->goBack();
         }
 
