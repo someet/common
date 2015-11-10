@@ -80,6 +80,20 @@
                     <button ng-if="entity.question" class="btn" ng-click="viewQuestion(entity)">修改报名表单</button>
                     <button ng-if="entity.question" class="btn" ng-click="previewQuestion(entity)">预览报名表单</button>
 
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            <span ng-if="entity.edit_status==10">doing</span>
+                            <span ng-if="entity.edit_status==20">pause</span>
+                            <span ng-if="entity.edit_status==30">done</span>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li> <a ng-click="onEditStatusChangeClick(entity, 10)">doing</a> </li>
+                            <li> <a ng-click="onEditStatusChangeClick(entity, 20)">pause</a> </li>
+                            <li> <a ng-click="onEditStatusChangeClick(entity, 30)">done</a> </li>
+                        </ul>
+                    </div>
+
                     <div class="btn-group btn-float-right">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                             更多
