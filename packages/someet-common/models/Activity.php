@@ -34,6 +34,7 @@ use Yii;
  * @property integer $updated_at
  * @property integer $updated_by
  * @property integer $status
+ * @property integer $edit_status
  */
 class Activity extends \yii\db\ActiveRecord
 {
@@ -62,7 +63,7 @@ class Activity extends \yii\db\ActiveRecord
     {
         return [
             [['type_id', 'title', 'desc', 'poster', 'area', 'address', 'details' ], 'required'],
-            [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'created_at', 'created_by', 'updated_at', 'updated_by', 'status'], 'integer'],
+            [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'created_at', 'created_by', 'updated_at', 'updated_by', 'status', 'edit_status'], 'integer'],
             [['details', 'review'], 'string'],
             [['longitude', 'latitude'], 'number'],
             [['longitude', 'latitude'], 'default', 'value' => 0],
@@ -106,6 +107,7 @@ class Activity extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'updated_by' => 'Updated By',
             'status' => '0 删除 10 草稿 20 发布',
+            'edit_status' => '扩展字段, 前端自定义状态',
         ];
     }
 

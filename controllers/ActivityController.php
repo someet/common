@@ -368,6 +368,13 @@ class ActivityController extends BackendController
             }
         }
 
+        if (isset($data['edit_status'])) {
+            $model->edit_status = $data['edit_status'];
+            if (!$model->validate('edit_status')) {
+                throw new DataValidationFailedException($model->getFirstError('edit_status'));
+            }
+        }
+
         if (!$model->save()) {
             throw new ServerErrorHttpException();
         }
