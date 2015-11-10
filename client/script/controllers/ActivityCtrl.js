@@ -58,15 +58,32 @@ angular.module('controllers', ['ngTagsInput'])
 
       // 发布活动
       $scope.release = function(entity) {
-        console.log(entity);
-        var newEntity = entity;
-        newEntity.status = 20;//活动状态20为发布
-        $activityManage.update(newEntity.id, newEntity).then(function(data){
-          $location.path('/activity/list/' + entity.type_id);
-          console.log(data);
-        },function(err){
-          alert(err);
-        });
+        var confirm = $mdDialog.confirm()
+          .title('确定要发布活动“' + entity.title + '”吗？')
+          .ariaLabel('delete activity item')
+          .ok('确定发布')
+          .cancel('点错了，再看看');
+
+        $mdDialog.show(confirm).then(function() {
+          console.log(entity);
+          var newEntity = entity;
+          newEntity.status = 20;//活动状态20为发布
+          $activityManage.update(newEntity.id, newEntity).then(function(data){
+            $location.path('/activity/list/' + entity.type_id);
+            console.log(data);
+            
+            $mdToast.show($mdToast.simple()
+              .content('活动 “' + entity.title + '” 已发布')
+              .hideDelay(5000)
+              .position("top right"));
+
+          },function(err){
+            $mdToast.show($mdToast.simple()
+              .content(err.toString())
+              .hideDelay(5000)
+              .position("top right"));
+          });          
+        });        
       }
 
       // 删除
@@ -154,8 +171,7 @@ angular.module('controllers', ['ngTagsInput'])
         $scope.showAddForm = false;
       };
 
-      // 增加新的类型
-      $scope.commitTypeName = function(data) {
+      var addTypeName = function(data){
         var newEntity = {
           name: data,
           display_order: 3
@@ -182,6 +198,27 @@ angular.module('controllers', ['ngTagsInput'])
         $scope.addForm = {
           newType: ""
         };
+      };
+
+      // 增加新的类型
+      $scope.commitTypeName = function(typeName) {
+
+        if(typeName.length == 0){
+          $mdToast.show(
+            $mdToast.simple()
+              .content("分组名称不能为空")
+              .hideDelay(5000)
+              .position("top right"));
+        }else if(typeName.length > 20){
+          $mdToast.show(
+            $mdToast.simple()
+              .content("分组名称不能超过20个字符")
+              .hideDelay(5000)
+              .position("top right"));
+        }else{
+          addTypeName(typeName);
+        }
+        
       };
 
       // 增加新活动

@@ -6,7 +6,6 @@ angular.module('controllers')
         var activity_id = $routeParams.activity_id;
         $scope.activity_id = activity_id;
 
-
         $scope.status_list = [
           {
             id: 10,
@@ -49,6 +48,7 @@ angular.module('controllers')
               };
               newEntity.questionItemList.push(questionItem);
             }
+            console.log(newEntity);
 
             $questionManage.update($scope.entity.id, newEntity).then(function(data) {
               $location.path('/activity/list/0');
