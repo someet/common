@@ -229,10 +229,10 @@ angular.module('controllers', ['ngTagsInput'])
       // 增加新的类型
       $scope.commitTypeName = function(typeName) {
 
-        if(typeName.length == 0){
+        if(typeName.length < 2){
           $mdToast.show(
             $mdToast.simple()
-              .content("分组名称不能为空")
+              .content("分组名称不能少于2个字符")
               .hideDelay(5000)
               .position("top right"));
         }else if(typeName.length > 20){

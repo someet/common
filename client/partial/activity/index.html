@@ -108,10 +108,10 @@
                                 <a ng-click="copy(entity)">复制活动</a>
                             </li>
                             <li class="divider"></li>
-                            <li>
+                            <li ng-if="entity.question.status==10">
                                 <a ng-click="applyStatus(entity, 20)">关闭报名</a>
                             </li>
-                            <li>
+                            <li ng-if="entity.question.status==20">
                                 <a ng-click="applyStatus(entity, 10)">打开报名</a>
                             </li>
                         </ul>

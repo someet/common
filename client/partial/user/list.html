@@ -1,21 +1,44 @@
 <div layout="column" flex id="content">
-  <md-button class="user-dialog-btn md-fab" ng-click="createUserPage()" aria-label="add user">
-    <i class="fa fa-plus"></i>
-  </md-button>
+  <div class="container">
+    <div>
+      <ul class="nav nav-tabs">
+        <li class="active">
+          <a href="#">全部</a>
+        </li>
+        <li>
+          <a href="#">黑名单</a>
+        </li>
+        <li>
+          <a href="#">白名单</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+ <div class="activityList">
   <md-list>
-    <md-list-item>
-      <p flex="10"> ID </p>
-      <p> 用户名 </p>
-    </md-list-item>
     <md-list-item ng-repeat="user in userList">
-      <p flex="10"> {{user.id}} </p>
-      <p> {{user.username}} </p>
-      <p layout="row">
-        <md-button class="md-raised" ng-href="/#/user/{{user.id}}">管理</md-button>
-        <md-button class="md-raised md-warn" ng-click="remove($index, $event)">删除</md-button>
-      </p>
+    <div class="panel panel-default" style="width:100%;">
+      <div class="panel-body ">
+        <div class="media">
+          <a class="pull-left" href="#">
+            <img class="media-object avatarSize" src="./head1.png" alt="..."></a>
+          <span> <strong>{{user.username}}</strong>
+          </span>
+          <button class="btn btn-primary btn-float-right" type="button" ng-href="/#/user/{{user.id}}">
+            已参加xx
+            <span class="badge">4</span>
+          </button>
+        </div>
+      </div>
+      <div class="panel-footer">
+        白名单 id: {{user.id}}
+        <span class="btn-float-right">上次登录时间：2015年xx月xx日17:18:07</span>
+      </div>
+    </div>     
+      
     </md-list-item>
   </md-list>
+  </div>
   <div ng-show="userPagination" class="someet-pagination user-pagination">
     <pagination total-items="userPagination.totalItems" ng-model="userPagination.currentPage" ng-change="userPagination.pageChange()" items-per-page="userPagination.itemsPerPage" max-size="userPagination.maxSize" class="pagination-sm" boundary-links="false" rotate="false" num-pages="">
           <a href="javascript:void(0)" ng-click="userPagination.currentPage=1;changePage(1)">首页</a>
