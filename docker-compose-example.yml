@@ -13,10 +13,14 @@ nginx:
     build: ./nginx
     ports:
         - "8080:80"
+        #- "443:443" # uncomment this line to enable https
     links:
         - app
     volumes_from:
         - app
+  # uncomment blow two lines to config https
+  #volumes:
+  #  - ./nginx/conf.d/:/etc/nginx/conf.d/
 
 db:
     image: mysql:5.6
