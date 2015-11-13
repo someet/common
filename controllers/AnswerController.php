@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\components\DataValidationFailedException;
+use dektrium\user\models\Account;
 use someet\common\models\Answer;
 use someet\common\models\AnswerItem;
 use someet\common\models\Question;
@@ -123,12 +124,93 @@ class AnswerController extends Controller
         $mobile = $model->user->mobile;
         $activityName = $model->activity->title;
         if ($this->isTelNumber($mobile)) {
+            $start_time = date('Y年m月d日', $model->activity->start_time);
+            $account = Account::find()->where(['provider' => 'wechat', 'user_id' => $model->user_id])->one();
+            if ($account) {
+                $data_arr = json_decode($account->data);
+                $openid = $data_arr->openid;
+            }
+
             if ($model->status == Answer::STATUS_REVIEW_PASS || $model->status == Answer::STATUS_REVIEW_REJECT) {
                 if ($model->status == Answer::STATUS_REVIEW_PASS) {
                     $wechat_id = 'maxwelldu';
                     $template = "【Someet活动平台】您好，恭喜您报名的“{$activityName}”活动已通过筛选。具体事宜请您添加工作人员微信（微信号：{$wechat_id}）后会进行说明。添加时请注明活动名称，期待与您共同玩耍，系统短信，请勿回复。";
+                    $data = [
+                        "touser" => "{$openid}",
+                        "template_id" => Yii::$app->params['sms.success_template_id'],
+                        "url" => "https://m.someet.cc",
+                        "topcolor" => "#FF0000",
+                        "data" => [
+                            "first" => [
+                                "value" => "您好, 您已成功报名{$activityName}",
+                                "color" => "#173177"
+                            ],
+                            "keyword1" => [
+                                "value" => "{$account->username}",
+                                "color" => "#173177"
+                            ],
+                            "keyword2" => [
+                                "value" => "{$activityName}",
+                                "color" =>"'#173177"
+                            ],
+                            "keyword3" => [
+                                "value" => "{$start_time}",
+                                "color" => "#173177"
+                            ],
+                            "keyword4" => [
+                                "value" => "{$model->activity->address}",
+                                "color" => "#173177"
+                            ],
+                            "remark" => [
+                                "value" => "期待您的参与",
+                                "color" => "#173177"
+                            ],
+                        ]
+                    ];
                 } elseif ($model->status == Answer::STATUS_REVIEW_REJECT) {
                     $template = "【Someet活动平台】Someet用户您好，很抱歉您报名的“{$activityName}”活动未通过筛选。关于如何提高报名的成功率，这里有几个小tips，1.认真回答筛选问题； 2.尽早报名，每周二周三是活动推送时间，周四周五报名的成功概率会相对降低很多 3.自己发起活动，优质的发起人是有参与活动特权的哦~ 当然，您还可以添加我们的官方客服Someet小海豹（微信号：someetxhb）随时与我们联系。期待下次活动和你相遇。系统短信，请勿回复。";
+                    $data = [
+                        "touser" => "{$openid}",
+                        "template_id" => Yii::$app->params['sms.failed_template_id'],
+                        "url" => Yii::$app->params[''],
+                        "topcolor" => "#FF0000",
+                        "data" => [
+                            "first" => [
+                                "value" => "您好, 您已成功报名{$activityName}",
+                                "color" => "#173177"
+                            ],
+                            "keyword1" => [
+                                "value" => "{$account->username}",
+                                "color" => "#173177"
+                            ],
+                            "keyword2" => [
+                                "value" => "{$activityName}",
+                                "color" =>"'#173177"
+                            ],
+                            "keyword3" => [
+                                "value" => "{$start_time}",
+                                "color" => "#173177"
+                            ],
+                            "keyword4" => [
+                                "value" => "{$model->activity->area}",
+                                "color" => "#173177"
+                            ],
+                            "keyword5" => [
+                                "value" => "您未通过活动筛选",
+                                "color" => "#173177"
+                            ],
+                            "remark" => [
+                                "value" => "期待您的参与",
+                                "color" => "#173177"
+                            ],
+                        ]
+                    ];
+                }
+
+                if ($account) {
+                    $wechat = Yii::$app->wechat;
+                    $sms_result = $wechat->sendTemplateMessage($data);
+                    Yii::info(json_encode($sms_result));
                 }
                 $r = Yii::$app->yunpian->sendSms($mobile, $template);
                 if (!$r) {

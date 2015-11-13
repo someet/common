@@ -16,4 +16,9 @@ return [
     'qiniu.bucket' => \DockerEnv::get('QINIU_BUCKET'),
 
     'yunpian.api_key' => \DockerEnv::get('YUNPIAN_API_KEY'),
+
+    'sms.success_template_id' => \DockerEnv::get('WEIXIN_TEMPLATE_SUCCESS_ID'),
+    'sms.failed_template_id' => \DockerEnv::get('WEIXIN_TEMPLATE_FAILED_ID'),
+
+    'domain' => \DockerEnv::get('WECHAT_DOMAIN'),
 ];

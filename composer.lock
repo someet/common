@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cec33f3f0ccc340baf276f11f41dbd88",
-    "content-hash": "2da6ee9110a7b1057e3c83d4102381d8",
+    "hash": "018c44d96511b69b05df5008ff84694c",
+    "content-hash": "2b3e9bd1bc926a066deb1e37d4ddaab0",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -207,16 +207,16 @@
         },
         {
             "name": "bower-asset/yii2-pjax",
-            "version": "v2.0.4",
+            "version": "v2.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/jquery-pjax.git",
-                "reference": "3f20897307cca046fca5323b318475ae9dac0ca0"
+                "reference": "6818718408086db6bdcf33649cecb86b6b4f9b67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/jquery-pjax/zipball/3f20897307cca046fca5323b318475ae9dac0ca0",
-                "reference": "3f20897307cca046fca5323b318475ae9dac0ca0",
+                "url": "https://api.github.com/repos/yiisoft/jquery-pjax/zipball/6818718408086db6bdcf33649cecb86b6b4f9b67",
+                "reference": "6818718408086db6bdcf33649cecb86b6b4f9b67",
                 "shasum": ""
             },
             "require": {
@@ -237,6 +237,48 @@
             "license": [
                 "MIT"
             ]
+        },
+        {
+            "name": "callmez/yii2-wechat-sdk",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/callmez/yii2-wechat-sdk.git",
+                "reference": "b64556e1af86637650bcded9db8efee8f2e4c536"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://packagist.phpcomposer.com/files/callmez/yii2-wechat-sdk/b64556e1af86637650bcded9db8efee8f2e4c536.zip",
+                "reference": "b64556e1af86637650bcded9db8efee8f2e4c536",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "callmez\\wechat\\sdk\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "CallMeZ",
+                    "email": "callme-z@qq.com"
+                }
+            ],
+            "description": "The wechat api for the Yii framework",
+            "keywords": [
+                "sdk",
+                "wechat",
+                "weixin",
+                "yii2"
+            ],
+            "time": "2015-09-26 16:09:06"
         },
         {
             "name": "cebe/markdown",
@@ -1813,7 +1855,8 @@
         "dektrium/yii2-user": 20,
         "dektrium/yii2-rbac": 20,
         "yiisoft/yii2-redis": 20,
-        "e96/yii2-sentry": 20
+        "e96/yii2-sentry": 20,
+        "callmez/yii2-wechat-sdk": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
