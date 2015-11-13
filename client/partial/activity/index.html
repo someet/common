@@ -90,7 +90,8 @@
                     </div>
 
                     <a class="btn btn-info" target="_blank" href="{{entity.preview_url}}">预览</a>
-                    <a class="btn btn-success" href="#/activity/{{entity.id}}">编辑</a>                    
+                    <a class="btn btn-info" target="_blank" href="{{entity.filter_url}}">筛选</a>
+                    <a class="btn btn-success" href="#/activity/{{entity.id}}">编辑</a>
                     <button ng-if="!entity.question" class="btn" ng-click="viewQuestion(entity)">设置表单</button>
                     <button ng-if="entity.question" class="btn" ng-click="viewQuestion(entity)">修改表单</button>
                     <button ng-if="entity.question" class="btn" ng-click="previewQuestion(entity)">预览表单</button>
