@@ -49,7 +49,7 @@
                             <span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true">置顶</span>
                         </button>
                         {{entity.id}}# 
-                        <span ng-if="entity.status==10" >(草稿) {{entity.title}}</span>
+                        <span ng-if="entity.status==10" >[草稿] {{entity.title}}</span>
                         <span ng-if="entity.status==20" >{{entity.title}}</span>
 
                         <div class="btn-group btn-group-xs">
@@ -91,9 +91,9 @@
 
                     <button class="btn btn-info" type="button" >预览</button>
                     <a class="btn btn-success" href="#/activity/{{entity.id}}">编辑</a>                    
-                    <button ng-if="!entity.question" class="btn" ng-click="viewQuestion(entity)">设置报名表单</button>
-                    <button ng-if="entity.question" class="btn" ng-click="viewQuestion(entity)">修改报名表单</button>
-                    <button ng-if="entity.question" class="btn" ng-click="previewQuestion(entity)">预览报名表单</button>
+                    <button ng-if="!entity.question" class="btn" ng-click="viewQuestion(entity)">设置表单</button>
+                    <button ng-if="entity.question" class="btn" ng-click="viewQuestion(entity)">修改表单</button>
+                    <button ng-if="entity.question" class="btn" ng-click="previewQuestion(entity)">预览表单</button>
 
                     <div class="btn-group btn-float-right">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
