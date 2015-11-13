@@ -375,6 +375,13 @@ class ActivityController extends BackendController
             }
         }
 
+        if (isset($data['content'])) {
+            $model->content = $data['content'];
+            if (!$model->validate('content')) {
+                throw new DataValidationFailedException($model->getFirstError('content'));
+            }
+        }
+
         if (!$model->save()) {
             throw new ServerErrorHttpException();
         }

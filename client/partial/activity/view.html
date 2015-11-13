@@ -13,6 +13,7 @@
                 <input type="hidden" ng-model="entity.id" />
                 <div layout="row">活动标题: {{entity.title}}</div>
                 <div layout="row">活动副标题: {{entity.desc}}</div>
+                <div layout="row">文案: {{entity.content}}</div>
                 <div layout="row">人数限制: {{entity.peoples}}</div>
                 <div layout="row">收费金额: {{entity.cost}}</div>
                 <div layout="row" ng-show="entity.cost">收费明细: {{entity.cost_list}}</div>
@@ -64,6 +65,11 @@
                     <div ng-messages="entityForm.viceTitle.$error">
                         <div ng-message="md-maxlength">副标题文字不能超过30个字符</div>
                     </div>
+                </md-input-container>
+
+                <md-input-container>
+                    <label>文案</label>
+                    <textarea ng-model="entity.content"></textarea>
                 </md-input-container>
 
                 <md-input-container>
