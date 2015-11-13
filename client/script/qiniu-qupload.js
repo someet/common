@@ -69,7 +69,7 @@
 			}
 
 
-			var uploadEndPoint = 'http://up.qiniu.com';
+			var uploadEndPoint = 'https://up.qiniu.com';
 
 			var defaultsSetting = {
 				chunkSize: 1024 * 1024 * 4,

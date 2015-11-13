@@ -95,6 +95,13 @@ $config = [
             'accessKey' => \DockerEnv::get('QINIU_ACCESS_KEY'),
             'secretKey' => \DockerEnv::get('QINIU_SECRET_KEY'),
         ],
+        'wechat' => [
+            'class' => 'callmez\wechat\sdk\MpWechat',
+            'appId' => \DockerEnv::get('WEIXIN_APP_ID'),
+            'appSecret' => \DockerEnv::get('WEIXIN_APP_SECRET'),
+            'token' => \DockerEnv::get('WEIXIN_TOKEN'),
+            'encodingAesKey' => \DockerEnv::get('WEIXIN_ENCODING_AES_KEY')
+        ],
         'yunpian' => [
             'class' => 'dcb9\Yunpian\sdk\Yunpian',
             'apiKey' => \DockerEnv::get('YUNPIAN_API_KEY'),
