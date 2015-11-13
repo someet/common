@@ -66,7 +66,7 @@
                             <button ng-class="{true: 'btn-danger', false: 'btn-default'}[entity.question.status==10]" ng-if="entity.question" class="btn  btn-float-right" type="button" ng-click="viewAnswer(entity)">
                                 <span ng-if="entity.question.status==20">报名关闭</span>
                                 <span ng-if="entity.question.status==10">报名打开</span>
-                                （xx/{{entity.peoples}}）
+                                （{{entity.answer_count}}/{{entity.peoples}}）
                                 <span class="badge"></span>
                             </button>
                         </span>

@@ -95,6 +95,7 @@ class ActivityController extends BackendController
                 ->all();
         }
         foreach($activities as $key => $activity) {
+            $activities[$key]['answer_count'] = count($activity['answerList']);
             $activities[$key]['feedback_count'] = count($activity['feedbackList']);
             $activities[$key]['preview_url'] = Yii::$app->params['domain'].'preview/'.$activity['id'];
             $activities[$key]['filter_url'] = Yii::$app->params['domain'].'filter/'.$activity['id'];
