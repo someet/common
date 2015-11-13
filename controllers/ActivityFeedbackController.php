@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\components\DataValidationFailedException;
+use someet\common\models\Activity;
 use someet\common\models\ActivityFeedback;
 use Yii;
 use yii\base\Exception;
@@ -52,16 +53,17 @@ class ActivityFeedbackController extends Controller
      *
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function actionIndex()
+    public function actionIndex($activity_id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $types = ActivityFeedback::find()
+        $feedback = ActivityFeedback::find()
+            ->where(['activity_id' => $activity_id])
             ->orderBy([
                 'id' => SORT_DESC,
             ])
             ->all();
 
-        return $types;
+        return $feedback;
     }
 
     /**
@@ -163,10 +165,16 @@ class ActivityFeedbackController extends Controller
         return [];
     }
 
-    public function actionView($id)
+    public function actionView($activity_id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $model = $this->findModel($id);
+        $model = ActivityFeedback::find()
+            ->where(['activity_id' => $activity_id])
+            ->with([
+                'user',
+            ])
+            ->asArray()
+            ->all();
 
         return $model;
     }

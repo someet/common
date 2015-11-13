@@ -111,15 +111,10 @@ function($routeProvider) {
       templateUrl: '/partial/answer/index.html',
       controller: 'AnswerCtrl'
     })
-    //活动反馈列表
-    .when('/activity-feedback', {
-      templateUrl: '/partial/activity-feedback/index.html',
-      controller: 'ActivityFeedbackCtrl'
-    })
-    //查看反馈
-      .when('/activity-feedback/:id', {
-        templateUrl: '/partial/activity-feedback/view.html',
-        controller: 'ActivityFeedbackViewCtrl'
+    //查看活动反馈
+      .when('/activity-feedback/:activity_id', {
+        templateUrl: '/partial/activity-feedback/index.html',
+        controller: 'ActivityFeedbackCtrl'
       })
     //消息模板列表
       .when('/sms-template', {

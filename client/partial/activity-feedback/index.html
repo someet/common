@@ -2,6 +2,7 @@
   <md-list style="width: 400px;">
     <md-list-item>
       <p flex="10"> ID </p>
+      <p> 用户名 </p>
       <p> 星级 </p>
       <p> 反馈 </p>
       <p> 排序 </p>
@@ -9,6 +10,7 @@
     </md-list-item>
     <md-list-item ng-repeat="entity in list | orderBy: 'status'">
       <p flex="10"> {{entity.id}} </p>      
+      <p> {{entity.user.username}} </p>
       <p> {{entity.stars}} </p>
       <p> {{entity.feedback}} </p>
       <p> {{entity.status}} </p>

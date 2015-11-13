@@ -148,8 +148,14 @@ angular.module('controllers', ['ngTagsInput'])
         $location.path('/question/view/' + activity.id);
       }
 
+      // 查看报名
       $scope.viewAnswer = function(activity) {
         $location.path('/answer/' + activity.id);
+      }
+
+      // 查看反馈
+      $scope.viewFeedback = function(activity) {
+        $location.path('/activity-feedback/'+activity.id);
       }
 
       // 预览问题

@@ -1,11 +1,14 @@
 angular.module('controllers')
   .controller('ActivityFeedbackCtrl',
-  ['$scope', '$http', '$location', '$activityFeedbackManage', 'lodash', '$mdToast', '$mdDialog',
-    function ($scope, $http, $location, $activityFeedbackManage, lodash, $mdToast, $mdDialog) {
+  ['$scope', '$routeParams', '$http', '$location', '$activityFeedbackManage', 'lodash', '$mdToast', '$mdDialog',
+    function ($scope, $routeParams, $http, $location, $activityFeedbackManage, lodash, $mdToast, $mdDialog) {
 
       $scope.$parent.pageName = '活动反馈管理';
+
+      // 获取GET参数的id
+      var activity_id = $routeParams.activity_id;
       // 活动反馈列表
-      $activityFeedbackManage.fetch().then(function (data) {
+      $activityFeedbackManage.fetch(activity_id).then(function (data) {
         $scope.list = data;
       }, function (err) {
         alert(err);

@@ -16,8 +16,8 @@ angular.module('backendServices')
           return data;
         });
       },
-      fetch: function (id) {
-        var url = typeof id == 'undefined' ? '/activity-feedback/index' : '/activity-feedback/view?id=' + id;
+      fetch: function (activity_id) {
+        var url = typeof activity_id == 'undefined' ? '/activity-feedback/index' : '/activity-feedback/view?activity_id=' + activity_id;
 
         return $http.get(url).then(function (data) {
           return data;
