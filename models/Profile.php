@@ -46,10 +46,10 @@ class Profile extends BaseProfile
      */
     public function rules()
     {
-        return [
+        return array_merge(parent::rules(), [
             [['sex', 'birth_year', 'birth_month', 'birth_day'], 'integer'],
             [['country', 'province', 'city', 'headimgurl', 'constellation', 'zodiac', 'company', 'education', 'occupation', 'position', 'affective_status', 'lookingfor', 'blood_type', 'height', 'weight', 'interest'], 'string', 'max' => 255],
-        ];
+        ]);
     }
 
     /**
@@ -57,7 +57,7 @@ class Profile extends BaseProfile
      */
     public function attributeLabels()
     {
-        return [
+        return array_merge(parent::attributes(), [
             'user_id' => 'User ID',
             'country' => 'Country',
             'province' => 'Province',
@@ -79,7 +79,7 @@ class Profile extends BaseProfile
             'height' => 'Height',
             'weight' => 'Weight',
             'interest' => 'Interest',
-        ];
+        ]);
     }
 
 }
