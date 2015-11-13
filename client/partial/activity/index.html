@@ -49,17 +49,29 @@
                             <span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true">置顶</span>
                         </button>
                         {{entity.id}}# 
-                        <span ng-if="entity.status==10" >(草稿) {{entity.title}}</span>
+                        <span ng-if="entity.status==10" >[草稿] {{entity.title}}</span>
                         <span ng-if="entity.status==20" >{{entity.title}}</span>
 
+                        <div class="btn-group btn-group-xs">
+                            <button ng-class="{true: 'label-danger', false: 'label'}[entity.edit_status==10]" class="btn label" ng-click="onEditStatusChangeClick(entity, 10)">doing</button>
+                            <button ng-class="{true: 'label-warning', false: 'label'}[entity.edit_status==20]" type="button" class="btn label" ng-click="onEditStatusChangeClick(entity, 20)">pause</button>
+                            <button ng-class="{true: 'label-success', false: 'label'}[entity.edit_status==30]" type="button" class="btn label" ng-click="onEditStatusChangeClick(entity, 30)">done</button>
+                        </div>
                         <!--ng-if="count(entity.feedbackList)>0"-->
-                        <button  class="btn btn-primary btn-float-right" type="button" ng-click="viewFeedback(entity)">
-                            反馈
-                            <span class="badge">{{entity.feedback_count}}</span>
-                        </button>
-                        <button ng-if="entity.question" class="btn btn-warning btn-float-right" type="button" ng-click="viewAnswer(entity)">
-                            报名（xx/{{entity.peoples}}）
-                            <span class="badge"></span>
+                        <span ng-if="entity.status==20">
+                            <button ng-if="entity.feedback_count>0" class="btn btn-warning btn-float-right" type="button" ng-click="viewFeedback(entity)">
+                                反馈
+                                <span class="badge">{{entity.feedback_count}}</span>
+                            </button>
+                            <button ng-class="{true: 'btn-danger', false: 'btn-default'}[entity.question.status==10]" ng-if="entity.question" class="btn  btn-float-right" type="button" ng-click="viewAnswer(entity)">
+                                <span ng-if="entity.question.status==20">报名关闭</span>
+                                <span ng-if="entity.question.status==10">报名打开</span>
+                                （xx/{{entity.peoples}}）
+                                <span class="badge"></span>
+                            </button>
+                        </span>
+                        <button ng-if="entity.status==10" class="btn btn-primary btn-float-right" ng-click="release(entity)" type="button">
+                        发布
                         </button>
                     </h3>
                 </div>
@@ -76,26 +88,12 @@
                             </li>
                         </ul>
                     </div>
-                    <button class="btn btn-info" type="button" >预览</button>
-                    <a class="btn btn-success" href="#/activity/{{entity.id}}">编辑</a>
-                    <button  ng-if="entity.status==10" class="btn btn-warning" ng-click="release(entity)" type="button">发布</button>
-                    <button ng-if="!entity.question" class="btn" ng-click="viewQuestion(entity)">设置报名表单</button>
-                    <button ng-if="entity.question" class="btn" ng-click="viewQuestion(entity)">修改报名表单</button>
-                    <button ng-if="entity.question" class="btn" ng-click="previewQuestion(entity)">预览报名表单</button>
 
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                            <span ng-if="entity.edit_status==10">doing</span>
-                            <span ng-if="entity.edit_status==20">pause</span>
-                            <span ng-if="entity.edit_status==30">done</span>
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li> <a ng-click="onEditStatusChangeClick(entity, 10)">doing</a> </li>
-                            <li> <a ng-click="onEditStatusChangeClick(entity, 20)">pause</a> </li>
-                            <li> <a ng-click="onEditStatusChangeClick(entity, 30)">done</a> </li>
-                        </ul>
-                    </div>
+                    <button class="btn btn-info" type="button" >预览</button>
+                    <a class="btn btn-success" href="#/activity/{{entity.id}}">编辑</a>                    
+                    <button ng-if="!entity.question" class="btn" ng-click="viewQuestion(entity)">设置表单</button>
+                    <button ng-if="entity.question" class="btn" ng-click="viewQuestion(entity)">修改表单</button>
+                    <button ng-if="entity.question" class="btn" ng-click="previewQuestion(entity)">预览表单</button>
 
                     <div class="btn-group btn-float-right">
                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -110,17 +108,13 @@
                                 <a ng-click="copy(entity)">复制活动</a>
                             </li>
                             <li class="divider"></li>
-                            <li>
+                            <li ng-if="entity.question.status==10">
                                 <a ng-click="applyStatus(entity, 20)">关闭报名</a>
                             </li>
-                            <li>
+                            <li ng-if="entity.question.status==20">
                                 <a ng-click="applyStatus(entity, 10)">打开报名</a>
                             </li>
                         </ul>
-                    </div>
-                    <div class="btn-float-right">
-                        <span ng-if="entity.question.status==20">报名已关闭</span>
-                        <span ng-if="entity.question.status==10">报名打开</span>
                     </div>
                 </div>
             </div>

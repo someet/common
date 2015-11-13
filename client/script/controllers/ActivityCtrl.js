@@ -68,32 +68,42 @@ angular.module('controllers', ['ngTagsInput'])
 
       // 发布活动
       $scope.release = function(entity) {
-        var confirm = $mdDialog.confirm()
-          .title('确定要发布活动“' + entity.title + '”吗？')
-          .ariaLabel('delete activity item')
-          .ok('确定发布')
-          .cancel('点错了，再看看');
+        if(entity.question){
+          var confirm = $mdDialog.confirm()
+            .title('确定要发布活动“' + entity.title + '”吗？')
+            .ariaLabel('delete activity item')
+            .ok('确定发布')
+            .cancel('点错了，再看看');
 
-        $mdDialog.show(confirm).then(function() {
-          console.log(entity);
-          var newEntity = entity;
-          newEntity.status = 20;//活动状态20为发布
-          $activityManage.update(newEntity.id, newEntity).then(function(data){
-            $location.path('/activity/list/' + entity.type_id);
-            console.log(data);
-            
-            $mdToast.show($mdToast.simple()
-              .content('活动 “' + entity.title + '” 已发布')
-              .hideDelay(5000)
-              .position("top right"));
+          $mdDialog.show(confirm).then(function() {
+            console.log(entity);
+            var newEntity = entity;
+            newEntity.status = 20;//活动状态20为发布
+            $activityManage.update(newEntity.id, newEntity).then(function(data){
+              $location.path('/activity/list/' + entity.type_id);
+              console.log(data);
+              
+              $mdToast.show($mdToast.simple()
+                .content('活动 “' + entity.title + '” 已发布')
+                .hideDelay(5000)
+                .position("top right"));
 
-          },function(err){
-            $mdToast.show($mdToast.simple()
-              .content(err.toString())
-              .hideDelay(5000)
-              .position("top right"));
-          });          
-        });        
+            },function(err){
+              $mdToast.show($mdToast.simple()
+                .content(err.toString())
+                .hideDelay(5000)
+                .position("top right"));
+            });          
+          });   
+        }else{
+          var noquestion = $mdDialog.confirm()
+            .title('请先设置问题表单然后再发布活动！')
+            .ariaLabel('delete activity item')
+            .ok('知道了')
+
+          $mdDialog.show(noquestion);
+        }
+
       }
 
       // 删除
@@ -219,10 +229,10 @@ angular.module('controllers', ['ngTagsInput'])
       // 增加新的类型
       $scope.commitTypeName = function(typeName) {
 
-        if(typeName.length == 0){
+        if(typeName.length < 2){
           $mdToast.show(
             $mdToast.simple()
-              .content("分组名称不能为空")
+              .content("分组名称不能少于2个字符")
               .hideDelay(5000)
               .position("top right"));
         }else if(typeName.length > 20){
