@@ -34,9 +34,18 @@ use Yii;
  * @property integer $updated_at
  * @property integer $updated_by
  * @property integer $status
+ * @property integer $edit_status
+ * @property integer $content
  */
 class Activity extends \yii\db\ActiveRecord
 {
+
+    /* 删除 */
+    const STATUS_DELETE     = 0;
+    /* 草稿 */
+    const STATUS_DRAFT    = 10;
+    /* 发布 */
+    const STATUS_RELEASE  = 20;
 
     // 标签名, 用于标签行为使用此属性
     public $tagNames;
@@ -54,9 +63,9 @@ class Activity extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['type_id', 'title', 'desc', 'poster', 'area', 'address', 'details' ], 'required'],
-            [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'created_at', 'created_by', 'updated_at', 'updated_by', 'status'], 'integer'],
-            [['details', 'review'], 'string'],
+            [['title', 'desc', 'poster', 'area', 'address', 'details' ], 'required'],
+            [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'created_at', 'created_by', 'updated_at', 'updated_by', 'status', 'edit_status'], 'integer'],
+            [['details', 'review', 'content'], 'string'],
             [['longitude', 'latitude'], 'number'],
             [['longitude', 'latitude'], 'default', 'value' => 0],
             ['group_code', 'default', 'value' => '0'],
@@ -98,7 +107,9 @@ class Activity extends \yii\db\ActiveRecord
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',
             'updated_by' => 'Updated By',
-            'status' => '20 删除 40 草稿 60 审核不通过 80 审核通过 100 进行中 120 已结束 ',
+            'status' => '0 删除 10 草稿 20 发布',
+            'edit_status' => '扩展字段, 前端自定义状态',
+            'content' => '文案',
         ];
     }
 
@@ -112,6 +123,20 @@ class Activity extends \yii\db\ActiveRecord
                 'class' => behaviors\TimestampBehavior::className(),
             ],
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if ($insert) {
+                $this->updated_by = $this->created_by = Yii::$app->user && Yii::$app->user->id > 0 ? Yii::$app->user->id : 0;
+            } else {
+                $this->updated_by = Yii::$app->user && Yii::$app->user->id > 0 ? Yii::$app->user->id : 0;
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // 活动标签
@@ -132,9 +157,21 @@ class Activity extends \yii\db\ActiveRecord
         return $this->hasOne(ActivityType::className(), ['id' => 'type_id']);
     }
 
+    // 获取对应的问题
+    public function getQuestion()
+    {
+        return $this->hasOne(Question::className(), ['activity_id' => 'id']);
+    }
+
+    // 活动报名列表
+    public function getAnswerList()
+    {
+        return $this->hasMany(Answer::className(), ['activity_id' => 'id']);
+    }
+
     // 活动反馈列表
     public function getFeedbackList()
     {
-        return $this->hasOne(ActivityFeedback::className(), ['activity_id' => 'id']);
+        return $this->hasMany(ActivityFeedback::className(), ['activity_id' => 'id']);
     }
 }

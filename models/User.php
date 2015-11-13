@@ -50,7 +50,7 @@ class User extends BaseUser
     public function scenarios()
     {
         return array_merge(parent::scenarios(), [
-            'signup' => ['username','email','password'],
+            'update'   => ['id'],
         ]);
     }
 
@@ -60,14 +60,12 @@ class User extends BaseUser
     public function rules()
     {
         return [
-            [['username','email','password'], 'required', 'on'=>'signup'],
+            [['email','password'], 'required', 'on'=>'signup'],
 
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
 
-            ['username', 'filter', 'filter' => 'trim'],
             ['username', 'unique'],
-            ['username', 'string', 'min' => 2, 'max' => 255],
 
             ['email', 'filter', 'filter' => 'trim'],
             ['email', 'email'],

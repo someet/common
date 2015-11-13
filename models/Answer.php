@@ -79,21 +79,26 @@ class Answer extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function beforeSave($insert)
     {
-        if ($this->isNewRecord) {
-            $this->user_id = Yii::$app->user->getId();
+        if (parent::beforeSave($insert)) {
+            if ($insert) {
+                $this->user_id = Yii::$app->user && Yii::$app->user->id > 0 ? Yii::$app->user->id : 0;
+            }
+            return true;
+        } else {
+            return false;
         }
-
-        return parent::beforeSave($insert);
     }
 
     public function getAnswerItemList()
     {
         return $this->hasMany(AnswerItem::className(), ['question_id' => 'question_id', 'user_id' => 'user_id']);
+    }
+
+    public function getActivity()
+    {
+        return $this->hasOne(Activity::className(), ['id' => 'activity_id']);
     }
 
     public function getUser()
