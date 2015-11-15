@@ -2,9 +2,9 @@
 angular.module('someetTextAngular', ['textAngular'])
   .config(['$provide', function($provide) {
     // taOptions 就卡在这了
-    $provide.decorator('taOptions',function($delegate){
+    //$provide.decorator('taOptions',function($delegate){
 
-    });
+    //});
 
     //$provide.decorator('taOptions', ['$delegate', 'taRegisterTool', '$uploadService', '$http', '$window', '$mdToast',
     //  function(taOptions, taRegisterTool, $uploadService, $http, $window, $mdToast) {
