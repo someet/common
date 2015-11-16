@@ -235,4 +235,10 @@ class User extends BaseUser
         //$this->is_email_verified = 1;
         return $this->save();
     }
+
+    // 活动
+    public function getActivity()
+    {
+        return $this->hasMany(Activity::className(), ['created_by' => 'id']);
+    }
 }
