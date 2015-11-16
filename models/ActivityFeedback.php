@@ -34,7 +34,7 @@ class ActivityFeedback extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['activity_id', 'user_id', 'stars', 'feedback'], 'required'],
+            [['activity_id', 'stars', 'feedback'], 'required'],
             [['activity_id', 'user_id', 'stars', 'created_at', 'updated_at', 'status'], 'integer'],
             ['status', 'default', 'value' => '10'],
             [['feedback'], 'string', 'max' => 255]
