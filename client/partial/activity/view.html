@@ -1,3 +1,4 @@
+<br/>
 <div class="container" id="content">
     <form name="entityForm" ng-submit="save()">
             <div >
@@ -9,33 +10,79 @@
         <div class="row">
             <input type="hidden" class="input-large"  ng-model="entity.start_time">
             <input type="hidden" class="input-large"  ng-model="entity.end_time">
-            <div class="col-md-6">
+
+            <div class="col-md-5" style="padding:0;border:solid 10px rgba(10,10,10,0.5)">
                 <input type="hidden" ng-model="entity.id" />
-                <div layout="row">活动标题: {{entity.title}}</div>
-                <div layout="row">活动副标题: {{entity.desc}}</div>
-                <div layout="row">文案: {{entity.content}}</div>
-                <div layout="row">人数限制: {{entity.peoples}}</div>
-                <div layout="row">收费金额: {{entity.cost}}</div>
-                <div layout="row" ng-show="entity.cost">收费明细: {{entity.cost_list}}</div>
-                <div layout="row">
-                    开始时间: {{start_time_str}}
-                结束时间: {{end_time_str}}
+
+                <div class="activity-card">
+                    <img width="100%" class="activity-image" ng-src="{{poster}}">                
+                    <img class="activity-img-mask" src="/static/icon/activity-mask.png" >                
+                    <div class="activity-location">
+                        <span class="so-float-right"> <i class="icon"><img src="/static/icon/location.png"></i>
+                            {{entity.area}}
+                        </span>
+                    </div>
+                    <div class="activity-desc">
+                        <span class="so-float-right"> <i class="icon"><img src="/static/icon/time.png"></i>
+                            {{start_time_str}} - {{end_time_str}}
+                        </span>
+                    </div>
+                    <div class="activity-title">
+                        <span class="so-float-right">{{entity.title}} - {{entity.desc}}</span>
+                    </div>
                 </div>
-                <div layout="row">地区: {{entity.area}}</div>
-                <div layout="row">详细地址: {{entity.address}}</div>
-                <div layout="row">活动详情: {{entity.details}}</div>
-                <div layout="row">
-                    海报:
-                    <img style="max-width:100px; max-height:100px" ng-src="{{poster}}" />
+
+                <!-- 文案 -->
+                <div class="detail-text">{{entity.content}}</div>
+
+                <div class="detail-host">
+                  <img class="activity-img-mask" src="/static/icon/activity-mask-left.png" >
+                  <div class="detail-above-mask">
+                    <div>
+                      <span class="detail-mask-label">
+                      <strong><font color="red">––––</font>发起人</strong> 
+                      </span>
+                    </div>
+                    <img class="detail-host-avatar" src="<?= $model->user->profile->headimgurl ?>"/>
+                    <div>
+                      <span class="detail-host-name">发起人姓名</span>
+                    </div>
+                  </div>
                 </div>
-                <div layout="row">
-                    活动群二维码:
-                    <img style="max-width:100px; max-height:100px" ng-src="{{group_code}}" />
+
+                <div class="detail-mask-block">
+                  <div class="detail-mask-text ">发起人介绍</div>
                 </div>
-                <div layout="row">活动回顾: {{entity.review}}</div>
+
+                <div class="detail-label">
+                    <span class="so-float-right"> <strong>活动详情 <font color="red">––––</font></strong> 
+                    </span>
+                </div>
+                <div class="detail-text">
+                    <p>{{entity.details}}</p>
+                </div>            
+
+                <div ng-show="entity.cost>0">
+                    <div>收费金额:{{entity.cost}}元/人</div>
+                    <div>{{entity.cost_list}}</div>
+                </div>
+                <div ng-show="entity.cost==0">收费金额: 免费</div>
+                <div  class="activity-card" layout="row">人数限制: {{entity.peoples}}</div>
+                            
+                <div class="activity-card">
+                    <h3>报名成功后出现</h3>
+                    <div layout="row">详细地址: {{entity.address}}</div>
+                    <div layout="row">微信群二维码：</div>
+                    <img width="100%" class="activity-image" ng-src="{{group_code}}">
+                </div>
+
+                <div >
+                    <h3>活动结束后出现</h3>
+                    <div>活动回顾: {{entity.review}}</div>
+                </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-7">
                 <input type="hidden" ng-model="entity.id" />
                 <md-input-container>
                     <md-select ng-model="entity.type_id" placeholder="选择分类">
@@ -60,8 +107,7 @@
                 </md-input-container>
 
                 <md-input-container>
-                    <label>副标题</label>
-                    <input name="viceTitle" type="text" md-maxlength="30" ng-model="entity.desc" />
+                    <input placeholder="副标题" name="viceTitle" type="text" md-maxlength="30" ng-model="entity.desc" />
                     <div ng-messages="entityForm.viceTitle.$error">
                         <div ng-message="md-maxlength">副标题文字不能超过30个字符</div>
                     </div>
@@ -69,7 +115,7 @@
 
                 <md-input-container>
                     <label>文案</label>
-                    <textarea ng-model="entity.content"></textarea>
+                    <textarea ng-model="entity.content" placeholder="文案"></textarea>
                 </md-input-container>
 
                 <md-input-container>
@@ -171,7 +217,7 @@
                     <textarea ng-model="entity.review"></textarea>
                 </md-input-container>
 
-                <md-input-container layout="row">
+                <md-input-container layout="row" class="btn-float-right">
                     <md-button class="md-raised md-primary"  ng-disabled="entityForm.$invalid">保存</md-button>
                     <md-button class="md-raised md-warn" ng-click="cancel()">取消</md-button>
                 </md-input-container>
