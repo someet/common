@@ -36,11 +36,18 @@ use dektrium\user\models\Profile as BaseProfile;
  * @property string $height
  * @property string $weight
  * @property string $interest
+ * @property string $from
+ * @property string $want
+ * @property string $recommand
  *
  * @property User $user
  */
 class Profile extends BaseProfile
 {
+    public $from;
+    public $want;
+    public $recommand;
+
     /**
      * @inheritdoc
      */
@@ -48,7 +55,7 @@ class Profile extends BaseProfile
     {
         return array_merge(parent::rules(), [
             [['sex', 'birth_year', 'birth_month', 'birth_day'], 'integer'],
-            [['country', 'province', 'city', 'headimgurl', 'constellation', 'zodiac', 'company', 'education', 'occupation', 'position', 'affective_status', 'lookingfor', 'blood_type', 'height', 'weight', 'interest'], 'string', 'max' => 255],
+            [['country', 'province', 'city', 'headimgurl', 'constellation', 'zodiac', 'company', 'education', 'occupation', 'position', 'affective_status', 'lookingfor', 'blood_type', 'height', 'weight', 'interest', 'from', 'want', 'recommand'], 'string', 'max' => 255],
         ]);
     }
 
@@ -79,6 +86,9 @@ class Profile extends BaseProfile
             'height' => 'Height',
             'weight' => 'Weight',
             'interest' => 'Interest',
+            'from' => '怎么来的',
+            'want' => '想要什么',
+            'recommand' => '推荐一个人',
         ]);
     }
 
