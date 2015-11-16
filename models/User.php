@@ -32,6 +32,7 @@ class User extends BaseUser
     const STATUS_ACTIVE = 10;
 
     public $wechat_id;
+    public $last_login_at;
 
     /**
      * @var string|null the current password value from form input
