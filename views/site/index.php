@@ -21,6 +21,7 @@ use yii\helpers\Url;
   <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
   <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="/static/style/main.css">
+  <link rel="stylesheet" href="/static/style/mystyle.css">
 
   <?= Html::csrfMetaTags() ?></head>
 <body flex="grow" class="main_css" layout="column" ng-controller="MainCtrl">
@@ -36,7 +37,7 @@ use yii\helpers\Url;
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">Someet</a>
+        <a class="navbar-brand" href="#/dashboard">Someet</a>
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
