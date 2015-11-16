@@ -2,20 +2,20 @@ angular.module('backendServices')
   .factory('$userManage', ['$http', '$q', function($http, $q) {
     return {
       fetch: function(params) {
-        return $http.get('/user', {
+        return $http.get('/member', {
           params: params
         }).then(function(userList) {
           return userList;
         });
       },
       add: function(newEntity) {
-        return $http.post('/user/create', newEntity).then(function(data) {
+        return $http.post('/member/create', newEntity).then(function(data) {
           return data;
         });
       },
       update: function(id, entity) {
 
-        return $http.post('/user/update?id='+id, entity).then(function(data){
+        return $http.post('/member/update?id='+id, entity).then(function(data){
           return data;
         });
       },
@@ -23,13 +23,13 @@ angular.module('backendServices')
         var entity = {
           status: 0
         }
-        return $http.post('/user/update?id='+id, entity).then(function(data){
+        return $http.post('/member/update?id='+id, entity).then(function(data){
           return data;
         });
       },
       userPageMeta: function(pageNum) {
 
-        return $http.get('/user?scenario=total&perPage='+pageNum).then(function(data) {
+        return $http.get('/member?scenario=total&perPage='+pageNum).then(function(data) {
           return data;
         });
       },
@@ -38,10 +38,10 @@ angular.module('backendServices')
 
         var params = {
           'page': page,
-          'per-page': 2
+          'per-page': 20
         };
 
-        return $http.get('/user?scenario=page', {
+        return $http.get('/member?scenario=page', {
           params: params
         }).then(function(data) {
 

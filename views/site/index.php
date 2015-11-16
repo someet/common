@@ -50,7 +50,7 @@ use yii\helpers\Url;
             <a href="#/activity/list/0">活动</a>
           </li>
           <li ng-class="{active:isActive('/user')}">
-            <a href="#/user">联系人</a>
+            <a href="#/member">联系人</a>
           </li>
         </ul>
 

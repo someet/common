@@ -14,7 +14,7 @@ use yii\web\Response;
 use yii\web\ServerErrorHttpException;
 
 
-class UserController extends Controller
+class MemberController extends Controller
 {
     public $enableCsrfValidation = false;
     /**
@@ -58,6 +58,8 @@ class UserController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $query = User::find()
+            ->with(['profile'])
+            ->asArray()
             ->where(['status' => User::STATUS_ACTIVE])
             ->orderBy(['id' => SORT_DESC]);
         if ($id != null) {

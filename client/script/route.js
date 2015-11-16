@@ -72,22 +72,22 @@ function($routeProvider) {
       controller: 'SpecialViewCtrl'
     })
     //用户列表
-    .when('/user', {
+    .when('/member', {
       templateUrl: '/partial/user/list.html',
       controller: 'UserListCtrl'
     })
     //添加用户
-    .when('/user/add', {
+    .when('/member/add', {
       templateUrl: '/partial/user/add.html',
       controller: 'UserAddCtrl'
     })
     //查看用户
-    .when('/user/:id', {
+    .when('/member/:id', {
       templateUrl: '/partial/user/update.html',
       controller: 'UserUpdateCtrl'
     })
     //删除用户
-    .when('/user/delete/:id', {
+    .when('/member/delete/:id', {
       templateUrl: '/partial/user/add.html',
       controller: 'UserDeleteCtrl'
     })

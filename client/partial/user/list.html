@@ -21,10 +21,11 @@
       <div class="panel-body ">
         <div class="media">
           <a class="pull-left" href="#">
-            <img class="media-object avatarSize" src="./head1.png" alt="..."></a>
+            <!--img class="media-object avatarSize" src="./head1.png" alt="..."></a-->
+            <img class="media-object avatarSize" src="{{user.profile.headimgurl}}" alt="..."></a>
           <span> <strong>{{user.username}}</strong>
           </span>
-          <button class="btn btn-primary btn-float-right" type="button" ng-href="/#/user/{{user.id}}">
+          <button class="btn btn-primary btn-float-right" type="button" ng-href="/#/member/{{user.id}}">
             已参加xx
             <span class="badge">4</span>
           </button>
