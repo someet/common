@@ -72,7 +72,7 @@ angular.module('controllers')
         totalItems: 0,
         currentPage: 1,
         maxSize: 5,
-        itemsPerPage: 2,
+        itemsPerPage: 20,
         pageChange: function() {
           fetchPage(this.currentPage);
         }
