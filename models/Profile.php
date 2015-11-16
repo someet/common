@@ -53,10 +53,15 @@ class Profile extends BaseProfile
      */
     public function rules()
     {
-        return array_merge(parent::rules(), [
+        return [
             [['sex', 'birth_year', 'birth_month', 'birth_day'], 'integer'],
+<<<<<<< HEAD
             [['country', 'province', 'city', 'headimgurl', 'constellation', 'zodiac', 'company', 'education', 'occupation', 'position', 'affective_status', 'lookingfor', 'blood_type', 'height', 'weight', 'interest', 'from', 'want', 'recommand'], 'string', 'max' => 255],
         ]);
+=======
+            [['country', 'province', 'city', 'headimgurl', 'constellation', 'zodiac', 'company', 'education', 'occupation', 'position', 'affective_status', 'lookingfor', 'blood_type', 'height', 'weight', 'interest'], 'string', 'max' => 255],
+        ];
+>>>>>>> b22e548e369e71ca94bdde1c28c269b3a3d7366a
     }
 
     /**
@@ -64,7 +69,7 @@ class Profile extends BaseProfile
      */
     public function attributeLabels()
     {
-        return array_merge(parent::attributes(), [
+        return [
             'user_id' => 'User ID',
             'country' => 'Country',
             'province' => 'Province',
@@ -86,10 +91,14 @@ class Profile extends BaseProfile
             'height' => 'Height',
             'weight' => 'Weight',
             'interest' => 'Interest',
+<<<<<<< HEAD
             'from' => '怎么来的',
             'want' => '想要什么',
             'recommand' => '推荐一个人',
         ]);
+=======
+        ];
+>>>>>>> b22e548e369e71ca94bdde1c28c269b3a3d7366a
     }
 
 }
