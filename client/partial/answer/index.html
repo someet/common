@@ -136,9 +136,34 @@
         <md-list-item ng-repeat="answer in answerItemList">{{answer.question_label}} : {{answer.question_value}}</md-list-item>
     </md-list>
     -->
-</div>
+    </div>
 
-<!-- 用户资料详情 -->
-<div class="col-md-6" style="padding:0;border:solid 10px rgba(10,10,10,0.5)">asdfasdfasdf</div>
-
+    <!-- 用户资料详情 -->    
+    <div class="col-md-6" style="padding:0;border:solid 10px rgba(10,10,10,0.5)">
+        <div class="media">
+            <a class="pull-left" href="#">
+                <img class="media-object avatarSize" src="./head1.png" alt="..."></a>
+            <span> <strong>{{entity.user.profile.name}}</strong>
+            </span>
+            <span ng-if="entity.status==10" class="btn-float-right" style="color:#E11;">待筛选</span>
+            <span ng-if="entity.status==20" class="btn-float-right" style="color:#1E1;">已通过</span>
+            <span ng-if="entity.status==30" class="btn-float-right" style="color:#CCC;">未通过</span>
+        </div>
+        <div>
+            <span>注册时间</span>            
+        </div>
+        <div>
+            <span>年龄</span>            
+            <span>性别</span>
+            <span>注册时间</span>
+        </div>
+        <div>
+            <span>报名次数</span>            
+            <span>参加次数</span>
+            <span>反馈次数</span>
+        </div>
+        <div>问题1及回答</div>
+        <div>问题2及回答</div>
+        <div>问题3及回答</div>
+    </div>
 </div>
