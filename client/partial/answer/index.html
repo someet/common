@@ -1,16 +1,80 @@
-<div layout="column" flex id="content">
+<h3>发起人 - 当前活动标题 （活动时间）</h3>
+<div layout="row" flex id="content">
 
-    未审核
-    <md-list style="width: 600px; ">
+    <!-- 用户列表 -->
+    <div class="col-md-6">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">可调整状态用户</h3>
+            </div>
+        </div>
+
+        <ul class="list-group">
+            <li class="list-group-item" ng-repeat="entity in list | filter: {is_send: '0'}" ng-click="view(entity)">
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <img class="media-object avatarSize" src="./head1.png" alt="..."></a>
+                    <span> <strong>{{entity.user.profile.name}}</strong>
+                    </span>
+                    <span ng-if="entity.status==10" class="btn-float-right" style="color:#E11;">待筛选</span>
+                    <span ng-if="entity.status==20" class="btn-float-right" style="color:#1E1;">已通过</span>
+                    <span ng-if="entity.status==30" class="btn-float-right" style="color:#CCC;">未通过</span>
+                </div>
+            </li>
+            <li class="list-group-item" ng-repeat="entity in list | filter: {status:'10', is_send: '1'}" ng-click="view(entity)">
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <img class="media-object avatarSize" src="./head1.png" alt="..."></a>
+                    <span> <strong>{{entity.user.profile.name}}</strong>
+                    </span>
+                    <span class="btn-float-right" style="color:#E11;">待筛选</span>
+                </div>
+            </li>
+        </ul>
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">不可变更状态用户</h3>
+            </div>
+        </div>
+
+        <ul class="list-group">
+            <li class="list-group-item" ng-repeat="entity in list | filter: {status:'20', is_send: '1'}" ng-click="view(entity)">
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <img class="media-object avatarSize" src="./head1.png" alt="..."></a>
+                    <span>
+                        <strong>{{entity.user.profile.name}}</strong>
+                    </span>
+                    <span class="btn-float-right" style="color:#1E1;">已通过</span>
+                </div>
+            </li>
+            <li class="list-group-item" ng-repeat="entity in list | filter: {status:'30', is_send: '1'}" ng-click="view(entity)">
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        <img class="media-object avatarSize" src="./head1.png" alt="..."></a>
+                    <span>
+                        <strong>{{entity.user.profile.name}}</strong>
+                    </span>
+                    <span class="btn-float-right" style="color:#CCC;">未通过</span>
+
+                </div>
+            </li>
+        </ul>
+
+        <!--
+        未审核
+        <md-list style="width: 600px; ">
         <md-list-item>
-            <p flex="10"> ID </p>
-            <p> 用户名 </p>
-            <p> 状态 </p>
-            <p> 操作 </p>
+            <p flex="10">ID</p>
+            <p>用户名</p>
+            <p>状态</p>
+            <p>操作</p>
         </md-list-item>
         <md-list-item ng-repeat="entity in list | filter: {status: '10', is_send: '0'}" ng-click="view(entity)">
-            <p flex="10"> {{entity.id}} </p>
-            <p> {{entity.user.profile.name}} </p>
+            <p flex="10">{{entity.id}}</p>
+            <p>{{entity.user.profile.name}}</p>
             <p>未确认</p>
             <p layout="row">
                 <md-button class="md-raised" ng-click="pass(entity)">通过</md-button>
@@ -18,18 +82,17 @@
             </p>
         </md-list-item>
     </md-list>
-
     审核通过列表
     <md-list style="width: 600px; ">
         <md-list-item>
-            <p flex="10"> ID </p>
-            <p> 用户名 </p>
-            <p> 状态 </p>
-            <p> 操作 </p>
+            <p flex="10">ID</p>
+            <p>用户名</p>
+            <p>状态</p>
+            <p>操作</p>
         </md-list-item>
         <md-list-item ng-repeat="entity in list | filter: {status: 20, is_send: '0'}" ng-click="view(entity)">
-            <p flex="10"> {{entity.id}} </p>
-            <p> {{entity.user.profile.name}} </p>
+            <p flex="10">{{entity.id}}</p>
+            <p>{{entity.user.profile.name}}</p>
             <p>未确认</p>
             <p layout="row">
                 <md-button class="md-raised" ng-click="reject(entity)">不通过</md-button>
@@ -37,18 +100,17 @@
             </p>
         </md-list-item>
     </md-list>
-
     审核不通过列表
     <md-list style="width: 700px; ">
         <md-list-item>
-            <p flex="10"> ID </p>
-            <p> 用户名 </p>
-            <p> 状态 </p>
-            <p> 操作 </p>
+            <p flex="10">ID</p>
+            <p>用户名</p>
+            <p>状态</p>
+            <p>操作</p>
         </md-list-item>
         <md-list-item ng-repeat="entity in list | filter: {status: 30, is_send: '0'}" ng-click="view(entity)">
-            <p flex="10"> {{entity.id}} </p>
-            <p> {{entity.user.profile.name}} </p>
+            <p flex="10">{{entity.id}}</p>
+            <p>{{entity.user.profile.name}}</p>
             <p>未确认</p>
             <p layout="row">
                 <md-button class="md-raised" ng-click="pass(entity)">通过</md-button>
@@ -56,27 +118,27 @@
             </p>
         </md-list-item>
     </md-list>
-
     已通过审核
     <md-list style="width: 600px; ">
         <md-list-item>
-            <p flex="10"> ID </p>
-            <p> 用户名 </p>
-            <p> 状态 </p>
+            <p flex="10">ID</p>
+            <p>用户名</p>
+            <p>状态</p>
         </md-list-item>
         <md-list-item ng-repeat="entity in list | filter: {is_send: '1'} | orderBy: status" ng-click="view(entity)">
-            <p flex="10"> {{entity.id}} </p>
-            <p> {{entity.user.profile.name}} </p>
+            <p flex="10">{{entity.id}}</p>
+            <p>{{entity.user.profile.name}}</p>
             <p>通知发送于 {{entity.send_at|date}}</p>
         </md-list-item>
     </md-list>
-
     审核通过列表
-
     <md-list>
-        <md-list-item ng-repeat="answer in answerItemList">
-            {{answer.question_label}} : {{answer.question_value}}
-        </md-list-item>
+        <md-list-item ng-repeat="answer in answerItemList">{{answer.question_label}} : {{answer.question_value}}</md-list-item>
     </md-list>
+    -->
+</div>
+
+<!-- 用户资料详情 -->
+<div class="col-md-6" style="padding:0;border:solid 10px rgba(10,10,10,0.5)">asdfasdfasdf</div>
 
 </div>
