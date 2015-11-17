@@ -136,6 +136,15 @@
                 </div>
 
                 <div layout="row">
+
+                <md-input-container>
+                    <label>人数限制(最多50人)</label>
+                    <input type="number" name="people" ng-model="entity.peoples" value="{{entity.peoples}}" max="50"/>
+                    <div ng-messages="entityForm.people.$error">
+                        <div ng-message="max">人数超过限制</div>
+                    </div>
+                </md-input-container>
+                
                     <md-input-container>
                         <label>开始时间</label>
                         <div class="dropdown">
@@ -190,14 +199,6 @@
                 <md-input-container>
                     <label>文案</label>
                     <textarea ng-model="entity.content" placeholder="文案"></textarea>
-                </md-input-container>
-
-                <md-input-container>
-                    <label>人数限制(最多50人)</label>
-                    <input type="number" name="people" ng-model="entity.peoples" value="{{entity.peoples}}" max="50"/>
-                    <div ng-messages="entityForm.people.$error">
-                        <div ng-message="max">人数超过限制</div>
-                    </div>
                 </md-input-container>
 
                 <md-input-container>

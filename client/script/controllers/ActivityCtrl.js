@@ -96,10 +96,12 @@ angular.module('controllers', ['ngTagsInput'])
             });          
           });   
         }else{
-          var noquestion = $mdDialog.confirm()
-            .title('请先设置问题表单然后再发布活动！')
+
+          var noquestion = $mdDialog.alert()
+            .title('请先设置问题表单然后再发布活动！')            
+            .clickOutsideToClose(true)
             .ariaLabel('delete activity item')
-            .ok('知道了')
+            .ok('知道了');
 
           $mdDialog.show(noquestion);
         }
@@ -139,9 +141,10 @@ angular.module('controllers', ['ngTagsInput'])
       $scope.top = function(entity, is_top) {
         var newEntity = entity;
         newEntity.is_top = is_top > 0 ? 1 : 0; // 是否置顶
+        var toastText = is_top > 0 ? "活动置顶成功" : "取消置顶成功"; // 是否置顶
         $activityManage.update(entity.id, newEntity).then(function(data) {
           $mdToast.show($mdToast.simple()
-            .content('置顶成功')
+            .content(toastText)
             .hideDelay(5000)
             .position("top right"));
           $location.path('/activity/list/' + $routeParams.type_id);

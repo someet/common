@@ -47,7 +47,7 @@ use yii\helpers\Url;
           <li ng-class="{active:isActive('/special')}">
             <a href="#/special">专题</a>
           </li>
-          <li ng-class="{active:isActive('/activity')}">
+          <li ng-class="{active:isActive('/activity')||isActive('/answer')||isActive('/question')}">
             <a href="#/activity/list/0">活动</a>
           </li>
           <li ng-class="{active:isActive('/user')}">
@@ -57,7 +57,7 @@ use yii\helpers\Url;
 
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown">
               <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
               <?php $user = Yii::$app->user->identity; ?>
               <?= $user->username ?> <b class="caret"></b>
