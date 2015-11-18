@@ -49,6 +49,7 @@ class MemberController extends Controller
                 'class' => '\app\components\AccessControl',
                 'allowActions' => [
                     'index',
+                    'search',
                 ]
             ],
         ];
@@ -83,7 +84,28 @@ class MemberController extends Controller
                 ->limit($pagination->limit)
                 ->all();
         }
+        return $users;
+    }
 
+    /**
+     * 搜索用户, 供给活动分配发起人的自动完成功能使用
+     * @param $username 用户名
+     * @return array
+     */
+    public function actionSearch($username) {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $users = User::find()
+            ->where([
+                'status' => User::STATUS_ACTIVE,
+            ])
+            ->andWhere(
+                ['like', 'username', $username]
+            )
+            ->with(['profile'])
+            ->limit(50)
+            ->orderBy(['id' => SORT_DESC])
+            ->asArray()
+            ->all();
         return $users;
     }
 

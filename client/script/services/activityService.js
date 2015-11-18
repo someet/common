@@ -31,5 +31,8 @@ angular.module('backendServices')
         tags: function(query) {
           return $http.get('/activity-tag/list?query=' + query);
         },
+        searchUser: function(query) {
+          return $http.get('/member/search?username=' + query);
+        },
       };
     }]);
