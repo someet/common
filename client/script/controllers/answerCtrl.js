@@ -2,6 +2,8 @@ angular.module('controllers')
     .controller('AnswerCtrl',
     ['$scope', '$location', '$routeParams', '$answerManage', '$mdToast',
       function ($scope, $location, $routeParams, $answerManage, $mdToast) {
+        $scope.today = new Date();
+
         var activity_id = $routeParams.activity_id;
         $answerManage.fetchByActivityId(activity_id).then(function (data) {
           $scope.list = data;

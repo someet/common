@@ -139,7 +139,7 @@
     </div>
 
     <!-- 用户资料详情 -->    
-    <div class="col-md-6" style="padding:0;border:solid 10px rgba(10,10,10,0.5)">
+    <div class="col-md-6" ng-show="entity.user" style="padding:0;border:solid 10px rgba(10,10,10,0.5)">
         <div class="media">
             <a class="pull-left" href="#">
                 <img class="media-object avatarSize" src="{{entity.user.profile.headimgurl}}" alt="..."></a>
@@ -150,10 +150,10 @@
             <span ng-if="entity.status==30" class="btn-float-right" style="color:#CCC;">未通过</span>
         </div>
         <div>
-            <span>年龄: {{entity.user.profile.birth_year}}</span>
             <span>性别: {{entity.user.profile.sex}}</span>
-            <span>职业: {{entity.user.profile.occupation}}</span>
-            <span>注册时间:{{ entity.user.created_at | date: 'yyyy年MM月dd日'}}</span>
+            <span ng-show="entity.user.profile.birth_year">年龄: {{ (today | date:'yyyy') - entity.user.profile.birth_year }}</span>
+            <span ng-show="entity.user.profile.occupation">职业: {{entity.user.profile.occupation}}</span>
+            <span>注册时间:{{ entity.user.created_at * 1000 | date: "yyyy年MM月dd日"}}</span>
         </div>
         <div>
             <span>报名次数</span>            
