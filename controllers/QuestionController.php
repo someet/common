@@ -102,6 +102,8 @@ class QuestionController extends Controller
         $questionItemList = $data['questionItemList'];
         $model = new Question;
 
+        $transaction = $model->getDb()->beginTransaction();
+        $flag = true;
         if ($model->load($data, '') && $model->save()) {
             $question_id = $model->id;
             if (!empty($questionItemList)) {
@@ -111,20 +113,27 @@ class QuestionController extends Controller
                     if ($questionItemModel->load($questionItem, '') && $questionItemModel->save()) {
 
                     } elseif ($questionItemModel->hasErrors()) {
+                        $flag = false;
                         $errors = $model->getFirstErrors();
-                        throw new DataValidationFailedException(array_pop($errors));
+                        //throw new DataValidationFailedException(array_pop($errors));
                     } else {
                         throw new ServerErrorHttpException();
                     }
                 }
             }
 
-            \someet\common\models\AdminLog::saveLog($this->searchById($model->id), $model->primaryKey);
-            return Question::find()
-                ->where(['id' => $model->id])
-                ->asArray()
-                ->with('questionItemList')
-                ->one();
+            if ($flag) {
+                $transaction->commit();
+                \someet\common\models\AdminLog::saveLog($this->searchById($model->id), $model->primaryKey);
+                return Question::find()
+                    ->where(['id' => $model->id])
+                    ->asArray()
+                    ->with('questionItemList')
+                    ->one();
+            } else {
+                $transaction->rollBack();
+                throw new DataValidationFailedException('设置问题异常');
+            }
         } elseif ($model->hasErrors()) {
             $errors = $model->getFirstErrors();
             throw new DataValidationFailedException(array_pop($errors));
@@ -280,8 +289,8 @@ class QuestionController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = Question::find()
             ->where(['activity_id' => $activity_id])
-            ->asArray()
             ->with('questionItemList')
+            ->asArray()
             ->one();
 
         return $model;
