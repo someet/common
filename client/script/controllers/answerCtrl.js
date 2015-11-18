@@ -2,6 +2,8 @@ angular.module('controllers')
     .controller('AnswerCtrl',
     ['$scope', '$location', '$routeParams', '$answerManage', '$mdToast',
       function ($scope, $location, $routeParams, $answerManage, $mdToast) {
+        $scope.today = new Date();
+
         var activity_id = $routeParams.activity_id;
         $answerManage.fetchByActivityId(activity_id).then(function (data) {
           $scope.list = data;
@@ -13,6 +15,7 @@ angular.module('controllers')
         //查看一个报名信息
         $scope.view = function(entity) {
           $scope.answerItemList = entity.answerItemList;
+          $scope.entity = entity;
         }
 
         //移至未审核
