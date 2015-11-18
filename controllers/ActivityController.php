@@ -385,6 +385,14 @@ class ActivityController extends BackendController
             }
         }
 
+        //发起人
+        if (isset($data['created_by'])) {
+            $model->created_by = $data['created_by'];
+            if (!$model->validate('created_by')) {
+                throw new DataValidationFailedException($model->getFirstError('created_by'));
+            }
+        }
+
         if (!$model->save()) {
             throw new ServerErrorHttpException();
         }
@@ -431,7 +439,13 @@ class ActivityController extends BackendController
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
-        $model = Activity::find()->where(['id' => $id])->with('type', 'tags')->asArray()->one();
+        $model = Activity::find()
+            ->where(['id' => $id])
+            ->with([
+                'type', 'user', 'user.profile', 'tags'
+            ])
+            ->asArray()
+            ->one();
 
         return $model;
     }

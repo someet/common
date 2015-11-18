@@ -261,6 +261,12 @@ angular.module('controllers', ['ngTagsInput'])
     function($scope, $routeParams, $location, $activityManage, $activityTypeManage, $qupload, $qiniuManage, $mdToast) {
       $scope.$parent.pageName = '活动详情';
 
+
+      // 搜索用户功能
+      $scope.getUsers = function(query) {
+        return $activityManage.searchUser(query);
+      }
+
       $scope.onStartTimeSet = function(newDate, oldDate) {
         $scope.start_time_str = getTimeByTimestamp(getTimestamp(newDate));
         $scope.entity.start_time = getTimestamp(newDate);
@@ -363,11 +369,13 @@ angular.module('controllers', ['ngTagsInput'])
       var id = $routeParams.id;
       if (id > 0) {
         $activityManage.fetch(id).then(function(data) {
+          $scope.user = {};
           $scope.entity = data;
           $scope.start_time_str = getTimeByTimestamp(data.start_time);
           $scope.end_time_str = getTimeByTimestamp(data.end_time);
           $scope.poster = data.poster;
           $scope.group_code = data.group_code;
+          $scope.user = data.user;
 
           var tags = [];
           for (var k in data.tags) {
@@ -397,6 +405,7 @@ angular.module('controllers', ['ngTagsInput'])
         newEntity.end_time = $scope.entity.end_time;
         newEntity.poster = $scope.poster;
         newEntity.group_code = $scope.group_code;
+        newEntity.created_by = $scope.user.id;
 
         var tags = [];
         for (var k in $scope.tags) {

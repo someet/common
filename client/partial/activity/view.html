@@ -16,14 +16,14 @@
 
                 <div class="activity-card">
                     <img width="100%" class="activity-image" ng-src="{{poster}}">                
-                    <img class="activity-img-mask" src="/static/icon/activity-mask.png" >                
+                    <img class="activity-img-mask" src="/static/image/activity-mask.png" >                
                     <div class="activity-location">
-                        <span class="so-float-right"> <i class="icon"><img src="/static/icon/location.png"></i>
+                        <span class="so-float-right"> <i class="icon"><img src="/static/image/location.png"></i>
                             {{entity.area}}
                         </span>
                     </div>
                     <div class="activity-desc">
-                        <span class="so-float-right"> <i class="icon"><img src="/static/icon/time.png"></i>
+                        <span class="so-float-right"> <i class="icon"><img src="/static/image/time.png"></i>
                             {{start_time_str}} - {{end_time_str}}
                         </span>
                     </div>
@@ -36,22 +36,22 @@
                 <div class="detail-text">{{entity.content}}</div>
 
                 <div class="detail-host">
-                  <img class="activity-img-mask" src="/static/icon/activity-mask-left.png" >
+                  <img class="activity-img-mask" src="/static/image/activity-mask-left.png" >
                   <div class="detail-above-mask">
                     <div>
                       <span class="detail-mask-label">
-                      <strong><font color="red">––––</font>发起人</strong> 
+                      <strong><font color="red">––––</font>发起人</strong>
                       </span>
                     </div>
-                    <img class="detail-host-avatar" src="<?= $model->user->profile->headimgurl ?>"/>
+                    <img class="detail-host-avatar" src="{{entity.user.profile.headimgurl}}"/>
                     <div>
-                      <span class="detail-host-name">发起人姓名</span>
+                      <span class="detail-host-name">{{entity.user.username}}</span>
                     </div>
                   </div>
                 </div>
 
                 <div class="detail-mask-block">
-                  <div class="detail-mask-text ">发起人介绍</div>
+                  <div class="detail-mask-text ">{{entity.user.profile.bio}}</div>
                 </div>
 
                 <div class="detail-label">
@@ -199,6 +199,19 @@
                 <md-input-container>
                     <label>文案</label>
                     <textarea ng-model="entity.content" placeholder="文案"></textarea>
+                </md-input-container>
+
+                <md-input-container>
+                    <label>发起人</label>
+                    <md-autocomplete md-selected-item="user" md-search-text="username" md-items="user in getUsers(username)" md-item-text="user.username">
+                        <md-item-template>
+                            <span md-highlight-text="searchText">{{user.username}}</span>
+                            <img width="100" src="{{user.profile.headimgurl}}" />
+                        </md-item-template>
+                        <md-not-found>
+                            No matches found.
+                        </md-not-found>
+                    </md-autocomplete>
                 </md-input-container>
 
                 <md-input-container>
