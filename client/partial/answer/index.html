@@ -14,7 +14,7 @@
             <li class="list-group-item" ng-repeat="entity in list | filter: {is_send: '0'}" ng-click="view(entity)">
                 <div class="media">
                     <a class="pull-left" href="#">
-                        <img class="media-object avatarSize" src="./head1.png" alt="..."></a>
+                        <img class="media-object avatarSize" src="{{entity.user.profile.headimgurl}}" alt="..."></a>
                     <span> <strong>{{entity.user.profile.name}}</strong>
                     </span>
                     <span ng-if="entity.status==10" class="btn-float-right" style="color:#E11;">待筛选</span>
@@ -43,7 +43,7 @@
             <li class="list-group-item" ng-repeat="entity in list | filter: {status:'20', is_send: '1'}" ng-click="view(entity)">
                 <div class="media">
                     <a class="pull-left" href="#">
-                        <img class="media-object avatarSize" src="./head1.png" alt="..."></a>
+                        <img class="media-object avatarSize" src="{{entity.user.profile.headimgurl}}" alt="..."></a>
                     <span>
                         <strong>{{entity.user.profile.name}}</strong>
                     </span>
@@ -142,7 +142,7 @@
     <div class="col-md-6" style="padding:0;border:solid 10px rgba(10,10,10,0.5)">
         <div class="media">
             <a class="pull-left" href="#">
-                <img class="media-object avatarSize" src="./head1.png" alt="..."></a>
+                <img class="media-object avatarSize" src="{{entity.user.profile.headimgurl}}" alt="..."></a>
             <span> <strong>{{entity.user.profile.name}}</strong>
             </span>
             <span ng-if="entity.status==10" class="btn-float-right" style="color:#E11;">待筛选</span>
@@ -150,20 +150,16 @@
             <span ng-if="entity.status==30" class="btn-float-right" style="color:#CCC;">未通过</span>
         </div>
         <div>
-            <span>注册时间</span>            
-        </div>
-        <div>
-            <span>年龄</span>            
-            <span>性别</span>
-            <span>注册时间</span>
+            <span>年龄: {{entity.user.profile.birth_year}}</span>
+            <span>性别: {{entity.user.profile.sex}}</span>
+            <span>职业: {{entity.user.profile.occupation}}</span>
+            <span>注册时间:{{ entity.user.created_at | date: 'yyyy年MM月dd日'}}</span>
         </div>
         <div>
             <span>报名次数</span>            
             <span>参加次数</span>
             <span>反馈次数</span>
         </div>
-        <div>问题1及回答</div>
-        <div>问题2及回答</div>
-        <div>问题3及回答</div>
+        <div ng-repeat="answer in answerItemList">{{answer.question_label}} : {{answer.question_value}}</div>
     </div>
 </div>

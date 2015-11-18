@@ -13,6 +13,7 @@ angular.module('controllers')
         //查看一个报名信息
         $scope.view = function(entity) {
           $scope.answerItemList = entity.answerItemList;
+          $scope.entity = entity;
         }
 
         //移至未审核
