@@ -25,14 +25,12 @@ use dektrium\user\models\User as BaseUser;
  * @property string $updated_at
  * @property string $password write-only password
  * @property string $wechat_id
+ * @property integer $last_login_at
  */
 class User extends BaseUser
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
-
-    public $wechat_id;
-    public $last_login_at;
 
     /**
      * @var string|null the current password value from form input
@@ -53,8 +51,8 @@ class User extends BaseUser
     public function scenarios()
     {
         return array_merge(parent::scenarios(), [
-            'update'   => ['id', 'wechat_id'],
-            'default'   => [],
+            'update'   => ['id', 'mobile', 'wechat_id', 'last_login_at'],
+            'default'   => ['mobile', 'wechat_id', 'last_login_at'],
         ]);
     }
 
@@ -63,7 +61,7 @@ class User extends BaseUser
      */
     public function rules()
     {
-        return [
+        return array_merge(parent::rules(), [
             [['email','password'], 'required', 'on'=>'signup'],
 
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
@@ -73,8 +71,10 @@ class User extends BaseUser
             ['email', 'email'],
             ['email', 'unique'],
             ['mobile', 'unique'],
-            [['wechat_id'], 'safe'],
-        ];
+            [['wechat_id'], 'unique'],
+            [['last_login_at'], 'integer'],
+            [['safe', 'last_login_at'], 'safe'],
+        ]);
     }
 
     /**
