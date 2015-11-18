@@ -21,6 +21,7 @@ use yii\helpers\Url;
   <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
   <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="/static/style/main.css">
+  <link rel="stylesheet" href="/static/style/mystyle.css">
 
   <?= Html::csrfMetaTags() ?></head>
 <body flex="grow" class="main_css" layout="column" ng-controller="MainCtrl">
@@ -36,7 +37,7 @@ use yii\helpers\Url;
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">Someet</a>
+        <a class="navbar-brand" href="#/dashboard">Someet</a>
       </div>
 
       <!-- Collect the nav links, forms, and other content for toggling -->
@@ -46,7 +47,7 @@ use yii\helpers\Url;
           <li ng-class="{active:isActive('/special')}">
             <a href="#/special">专题</a>
           </li>
-          <li ng-class="{active:isActive('/activity')}">
+          <li ng-class="{active:isActive('/activity')||isActive('/answer')||isActive('/question')}">
             <a href="#/activity/list/0">活动</a>
           </li>
           <li ng-class="{active:isActive('/user')}">
@@ -56,7 +57,7 @@ use yii\helpers\Url;
 
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown">
               <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
               <?php $user = Yii::$app->user->identity; ?>
               <?= $user->username ?> <b class="caret"></b>
