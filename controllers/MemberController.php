@@ -51,9 +51,66 @@ class MemberController extends Controller
                     'index',
                     'search',
                     'search-principal',
+                    'fetch-white-list',
+                    'fetch-black-list',
+                    'fetch-pma-list',
+                    'fetch-founder-list',
                 ]
             ],
         ];
+    }
+
+    //白名单列表
+    public function actionFetchWhiteList()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $users = User::find()
+            ->where(['in_white_list' => User::WHITE_LIST_YES])
+            ->with([
+                'profile'
+            ])
+            ->asArray()
+            ->orderBy([
+                'id' => SORT_DESC,
+            ])
+            ->all();
+        return $users;
+    }
+
+    //PMA列表
+    public function actionFetchPmaList()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $users = User::find()
+            ->joinWith('assignment')
+            ->where([
+                'status' => User::STATUS_ACTIVE,
+                'auth_assignment.item_name' => 'pma',
+            ])
+            ->with(['profile'])
+            ->orderBy(['id' => SORT_DESC])
+            ->asArray()
+            ->all();
+        return $users;
+    }
+
+    //PMA列表
+    public function actionFetchFounderList()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $users = User::find()
+            ->joinWith('assignment')
+            ->where([
+                'status' => User::STATUS_ACTIVE,
+                'auth_assignment.item_name' => 'founder',
+            ])
+            ->with(['profile'])
+            ->orderBy(['id' => SORT_DESC])
+            ->asArray()
+            ->all();
+        return $users;
     }
 
     public function actionIndex($id = null, $scenario = null, $perPage = 20)
