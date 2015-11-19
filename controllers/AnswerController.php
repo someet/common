@@ -111,7 +111,15 @@ class AnswerController extends Controller
     public function actionUpdate($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $model = Answer::find()->where(['id' => $id])->with(['user', 'activity', 'activity.principal'])->one();
+        $model = Answer::find()
+            ->where(['id' => $id])
+            ->with([
+                'user',
+                'activity',
+                'activity.principal'
+            ])
+            ->asArray()
+            ->one();
         $data = Yii::$app->getRequest()->post();
 
         if (isset($data['status'])) {
@@ -176,7 +184,7 @@ class AnswerController extends Controller
                         "topcolor" => "#FF0000",
                         "data" => [
                             "first" => [
-                                "value" => "您好, 您已成功报名{$activityName}",
+                                "value" => "您好, 您已报名被拒绝",
                                 "color" => "#173177"
                             ],
                             "keyword1" => [
