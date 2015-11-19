@@ -61,7 +61,23 @@ class User extends BaseUser
      */
     public function rules()
     {
-        return array_merge(parent::rules(), [
+        return [
+            //'usernameRequired' => ['username', 'required', 'on' => ['register', 'create', 'connect', 'update']],
+            //'usernameMatch'    => ['username', 'match', 'pattern' => static::$usernameRegexp],
+            //'usernameLength'   => ['username', 'string', 'min' => 3, 'max' => 255],
+            //'usernameUnique'   => ['username', 'unique', 'message' => Yii::t('user', 'This username has already been taken')],
+            //'usernameTrim'     => ['username', 'trim'],
+
+            // email rules
+            'emailPattern'  => ['email', 'email'],
+            'emailLength'   => ['email', 'string', 'max' => 255],
+            'emailUnique'   => ['email', 'unique', 'message' => Yii::t('user', 'This email address has already been taken')],
+            'emailTrim'     => ['email', 'trim'],
+
+            // password rules
+            'passwordRequired' => ['password', 'required', 'on' => ['register']],
+            'passwordLength'   => ['password', 'string', 'min' => 6, 'on' => ['register', 'create']],
+
             [['email','password'], 'required', 'on'=>'signup'],
 
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
@@ -74,7 +90,7 @@ class User extends BaseUser
             [['wechat_id'], 'unique'],
             [['last_login_at'], 'integer'],
             [['safe', 'last_login_at'], 'safe'],
-        ]);
+        ];
     }
 
     /**
