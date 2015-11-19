@@ -1,4 +1,3 @@
-<br/>
 <div class="container" id="content">
     <form name="entityForm" ng-submit="save()">
             <div >
@@ -201,18 +200,31 @@
                     <textarea ng-model="entity.content" placeholder="文案"></textarea>
                 </md-input-container>
 
-                <md-input-container>
+                <div>
                     <label>发起人</label>
-                    <md-autocomplete md-selected-item="user" md-search-text="username" md-items="user in getUsers(username)" md-item-text="user.username">
+                    <md-autocomplete md-selected-item="user" placeholder="请选择发起人" md-search-text="username" md-items="user in getUsers(username)" md-item-text="user.username">
                         <md-item-template>
-                            <span md-highlight-text="searchText">{{user.username}}</span>
-                            <img width="100" src="{{user.profile.headimgurl}}" />
+                            <span md-highlight-text="principalname">{{user.username}}</span>
+                            <img width="50" style="border-radius:25px" src="{{user.profile.headimgurl}}" />
                         </md-item-template>
                         <md-not-found>
                             No matches found.
                         </md-not-found>
                     </md-autocomplete>
-                </md-input-container>
+                </div>
+
+                <div>
+                    <label>PMA</label>
+                    <md-autocomplete md-selected-item="principal" placeholder="请选择PMA" md-search-text="principalname" md-items="principal in getPrincipals(principalname)" md-item-text="principal.username">
+                        <md-item-template>
+                            <span md-highlight-text="principalname">{{principal.username}}</span>
+                            <img width="50" style="border-radius:25px" src="{{principal.profile.headimgurl}}" />
+                        </md-item-template>
+                        <md-not-found>
+                            No matches found.
+                        </md-not-found>
+                    </md-autocomplete>
+                    </div>
 
                 <md-input-container>
                     <label>收费金额(0为免费)</label>

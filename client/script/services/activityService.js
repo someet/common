@@ -34,5 +34,8 @@ angular.module('backendServices')
         searchUser: function(query) {
           return $http.get('/member/search?username=' + query);
         },
+        searchPrincipal: function(query) {
+          return $http.get('/member/search-principal?username=' + query);
+        },
       };
     }]);

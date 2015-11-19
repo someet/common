@@ -264,7 +264,14 @@ angular.module('controllers', ['ngTagsInput'])
 
       // 搜索用户功能
       $scope.getUsers = function(query) {
+        console.log(query);
         return $activityManage.searchUser(query);
+      }
+
+      // 搜索PMA功能
+      $scope.getPrincipals = function(query) {
+        console.log(query);
+        return $activityManage.searchPrincipal(query);
       }
 
       $scope.onStartTimeSet = function(newDate, oldDate) {
@@ -376,6 +383,7 @@ angular.module('controllers', ['ngTagsInput'])
           $scope.poster = data.poster;
           $scope.group_code = data.group_code;
           $scope.user = data.user;
+          $scope.principal = data.principal;
 
           var tags = [];
           for (var k in data.tags) {
@@ -406,6 +414,7 @@ angular.module('controllers', ['ngTagsInput'])
         newEntity.poster = $scope.poster;
         newEntity.group_code = $scope.group_code;
         newEntity.created_by = $scope.user.id;
+        newEntity.principal = $scope.principal.id;
 
         var tags = [];
         for (var k in $scope.tags) {
