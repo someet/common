@@ -7,7 +7,7 @@ use yii\helpers\Url;
 <head>
   <link rel="stylesheet" href="/static/style/bundle.css">
   <meta name="viewport" content="initial-scale=1" />
-  <link rel="stylesheet" href="http://asset.mikecrm.com/css/reset.css">
+  <link rel="stylesheet" href="/css/reset.css">
   <link rel="stylesheet" href="/static/style/pages/site-t.css">
   <!-- 新 Bootstrap 核心 CSS 文件 -->
   <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -21,7 +21,7 @@ use yii\helpers\Url;
   <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
   <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="/static/style/main.css">
-  <link rel="stylesheet" href="/static/style/mystyle.css">
+  <link rel="stylesheet" href="/css/mystyle.css">
 
   <?= Html::csrfMetaTags() ?></head>
 <body flex="grow" class="main_css" layout="column" ng-controller="MainCtrl">

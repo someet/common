@@ -25,7 +25,7 @@
             <li class="list-group-item" ng-repeat="entity in list | filter: {status:'10', is_send: '1'}" ng-click="view(entity)">
                 <div class="media">
                     <a class="pull-left" href="">
-                        <img class="media-object avatarSize" src="./head1.png" alt="..."></a>
+                        <img class="media-object avatarSize" src="{{entity.user.profile.headimgurl}}" alt="..."></a>
                     <span> <strong>{{entity.user.profile.name}}</strong>
                     </span>
                     <span class="btn-float-right" style="color:#33E;">待筛选</span>
@@ -53,7 +53,7 @@
             <li class="list-group-item" ng-repeat="entity in list | filter: {status:'30', is_send: '1'}" ng-click="view(entity)">
                 <div class="media">
                     <a class="pull-left" href="">
-                        <img class="media-object avatarSize" src="./head1.png" alt="..."></a>
+                        <img class="media-object avatarSize" src="{{entity.user.profile.headimgurl}}" alt="..."></a>
                     <span>
                         <strong>{{entity.user.profile.name}}</strong>
                     </span>
@@ -111,11 +111,11 @@
             </div>
             <div ng-show="entity.user.profile.from>0">
                 <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">来自：</div>
-                {{entity.user.profile.occupation}}
+                {{entity.user.profile.from}}
             </div>
             <div ng-show="entity.user.profile.want>0">
                 <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">想要：</div>
-                {{entity.user.profile.occupation}}
+                {{entity.user.profile.want}}
             </div>
         </div>
         <br />

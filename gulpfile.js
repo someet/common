@@ -51,6 +51,8 @@ gulp.task('copy-bundle', function(){
     './bower_components/ng-tags-input/ng-tags-input.min.css',
     './bower_components/angular-bootstrap/ui-bootstrap-csp.css',
     './bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css',
+    './bower_components/bootstrap/dist/css/bootstrap.min.css',
+    './bower_components/bootstrap/dist/css/bootstrap-theme.min.css',
     'client/style/font-awesome.min.css'
     ])
     .pipe(plumber())
@@ -75,6 +77,7 @@ gulp.task('copy-bundle', function(){
       './bower_components/textAngular/dist/textAngular.min.js',
 
       './bower_components/ng-tags-input/ng-tags-input.min.js',
+      './bower_components/bootstrap/dist/js/bootstrap.min.js',
       './bower_components/angular-jquery/dist/angular-jquery.min.js'
     ])
     .pipe(plumber())
