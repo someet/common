@@ -40,7 +40,7 @@ angular.module('controllers')
     }
   }
 }])
-  .controller('UserListCtrl', ['$scope', '$location', '$userManage', function($scope, $location, $userManage){
+  .controller('UserListCtrl', ['$scope', '$routeParams', '$location', '$userManage', function($scope, $routeParams, $location, $userManage){
     $scope.$parent.pageName = '用户管理';
 
     $scope.userList = [];
@@ -65,7 +65,33 @@ angular.module('controllers')
       });
     }
 
-    normalPagination();
+      var listtype = $routeParams.type;
+      console.log(listtype);
+      //白名单
+      if (listtype == 'white') {
+        $userManage.fetchWhiteList().then(function(data) {
+          $scope.userList = data;
+        });
+        //黑名单
+      } else if (listtype == 'black') {
+        $userManage.fetchBlackList().then(function(data) {
+          $scope.userList = data;
+        });
+        // pma
+      } else if (listtype=='pma') {
+        $userManage.fetchPmaList().then(function(data) {
+          $scope.userList = data;
+        });
+        //发起人
+      } else if (listtype=='founder') {
+        $userManage.fetchFounderList().then(function(data) {
+          $scope.userList = data;
+        });
+
+        // 正常的所有用户
+      } else {
+        normalPagination();
+      }
 
     function normalPagination() {
       $scope.userPagination = {

@@ -91,6 +91,11 @@ function($routeProvider) {
       templateUrl: '/partial/user/add.html',
       controller: 'UserDeleteCtrl'
     })
+    //白名单,黑名单, PMA, 发起人列表
+      .when('/member/list/:type', {
+        templateUrl: '/partial/user/list.html',
+        controller: 'UserListCtrl'
+      })
     //添加问题
     .when('/question/add/:activity_id', {
       templateUrl: '/partial/question/add.html',

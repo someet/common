@@ -8,6 +8,34 @@ angular.module('backendServices')
           return userList;
         });
       },
+      //白名单
+      fetchWhiteList: function() {
+        return $http.get('/member/fetch-white-list', {
+        }).then(function(userList) {
+          return userList;
+        });
+      },
+      //黑名单
+      fetchBlackList: function() {
+        return $http.get('/member/fetch-black-list', {
+        }).then(function(userList) {
+          return userList;
+        });
+      },
+      //PMA
+      fetchPmaList: function() {
+        return $http.get('/member/fetch-pma-list', {
+        }).then(function(userList) {
+          return userList;
+        });
+      },
+      //发起人
+      fetchFounderList: function() {
+        return $http.get('/member/fetch-founder-list', {
+        }).then(function(userList) {
+          return userList;
+        });
+      },
       add: function(newEntity) {
         return $http.post('/member/create', newEntity).then(function(data) {
           return data;
