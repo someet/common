@@ -50,6 +50,12 @@ angular.module('controllers')
     //  $scope.userList = data;
     //});
 
+
+    // 查看用户详情
+    $scope.viewUser = function(user) {
+      $location.path('/member/' + user.id);
+    }
+
     $scope.createUserPage = function() {
       $location.path('/user/add');
     }
