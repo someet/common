@@ -50,6 +50,12 @@ angular.module('controllers')
     //  $scope.userList = data;
     //});
 
+
+    // 查看用户详情
+    $scope.viewUser = function(user) {
+      $location.path('/member/' + user.id);
+    }
+
     $scope.createUserPage = function() {
       $location.path('/user/add');
     }
@@ -167,8 +173,11 @@ angular.module('controllers')
        id: userId
       }
     }
+      $scope.data = {};
+
     $userManage.fetch(params).then(function(data) {
       $scope.user = data;
+      $scope.data.cb3 = data.in_white_list == 1;
     }, function (err) {
       alert(err);
     });
@@ -178,7 +187,33 @@ angular.module('controllers')
         email: $scope.user.email
       };
 
-      $userManage.update(userId, userData).then(function(data){
+      var user_id = $scope.user.id;
+
+      console.log($scope.user.in_white_list);
+      console.log($scope.user.in_white_list==1);
+      if ($scope.data.cb3== true) {
+        $userManage.setUserInWhiteList(user_id, 1).then(function (data) {
+          console.log('设置用户为白名单成功');
+        });
+      } else {
+        $userManage.setUserInWhiteList(user_id, 0).then(function (data) {
+          console.log('设置用户为白名单成功');
+        });
+      }
+
+      if ($scope.data.cb == true) {
+        $userManage.setUserAsPma(user_id).then(function (data) {
+          console.log('设置用户为PMA成功');
+        });
+      }
+
+      if ($scope.data.cb2==true) {
+        $userManage.setUserAsFounder(user_id).then(function (data) {
+          console.log('设置用户为Founder成功');
+        });
+      }
+
+      $userManage.update(user_id, userData).then(function(data){
         alert("修改成功");
       }, function (err) {
         alert(err);
