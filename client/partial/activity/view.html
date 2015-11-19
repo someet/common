@@ -57,9 +57,9 @@
                     <span class="so-float-right"> <strong>活动详情 <font color="red">––––</font></strong> 
                     </span>
                 </div>
-                <div class="detail-text">
-                    <p>{{entity.details}}</p>
-                </div>            
+
+                <!-- 绑定后显示富文本 -->
+                <div ng-bind-html="entity.details"></div>                        
 
                 <div ng-show="entity.cost>0">
                     <div>收费金额:{{entity.cost}}元/人</div>
