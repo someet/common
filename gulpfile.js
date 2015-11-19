@@ -60,6 +60,7 @@ gulp.task('copy-bundle', function(){
    .pipe(gulp.dest('./web/static/style'));
 
   gulp.src([
+      './bower_components/jquery/dist/jquery.min.js',
       './bower_components/angular/angular.min.js',
       './bower_components/angular-animate/angular-animate.min.js',
       './bower_components/angular-aria/angular-aria.min.js',
