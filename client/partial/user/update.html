@@ -1,13 +1,61 @@
 <div layout="column" flex id="content">
-  <md-input-container>
-    <label>用户名</label>
-    <input type="text" ng-model="user.username" readonly required />
-  </md-input-container>
-  <md-input-container>
-    <label>邮箱</label>
-    <input type="text" ng-model="user.email" required />
-  </md-input-container>
-  <md-input-container layout="row">
-    <md-button class="md-raised md-primary" ng-click="updateUser()">添加</md-button>
-  </md-input-container>
+  <legend>用户资料修改</legend>
+  <div class="media" >
+    <a class="pull-left">
+      <img width="40" style="border-radius:20px" class="media-object avatarSize" src="{{user.headimgurl}}"></a>
+    <md-button class="md-raised" ng-click="">设置头像</md-button>
+  </div>
+
+  <div style="width:50%;">
+    <md-input-container flex="40">
+      <label>用户名</label>
+      <input type="text" ng-model="user.username" readonly required />
+    </md-input-container>
+    <md-input-container flex="40">
+      <label>邮箱</label>
+      <input type="text" ng-model="user.email" required />
+    </md-input-container>
+  </div>
+
+  <br/>
+  <legend>设置用户身份</legend>
+  <div layout="row" layout-wrap>
+    <div flex="50">
+      <md-checkbox ng-model="data.cb2" aria-label="Checkbox 1" class="md-warn md-align-top-left"> <strong>发起人</strong>
+        <br/>
+        <span class="ipsum">是我们最关心的一类用户。将能够填写活动内容，设置自己的发起人介绍信息，在后台修改头像。</span>
+        <br/>
+      </md-checkbox>
+      <md-input-container ng-if="data.cb2">
+        <label>发起人简介</label>
+        <input type="text" ng-model="user.email" required />
+      </md-input-container>
+    </div>
+
+    <div flex="50">
+      <md-checkbox ng-model="data.cb" aria-label="Checkbox 2" class="md-warn md-align-top-left"> <strong>PMA</strong>
+        <br/>
+        <span class="ipsum">是我们团队中最可爱的群体。将能够提前看到活动内容，协助筛选用户。</span>
+        <br/>
+      </md-checkbox>
+    </div>
+
+    <div flex="50">
+      <md-checkbox ng-model="data.cb3" aria-label="Checkbox 3" class="md-warn md-align-top-left">
+        <strong>白名单</strong>
+        <br/>
+        <span class="ipsum">特殊人群标记。</span>
+        <br/>
+      </md-checkbox>
+    </div>
+  </div>
+
+  <br/>
+  <legend>用户行为管理</legend>
+  <div layout="row" layout-wrap>
+    <md-button class="md-raised md-accent" ng-click="">增加黄牌一张</md-button>
+    <md-button class="md-raised md-warn" ng-click="">清空黑暗历史</md-button>
+  </div>
+
+  <md-button class="md-raised md-primary" ng-click="updateUser()">确认修改</md-button>
 </div>
