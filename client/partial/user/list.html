@@ -3,7 +3,7 @@
     <div>
       <ul class="nav nav-tabs">
         <li class="active">
-          <a href="">全部</a>
+          <a href="/#/member">全部</a>
         </li>
         <li>
           <a href="/#/member/list/black">黑名单</a>
@@ -45,6 +45,7 @@
             <span ng-if="user.profile.want==5">我想通过活动融入一些兴趣圈子</span>
             <br />
             <br />
+
             推荐一个你身边有趣的人?<br />
           <span> {{user.profile.recommand}}</span>
           <br />
@@ -55,8 +56,7 @@
         </div>
       </div>
       <div class="panel-footer">
-        白名单 id: {{user.id}}
-        <span class="btn-float-right">上次登录时间：2015年xx月xx日17:18:07</span>
+        <span class="btn-float-right" ng-if="user.last_login_at">上次登录时间：{{user.last_login_at*1000|date:'yyyy年MM月dd日 HH:mm:ss'}}</span>
       </div>
     </div>     
       
