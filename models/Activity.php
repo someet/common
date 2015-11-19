@@ -129,7 +129,11 @@ class Activity extends \yii\db\ActiveRecord
     {
         if (parent::beforeSave($insert)) {
             if ($insert) {
-                $this->updated_by = $this->created_by = Yii::$app->user && Yii::$app->user->id > 0 ? Yii::$app->user->id : 0;
+                if ($this->created_by < 1) {
+                    $this->updated_by = $this->created_by = Yii::$app->user && Yii::$app->user->id > 0 ? Yii::$app->user->id : 0;
+                } else {
+                    $this->updated_by = $this->created_by;
+                }
             } else {
                 $this->updated_by = Yii::$app->user && Yii::$app->user->id > 0 ? Yii::$app->user->id : 0;
             }
