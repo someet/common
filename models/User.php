@@ -32,6 +32,9 @@ class User extends BaseUser
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
 
+    const WHITE_LIST_YES = 1;
+    const WHITE_LIST_NO = 0;
+
     /**
      * @var string|null the current password value from form input
      */
