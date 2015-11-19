@@ -50,7 +50,7 @@ use yii\helpers\Url;
           <li ng-class="{active:isActive('/activity')||isActive('/answer')||isActive('/question')}">
             <a href="#/activity/list/0">活动</a>
           </li>
-          <li ng-class="{active:isActive('/user')}">
+          <li ng-class="{active:isActive('/member')}">
             <a href="#/member">联系人</a>
           </li>
         </ul>
