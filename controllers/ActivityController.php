@@ -63,6 +63,7 @@ class ActivityController extends BackendController
         if ($type_id > 0) {
             $activities = Activity::find()
                 ->where(['type_id' => $type_id])
+                ->andWhere(['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE]])
                 ->with([
                     'type',
                     'tags',
@@ -79,6 +80,7 @@ class ActivityController extends BackendController
                 ->all();
         } else {
             $activities = Activity::find()
+                ->where(['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE]])
                 ->with([
                     'type',
                     'tags',

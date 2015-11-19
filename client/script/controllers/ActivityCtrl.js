@@ -124,7 +124,7 @@ angular.module('controllers', ['ngTagsInput'])
             });
 
             $mdToast.show($mdToast.simple()
-              .content('删除活动类型“' + entity.title + '”成功')
+              .content('删除活动“' + entity.title + '”成功')
               .hideDelay(5000)
               .position("top right"));
 
