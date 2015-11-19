@@ -149,7 +149,13 @@ class Activity extends \yii\db\ActiveRecord
         return $this->hasMany(ActivityTag::className(), ['id' => 'tag_id'])->viaTable('r_tag_activity', ['activity_id' => 'id']);
     }
 
-    // 用户
+    // PMA
+    public function getPrincipal()
+    {
+        return $this->hasOne(User::className(), ['id' => 'principal']);
+    }
+
+    // 发起人
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'created_by']);

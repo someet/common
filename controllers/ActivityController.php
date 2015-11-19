@@ -395,6 +395,14 @@ class ActivityController extends BackendController
             }
         }
 
+        //负责人(PMA)
+        if (isset($data['principal'])) {
+            $model->principal= $data['principal'];
+            if (!$model->validate('principal')) {
+                throw new DataValidationFailedException($model->getFirstError('principal'));
+            }
+        }
+
         if (!$model->save()) {
             throw new ServerErrorHttpException();
         }
@@ -444,7 +452,12 @@ class ActivityController extends BackendController
         $model = Activity::find()
             ->where(['id' => $id])
             ->with([
-                'type', 'user', 'user.profile', 'tags'
+                'type',
+                'user',
+                'user.profile',
+                'principal',
+                'principal.profile',
+                'tags'
             ])
             ->asArray()
             ->one();

@@ -255,9 +255,15 @@ class User extends BaseUser
         return $this->save();
     }
 
-    // 活动
+    // 活动列表
     public function getActivity()
     {
         return $this->hasMany(Activity::className(), ['created_by' => 'id']);
+    }
+
+    // 获得角色对象
+    public function getAssignment()
+    {
+        return $this->hasOne(AuthAssignment::className(), ['user_id' => 'id']);
     }
 }

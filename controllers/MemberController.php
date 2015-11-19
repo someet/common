@@ -50,6 +50,7 @@ class MemberController extends Controller
                 'allowActions' => [
                     'index',
                     'search',
+                    'search-principal',
                 ]
             ],
         ];
@@ -108,6 +109,31 @@ class MemberController extends Controller
             ->all();
         return $users;
     }
+
+    /**
+     * 搜索PMA, 供通知时使用
+     * @param $username 用户名
+     * @return array
+     */
+    public function actionSearchPrincipal($username) {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $users = User::find()
+            ->joinWith('assignment')
+            ->where([
+                'status' => User::STATUS_ACTIVE,
+                'auth_assignment.item_name' => 'pma',
+            ])
+            ->andWhere(
+                ['like', 'username', $username]
+            )
+            ->with(['profile', 'assignment'])
+            ->limit(50)
+            ->orderBy(['id' => SORT_DESC])
+            ->asArray()
+            ->all();
+        return $users;
+    }
+
 
     public function actionCreate()
     {

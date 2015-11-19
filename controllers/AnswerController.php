@@ -111,7 +111,7 @@ class AnswerController extends Controller
     public function actionUpdate($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $model = Answer::find()->where(['id' => $id])->with(['user', 'activity'])->one();
+        $model = Answer::find()->where(['id' => $id])->with(['user', 'activity', 'activity.principal'])->one();
         $data = Yii::$app->getRequest()->post();
 
         if (isset($data['status'])) {
@@ -133,7 +133,7 @@ class AnswerController extends Controller
 
             if ($model->status == Answer::STATUS_REVIEW_PASS || $model->status == Answer::STATUS_REVIEW_REJECT) {
                 if ($model->status == Answer::STATUS_REVIEW_PASS) {
-                    $wechat_id = 'maxwelldu';
+                    $wechat_id = $model->activity->principal ? $model->activity->principal->wechat_id : \DockerEnv::get('DEFAULT_PRINCIPAL');
                     $template = "【Someet活动平台】您好，恭喜您报名的“{$activityName}”活动已通过筛选。具体事宜请您添加工作人员微信（微信号：{$wechat_id}）后会进行说明。添加时请注明活动名称，期待与您共同玩耍，系统短信，请勿回复。";
                     $data = [
                         "touser" => "{$openid}",
