@@ -50,11 +50,15 @@ class MemberController extends Controller
                 'allowActions' => [
                     'index',
                     'search',
+                    'update',
                     'search-principal',
                     'fetch-white-list',
                     'fetch-black-list',
                     'fetch-pma-list',
                     'fetch-founder-list',
+                    'set-user-as-pma',
+                    'set-user-as-founder',
+                    'set-user-in-white-list',
                 ]
             ],
         ];
@@ -111,6 +115,32 @@ class MemberController extends Controller
             ->asArray()
             ->all();
         return $users;
+    }
+
+    // 设置用户为白名单
+    public function actionSetUserInWhiteList($user_id, $in_white_list=User::WHITE_LIST_YES) {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        if ( User::updateAll(['in_white_list' => $in_white_list], ['id' => $user_id]) ) {
+            return [];
+        } else {
+            return false;
+        }
+    }
+
+    //设置用户为PMA
+    public function actionSetUserAsPma($user_id) {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        if ( User::updateAll(['in_white_list' => User::WHITE_LIST_YES], ['id' => $user_id]) ) {
+            return [];
+        } else {
+            return false;
+        }
+
+    }
+
+    //设置用户为发起人
+    public function actionSetUserAsFounder($user_id) {
+
     }
 
     public function actionIndex($id = null, $scenario = null, $perPage = 20)

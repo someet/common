@@ -36,6 +36,24 @@ angular.module('backendServices')
           return userList;
         });
       },
+      //设置用户为白名单
+      setUserInWhiteList: function(user_id, in_white_list){
+         return $http.post('/member/set-user-in-white-list?user_id='+user_id+'&in_white_list='+in_white_list).then(function(data) {
+            return data;
+         })
+      },
+      //设置用户为PMA
+      setUserAsPma: function(user_id){
+        return $http.post('/member/set-user-as-pma?user_id='+user_id).then(function(data) {
+          return data;
+        })
+      },
+      //设置用户为发起人
+      setUserAsFounder: function(user_id){
+        return $http.post('/member/set-user-as-founder?user_id='+user_id).then(function(data) {
+          return data;
+        })
+      },
       add: function(newEntity) {
         return $http.post('/member/create', newEntity).then(function(data) {
           return data;
