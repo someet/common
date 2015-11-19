@@ -14,9 +14,6 @@ CREATE TABLE IF NOT EXISTS `special_activity` (
   `activity_id` INT(11) UNSIGNED NOT NULL COMMENT '活动ID',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `special_id_UNIQUE` (`special_id` ASC, `activity_id` ASC))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci
 COMMENT = '专题活动关联表';
 SQL;
         $this->execute($sql);

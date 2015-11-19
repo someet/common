@@ -9,9 +9,6 @@ class m151109_101640_add_admin_log_table extends Migration
     public function up()
     {
         $tableOptions = null;
-        if ($this->db->driverName === 'mysql') {
-            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_general_ci ENGINE=InnoDB COMMENT="后台操作记录"';
-        }
 
         $this->createTable('{{%admin_log}}', [
             //'name'=>Schema::TYPE_STRING.'(200) PRIMARY KEY NOT NULL',

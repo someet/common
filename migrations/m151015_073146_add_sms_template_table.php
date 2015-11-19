@@ -14,9 +14,6 @@ CREATE TABLE IF NOT EXISTS `sms_template` (
   `template` VARCHAR(255) NOT NULL,
   `status` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '冗余扩展',
   PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci
 COMMENT = '消息模板';
 SQL;
         $this->execute($sql);

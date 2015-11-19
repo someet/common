@@ -70,7 +70,7 @@ class User extends BaseUser
 
             // email rules
             'emailPattern'  => ['email', 'email'],
-            'emailLength'   => ['email', 'string', 'max' => 255],
+            'emailLength'   => ['email', 'string', 'max' => 200],
             'emailUnique'   => ['email', 'unique', 'message' => Yii::t('user', 'This email address has already been taken')],
             'emailTrim'     => ['email', 'trim'],
 
