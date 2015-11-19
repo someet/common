@@ -34,9 +34,6 @@ CREATE TABLE IF NOT EXISTS `activity` (
   `updated_by` INT(11) UNSIGNED NOT NULL DEFAULT 0,
   `status` TINYINT(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '20 删除 40 草稿 60 审核不通过 80 审核通过 100 进行中 120 已结束 ',
   PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci
 COMMENT = '活动表';
 SQL;
         $this->execute($sql);

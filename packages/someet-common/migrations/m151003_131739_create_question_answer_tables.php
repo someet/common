@@ -18,9 +18,6 @@ CREATE TABLE IF NOT EXISTS `question` (
   `status` TINYINT(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '0 删除 10 草稿 20 正常',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `uniq_activity` (`activity_id` ASC))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci
 COMMENT = '问题表';
 
 CREATE TABLE IF NOT EXISTS `question_item` (
@@ -33,9 +30,6 @@ CREATE TABLE IF NOT EXISTS `question_item` (
   `listorder` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '问题项排序',
   `status` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '冗余扩展',
   PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci
 COMMENT = '问题项表';
 
 CREATE TABLE IF NOT EXISTS `question_type` (
@@ -46,9 +40,6 @@ CREATE TABLE IF NOT EXISTS `question_type` (
   `check_type` TINYINT(3) UNSIGNED NOT NULL COMMENT '标识 该字段类型 用什么方式验证, 比如 数字, 邮箱, 字符串, 单选, 多选, 文件上传. 用于表单的字段验证',
   `status` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '冗余扩展',
   PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci
 COMMENT = '问题类型表';
 
 CREATE TABLE IF NOT EXISTS `answer` (
@@ -62,9 +53,6 @@ CREATE TABLE IF NOT EXISTS `answer` (
   `status` TINYINT(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '0 删除 10 正常',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `uniq_form_created_by` (`question_id` ASC))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci
 COMMENT = '答案表';
 
 CREATE TABLE IF NOT EXISTS `answer_item` (
@@ -75,9 +63,6 @@ CREATE TABLE IF NOT EXISTS `answer_item` (
   `question_value` VARCHAR(255) NOT NULL COMMENT '问题的值',
   `status` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '冗余扩展',
   PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci
 COMMENT = '答案项表';
 SQL;
         $this->execute($sql);
