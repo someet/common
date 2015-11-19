@@ -5,6 +5,7 @@ angular.module('controllers')
         $scope.$parent.pageName = '查看问题';
         var activity_id = $routeParams.activity_id;
         $scope.activity_id = activity_id;
+        $scope.questionItem = {};
 
         $scope.status_list = [
           {
@@ -19,8 +20,9 @@ angular.module('controllers')
 
         $questionManage.fetchByActivityId(activity_id).then(function(data) {
           $scope.entity = data;
+          console.log(data);
         }, function(err) {
-
+          alert(err);
         });
 
         $scope.cancel = function() {
@@ -31,13 +33,13 @@ angular.module('controllers')
         $scope.save = function(){
           var newEntity = {
             activity_id: $scope.activity_id,
-            title: $scope.entity.title,
-            desc: $scope.entity.desc,
-            status: $scope.entity.status,
+            //title: $scope.entity.title,
+            //desc: $scope.entity.desc,
+            //status: $scope.entity.status,
             questionItemList: [],
           };
 
-          if ($scope.entity.id > 0) { // 更新
+          if ($scope.entity!=null && $scope.entity.id > 0) { // 更新
 
             newEntity.id = $scope.entity.id;
             for(var k in $scope.entity.questionItemList) {
@@ -61,13 +63,13 @@ angular.module('controllers')
             });
           } else { // 新建
             var questionItem1 = {
-              label: $scope.entity.q1,
+              label: $scope.questionItem.q1,
             };
             var questionItem2 = {
-              label: $scope.entity.q2,
+              label: $scope.questionItem.q2,
             };
             var questionItem3 = {
-              label: $scope.entity.q3,
+              label: $scope.questionItem.q3,
             };
             newEntity.questionItemList.push(questionItem1);
             newEntity.questionItemList.push(questionItem2);
