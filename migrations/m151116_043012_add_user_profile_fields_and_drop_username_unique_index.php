@@ -20,7 +20,7 @@ class m151116_043012_add_user_profile_fields_and_drop_username_unique_index exte
             ADD COLUMN `recommand` TEXT NULL DEFAULT NULL COMMENT '推荐一个身边有趣的人' AFTER `want`;
 
             ALTER TABLE `user`
-            CHANGE COLUMN `username` `username` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT NULL COMMENT '昵称' ,
+            CHANGE COLUMN `username` `username` VARCHAR(255) NULL DEFAULT NULL COMMENT '昵称' ,
             DROP INDEX `user_unique_username` ;
 SQL;
         $this->execute($sql);

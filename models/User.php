@@ -70,7 +70,7 @@ class User extends BaseUser
 
             // email rules
             'emailPattern'  => ['email', 'email'],
-            'emailLength'   => ['email', 'string', 'max' => 255],
+            'emailLength'   => ['email', 'string', 'max' => 200],
             'emailUnique'   => ['email', 'unique', 'message' => Yii::t('user', 'This email address has already been taken')],
             'emailTrim'     => ['email', 'trim'],
 
@@ -253,5 +253,11 @@ class User extends BaseUser
         //$this->email_confirmation_token = null;
         //$this->is_email_verified = 1;
         return $this->save();
+    }
+
+    // 活动
+    public function getActivity()
+    {
+        return $this->hasMany(Activity::className(), ['created_by' => 'id']);
     }
 }

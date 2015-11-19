@@ -19,9 +19,6 @@ CREATE TABLE IF NOT EXISTS `special` (
   `updated_at` INT(11) UNSIGNED NOT NULL DEFAULT 0,
   `status` TINYINT(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '0 删除 10 草稿 20 正常',
   PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci
 COMMENT = '活动专题表';
 SQL;
         $this->execute($sql);

@@ -10,7 +10,7 @@ class m151020_071207_update_group_code_length_limit extends Migration
         $sql = <<<SQL
 ALTER TABLE `activity`
 DROP COLUMN `group_code`,
-ADD COLUMN `group_code` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NOT NULL COMMENT '群二维码' AFTER `details`
+ADD COLUMN `group_code` VARCHAR(255) NOT NULL COMMENT '群二维码' AFTER `details`
 SQL;
         $this->execute($sql);
         return true;

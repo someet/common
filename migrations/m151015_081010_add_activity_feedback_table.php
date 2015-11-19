@@ -18,9 +18,6 @@ CREATE TABLE IF NOT EXISTS `activity_feedback` (
   `updated_at` INT(11) UNSIGNED NOT NULL COMMENT '处理时间',
   `status` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '冗余扩展',
   PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci
 COMMENT = '活动反馈表';
 SQL;
         $this->execute($sql);

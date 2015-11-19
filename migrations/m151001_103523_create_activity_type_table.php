@@ -14,9 +14,6 @@ CREATE TABLE IF NOT EXISTS `activity_type` (
   `displayorder` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '显示顺序',
   `status` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '冗余扩展',
   PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_unicode_ci
 COMMENT = '活动类型表';
 SQL;
         $this->execute($sql);

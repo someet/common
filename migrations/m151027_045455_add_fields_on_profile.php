@@ -9,7 +9,7 @@ class m151027_045455_add_fields_on_profile extends Migration
     {
         $sql = <<<SQL
 ALTER TABLE `profile`
-CHANGE COLUMN `bio` `bio` TEXT CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NULL DEFAULT NULL COMMENT '自我介绍' ,
+CHANGE COLUMN `bio` `bio` TEXT NULL DEFAULT NULL COMMENT '自我介绍' ,
 ADD COLUMN `country` VARCHAR(255) NULL DEFAULT NULL COMMENT '国家' AFTER `bio`,
 ADD COLUMN `province` VARCHAR(255) NULL DEFAULT NULL COMMENT '省份' AFTER `country`,
 ADD COLUMN `city` VARCHAR(255) NULL DEFAULT NULL COMMENT '城市' AFTER `province`,

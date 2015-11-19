@@ -11,7 +11,7 @@ class m151012_120942_update_activity_fields extends Migration
 ALTER TABLE `activity`
 CHANGE COLUMN `starttime` `start_time` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '活动开始时间' ,
 CHANGE COLUMN `endtime` `end_time` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '活动结束时间' ,
-CHANGE COLUMN `groupcode` `group_code` VARCHAR(45) CHARACTER SET 'utf8' COLLATE 'utf8_unicode_ci' NOT NULL COMMENT '群二维码' ,
+CHANGE COLUMN `groupcode` `group_code` VARCHAR(45) NOT NULL COMMENT '群二维码' ,
 CHANGE COLUMN `isvolume` `is_volume` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '0 非系列 1 系列活动' ,
 CHANGE COLUMN `isdigest` `is_digest` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '0 非精华 1 精华' ,
 CHANGE COLUMN `responsi` `principal` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '负责人 0为未设置' ,

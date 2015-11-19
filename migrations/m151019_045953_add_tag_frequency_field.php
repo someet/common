@@ -11,7 +11,7 @@ class m151019_045953_add_tag_frequency_field extends Migration
 ALTER TABLE `activity_tag`
 DROP COLUMN `label`,
 ADD COLUMN `frequency` INT(11) NOT NULL DEFAULT 0 COMMENT '频率' AFTER `id`,
-ADD COLUMN `name` VARCHAR(255) NOT NULL COMMENT '标签名称' AFTER `frequency`,
+ADD COLUMN `name` VARCHAR(190) NOT NULL COMMENT '标签名称' AFTER `frequency`,
 DROP INDEX `title_UNIQUE` ,
 ADD UNIQUE INDEX `title_UNIQUE` (`name` ASC);
 SQL;
