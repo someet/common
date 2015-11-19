@@ -8,8 +8,6 @@ class m151119_035039_add_permission extends Migration
     public function up()
     {
         $items = [
-            '/mobile/activity/index' => ['user'],
-            '/mobile/site/index' => ['user'],
             '/mobile/member/finish-page' => ['user'],
             '/mobile/member/filled-answer' => ['user'],
             '/mobile/member/index' => ['user'],
