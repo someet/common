@@ -43,14 +43,14 @@ angular.module('backendServices')
          })
       },
       //设置用户为PMA
-      setUserAsPma: function(user_id){
-        return $http.post('/member/set-user-as-pma?user_id='+user_id).then(function(data) {
+      setUserAsPma: function(user_id, assign){
+        return $http.post('/member/set-user-as-pma?user_id='+user_id+'&assign='+assign).then(function(data) {
           return data;
         })
       },
       //设置用户为发起人
-      setUserAsFounder: function(user_id){
-        return $http.post('/member/set-user-as-founder?user_id='+user_id).then(function(data) {
+      setUserAsFounder: function(user_id, assign){
+        return $http.post('/member/set-user-as-founder?user_id='+user_id+'&assign='+assign).then(function(data) {
           return data;
         })
       },

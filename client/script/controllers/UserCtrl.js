@@ -176,42 +176,46 @@ angular.module('controllers')
       $scope.data = {};
 
     $userManage.fetch(params).then(function(data) {
+      var isFounder = false;
+      var isPma = false;
+      for(var i= 0, k=data.assignment.length; i<k; i++) {
+        if (data.assignment[i].item_name == 'founder') {
+          isFounder = true;
+        }
+        if (data.assignment[i].item_name == 'pma') {
+          isPma = true;
+        }
+      }
       $scope.user = data;
       $scope.data.cb3 = data.in_white_list == 1;
+      $scope.data.cb2 = isFounder;
+      $scope.data.cb = isPma;
     }, function (err) {
       alert(err);
     });
 
     $scope.updateUser = function() {
       var userData = {
-        email: $scope.user.email
+        email: $scope.user.email,
+        bio: $scope.user.profile.bio
       };
 
       var user_id = $scope.user.id;
 
-      console.log($scope.user.in_white_list);
-      console.log($scope.user.in_white_list==1);
-      if ($scope.data.cb3== true) {
-        $userManage.setUserInWhiteList(user_id, 1).then(function (data) {
-          console.log('设置用户为白名单成功');
-        });
-      } else {
-        $userManage.setUserInWhiteList(user_id, 0).then(function (data) {
-          console.log('设置用户为白名单成功');
-        });
-      }
+      var setup = $scope.data.cb3 == true;
+      $userManage.setUserInWhiteList(user_id, setup).then(function (data) {
+        console.log('设置用户为白名单成功');
+      });
 
-      if ($scope.data.cb == true) {
-        $userManage.setUserAsPma(user_id).then(function (data) {
-          console.log('设置用户为PMA成功');
-        });
-      }
+      var assignPMA = $scope.data.cb == true;
+      $userManage.setUserAsPma(user_id, assignPMA).then(function (data) {
+        console.log('设置用户为PMA成功');
+      });
 
-      if ($scope.data.cb2==true) {
-        $userManage.setUserAsFounder(user_id).then(function (data) {
-          console.log('设置用户为Founder成功');
-        });
-      }
+      var assignFounder = $scope.data.cb2 == true;
+      $userManage.setUserAsFounder(user_id, assignFounder).then(function (data) {
+        console.log('设置用户为Founder成功');
+      });
 
       $userManage.update(user_id, userData).then(function(data){
         alert("修改成功");
