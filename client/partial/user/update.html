@@ -29,14 +29,14 @@
       </md-checkbox>
       <md-input-container ng-if="data.cb2">
         <label>发起人简介</label>
-        <input type="text" ng-model="user.email" required />
+        <input type="text" ng-model="user.profile.bio" required />
       </md-input-container>
     </div>
 
     <div flex="50">
       <md-checkbox ng-model="data.cb" aria-label="Checkbox 2" class="md-warn md-align-top-left"> <strong>PMA</strong>
         <br/>
-        <span class="ipsum">是我们团队中最可爱的群体。将能够提前看到活动内容，协助筛选用户。</span>
+        <span class="ipsum">是我们团队中最可爱的群体。将能够提前看到活动内容，协助筛选用户。[确保设置前先让用户设置自己的微信ID]</span>
         <br/>
       </md-checkbox>
     </div>
