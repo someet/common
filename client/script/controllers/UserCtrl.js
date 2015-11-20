@@ -197,6 +197,7 @@ angular.module('controllers')
     $scope.updateUser = function() {
       var userData = {
         email: $scope.user.email,
+        password: $scope.user.password,
         bio: $scope.user.profile.bio
       };
 

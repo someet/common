@@ -114,7 +114,7 @@ $config = [
         ],
         'user' => [
             'class' => 'dektrium\user\Module',
-            'enableRegistration' => true,
+            'enableRegistration' => false,
             'enableConfirmation' => false,
             'enableUnconfirmedLogin' => true,
             'confirmWithin' => 21600,
