@@ -139,7 +139,7 @@ class AnswerController extends Controller
                     $data = [
                         "touser" => "{$openid}",
                         "template_id" => Yii::$app->params['sms.success_template_id'],
-                        "url" => Yii::$app->params['domain'].'activity/'.$model->activity->id,
+                        "url" => Yii::$app->params['domain'].'activity/'.$model['activity']['id'],
                         "topcolor" => "#FF0000",
                         "data" => [
                             "first" => [
