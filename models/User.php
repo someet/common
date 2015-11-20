@@ -86,13 +86,10 @@ class User extends BaseUser
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
 
-            ['email', 'filter', 'filter' => 'trim'],
-            ['email', 'email'],
-            ['email', 'unique'],
             ['mobile', 'unique'],
             [['wechat_id'], 'unique'],
             [['last_login_at'], 'integer'],
-            [['safe', 'last_login_at'], 'safe'],
+            [['last_login_at'], 'safe'],
         ];
     }
 
@@ -267,6 +264,6 @@ class User extends BaseUser
     // 获得角色对象
     public function getAssignment()
     {
-        return $this->hasOne(AuthAssignment::className(), ['user_id' => 'id']);
+        return $this->hasMany(AuthAssignment::className(), ['user_id' => 'id']);
     }
 }
