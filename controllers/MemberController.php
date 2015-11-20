@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\components\DataValidationFailedException;
+use someet\common\models\Profile;
 use someet\common\models\User;
 use Yii;
 use yii\data\Pagination;
@@ -118,9 +119,9 @@ class MemberController extends Controller
     }
 
     // 设置用户为白名单
-    public function actionSetUserInWhiteList($user_id, $in_white_list=User::WHITE_LIST_YES) {
+    public function actionSetUserInWhiteList($user_id, $in_white_list='true') {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        if ( User::updateAll(['in_white_list' => $in_white_list], ['id' => $user_id]) ) {
+        if ( User::updateAll(['in_white_list' => $in_white_list == 'true' ? User::WHITE_LIST_YES : User::WHITE_LIST_NO], ['id' => $user_id]) ) {
             return [];
         } else {
             return false;
@@ -128,19 +129,31 @@ class MemberController extends Controller
     }
 
     //设置用户为PMA
-    public function actionSetUserAsPma($user_id) {
+    public function actionSetUserAsPma($user_id, $assign='true') {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        if ( User::updateAll(['in_white_list' => User::WHITE_LIST_YES], ['id' => $user_id]) ) {
-            return [];
+        $auth = Yii::$app->authManager;
+        $role = $auth->getRole('pma');
+        if ($assign == 'true') {
+            echo 1;
+            $auth->assign($role, $user_id);
         } else {
-            return false;
+            echo 2;
+            $auth->revoke($role, $user_id);
         }
-
+        return [];
     }
 
     //设置用户为发起人
-    public function actionSetUserAsFounder($user_id) {
-
+    public function actionSetUserAsFounder($user_id, $assign='true') {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $auth = Yii::$app->authManager;
+        $role = $auth->getRole('founder');
+        if ($assign == 'true') {
+            $auth->assign($role, $user_id);
+        } else {
+            $auth->revoke($role, $user_id);
+        }
+        return [];
     }
 
     public function actionIndex($id = null, $scenario = null, $perPage = 20)
@@ -152,7 +165,7 @@ class MemberController extends Controller
             ->where(['status' => User::STATUS_ACTIVE])
             ->orderBy(['id' => SORT_DESC]);
         if ($id != null) {
-            $users = $this->findOne($id);
+            $users = User::find()->where(['id' => $id])->with(['profile', 'assignment'])->asArray()->one();
         } elseif ($scenario == "total") {
             $countQuery = clone $query;
             $pagination = new Pagination([
@@ -245,26 +258,32 @@ class MemberController extends Controller
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = $this->findOne($id);
-        $post = Yii::$app->request->post();
-        if (isset($post['email'])) {
-            $model->email = $post['email'];
-//            if(!$model->validation('email')){
-//                throw new DataValidationFailedException($model->getFirstError('email'));
-//            }
-            if (!$model->save()) {
+        $data = Yii::$app->request->post();
+        if (isset($data['email'])) {
+            $model->email = $data['email'];
+            if (!$model->validate('email')) {
+                throw new DataValidationFailedException($model->getFirstError('email'));
+            }
+        }
+
+        if (!$model->save()) {
+            throw new ServerErrorHttpException();
+        }
+
+        if (isset($data['bio'])) {
+            $profile = Profile::find()->where(['user_id' => $model->id])->one();
+            $profile->bio = $data['bio'];
+            if (!$profile->validate('bio')) {
+                throw new DataValidationFailedException($profile->getFirstError('bio'));
+            }
+            if (!$profile->save()) {
                 throw new ServerErrorHttpException();
             }
-
-            return $this->findOne($id);
         }
-        if (isset($post['status'])) {
-            $model->status = $post['status'];
-            if (!$model->save()) {
-                throw new ServerErrorHttpException();
-            }
 
-            return $this->findOne($id);
-        }
+        \someet\common\models\AdminLog::saveLog($this->searchById($model->id), $model->primaryKey);
+
+        return $this->findOne($id);
     }
 
     public function findOne($id)
@@ -274,6 +293,14 @@ class MemberController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('该用户不存在');
+        }
+    }
+
+    public function searchById($id){
+        if (($model = User::findOne($id)) !== null) {
+            return json_encode($model->toArray());
+        } else {
+            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
     }
 }
