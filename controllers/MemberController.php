@@ -120,6 +120,7 @@ class MemberController extends Controller
 
     // 设置用户为白名单
 <<<<<<< HEAD
+<<<<<<< HEAD
     public function actionSetUserInWhiteList($user_id, $in_white_list='true') {
         Yii::$app->response->format = Response::FORMAT_JSON;
         if ( User::updateAll(['in_white_list' => $in_white_list == 'true' ? User::WHITE_LIST_YES : User::WHITE_LIST_NO], ['id' => $user_id]) ) {
@@ -128,6 +129,11 @@ class MemberController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
         if ( User::updateAll(['in_white_list' => $in_white_list], ['id' => $user_id]) ) {
 >>>>>>> complete set white list function
+=======
+    public function actionSetUserInWhiteList($user_id, $in_white_list='true') {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        if ( User::updateAll(['in_white_list' => $in_white_list == 'true' ? User::WHITE_LIST_YES : User::WHITE_LIST_NO], ['id' => $user_id]) ) {
+>>>>>>> save user info
             return [];
         } else {
             return false;
@@ -135,6 +141,7 @@ class MemberController extends Controller
     }
 
     //设置用户为PMA
+<<<<<<< HEAD
 <<<<<<< HEAD
     public function actionSetUserAsPma($user_id, $assign='true') {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -163,19 +170,39 @@ class MemberController extends Controller
         return [];
 =======
     public function actionSetUserAsPma($user_id) {
+=======
+    public function actionSetUserAsPma($user_id, $assign='true') {
+>>>>>>> save user info
         Yii::$app->response->format = Response::FORMAT_JSON;
-        if ( User::updateAll(['in_white_list' => User::WHITE_LIST_YES], ['id' => $user_id]) ) {
-            return [];
+        $auth = Yii::$app->authManager;
+        $role = $auth->getRole('pma');
+        if ($assign == 'true') {
+            echo 1;
+            $auth->assign($role, $user_id);
         } else {
-            return false;
+            echo 2;
+            $auth->revoke($role, $user_id);
         }
-
+        return [];
     }
 
     //设置用户为发起人
+<<<<<<< HEAD
     public function actionSetUserAsFounder($user_id) {
 
 >>>>>>> complete set white list function
+=======
+    public function actionSetUserAsFounder($user_id, $assign='true') {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $auth = Yii::$app->authManager;
+        $role = $auth->getRole('founder');
+        if ($assign == 'true') {
+            $auth->assign($role, $user_id);
+        } else {
+            $auth->revoke($role, $user_id);
+        }
+        return [];
+>>>>>>> save user info
     }
 
     public function actionIndex($id = null, $scenario = null, $perPage = 20)
