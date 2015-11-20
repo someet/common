@@ -267,6 +267,10 @@ class MemberController extends Controller
             }
         }
 
+        if (isset($data['password']) && $data['password']!='') {
+            $model->password = $data['password'];
+        }
+
         if (!$model->save()) {
             throw new ServerErrorHttpException();
         }
