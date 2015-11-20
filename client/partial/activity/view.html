@@ -205,7 +205,7 @@
                     <md-autocomplete md-selected-item="user" placeholder="请选择发起人" md-search-text="username" md-items="user in getUsers(username)" md-item-text="user.username">
                         <md-item-template>
                             <span md-highlight-text="principalname">{{user.username}}</span>
-                            <img width="50" style="border-radius:25px" src="{{user.profile.headimgurl}}" />
+                            <img ng-if="user" width="50" style="border-radius:25px" ng-src="{{user.profile.headimgurl}}" />
                         </md-item-template>
                         <md-not-found>
                             No matches found.
@@ -218,7 +218,7 @@
                     <md-autocomplete md-selected-item="principal" placeholder="请选择PMA" md-search-text="principalname" md-items="principal in getPrincipals(principalname)" md-item-text="principal.username">
                         <md-item-template>
                             <span md-highlight-text="principalname">{{principal.username}}</span>
-                            <img width="50" style="border-radius:25px" src="{{principal.profile.headimgurl}}" />
+                            <img width="50" style="border-radius:25px" ng-src="{{principal.profile.headimgurl}}" />
                         </md-item-template>
                         <md-not-found>
                             No matches found.
