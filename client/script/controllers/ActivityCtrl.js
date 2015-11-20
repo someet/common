@@ -413,8 +413,12 @@ angular.module('controllers', ['ngTagsInput'])
         newEntity.end_time = $scope.entity.end_time;
         newEntity.poster = $scope.poster;
         newEntity.group_code = $scope.group_code;
-        newEntity.created_by = $scope.user.id;
-        newEntity.principal = $scope.principal.id;
+        if ($scope.user) {
+          newEntity.created_by = $scope.user.id;
+        }
+        if ($scope.principal) {
+          newEntity.principal = $scope.principal.id;
+        }
 
         var tags = [];
         for (var k in $scope.tags) {
