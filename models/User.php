@@ -1,6 +1,7 @@
 <?php
 namespace someet\common\models;
 
+use dektrium\user\models\Account;
 use yii\behaviors\TimestampBehavior;
 
 use someet\common\models\queries\UserQuery;
@@ -31,6 +32,9 @@ class User extends BaseUser
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
+
+    const WHITE_LIST_YES = 1;
+    const WHITE_LIST_NO = 0;
 
     /**
      * @var string|null the current password value from form input
@@ -255,9 +259,34 @@ class User extends BaseUser
         return $this->save();
     }
 
-    // 活动
+    /**
+     * 获取用户根据用户的Openid
+     * @param $id 用户openid
+     * @return bool | string openid
+     */
+    public static function fetchUserByWechatOpenid($openid)
+    {
+        $account = Account::find()
+            ->where(['provider' => 'wechat'])
+            ->andWhere(['like', 'data', '{"openid":"'.$openid.'"'])
+            ->with(['user'])
+            ->one();
+        if ($account) {
+            return $account;
+        } else {
+            return false;
+        }
+    }
+
+    // 活动列表
     public function getActivity()
     {
         return $this->hasMany(Activity::className(), ['created_by' => 'id']);
+    }
+
+    // 获得角色对象
+    public function getAssignment()
+    {
+        return $this->hasOne(AuthAssignment::className(), ['user_id' => 'id']);
     }
 }
