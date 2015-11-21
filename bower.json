@@ -15,9 +15,10 @@
     "angular-jquery": "~0.2.1",
     "textAngular": "1.4.6",
     "bootstrap": "~3.3.5",
-    "jquery": "~2.1.4"
+    "jquery": "~2.1.4",
+    "angular": "~1.4.8"
   },
   "resolutions": {
-    "angular": "1.4.6"
+    "angular": "1.4.8"
   }
 }
