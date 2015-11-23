@@ -40,6 +40,8 @@ class User extends BaseUser
      * @var string|null the current password value from form input
      */
     protected $_password;
+    public $password_reset_token;
+    public $email_confirmation_token;
 
     /**
      * @return UserQuery custom query class with user scopes
@@ -90,7 +92,9 @@ class User extends BaseUser
             ['mobile', 'unique'],
             [['wechat_id'], 'unique'],
             [['last_login_at'], 'integer'],
-            [['last_login_at'], 'safe'],
+            ['password_reset_token', 'string', 'max' => 60],
+            ['email_confirmation_token', 'string', 'max' => 60],
+            [['last_login_at', 'password_reset_token', 'email_confirmation_token'], 'safe'],
         ];
     }
 
@@ -214,7 +218,7 @@ class User extends BaseUser
      */
     public function generateEmailConfirmationToken($save = false)
     {
-        //$this->email_confirmation_token = Yii::$app->security->generateRandomString() . '_' . time();
+        $this->email_confirmation_token = Yii::$app->security->generateRandomString() . '_' . time();
         if ($save) {
             return $this->save();
         }
@@ -251,8 +255,8 @@ class User extends BaseUser
      */
     public function confirmEmail()
     {
-        //$this->email_confirmation_token = null;
-        //$this->is_email_verified = 1;
+        $this->email_confirmation_token = null;
+        $this->is_email_verified = 1;
         return $this->save();
     }
 
