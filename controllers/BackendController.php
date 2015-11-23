@@ -17,17 +17,14 @@ use e96\sentry\SentryHelper;
 class BackendController extends Controller
 {
     /**
-     * 保存系统日志
-     * @param $data adminLog的数组
+     * @inheritdoc
      */
-    protected function SaveAdminLog($data)
+    public function actions()
     {
-        try {
-            $model = new AdminLog();
-            $model->load($data, '') && $model->save();
-        } catch (Exception $e) {
-            SentryHelper::captureWithMessage('后台日志记录失败', $e);
-        }
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ],
+        ];
     }
-
 }

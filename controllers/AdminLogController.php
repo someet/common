@@ -12,7 +12,7 @@ namespace app\controllers;
 use someet\common\models\AdminLog;
 use yii\data\ActiveDataProvider;
 
-class AdminLogController extends \yii\web\Controller
+class AdminLogController extends BackendController
 {
     public function actionIndex()
     {

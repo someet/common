@@ -13,20 +13,8 @@ use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
 
-class ActivityTypeController extends Controller
+class ActivityTypeController extends BackendController
 {
-
-    /**
-     * @inheritdoc
-     */
-    public function actions()
-    {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-        ];
-    }
 
     /**
      * @inheritdoc

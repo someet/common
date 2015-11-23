@@ -12,7 +12,7 @@ use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
 
-class SmsTemplateController extends Controller
+class SmsTemplateController extends BackendController
 {
 
     /**

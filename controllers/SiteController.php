@@ -9,7 +9,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use e96\sentry\SentryHelper;
 
-class SiteController extends Controller
+class SiteController extends BackendController
 {
     /**
      * @inheritdoc
@@ -31,18 +31,6 @@ class SiteController extends Controller
                     'test-sentry',
                     'fetch'
                 ]
-            ],
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function actions()
-    {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
             ],
         ];
     }

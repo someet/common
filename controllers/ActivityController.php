@@ -14,17 +14,7 @@ use yii\web\ServerErrorHttpException;
 class ActivityController extends BackendController
 {
 
-    /**
-     * @inheritdoc
-     */
-    public function actions()
-    {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-        ];
-    }
+
 
     /**
      * @inheritdoc

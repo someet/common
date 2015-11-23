@@ -15,20 +15,9 @@ use yii\web\Response;
 use yii\web\ServerErrorHttpException;
 
 
-class MemberController extends Controller
+class MemberController extends BackendController
 {
     public $enableCsrfValidation = false;
-    /**
-     * @inheritdoc
-     */
-    public function actions()
-    {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-        ];
-    }
 
     /**
      * @inheritdoc

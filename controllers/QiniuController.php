@@ -8,7 +8,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\Response;
 
-class QiniuController extends Controller
+class QiniuController extends BackendController
 {
     public $enableCsrfValidation = false;
     /**
