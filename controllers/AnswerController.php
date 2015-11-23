@@ -291,7 +291,7 @@ class AnswerController extends BackendController
         $answerModel = Answer::find()->where(['id' => $id])->with(['user', 'activity', 'activity.principal'])->asArray()->one();
 
         // 判断用户存在, 并且用户的手机号码不为空, 并且手机号码是合法的手机号
-        if ($answerModel['user'] && !is_empty($answerModel['user']['mobile']) && $this->isTelNumber($answerModel['user']['mobile'])) {
+        if ($answerModel['user'] && !empty($answerModel['user']['mobile']) && $this->isTelNumber($answerModel['user']['mobile'])) {
 
             //手机号
             $mobile = $model['user']['mobile'];
@@ -300,7 +300,7 @@ class AnswerController extends BackendController
             if ($pass_or_not) {
 
                 //获取pma的微信id
-                if ( $answerModel['activity']['principal'] ) {
+                if ( $answerModel['activity']['principal'] && !empty($answerModel['activity']['principal']['wechat_id'])) {
                     //pma的微信号
                     $pmaWechatId = $answerModel['activity']['principal']['wechat_id'];
                 } else {

@@ -18,22 +18,6 @@ angular.module('controllers')
           $scope.entity = entity;
         }
 
-        //移至未审核
-        $scope.remove = function(entity) {
-          entity.status = 10; //未审核
-          $answerManage.update(entity.id, entity).then(function(data) {
-            $mdToast.show($mdToast.simple()
-                .content('已移出')
-                .hideDelay(5000)
-                .position("top right"));
-          }, function(err){
-            $mdToast.show($mdToast.simple()
-                .content(err.toString())
-                .hideDelay(5000)
-                .position("top right"));
-          });
-        }
-
         //通过审核
         $scope.pass = function(entity) {
           $answerManage.filter(entity.id, 1).then(function(data) {
@@ -51,7 +35,7 @@ angular.module('controllers')
 
         //拒绝通过
         $scope.reject = function(entity) {
-          $answerManage.update(entity.id, 0).then(function(data) {
+          $answerManage.filter(entity.id, 0).then(function(data) {
             $mdToast.show($mdToast.simple()
                 .content('已拒绝')
                 .hideDelay(5000)
