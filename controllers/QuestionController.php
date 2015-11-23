@@ -87,47 +87,66 @@ class QuestionController extends BackendController
         $response->format = Response::FORMAT_JSON;
 
         $data = $request->post();
+
+        //验证三个问题不能为空
+        if (!isset($data['questionItemList'])) {
+            Yii::error('表单的三个问题不能为空');
+            return ['msg' => '三个问题不能为空'];
+        }
+
+        //验证必须是三个问题
         $questionItemList = $data['questionItemList'];
+        if (count($questionItemList)!=3) {
+            Yii::error('请设置三个问题');
+            return ['msg' => '请设置三个问题'];
+        }
+
         $model = new Question;
 
+        //开启事务
         $transaction = $model->getDb()->beginTransaction();
-        $flag = true;
+
+        //问题标记
+        $questionFlag = true;
+
+        //尝试保存问题主记录
         if ($model->load($data, '') && $model->save()) {
             $question_id = $model->id;
-            if (!empty($questionItemList)) {
-                foreach ($questionItemList as $questionItem) {
-                    $questionItemModel = new QuestionItem();
-                    $questionItemModel->question_id = $question_id;
-                    if ($questionItemModel->load($questionItem, '') && $questionItemModel->save()) {
 
-                    } elseif ($questionItemModel->hasErrors()) {
-                        $flag = false;
-                        $errors = $model->getFirstErrors();
-                        //throw new DataValidationFailedException(array_pop($errors));
-                    } else {
-                        throw new ServerErrorHttpException();
-                    }
+            //遍历三个问题
+            foreach ($questionItemList as $questionItem) {
+                $questionItemModel = new QuestionItem();
+                $questionItemModel->question_id = $question_id;
+
+                //尝试保存问题项
+                if (!$questionItemModel->load($questionItem, '') || !$questionItemModel->save()) {
+                    $questionFlag = false;
+                    Yii::error('设置问题项出错');
                 }
             }
 
-            if ($flag) {
+            //判断是否有错误
+            if ($questionFlag) {
+
+                //提交事务
                 $transaction->commit();
+
+                //记录后台操作记录日志
                 \someet\common\models\AdminLog::saveLog($this->searchById($model->id), $model->primaryKey);
+
+                //返回问题对象
                 return Question::find()
                     ->where(['id' => $model->id])
                     ->asArray()
                     ->with('questionItemList')
                     ->one();
-            } else {
-                $transaction->rollBack();
-                throw new DataValidationFailedException('设置问题异常');
             }
-        } elseif ($model->hasErrors()) {
-            $errors = $model->getFirstErrors();
-            throw new DataValidationFailedException(array_pop($errors));
-        } else {
-            throw new ServerErrorHttpException();
         }
+
+        //回滚事务
+        $transaction->rollBack();
+        Yii::error('设置问题出错');
+        return ['msg' => '设置问题出错'];
     }
 
     /**
