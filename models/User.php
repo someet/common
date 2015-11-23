@@ -260,25 +260,6 @@ class User extends BaseUser
         return $this->save();
     }
 
-    /**
-     * 获取用户根据用户的Openid
-     * @param $id 用户openid
-     * @return bool | string openid
-     */
-    public static function fetchUserByWechatOpenid($openid)
-    {
-        $account = Account::find()
-            ->where(['provider' => 'wechat'])
-            ->andWhere(['like', 'data', '{"openid":"'.$openid.'"'])
-            ->with(['user'])
-            ->one();
-        if ($account) {
-            return $account;
-        } else {
-            return false;
-        }
-    }
-
     // 活动列表
     public function getActivity()
     {
