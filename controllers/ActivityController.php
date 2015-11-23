@@ -366,6 +366,7 @@ class ActivityController extends BackendController
             }
         }
 
+        //发布活动的时候有值
         if (isset($data['status'])) {
             $model->status = $data['status'];
             if (!$model->validate('status')) {

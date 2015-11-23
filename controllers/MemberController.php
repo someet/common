@@ -134,10 +134,8 @@ class MemberController extends Controller
         $auth = Yii::$app->authManager;
         $role = $auth->getRole('pma');
         if ($assign == 'true') {
-            echo 1;
             $auth->assign($role, $user_id);
         } else {
-            echo 2;
             $auth->revoke($role, $user_id);
         }
         return [];
