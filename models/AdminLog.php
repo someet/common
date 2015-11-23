@@ -73,6 +73,5 @@ class AdminLog extends \yii\db\ActiveRecord
         $model->handle_id = $handle_id;
         $model->title =  $model->admin_name.' '.$model->action.' '.$model->controller;
         $model->save(false);
-
     }
 }
