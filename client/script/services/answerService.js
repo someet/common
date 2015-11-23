@@ -23,6 +23,11 @@ angular.module('backendServices')
             return data;
           });
         },
+        filter: function (id, pass_or_not) {
+          return $http.post('/answer/filter?id=' + id + '&pass_or_not=' + pass_or_not).then(function (data) {
+            return data;
+          });
+        },
         fetchByActivityId: function (activity_id) {
           return $http.get('/answer/view-by-activity-id?activity_id=' + activity_id).then(function (data) {
             return data;

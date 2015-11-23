@@ -27,6 +27,20 @@ class Answer extends \yii\db\ActiveRecord
     /* 审核拒绝 */
     const STATUS_REVIEW_REJECT  = 30;
 
+    /* 短信未发送 */
+    const STATUS_SMS_YET = 0;
+    /* 短信发送成功 */
+    const STATUS_SMS_SUCC = 1;
+    /* 短信发送失败 */
+    const STATUS_SMS_Fail = 2;
+
+    /* 微信模板消息未发送 */
+    const STATUS_WECHAT_TEMPLATE_YET = 0;
+    /* 微信模板消息发送成功 */
+    const STATUS_WECHAT_TEMPLATE_SUCC = 1;
+    /* 微信模板消息发送失败 */
+    const STATUS_WECHAT_TEMPLATE_Fail = 2;
+
     /**
      * @inheritdoc
      */

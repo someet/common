@@ -36,8 +36,7 @@ angular.module('controllers')
 
         //通过审核
         $scope.pass = function(entity) {
-          entity.status = 20; //通过
-          $answerManage.update(entity.id, entity).then(function(data) {
+          $answerManage.filter(entity.id, 1).then(function(data) {
             $mdToast.show($mdToast.simple()
                 .content('已通过')
                 .hideDelay(5000)
@@ -52,8 +51,7 @@ angular.module('controllers')
 
         //拒绝通过
         $scope.reject = function(entity) {
-          entity.status = 30; //不通过
-          $answerManage.update(entity.id, entity).then(function(data) {
+          $answerManage.update(entity.id, 0).then(function(data) {
             $mdToast.show($mdToast.simple()
                 .content('已拒绝')
                 .hideDelay(5000)
