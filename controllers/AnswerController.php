@@ -255,7 +255,7 @@ class AnswerController extends BackendController
                 $template_id = Yii::$app->params['sms.success_template_id'];
 
                 //获取通过的消息模板并填充内容, 设置颜色
-                $template_data = $this->fetchSuccessWechatTemplateData($template_id, $openid, $account, $account->activity);
+                $template_data = $this->fetchSuccessWechatTemplateData($template_id, $openid, $account, $model->activity);
             } else {
 
                 //获取模板id
@@ -266,7 +266,7 @@ class AnswerController extends BackendController
 
                 $template_id = Yii::$app->params['sms.failed_template_id'];
                 //获取通过的消息模板并填充内容, 设置颜色
-                $template_data = $this->fetchFailedWechatTemplateData($template_id, $openid, $account, $account->activity);
+                $template_data = $this->fetchFailedWechatTemplateData($template_id, $openid, $account, $model->activity);
             }
 
             //获取微信组件
