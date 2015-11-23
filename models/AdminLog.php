@@ -51,6 +51,7 @@ class AdminLog extends \yii\db\ActiveRecord
      * 保存日志
      * @param $result 例如登录成功等
      * @param $handle_id 如果操作了某个对象, 则将对象的id填充进来
+     * @return null
      */
     public static function saveLog($result,$handle_id=null){
         $model = new self;
