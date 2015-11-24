@@ -9,8 +9,9 @@ COPY php/redis.tgz /home/redis.tgz
 RUN composer self-update \
   && composer install --no-progress \
   # install bower gulp
-  && npm install gulp \
-  && npm install \
+  && npm install -g cnpm --registry=https://registry.npm.taobao.org \
+  && cnpm install gulp \
+  && cnpm install \
   && bower install --allow-root --config.interactive=false \
   && gulp dist \
   && mkdir -p runtime web/assets \
