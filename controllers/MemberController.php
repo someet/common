@@ -46,8 +46,7 @@ class MemberController extends BackendController
                     'fetch-black-list',
                     'fetch-pma-list',
                     'fetch-founder-list',
-                    'set-user-as-pma',
-                    'set-user-as-founder',
+                    'update-assignment',
                     'set-user-in-white-list',
                 ]
             ],
@@ -107,6 +106,67 @@ class MemberController extends BackendController
         return $users;
     }
 
+    /**
+     * 更新用户的角色
+     * @param $user_id 需要更新的用户ID
+     * @param $role_name 更新的角色名称
+     * @param $assign_or_not 是赋权还是撤权
+     */
+    public function actionUpdateAssignment($user_id, $role_name, $assign_or_not) {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        //参数检查
+        if ($user_id<1 || empty($role_name) || !in_array($assign_or_not, [0, 1])) {
+            return ['msg' => '参数不正确'];
+        }
+
+        //获取权限管理组件
+        $auth = Yii::$app->authManager;
+
+        //获取角色列表
+        $roles = $auth->getRoles();
+
+        //角色判断
+        if (!array_key_exists($role_name, $roles)) {
+            //提示角色不存在
+            return ['msg' => '角色'.$role_name.'不存在'];
+        }
+
+        //根据角色名获取对象的角色对象
+        $role = $auth->getRole($role_name);
+
+        //判断是否越权操作了
+//        if ($auth->hasChild())
+
+        //判断是赋权还是撤权
+        if ($assign_or_not) {
+            //判断当前状态是未赋权的状态再进行赋权, 否则提示已经赋权
+            if ($auth->getAssignment($role_name, $user_id)) {
+                //提示已经授权, 无需再进行赋权
+                return ['msg' => '该角色已经赋权'];
+            }
+            //如果上面不成立则表示未赋权, 可以尝试进行赋权
+            if ($auth->assign($role, $user_id)) {
+                return ['msg' => '更新角色成功'];
+            } else {
+                return ['msg' => '更新角色失败'];
+            }
+        } else {
+            //判断当前状态是否有该权限, 如果没有则不能进行撤权
+            if (!$auth->getAssignment($role_name, $user_id)) {
+                //提示当前用户没有该角色权限, 无法撤权
+                return ['msg' => '当前用户没有该角色权限, 无法撤权'];
+            }
+            //如果上面的不成立表示有权限，可以尝试进行撤权
+            if ($auth->revoke($role, $user_id)) {
+                //提示撤权成功
+                return ['msg' => '撤权成功'];
+            } else {
+                //提示撤权失败
+                return ['msg' => '撤权失败'];
+            }
+        }
+    }
+
     // 设置用户为白名单
     public function actionSetUserInWhiteList($user_id, $in_white_list='true') {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -115,33 +175,6 @@ class MemberController extends BackendController
         } else {
             return false;
         }
-    }
-
-    //设置用户为PMA
-    public function actionSetUserAsPma($user_id, $assign='true') {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $auth = Yii::$app->authManager;
-        $role = $auth->getRole('pma');
-        if ($assign == 'true') {
-            $auth->assign($role, $user_id);
-        } else {
-            $auth->revoke($role, $user_id);
-        }
-        return [];
-    }
-
-    //设置用户为发起人
-    public function actionSetUserAsFounder($user_id, $assign='true')
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $auth = Yii::$app->authManager;
-        $role = $auth->getRole('founder');
-        if ($assign == 'true') {
-            $auth->assign($role, $user_id);
-        } else {
-            $auth->revoke($role, $user_id);
-        }
-        return [];
     }
 
     public function actionIndex($id = null, $scenario = null, $perPage = 20)

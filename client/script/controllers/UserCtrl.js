@@ -208,12 +208,12 @@ angular.module('controllers')
         console.log('设置用户为白名单成功');
       });
 
-      var assignPMA = $scope.data.cb == true;
+      var assignPMA = $scope.data.cb == true ? 1 : 0;
       $userManage.setUserAsPma(user_id, assignPMA).then(function (data) {
         console.log('设置用户为PMA成功');
       });
 
-      var assignFounder = $scope.data.cb2 == true;
+      var assignFounder = $scope.data.cb2 == true ? 1 : 0;
       $userManage.setUserAsFounder(user_id, assignFounder).then(function (data) {
         console.log('设置用户为Founder成功');
       });
