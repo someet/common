@@ -5,7 +5,7 @@ $config = [
     'vendorPath' => '/var/www/vendor',
     'timeZone' => 'Asia/Chongqing',
     'language' => 'zh-CN',
-    'bootstrap' => ['log', 'raven'],
+    'bootstrap' => ['log', 'raven', 'newrelic'],
     'components' => [
         'cache' => [
             'class' => 'yii\redis\Cache',
@@ -41,6 +41,10 @@ $config = [
                 'username' => \DockerEnv::get('SMTP_USER'),
                 'password' => \DockerEnv::get('SMTP_PASSWORD'),
             ],
+        ],
+        'newrelic' => [
+            'class' => 'bazilio\yii\newrelic\Newrelic',
+            'name' => \DockerEnv::get('NEW_RELIC_APP_NAME'),
         ],
         'raven' => [
             'class' => 'e96\sentry\ErrorHandler',
