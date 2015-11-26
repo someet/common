@@ -21,7 +21,7 @@ angular.module('someetTextAngular', ['textAngular'])
           }
 
           $uploadService.upload(file).then(function(filename) {
-            var imgsrc = 'http://7te94f.com2.z0.glb.qiniucdn.com/' + filename;
+            var imgsrc = 'http://7xn8h3.com2.z0.glb.qiniucdn.com/' + filename;
 
             insertAction('insertImage', imgsrc, true);
           });
