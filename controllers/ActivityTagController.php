@@ -13,6 +13,13 @@ use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
 
+/**
+ *
+ * 活动标签控制器
+ *
+ * @author Maxwell Du <maxwelldu@someet.so>
+ * @package app\controllers
+ */
 class ActivityTagController extends BackendController
 {
 
@@ -225,6 +232,12 @@ class ActivityTagController extends BackendController
         return [];
     }
 
+    /**
+     * 查看一个活动标签对象
+     * @param integer $id 活动标签id
+     * @return ActivityTag 活动标签对象
+     * @throws NotFoundHttpException 如果没有找到活动标签则抛出404异常
+     */
     public function actionView($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -251,9 +264,10 @@ class ActivityTagController extends BackendController
     }
 
     /**
-     * @param $id
-     * @return ActivityTag
-     * @throws NotFoundHttpException
+     * 查找活动标签对象
+     * @param integer $id 活动标签ID
+     * @return ActivityTag 活动标签对象
+     * @throws NotFoundHttpException 如果找不到活动标签对象, 则抛出活动异常
      */
     public function findModel($id)
     {

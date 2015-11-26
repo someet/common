@@ -8,7 +8,9 @@ config/console-local.php
 /web/static/
 /web/partial/
 /.idea/
+/apidoc
 
 composer.lock
 *.swp
 .vimrc
+.DS_Store

@@ -11,6 +11,13 @@ use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
 
+/**
+ *
+ * 专题控制器
+ *
+ * @author Maxwell Du <maxwelldu@someet.so>
+ * @package app\controllers
+ */
 class SpecialController extends BackendController
 {
 
@@ -249,6 +256,12 @@ class SpecialController extends BackendController
         return [];
     }
 
+    /**
+     * 显示单个专题项
+     * @param integer $id 专题ｉｄ
+     * @return Special 专题对象
+     * @throws NotFoundHttpException
+     */
     public function actionView($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -258,8 +271,9 @@ class SpecialController extends BackendController
     }
 
     /**
-     * @param $id
-     * @return Special
+     * 查找一个专题
+     * @param integer $id 专题ID
+     * @return Special 专题对象
      * @throws NotFoundHttpException
      */
     public function findModel($id)

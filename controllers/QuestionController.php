@@ -12,6 +12,13 @@ use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
 
+/**
+ *
+ * 表单控制器
+ *
+ * @author Maxwell Du <maxwelldu@someet.so>
+ * @package app\controllers
+ */
 class QuestionController extends BackendController
 {
 
@@ -132,7 +139,7 @@ class QuestionController extends BackendController
                 $transaction->commit();
 
                 //记录后台操作记录日志
-                \someet\common\models\AdminLog::saveLog($this->searchById($model->id), $model->primaryKey);
+                \someet\common\models\AdminLog::saveLog('添加表单', $model->primaryKey);
 
                 //返回问题对象
                 return Question::find()
@@ -238,7 +245,7 @@ class QuestionController extends BackendController
             }
         }
 
-        \someet\common\models\AdminLog::saveLog($this->searchById($model->id), $model->primaryKey);
+        \someet\common\models\AdminLog::saveLog('更新表单', $model->primaryKey);
         return Question::find()
             ->where(['id' => $model->id])
             ->asArray()
@@ -278,6 +285,11 @@ class QuestionController extends BackendController
         return [];
     }
 
+    /**
+     * 查看一个表单
+     * @param integer $id 表单ID
+     * @return array|null|\yii\db\ActiveRecord
+     */
     public function actionView($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -290,7 +302,11 @@ class QuestionController extends BackendController
         return $model;
     }
 
-
+    /**
+     * 根据活动ID查看表单
+     * @param integer $activity_id 活动ID
+     * @return array|null|\yii\db\ActiveRecord
+     */
     public function actionViewByActivityId($activity_id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -304,9 +320,10 @@ class QuestionController extends BackendController
     }
 
     /**
-     * @param $id
-     * @return Question
-     * @throws NotFoundHttpException
+     * 查找表单
+     * @param integer $id 表单ID
+     * @return Question 表单对象
+     * @throws NotFoundHttpException 如果查找不到则抛出404异常
      */
     public function findModel($id)
     {
@@ -319,11 +336,4 @@ class QuestionController extends BackendController
         }
     }
 
-    public function searchById($id){
-        if (($model = Question::findOne($id)) !== null) {
-            return json_encode($model->toArray());
-        } else {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
-    }
 }

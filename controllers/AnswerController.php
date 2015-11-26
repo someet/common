@@ -15,6 +15,13 @@ use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
 
+/**
+ *
+ * 报名控制器
+ *
+ * @author Maxwell Du <maxwelldu@someet.so>
+ * @package app\controllers
+ */
 class AnswerController extends BackendController
 {
 
@@ -362,10 +369,11 @@ class AnswerController extends BackendController
         }
     }
 
-    public function actionDelete($id)
-    {
-    }
-
+    /**
+     * 查看一个报名的情况
+     * @param integer $id 表单ID
+     * @return array|null|\yii\db\ActiveRecord
+     */
     public function actionView($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -379,6 +387,11 @@ class AnswerController extends BackendController
     }
 
     // 查看一个活动下面的问题答案
+    /**
+     * 根据活动id查看报名列表
+     * @param integer $activity_id 活动ID
+     * @return array|\yii\db\ActiveRecord[]
+     */
     public function actionViewByActivityId($activity_id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -411,9 +424,10 @@ class AnswerController extends BackendController
     }
 
     /**
-     * @param $id
-     * @return Answer
-     * @throws NotFoundHttpException
+     * 查找报名
+     * @param  integer $id 报名id
+     * @return Answer 报名对象
+     * @throws NotFoundHttpException 如果找不到则抛出404异常
      */
     public function findModel($id)
     {
