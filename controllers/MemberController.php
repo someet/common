@@ -44,8 +44,7 @@ class MemberController extends BackendController
                     'search-principal',
                     'fetch-white-list',
                     'fetch-black-list',
-                    'fetch-pma-list',
-                    'fetch-founder-list',
+                    'fetch-user-list-by-role-name',
                     'update-assignment',
                     'set-user-in-white-list',
                 ]
@@ -70,39 +69,43 @@ class MemberController extends BackendController
         return $users;
     }
 
-    //PMA列表
-    public function actionFetchPmaList()
-    {
+    /**
+     * 获取用户列表, 根据角色名称
+     * @param $role_name 角色名称
+     * @return array 用户列表
+     */
+    public function actionFetchUserListByRoleName($role_name) {
         Yii::$app->response->format = Response::FORMAT_JSON;
+        //检查参数
+        if (empty($role_name)) {
+            return ['msg' => '角色名称不能为空'];
+        }
 
+        //获取权限管理组件
+        $auth = Yii::$app->authManager;
+
+        //获取角色列表
+        $roles = $auth->getRoles();
+
+        //角色判断
+        if (!array_key_exists($role_name, $roles)) {
+            //提示角色不存在
+            return ['msg' => '角色'.$role_name.'不存在'];
+        }
+
+        //查询列表
         $users = User::find()
             ->joinWith('assignment')
             ->where([
                 'status' => User::STATUS_ACTIVE,
-                'auth_assignment.item_name' => 'pma',
+                'auth_assignment.item_name' => $role_name,
             ])
             ->with(['profile'])
             ->orderBy(['id' => SORT_DESC])
             ->asArray()
             ->all();
-        return $users;
-    }
 
-    //PMA列表
-    public function actionFetchFounderList()
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-
-        $users = User::find()
-            ->joinWith('assignment')
-            ->where([
-                'status' => User::STATUS_ACTIVE,
-                'auth_assignment.item_name' => 'founder',
-            ])
-            ->with(['profile'])
-            ->orderBy(['id' => SORT_DESC])
-            ->asArray()
-            ->all();
+        //返回列表
         return $users;
     }
 

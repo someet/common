@@ -22,16 +22,9 @@ angular.module('backendServices')
           return userList;
         });
       },
-      //PMA
-      fetchPmaList: function() {
-        return $http.get('/member/fetch-pma-list', {
-        }).then(function(userList) {
-          return userList;
-        });
-      },
-      //发起人
-      fetchFounderList: function() {
-        return $http.get('/member/fetch-founder-list', {
+      //获取用户的列表, 根据角色名
+      fetchUserListByRoleName: function(role_name) {
+        return $http.get('/member/fetch-user-list-by-role-name?role_name='+role_name, {
         }).then(function(userList) {
           return userList;
         });

@@ -85,12 +85,16 @@ angular.module('controllers')
         });
         // pma
       } else if (listtype=='pma') {
-        $userManage.fetchPmaList().then(function(data) {
+        $userManage.fetchUserListByRoleName(listtype).then(function(data) {
           $scope.userList = data;
         });
         //发起人
       } else if (listtype=='founder') {
-        $userManage.fetchFounderList().then(function(data) {
+        $userManage.fetchUserListByRoleName(listtype).then(function(data) {
+          $scope.userList = data;
+        });
+      } else if (listtype=='admin') {
+        $userManage.fetchUserListByRoleName(listtype).then(function(data) {
           $scope.userList = data;
         });
 
