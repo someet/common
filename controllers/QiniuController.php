@@ -8,6 +8,13 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\Response;
 
+/**
+ *
+ * 七牛控制器
+ *
+ * @author Maxwell Du <maxwelldu@someet.so>
+ * @package app\controllers
+ */
 class QiniuController extends BackendController
 {
     public $enableCsrfValidation = false;
@@ -30,6 +37,11 @@ class QiniuController extends BackendController
         ];
     }
 
+    /**
+     * 创建一个完整的URL
+     * @return array
+     * @throws BadRequestHttpException
+     */
     public function actionCreateCompletelyUrl()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -47,6 +59,10 @@ class QiniuController extends BackendController
         ];
     }
 
+    /**
+     * 获取上传的TOKEN
+     * @return array
+     */
     public function actionGetUploadToken()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;

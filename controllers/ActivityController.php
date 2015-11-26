@@ -11,10 +11,15 @@ use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
 
+/**
+ *
+ * 活动控制器
+ *
+ * @author Maxwell Du <maxwelldu@someet.so>
+ * @package app\controllers
+ */
 class ActivityController extends BackendController
 {
-
-
 
     /**
      * @inheritdoc
@@ -44,7 +49,7 @@ class ActivityController extends BackendController
     /**
      * 根据活动类型查询活动列表
      *
-     * @param $type_id
+     * @param integer $type_id 活动类型ID
      * @return array|\yii\db\ActiveRecord[]
      */
     public function actionListByTypeId($type_id=0)
@@ -181,7 +186,7 @@ class ActivityController extends BackendController
     }
 
     /**
-     * 修改
+     * 修改一个活动
      *
      * POST 提交到 /activity/update?id=10
      *
@@ -436,6 +441,11 @@ class ActivityController extends BackendController
         return [];
     }
 
+    /**
+     * 查看单个活动详情
+     * @param integer $id 活动ID
+     * @return array|null|\yii\db\ActiveRecord
+     */
     public function actionView($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -457,9 +467,10 @@ class ActivityController extends BackendController
     }
 
     /**
-     * @param $id
-     * @return Activity
-     * @throws NotFoundHttpException
+     * 查找活动
+     * @param integer $id 活动ID
+     * @return Activity 活动对象
+     * @throws NotFoundHttpException 如果没有查找到则抛出404异常
      */
     public function findModel($id)
     {

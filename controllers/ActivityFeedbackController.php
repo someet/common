@@ -13,6 +13,13 @@ use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
 
+/**
+ *
+ * 活动反馈控制器
+ *
+ * @author Maxwell Du <maxwelldu@someet.so>
+ * @package app\controllers
+ */
 class ActivityFeedbackController extends BackendController
 {
 
@@ -120,39 +127,10 @@ class ActivityFeedbackController extends BackendController
     }
 
     /**
-     * 删除反馈
-     * POST 请求 /activity-feedkback/delete?id=10
-     *
-     * @param $id
-     * @return array
-     *
-     * 成功
-     *
-     * ~~~
-     * {
-     *   "success": "1",
-     *   "data": [],
-     *   "status_code": 200
-     * }
-     * ~~~
-     *
-     * @throws NotFoundHttpException
-     * @throws ServerErrorHttpException
-     * @throws \Exception
+     * 查看单个活动反馈
+     * @param integer $activity_id 活动ID
+     * @return array|\yii\db\ActiveRecord[]
      */
-    public function actionDelete($id)
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $model = $this->findModel($id);
-
-        $model->status = ActivityFeedback::STATUS_DELETED;
-        if ($model->save() === false) {
-            throw new ServerErrorHttpException('删除失败');
-        }
-
-        return [];
-    }
-
     public function actionView($activity_id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -168,9 +146,10 @@ class ActivityFeedbackController extends BackendController
     }
 
     /**
-     * @param $id
-     * @return ActivityFeedback
-     * @throws NotFoundHttpException
+     * 查找活动反馈
+     * @param integer $id 活动反馈ID
+     * @return ActivityFeedback 活动反馈对象
+     * @throws NotFoundHttpException 如果活动反馈找不到则抛出404异常
      */
     public function findModel($id)
     {

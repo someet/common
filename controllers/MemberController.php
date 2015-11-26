@@ -14,7 +14,13 @@ use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
 
-
+/**
+ *
+ * 联系人控制器
+ *
+ * @author Maxwell Du <maxwelldu@someet.so>
+ * @package app\controllers
+ */
 class MemberController extends BackendController
 {
     public $enableCsrfValidation = false;
@@ -52,7 +58,10 @@ class MemberController extends BackendController
         ];
     }
 
-    //白名单列表
+    /**
+     * 获取白名单列表
+     * @return array|\yii\db\ActiveRecord[]
+     */
     public function actionFetchWhiteList()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -71,7 +80,7 @@ class MemberController extends BackendController
 
     /**
      * 获取用户列表, 根据角色名称
-     * @param $role_name 角色名称
+     * @param string $role_name 角色名称
      * @return array 用户列表
      */
     public function actionFetchUserListByRoleName($role_name) {
@@ -111,9 +120,9 @@ class MemberController extends BackendController
 
     /**
      * 更新用户的角色
-     * @param $user_id 需要更新的用户ID
-     * @param $role_name 更新的角色名称
-     * @param $assign_or_not 是赋权还是撤权
+     * @param integer $user_id 需要更新的用户ID
+     * @param string $role_name 更新的角色名称
+     * @param integer $assign_or_not 是赋权还是撤权
      */
     public function actionUpdateAssignment($user_id, $role_name, $assign_or_not) {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -170,7 +179,12 @@ class MemberController extends BackendController
         }
     }
 
-    // 设置用户为白名单
+    /**
+     * 设置用户为白名单
+     * @param integer $user_id 用户ID
+     * @param string $in_white_list 是否是白名单 'true' 和 'false'
+     * @return array|bool
+     */
     public function actionSetUserInWhiteList($user_id, $in_white_list='true') {
         Yii::$app->response->format = Response::FORMAT_JSON;
         if ( User::updateAll(['in_white_list' => $in_white_list == 'true' ? User::WHITE_LIST_YES : User::WHITE_LIST_NO], ['id' => $user_id]) ) {
@@ -180,6 +194,13 @@ class MemberController extends BackendController
         }
     }
 
+    /**
+     * 联系人列表
+     * @param integer $id
+     * @param string $scenario 场景
+     * @param int $perPage
+     * @return array|int|null|\yii\db\ActiveRecord|\yii\db\ActiveRecord[]
+     */
     public function actionIndex($id = null, $scenario = null, $perPage = 20)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -214,7 +235,7 @@ class MemberController extends BackendController
 
     /**
      * 搜索用户, 供给活动分配发起人的自动完成功能使用
-     * @param $username 用户名
+     * @param string $username 用户名
      * @return array
      */
     public function actionSearch($username) {
@@ -236,7 +257,7 @@ class MemberController extends BackendController
 
     /**
      * 搜索PMA, 供通知时使用
-     * @param $username 用户名
+     * @param string $username 用户名
      * @return array
      */
     public function actionSearchPrincipal($username) {
@@ -258,7 +279,12 @@ class MemberController extends BackendController
         return $users;
     }
 
-
+    /**
+     * 创建一个联系人
+     * @return null|static
+     * @throws DataValidationFailedException
+     * @throws ServerErrorHttpException
+     */
     public function actionCreate()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -278,6 +304,14 @@ class MemberController extends BackendController
 
     }
 
+    /**
+     * 更新一个联系人
+     * @param integer $id 联系人ID
+     * @return null|static
+     * @throws DataValidationFailedException
+     * @throws NotFoundHttpException
+     * @throws ServerErrorHttpException
+     */
     public function actionUpdate($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -309,11 +343,17 @@ class MemberController extends BackendController
             }
         }
 
-        \someet\common\models\AdminLog::saveLog($this->searchById($model->id), $model->primaryKey);
+        \someet\common\models\AdminLog::saveLog('更新联系人', $model->primaryKey);
 
         return $this->findOne($id);
     }
 
+    /**
+     * 查找一个联系人
+     * @param integer $id 联系人ID
+     * @return null|static
+     * @throws NotFoundHttpException 查找不到联系人则抛出404异常
+     */
     public function findOne($id)
     {
         $model = User::findOne($id);
@@ -324,11 +364,4 @@ class MemberController extends BackendController
         }
     }
 
-    public function searchById($id){
-        if (($model = User::findOne($id)) !== null) {
-            return json_encode($model->toArray());
-        } else {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
-    }
 }

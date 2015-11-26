@@ -9,6 +9,13 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use e96\sentry\SentryHelper;
 
+/**
+ *
+ * 站点控制器
+ *
+ * @author Maxwell Du <maxwelldu@someet.so>
+ * @package app\controllers
+ */
 class SiteController extends BackendController
 {
     /**
@@ -36,7 +43,7 @@ class SiteController extends BackendController
     }
 
     /**
-     * Render the homepage
+     * 站点首页
      */
     public function actionIndex()
     {
@@ -44,19 +51,7 @@ class SiteController extends BackendController
     }
 
     /**
-     * 测试sentry
-     */
-    public function actionTestSentry()
-    {
-        try {
-            throw new Exception('FAIL');
-        } catch (Exception $e) {
-            SentryHelper::captureWithMessage('Fail to save model', $e);
-        }
-    }
-
-    /**
-     * User logout
+     * 用户退出
      */
     public function actionLogout()
     {

@@ -11,6 +11,13 @@ use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
 
+/**
+ *
+ * 表单项控制器
+ *
+ * @author Maxwell Du <maxwelldu@someet.so>
+ * @package app\controllers
+ */
 class QuestionItemController extends BackendController
 {
 
@@ -174,59 +181,4 @@ class QuestionItemController extends BackendController
         return $this->findModel($id);
     }
 
-    /**
-     * 删除问题项
-     * POST 请求 /question-item/delete?id=10
-     *
-     * @param $id
-     * @return array
-     *
-     * 成功
-     *
-     * ~~~
-     * {
-     *   "success": "1",
-     *   "data": [],
-     *   "status_code": 200
-     * }
-     * ~~~
-     *
-     * @throws NotFoundHttpException
-     * @throws ServerErrorHttpException
-     * @throws \Exception
-     */
-    public function actionDelete($id)
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $model = $this->findModel($id);
-        if ($model->delete() === false) {
-            throw new ServerErrorHttpException('删除失败');
-        }
-
-        return [];
-    }
-
-    public function actionView($id)
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $model = $this->findModel($id);
-
-        return $model;
-    }
-
-    /**
-     * @param $id
-     * @return ActivityType
-     * @throws NotFoundHttpException
-     */
-    public function findModel($id)
-    {
-        $model = ActivityType::findOne($id);
-
-        if (isset($model)) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException("类型不存在");
-        }
-    }
 }

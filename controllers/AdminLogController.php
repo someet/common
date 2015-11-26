@@ -12,6 +12,13 @@ namespace app\controllers;
 use someet\common\models\AdminLog;
 use yii\data\ActiveDataProvider;
 
+/**
+ *
+ * 后台管理日志控制器
+ *
+ * @author Maxwell Du <maxwelldu@someet.so>
+ * @package app\controllers
+ */
 class AdminLogController extends BackendController
 {
     public function actionIndex()
@@ -29,6 +36,11 @@ class AdminLogController extends BackendController
         ]);
     }
 
+    /**
+     * 查看单个后台管理日志
+     * @param integer $id 操作日志记录id
+     * @return string
+     */
     public function actionView($id){
         return $this->render('view',[
             'model'=>AdminLog::findOne($id),

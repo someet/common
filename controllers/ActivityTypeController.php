@@ -13,6 +13,13 @@ use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
 
+/**
+ *
+ * 活动类型控制器
+ *
+ * @author Maxwell Du <maxwelldu@someet.so>
+ * @package app\controllers
+ */
 class ActivityTypeController extends BackendController
 {
 
@@ -236,10 +243,15 @@ class ActivityTypeController extends BackendController
             throw new ServerErrorHttpException('删除失败');
         }
 
-        \someet\common\models\AdminLog::saveLog($this->searchById($model->id), $model->primaryKey);
+        \someet\common\models\AdminLog::saveLog('删除活动分类', $model->primaryKey);
         return [];
     }
 
+    /**
+     * 查看一个活动分类
+     * @param integer $id 活动分类ID
+     * @return ActivityType 活动分类对象
+     */
     public function actionView($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -249,9 +261,10 @@ class ActivityTypeController extends BackendController
     }
 
     /**
-     * @param $id
-     * @return ActivityType
-     * @throws NotFoundHttpException
+     * 查找活动分类
+     * @param integer $id 活动分类id
+     * @return ActivityType 活动分类对象
+     * @throws NotFoundHttpException 如果找不到活动分类则抛出404异常
      */
     public function findModel($id)
     {
@@ -264,11 +277,4 @@ class ActivityTypeController extends BackendController
         }
     }
 
-    public function searchById($id){
-        if (($model = ActivityType::findOne($id)) !== null) {
-            return json_encode($model->toArray());
-        } else {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
-        }
-    }
 }

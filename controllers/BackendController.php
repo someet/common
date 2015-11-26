@@ -14,6 +14,13 @@ use Yii;
 use yii\web\Controller;
 use e96\sentry\SentryHelper;
 
+/**
+ *
+ * 后台通用控制器
+ *
+ * @author Maxwell Du <maxwelldu@someet.so>
+ * @package app\controllers
+ */
 class BackendController extends Controller
 {
     /**

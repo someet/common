@@ -12,6 +12,13 @@ use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
 
+/**
+ *
+ * 消息模板控制器
+ *
+ * @author Maxwell Du <maxwelldu@someet.so>
+ * @package app\controllers
+ */
 class SmsTemplateController extends BackendController
 {
 
@@ -238,6 +245,12 @@ class SmsTemplateController extends BackendController
         return [];
     }
 
+    /**
+     * 查看单个消息模板
+     * @param integer $id 消息模板ID
+     * @return SmsTemplate 消息模板对象
+     * @throws NotFoundHttpException
+     */
     public function actionView($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -247,9 +260,10 @@ class SmsTemplateController extends BackendController
     }
 
     /**
-     * @param $id
-     * @return SmsTemplate
-     * @throws NotFoundHttpException
+     * 查找一个消息模板
+     * @param integer $id 消息模板ID
+     * @return SmsTemplate 消息模板对象
+     * @throws NotFoundHttpException 如果没找到则抛出404异常
      */
     public function findModel($id)
     {
