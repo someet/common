@@ -14,7 +14,7 @@ angular.module('backendServices')
           if (angular.isDefined(token) && (now - timestamp < threshold)) {
             return $q.when(token);
           } else {
-            return $http.get('/qiniu/upload-token', {
+            return $http.get('/qiniu/get-upload-token', {
               params: {
                 t: new Date().getTime()
               }

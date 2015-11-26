@@ -4,6 +4,7 @@ var app = angular.module('SomeetBackendApp', [
   'ngMessages',
   'ngRoute',
   'ngLodash',
+  'ngFileUpload',
   'controllers',
   'ui.bootstrap',
   'someetPagination',
