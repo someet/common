@@ -73,6 +73,7 @@ gulp.task('copy-bundle', function(){
       './bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js',
       './bower_components/angular-jquery/dist/angular-jquery.min.js',
       './bower_components/ng-lodash/build/ng-lodash.min.js',
+      './bower_components/ng-file-upload/ng-file-upload.min.js',
       './bower_components/textAngular/dist/textAngular-rangy.min.js',
       './bower_components/textAngular/dist/textAngular-sanitize.min.js',
       './bower_components/textAngular/dist/textAngular.min.js',
