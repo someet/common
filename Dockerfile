@@ -8,6 +8,8 @@ COPY php/redis.tgz /home/redis.tgz
 
 RUN composer self-update \
   && composer install --no-progress \
+  # 优化自动加载
+  && composer dump-autoload --optimize \
   # install bower gulp
   && npm install -g cnpm --registry=https://registry.npm.taobao.org \
   && cnpm install gulp \
