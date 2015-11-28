@@ -46,8 +46,7 @@ gulp.task('copy-css-map', function(){
 gulp.task('copy-bundle', function(){
   gulp.src([
     './bower_components/angular-material/angular-material.min.css',
-    './bower_components/textAngular/dist/textAngular.css',
-
+    './bower_components/textAngular/src/textAngular.css',
     './bower_components/ng-tags-input/ng-tags-input.min.css',
     './bower_components/angular-bootstrap/ui-bootstrap-csp.css',
     './bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css',
