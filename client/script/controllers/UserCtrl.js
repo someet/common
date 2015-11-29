@@ -50,6 +50,16 @@ angular.module('controllers')
     //  $scope.userList = data;
     //});
 
+    // tab
+    $scope.isActive = function(type_id) {        
+      var route = "/member/list/"+type_id;
+      if (type_id === "all"){
+        route = "/member"
+      }
+      console.log("member/list = " + route + "--" + $location.path());
+      return route === $location.path();
+      // return .indexOf(route) != -1;
+    }
 
     // 查看用户详情
     $scope.viewUser = function(user) {
