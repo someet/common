@@ -168,7 +168,7 @@ angular.module('controllers')
 
 
   }])
-  .controller('UserUpdateCtrl', ['$scope', '$routeParams', '$userManage', function($scope, $routeParams, $userManage){
+  .controller('UserUpdateCtrl', ['$scope', '$location', '$routeParams', '$userManage','$mdToast', function($scope, $location, $routeParams, $userManage, $mdToast){
     $scope.$parent.pageName = '用户详情';
 
     var userId = $routeParams.id;
@@ -198,6 +198,11 @@ angular.module('controllers')
       alert(err);
     });
 
+          // 取消
+      $scope.cancel = function() {
+        $location.path('/member');
+      }
+
     $scope.updateUser = function() {
       var userData = {
         email: $scope.user.email,
@@ -223,9 +228,16 @@ angular.module('controllers')
       });
 
       $userManage.update(user_id, userData).then(function(data){
-        alert("修改成功");
+        $mdToast.show($mdToast.simple()
+              .content('设置用户属性成功')
+              .hideDelay(5000)
+              .position("top right"));
+        $location.path('/member');
       }, function (err) {
-        alert(err);
+        $mdToast.show($mdToast.simple()
+              .content('设置用户属性发生错误：' + err + '')
+              .hideDelay(5000)
+              .position("top right"));
       });
     }
   }])
