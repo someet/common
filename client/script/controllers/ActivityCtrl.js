@@ -177,16 +177,14 @@ angular.module('controllers', ['ngTagsInput'])
       }
 
       // tab
-      $scope.isActive = function(type_id) {
-        console.log(type_id);
+      $scope.isActive = function(type_id) {        
         var route = "/activity/list/"+type_id
         return route === $location.path();
         // return .indexOf(route) != -1;
       }
 
       //点击增加类型按钮
-      $scope.onTypeAddClicked = function() {
-        console.log("type add")
+      $scope.onTypeAddClicked = function() {        
         $scope.showAddForm = true;
       };
 

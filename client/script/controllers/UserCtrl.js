@@ -50,6 +50,16 @@ angular.module('controllers')
     //  $scope.userList = data;
     //});
 
+    // tab
+    $scope.isActive = function(type_id) {        
+      var route = "/member/list/"+type_id;
+      if (type_id === "all"){
+        route = "/member"
+      }
+      console.log("member/list = " + route + "--" + $location.path());
+      return route === $location.path();
+      // return .indexOf(route) != -1;
+    }
 
     // 查看用户详情
     $scope.viewUser = function(user) {
@@ -168,7 +178,7 @@ angular.module('controllers')
 
 
   }])
-  .controller('UserUpdateCtrl', ['$scope', '$routeParams', '$userManage', function($scope, $routeParams, $userManage){
+  .controller('UserUpdateCtrl', ['$scope', '$location', '$routeParams', '$userManage','$mdToast', function($scope, $location, $routeParams, $userManage, $mdToast){
     $scope.$parent.pageName = '用户详情';
 
     var userId = $routeParams.id;
@@ -198,6 +208,11 @@ angular.module('controllers')
       alert(err);
     });
 
+          // 取消
+      $scope.cancel = function() {
+        $location.path('/member');
+      }
+
     $scope.updateUser = function() {
       var userData = {
         email: $scope.user.email,
@@ -223,9 +238,16 @@ angular.module('controllers')
       });
 
       $userManage.update(user_id, userData).then(function(data){
-        alert("修改成功");
+        $mdToast.show($mdToast.simple()
+              .content('设置用户属性成功')
+              .hideDelay(5000)
+              .position("top right"));
+        $location.path('/member');
       }, function (err) {
-        alert(err);
+        $mdToast.show($mdToast.simple()
+              .content('设置用户属性发生错误：' + err + '')
+              .hideDelay(5000)
+              .position("top right"));
       });
     }
   }])

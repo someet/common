@@ -1,5 +1,9 @@
 <div layout="column" flex id="content">
   <input type="hidden" ng-model="user.id" />
+
+  <div layout row>
+    
+  <div style="width:40%;margin:0 10% 20px 0;">
   <legend>用户资料修改</legend>
   <div class="media" >
     <a class="pull-left">
@@ -7,7 +11,6 @@
     <md-button class="md-raised" ng-click="">设置头像</md-button>
   </div>
 
-  <div style="width:50%;">
     <md-input-container flex="40">
       <label>用户名</label>
       <input type="text" ng-model="user.username" readonly required />
@@ -22,6 +25,15 @@
     </md-input-container>
   </div>
 
+  <div style="width:40%;">
+  <legend>用户行为管理</legend>
+  <div layout="row" layout-wrap>
+    <md-button class="md-raised md-accent" ng-click="">增加黄牌一张</md-button>
+    <md-button class="md-raised md-warn" ng-click="">清空黑暗历史</md-button>
+  </div>
+  </div>
+
+  </div>
   <br/>
   <legend>设置用户身份</legend>
   <div layout="row" layout-wrap>
@@ -55,12 +67,9 @@
     </div>
   </div>
 
-  <br/>
-  <legend>用户行为管理</legend>
-  <div layout="row" layout-wrap>
-    <md-button class="md-raised md-accent" ng-click="">增加黄牌一张</md-button>
-    <md-button class="md-raised md-warn" ng-click="">清空黑暗历史</md-button>
-  </div>
+  <md-input-container layout="row" class="pull-right">
+    <md-button class="md-raised md-primary" ng-click="updateUser()">确认修改</md-button>
+    <md-button class="md-raised md-warn" ng-click="cancel()">取消</md-button>
+  </md-input-container>
 
-  <md-button class="md-raised md-primary" ng-click="updateUser()">确认修改</md-button>
 </div>

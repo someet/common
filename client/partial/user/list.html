@@ -2,22 +2,22 @@
   <div class="container">
     <div>
       <ul class="nav nav-tabs">
-        <li class="active">
+        <li ng-class="{active:isActive('all')}" >
           <a href="/#/member">全部</a>
         </li>
-        <li>
+        <li ng-class="{active:isActive('black')}">
           <a href="/#/member/list/black">黑名单</a>
         </li>
-        <li>
+        <li ng-class="{active:isActive('white')}">
           <a href="/#/member/list/white">白名单</a>
         </li>
-        <li>
+        <li ng-class="{active:isActive('pma')}">
           <a href="/#/member/list/pma">PMA</a>
         </li>
-        <li>
+        <li ng-class="{active:isActive('founder')}">
           <a href="/#/member/list/founder">发起人</a>
         </li>
-          <li>
+          <li ng-class="{active:isActive('admin')}">
               <a href="/#/member/list/admin">管理员</a>
           </li>
       </ul>
