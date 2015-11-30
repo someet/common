@@ -8,11 +8,11 @@ COPY opcache.ini /usr/local/etc/php/conf.d/
 RUN composer self-update \
   && composer install --no-progress \
   # 优化自动加载
-  && composer dump-autoload --optimize \
+  #&& composer dump-autoload --optimize \
   # install bower
   && npm install -g cnpm --registry=https://registry.npm.taobao.org \
-  && npm install gulp \
-  && npm install \
+  && cnpm install gulp \
+  && cnpm install \
   && bower install --allow-root --config.interactive=false \
   && gulp dist \
   && mkdir -p runtime web/assets \
