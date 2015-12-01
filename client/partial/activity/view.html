@@ -96,7 +96,7 @@
                     </div>
                     <div flex="">
                         <label>PMA</label>
-                        <md-autocomplete md-selected-item="principal" placeholder="请选择PMA" md-search-text="principalname" md-items="principal in getPrincipals(principalname)" md-item-text="principal.username">
+                        <md-autocomplete md-selected-item="principal" placeholder="请选择PMA" md-search-text="principalname" md-items="principal in getPrincipals(principalname)" md-item-text="principal.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
                             <md-item-template>
                                 <span md-highlight-text="principalname">{{principal.username}}</span>
                                 <img width="50" style="border-radius:25px" ng-src="{{principal.profile.headimgurl}}" />                
