@@ -123,8 +123,12 @@ $config = [
             'enableUnconfirmedLogin' => true,
             'enablePasswordRecovery' => true,
             'confirmWithin' => 21600,
-            'rememberFor' => 1209600,
+            'rememberFor' => 1209600, //如果没有点击记住密码则默认保持1天的登录时间
             'admins' => ['admin'],
+            'modelMap' => [
+                'User' => 'someet\common\models\User',
+                'Profile' => 'someet\common\models\Profile',
+            ],
         ],
     ],
     'params' => require('/var/www/html/config/params.php'),
