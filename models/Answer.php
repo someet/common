@@ -17,6 +17,9 @@ use Yii;
  * @property integer $created_at
  * @property integer $updated_at
  * @property integer $status
+ * @property integer $wechat_template_push_at
+ * @property integer $wechat_template_is_send
+ * @property integer $wechat_template_msg_id
  */
 class Answer extends \yii\db\ActiveRecord
 {
@@ -56,7 +59,7 @@ class Answer extends \yii\db\ActiveRecord
     {
         return [
             [['question_id'], 'required'],
-            [['question_id', 'activity_id', 'user_id', 'is_finish', 'is_send', 'send_at', 'created_at', 'updated_at', 'status'], 'integer'],
+            [['question_id', 'activity_id', 'user_id', 'is_finish', 'is_send', 'send_at', 'created_at', 'updated_at', 'status', 'wechat_template_push_at', 'wechat_template_is_send', 'wechat_template_msg_id'], 'integer'],
             [['question_id', 'user_id'], 'unique', 'targetAttribute' => ['question_id', 'user_id'], 'message' => 'The combination of 问题ID and 用户ID has already been taken.'],
             [['status'], 'default', 'value' => static::STATUS_REVIEW_YET]
         ];
