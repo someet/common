@@ -275,7 +275,7 @@ class CronController  extends \yii\console\Controller
             $account = Account::find()->where([
                 'provider' => 'wechat',
                 'user_id' => $answer->user->id,
-            ])->one();
+            ])->with('user')->one();
 
             //如果绑定了微信对象
             if ($account) {
