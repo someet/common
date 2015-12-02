@@ -3,6 +3,8 @@ namespace app\commands;
 
 use Yii;
 use someet\common\models\Answer;
+use dektrium\user\models\Account;
+use someet\common\models\User;
 
 class CronController  extends \yii\console\Controller
 {
@@ -21,13 +23,18 @@ class CronController  extends \yii\console\Controller
 
     /**
      * 获取成功的微信模板消息
-     * @param $template_id 模板id
      * @param $openid openid
      * @param $account Account对象
      * @param $activity 活动对象
      * @return array
      */
-    private function fetchSuccessWechatTemplateData($template_id, $openid, $account, $activity) {
+    private function fetchSuccessWechatTemplateData($openid, $account, $activity) {
+        //获取成功的模板消息id
+        $template_id = Yii::$app->params['sms.success_template_id'];
+        if (!$template_id) {
+            //记录一个错误, 请设置成功的模板消息id
+            Yii::error('请设置成功的模板消息id');
+        }
         $start_time = date('Y年m月d日', $activity->start_time);
         $data = [
             "touser" => "{$openid}",
@@ -48,7 +55,7 @@ class CronController  extends \yii\console\Controller
                     "color" =>"#173177"
                 ],
                 "keyword3" => [
-                    "value" => "{$activity->start_time}",
+                    "value" => "{$start_time}",
                     "color" => "#173177"
                 ],
                 "keyword4" => [
@@ -66,12 +73,17 @@ class CronController  extends \yii\console\Controller
 
     /*
      * 获取等待的微信模板消息
-     * @param $template_id 模板id
      * @param $openid openid
      * @param $activity 活动对象
      * @return array
      */
-    private function fetchWaitWechatTemplateData($template_id, $openid, $activity) {
+    private function fetchWaitWechatTemplateData($openid, $activity) {
+        //获取等待的模板消息id
+        $template_id = Yii::$app->params['sms.wait_template_id'];
+        if (!$template_id) {
+            //记录一个错误, 请设置等待的模板消息id
+            Yii::error('请设置等待的模板消息id');
+        }
         $start_time = date('Y年m月d日', $activity->start_time);
         $data = [
             "touser" => "{$openid}",
@@ -106,13 +118,18 @@ class CronController  extends \yii\console\Controller
 
     /*
      * 获取失败的微信模板消息
-     * @param $template_id 模板id
      * @param $openid openid
      * @param $account Account对象
      * @param $activity 活动对象
      * @return array
      */
-    private function fetchFailedWechatTemplateData($template_id, $openid, $account, $activity) {
+    private function fetchFailedWechatTemplateData($openid, $account, $activity) {
+        //获取失败的模板消息id
+        $template_id = Yii::$app->params['sms.failed_template_id'];
+        if (!$template_id) {
+            //记录一个错误, 请设置失败的模板消息id
+            Yii::error('请设置失败的模板消息id');
+        }
         $start_time = date('Y年m月d日', $activity->start_time);
         $data = [
             "touser" => "{$openid}",
@@ -190,34 +207,50 @@ class CronController  extends \yii\console\Controller
      */
     public function actionSendReviewNoti()
     {
+        //默认的PMA的微信id
+        $default_pma_wechat_id = \DockerEnv::get('DEFAULT_PRINCIPAL');
+        //获取微信组件
+        $wechat = Yii::$app->wechat;
+
         // 给审核的用户发短信, 包括通过的, 等待的, 拒绝的
         $answerList = Answer::find()->where(['is_send' => '0'])->with(['user', 'activity', 'activity.principal'])->all();
+        //遍历列表
         foreach($answerList as $answer) {
+
+            //判断报名的用户是否存在
             if (!$answer->user) {
-                Yii::error('报名的用户不存在, 请检查');
+                //记录一个错误, 提示计划任务中报名的用户不存在, 请检查
+                Yii::error('计划任务中活动id为'.$answer->activity->id.' 的报名的用户不存在, 请检查');
+                //继续下一个
                 continue;
             }
 
-            // 判断用户存在, 并且用户的手机号码不为空, 并且手机号码是合法的手机号
+            // 用户的手机号码不为空, 并且手机号码是合法的手机号
             if (!empty($answer->user->mobile) && $this->isTelNumber($answer->user->mobile)) {
 
                 //手机号
                 $mobile = $answer->user->mobile;
 
-                //等待的短信内容
+                //设置默认的短信为等待的短信内容
                 $smsData = $this->fetchWaitSmsData($answer->activity->title);
+                //判断状态是通过
                 if ($answer->status = Answer::STATUS_REVIEW_PASS) {
 
                     // 给一个默认的pma的微信id[此id可能是我们工作人员的微信id]
-                    $pma_wechat_id = \DockerEnv::get('DEFAULT_PRINCIPAL');
+                    $pma_wechat_id = $default_pma_wechat_id;
 
                     //获取pma的微信id
                     if ($answer->activity->principal && !empty($answer->activity->principal->wechat_id)) {
-                        //pma的微信号
+                        //设置pma的微信号为当前活动的pma
                         $pma_wechat_id = $answer->activity->principal->wechat_id;
+                    } else {
+                        //记录一个错误, 提示活动id为多少的活动没有设置pma, 或者对应pma的微信id为空
+                        Yii::error("活动id为: {$answer->activity->id} 的活动没有设置pma, 或者对应pma的微信id为空");
                     }
+                    //获取通过的短信内容
                     $smsData = $this->fetchSuccessSmsData($answer->activity->title, $pma_wechat_id);
                 } elseif ($answer->status = Answer::STATUS_REVIEW_REJECT) {
+                    //获取不通过的短信内容
                     $smsData = $this->fetchFailSmsData($answer->activity->title);
                 }
 
@@ -227,9 +260,6 @@ class CronController  extends \yii\console\Controller
                     //修改短信发送状态为成功, 以及修改发送时间
                     Answer::updateAll(['is_send' => Answer::STATUS_SMS_SUCC, 'send_at' => time()],
                         ['id' => $answer->id]);
-
-                    //修改短信的标记为true
-                    $smsFlag = true;
                 } else {
                     //修改短信发送状态为失败, 以及修改发送时间[方便以后单独发送短信]
                     Answer::updateAll(['is_send' => Answer::STATUS_SMS_Fail, 'send_at' => time()],
@@ -237,46 +267,47 @@ class CronController  extends \yii\console\Controller
                 }
             } else {
                 //报一个错误, 用户手机号码有误, 无法发送短信
-                Yii::error('用户手机号码未设置, 或者设置的不正确');
-                return ['msg' => '用户手机号码有误, 无法发送短信'];
+                Yii::error('报名用户id: '.$answer->user->id.' 的用户手机号码未设置, 或者设置的不正确');
             }
 
-            $wechat = Yii::$app->wechat;
             //获取绑定的微信对象
             /* @var $account Account */
             $account = Account::find()->where([
                 'provider' => 'wechat',
                 'user_id' => $answer->user->id,
-            ])->with(['user'])->one();
+            ])->with('user')->one();
+
             //如果绑定了微信对象
             if ($account) {
                 //获取微信的openid
                 $openid = $account->client_id;
 
-                $template_id = Yii::$app->params['sms.wait_template_id'];
-                $templateData = $this->fetchWaitWechatTemplateData($template_id, $openid);
+                //设置模板消息默认为等待的模板消息内容
+                $templateData = $this->fetchWaitWechatTemplateData($openid, $answer->activity);
+                //如果通过
                 if ($answer->status == Answer::STATUS_REVIEW_PASS) {
-                    $templateData = $this->fetchSuccessWechatTemplateData($template_id, $openid, $answer->user, $answer->activity);
+                    //获取通过的模板消息内容
+                    $templateData = $this->fetchSuccessWechatTemplateData($openid, $answer->user, $answer->activity);
                 } elseif ($answer->status == Answer::STATUS_REVIEW_REJECT) {
-                    $templateData = $this->fetchFailedWechatTemplateData($template_id, $openid, $answer->user, $answer->activity);
+                    //获取不通过的模板消息内容
+                    $templateData = $this->fetchFailedWechatTemplateData($openid, $answer->user, $answer->activity);
                 }
 
-                //发送模板消息
-                $msgid = $wechat->sendTemplateMessage($templateData);
-                if ($msgid) { //模板消息发送成功
+                //尝试发送模板消息
+                if ($msgid = $wechat->sendTemplateMessage($templateData)) { //模板消息发送成功
 
-                    //记录一下消息模板发送的时间和状态
-                    Answer::updateAll(['wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_SUCC, 'wechat_template_push_at' => time()], ['id' => $answer->id]);
-
+                    //更新报名的模板消息的id, 发送的时间和状态
+                    Answer::updateAll(['wechat_template_msg_id' => $msgid, 'wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_SUCC, 'wechat_template_push_at' => time()], ['id' => $answer->id]);
                 } else {
 
-                    //记录一下消息模板发送的时间和状态, 状态为失败,后面可以单独的重新发送模板消息
+                    //更新报名的模板消息发送的时间和状态, 状态为失败,后面可以单独的重新发送模板消息
                     Answer::updateAll(['wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_Fail, 'wechat_template_push_at' => time()], ['id' => $answer->id]);
                 }
+            } else {
+                //记录一个错误, 当前报名用户没有绑定微信
+                Yii::error('报名用户id: '.$answer->user->id.' 的用户没有绑定微信');
             }
-
-
-        }
+        } // foreach结束
     }
 
     /**
