@@ -111,6 +111,17 @@ $config = [
             'apiKey' => \DockerEnv::get('YUNPIAN_API_KEY'),
             'useFileTransport' => false, // 如果该值为 true 则不会真正的发送短信，而是把内容写到文件里面，测试环境经常需要用到！
         ],
+        'authClientCollection' => [
+            'class'   => \yii\authclient\Collection::className(),
+            'clients' => [
+                'weixin' => [
+                    'class' => 'dektrium\user\clients\Weixin',
+                    'clientId' => \DockerEnv::get('WEIXIN_OPEN_APP_ID'),
+                    'clientSecret' => \DockerEnv::get('WEIXIN_OPEN_APP_SECRET'),
+
+                ],
+            ],
+        ],
     ],
     'modules' => [
         'rbac' => [
