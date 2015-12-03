@@ -259,7 +259,6 @@ angular.module('controllers', ['ngTagsInput'])
     function($scope, $routeParams, $location, $activityManage, $activityTypeManage, $qupload, $qiniuManage, $mdToast) {
       $scope.$parent.pageName = '活动详情';
 
-
       // 搜索用户功能
       $scope.getUsers = function(query) {
         console.log(query);
@@ -381,7 +380,7 @@ angular.module('controllers', ['ngTagsInput'])
           $scope.poster = data.poster;
           $scope.group_code = data.group_code;
           $scope.user = data.user;
-          $scope.principal = data.principal;
+          $scope.pma = data.pma;
 
           var tags = [];
           for (var k in data.tags) {
@@ -391,7 +390,7 @@ angular.module('controllers', ['ngTagsInput'])
           $scope.tags = tags;
 
         }, function(err) {
-          $location.path('/activity/list/0');
+          alert(err);
         });
       }
 
@@ -414,8 +413,8 @@ angular.module('controllers', ['ngTagsInput'])
         if ($scope.user) {
           newEntity.created_by = $scope.user.id;
         }
-        if ($scope.principal) {
-          newEntity.principal = $scope.principal.id;
+        if ($scope.pma) {
+          newEntity.principal = $scope.pma.id;
         }
 
         var tags = [];

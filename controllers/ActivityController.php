@@ -456,8 +456,8 @@ class ActivityController extends BackendController
                 'type',
                 'user',
                 'user.profile',
-                'principal',
-                'principal.profile',
+                'pma',
+                'pma.profile',
                 'tags'
             ])
             ->asArray()
