@@ -7,6 +7,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">可调整状态用户</h3>
+                <!--如果发送时间不为空则表示发送短信失败, 考虑重新发送-->
             </div>
         </div>
 
@@ -40,7 +41,7 @@
         </div>
 
         <ul class="list-group">
-            <li class="list-group-item" ng-repeat="entity in list | filter: {status:'20', is_send: '1'}" ng-click="view(entity)">
+            <li class="list-group-item" ng-repeat="entity in list | filter: {is_send: '1'}" ng-click="view(entity)">
                 <div class="media">
                     <a class="pull-left" href="">
                         <img width="50" height="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像"/></a>

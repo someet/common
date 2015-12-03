@@ -213,7 +213,7 @@ class CronController  extends \yii\console\Controller
         $wechat = Yii::$app->wechat;
 
         // 给审核的用户发短信, 包括通过的, 等待的, 拒绝的
-        $answerList = Answer::find()->where(['is_send' => '0'])->with(['user', 'activity', 'activity.principal'])->all();
+        $answerList = Answer::find()->where(['is_send' => '0'])->with(['user', 'activity', 'activity.pma'])->all();
         //遍历列表
         foreach($answerList as $answer) {
 
@@ -240,9 +240,9 @@ class CronController  extends \yii\console\Controller
                     $pma_wechat_id = $default_pma_wechat_id;
 
                     //获取pma的微信id
-                    if ($answer->activity->principal && !empty($answer->activity->principal->wechat_id)) {
+                    if ($answer->activity->pma && !empty($answer->activity->pma->wechat_id)) {
                         //设置pma的微信号为当前活动的pma
-                        $pma_wechat_id = $answer->activity->principal->wechat_id;
+                        $pma_wechat_id = $answer->activity->pma->wechat_id;
                     } else {
                         //记录一个错误, 提示活动id为多少的活动没有设置pma, 或者对应pma的微信id为空
                         Yii::error("活动id为: {$answer->activity->id} 的活动没有设置pma, 或者对应pma的微信id为空");
@@ -254,15 +254,15 @@ class CronController  extends \yii\console\Controller
                     $smsData = $this->fetchFailSmsData($answer->activity->title);
                 }
 
-                //使用云片发送短消息
-                if ($smsStatus = Yii::$app->yunpian->sendSms($mobile, $smsData)) {
+                //尝试发送短消息
+                if (Yii::$app->yunpian->sendSms($mobile, $smsData)) {
 
                     //修改短信发送状态为成功, 以及修改发送时间
                     Answer::updateAll(['is_send' => Answer::STATUS_SMS_SUCC, 'send_at' => time()],
                         ['id' => $answer->id]);
                 } else {
                     //修改短信发送状态为失败, 以及修改发送时间[方便以后单独发送短信]
-                    Answer::updateAll(['is_send' => Answer::STATUS_SMS_Fail, 'send_at' => time()],
+                    Answer::updateAll(['is_send' => Answer::STATUS_SMS_YET, 'send_at' => time()],
                         ['id' => $answer->id]);
                 }
             } else {

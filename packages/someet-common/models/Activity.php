@@ -150,7 +150,7 @@ class Activity extends \yii\db\ActiveRecord
     }
 
     // PMA
-    public function getPrincipal()
+    public function getPma()
     {
         return $this->hasOne(User::className(), ['id' => 'principal']);
     }
