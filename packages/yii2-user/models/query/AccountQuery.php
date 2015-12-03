@@ -62,7 +62,7 @@ class AccountQuery extends ActiveQuery
     {
         return $this->andWhere([
             'provider'  => $client->getId(),
-            'client_id' => $client->getUserAttributes()['id'],
+            'union_id' => $client->getUserAttributes()['id'],
         ]);
     }
 }

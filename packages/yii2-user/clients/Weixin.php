@@ -69,7 +69,7 @@ class Weixin extends OAuth2
     protected function defaultNormalizeUserAttributeMap()
     {
         return [
-            'id' => 'openid',
+            'id' => 'unionid',
             'username' => 'nickname',
         ];
     }
