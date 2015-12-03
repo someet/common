@@ -265,47 +265,48 @@ class CronController  extends \yii\console\Controller
                     Answer::updateAll(['is_send' => Answer::STATUS_SMS_YET, 'send_at' => time()],
                         ['id' => $answer->id]);
                 }
+
+                //尝试发送微信模板消息
+                //获取绑定的微信对象
+                /* @var $account Account */
+                $account = Account::find()->where([
+                    'provider' => 'wechat',
+                    'user_id' => $answer->user->id,
+                ])->with('user')->one();
+
+                //如果绑定了微信对象
+                if ($account) {
+                    //获取微信的openid
+                    $openid = $account->client_id;
+
+                    //设置模板消息默认为等待的模板消息内容
+                    $templateData = $this->fetchWaitWechatTemplateData($openid, $answer->activity);
+                    //如果通过
+                    if ($answer->status == Answer::STATUS_REVIEW_PASS) {
+                        //获取通过的模板消息内容
+                        $templateData = $this->fetchSuccessWechatTemplateData($openid, $answer->user, $answer->activity);
+                    } elseif ($answer->status == Answer::STATUS_REVIEW_REJECT) {
+                        //获取不通过的模板消息内容
+                        $templateData = $this->fetchFailedWechatTemplateData($openid, $answer->user, $answer->activity);
+                    }
+
+                    //尝试发送模板消息
+                    if ($msgid = $wechat->sendTemplateMessage($templateData)) { //模板消息发送成功
+
+                        //更新报名的模板消息的id, 发送的时间和状态
+                        Answer::updateAll(['wechat_template_msg_id' => $msgid, 'wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_SUCC, 'wechat_template_push_at' => time()], ['id' => $answer->id]);
+                    } else {
+
+                        //更新报名的模板消息发送的时间和状态, 状态为失败,后面可以单独的重新发送模板消息
+                        Answer::updateAll(['wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_Fail, 'wechat_template_push_at' => time()], ['id' => $answer->id]);
+                    }
+                } else {
+                    //记录一个错误, 当前报名用户没有绑定微信
+                    Yii::error('报名用户id: '.$answer->user->id.' 的用户没有绑定微信');
+                }
             } else {
                 //报一个错误, 用户手机号码有误, 无法发送短信
                 Yii::error('报名用户id: '.$answer->user->id.' 的用户手机号码未设置, 或者设置的不正确');
-            }
-
-            //获取绑定的微信对象
-            /* @var $account Account */
-            $account = Account::find()->where([
-                'provider' => 'wechat',
-                'user_id' => $answer->user->id,
-            ])->with('user')->one();
-
-            //如果绑定了微信对象
-            if ($account) {
-                //获取微信的openid
-                $openid = $account->client_id;
-
-                //设置模板消息默认为等待的模板消息内容
-                $templateData = $this->fetchWaitWechatTemplateData($openid, $answer->activity);
-                //如果通过
-                if ($answer->status == Answer::STATUS_REVIEW_PASS) {
-                    //获取通过的模板消息内容
-                    $templateData = $this->fetchSuccessWechatTemplateData($openid, $answer->user, $answer->activity);
-                } elseif ($answer->status == Answer::STATUS_REVIEW_REJECT) {
-                    //获取不通过的模板消息内容
-                    $templateData = $this->fetchFailedWechatTemplateData($openid, $answer->user, $answer->activity);
-                }
-
-                //尝试发送模板消息
-                if ($msgid = $wechat->sendTemplateMessage($templateData)) { //模板消息发送成功
-
-                    //更新报名的模板消息的id, 发送的时间和状态
-                    Answer::updateAll(['wechat_template_msg_id' => $msgid, 'wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_SUCC, 'wechat_template_push_at' => time()], ['id' => $answer->id]);
-                } else {
-
-                    //更新报名的模板消息发送的时间和状态, 状态为失败,后面可以单独的重新发送模板消息
-                    Answer::updateAll(['wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_Fail, 'wechat_template_push_at' => time()], ['id' => $answer->id]);
-                }
-            } else {
-                //记录一个错误, 当前报名用户没有绑定微信
-                Yii::error('报名用户id: '.$answer->user->id.' 的用户没有绑定微信');
             }
         } // foreach结束
     }
