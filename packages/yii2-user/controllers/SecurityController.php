@@ -135,13 +135,20 @@ class SecurityController extends Controller
      */
     public function authenticate(ClientInterface $client)
     {
+        $wechatAccount = $this->finder->findAccount()->byWechatClient($client)->one();
         $account = $this->finder->findAccount()->byClient($client)->one();
 
         if ($account === null) {
-            $account = Account::create($client);
+            if ($client->getId() == 'weixin_backend' && $wechatAccount === null) {
+                echo '后台禁止用户注册, 请先在微信端登录';
+                exit;
+            } else {
+                $account = Account::create($client);
+            }
         }
 
         if ($account->user instanceof User) {
+
             if ($account->user->isBlocked) {
                 Yii::$app->session->setFlash('danger', Yii::t('user', 'Your account has been blocked.'));
                 $this->action->successUrl = Url::to(['/user/security/login']);

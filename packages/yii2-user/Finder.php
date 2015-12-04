@@ -117,6 +117,18 @@ class Finder extends Object
     }
 
     /**
+     * Finds a user by the given unionid.
+     *
+     * @param string $unionid UnionId to be used on search.
+     *
+     * @return models\User
+     */
+    public function findUserByUnionId($unionid)
+    {
+        return $this->findUser(['unionid' => $unionid])->one();
+    }
+
+    /**
      * Finds a user by the given email.
      *
      * @param string $email Email to be used on search.

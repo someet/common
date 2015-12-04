@@ -124,6 +124,8 @@ class Account extends ActiveRecord
             'class'      => static::className(),
             'provider'   => $client->getId(),
             'client_id'  => $client->getUserAttributes()['id'],
+            'unionid'  => $client->getUserAttributes()['unionid'],
+            'username'  => $client->getUserAttributes()['nickname'],
             'data'       => json_encode($client->getUserAttributes()),
         ]);
 
@@ -200,7 +202,7 @@ class Account extends ActiveRecord
      */
     protected static function fetchUser(Account $account)
     {
-        $user = static::getFinder()->findUserByEmail($account->email);
+        $user = static::getFinder()->findUserByUnionId($account->unionid);
 
         if (null !== $user) {
             return $user;
