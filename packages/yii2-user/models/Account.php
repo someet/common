@@ -132,7 +132,7 @@ class Account extends ActiveRecord
         if ($client instanceof ClientInterface) {
             $account->setAttributes([
                 'username' => $client->getUsername(),
-                'email'    => $client->getEmail(),
+                //'email'    => $client->getEmail(),
             ], false);
         }
 
@@ -207,6 +207,7 @@ class Account extends ActiveRecord
         if (null !== $user) {
             return $user;
         }
+
 
         $user = Yii::createObject([
             'class'    => User::className(),

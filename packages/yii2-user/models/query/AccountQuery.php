@@ -58,19 +58,6 @@ class AccountQuery extends ActiveQuery
      * @param  ClientInterface $client
      * @return AccountQuery
      */
-    public function byWechatClient(ClientInterface $client)
-    {
-        return $this->andWhere([
-            'provider'  => 'wechat',
-            'unionid' => $client->getUserAttributes()['unionid'],
-        ]);
-    }
-
-    /**
-     * Finds an account by client.
-     * @param  ClientInterface $client
-     * @return AccountQuery
-     */
     public function byClient(ClientInterface $client)
     {
         return $this->andWhere([

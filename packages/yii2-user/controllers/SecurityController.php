@@ -135,13 +135,15 @@ class SecurityController extends Controller
      */
     public function authenticate(ClientInterface $client)
     {
-        $wechatAccount = $this->finder->findAccount()->byWechatClient($client)->one();
         $account = $this->finder->findAccount()->byClient($client)->one();
+        $wechatAccount = Account::find()->where(['provider' => 'wechat', 'unionid' => $client->getUserAttributes()['unionid']])->one();
 
+        //当前客户端未授权
         if ($account === null) {
-            if ($client->getId() == 'weixin_backend' && $wechatAccount === null) {
-                echo '后台禁止用户注册, 请先在微信端登录';
-                exit;
+            //如果是后台应用并且微信端未授权则提示只能微信端授权
+            if ($client->getId() == 'weixin_backend' && null === $wechatAccount) {
+                    echo '后台禁止用户注册, 请先在微信端登录';
+                    exit;
             } else {
                 $account = Account::create($client);
             }
