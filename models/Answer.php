@@ -17,6 +17,9 @@ use Yii;
  * @property integer $created_at
  * @property integer $updated_at
  * @property integer $status
+ * @property integer $wechat_template_push_at
+ * @property integer $wechat_template_is_send
+ * @property integer $wechat_template_msg_id
  */
 class Answer extends \yii\db\ActiveRecord
 {
@@ -26,6 +29,20 @@ class Answer extends \yii\db\ActiveRecord
     const STATUS_REVIEW_PASS    = 20;
     /* 审核拒绝 */
     const STATUS_REVIEW_REJECT  = 30;
+
+    /* 短信未发送 */
+    const STATUS_SMS_YET = 0;
+    /* 短信发送成功 */
+    const STATUS_SMS_SUCC = 1;
+    /* 短信发送失败 */
+    const STATUS_SMS_Fail = 2;
+
+    /* 微信模板消息未发送 */
+    const STATUS_WECHAT_TEMPLATE_YET = 0;
+    /* 微信模板消息发送成功 */
+    const STATUS_WECHAT_TEMPLATE_SUCC = 1;
+    /* 微信模板消息发送失败 */
+    const STATUS_WECHAT_TEMPLATE_Fail = 2;
 
     /**
      * @inheritdoc
@@ -42,7 +59,7 @@ class Answer extends \yii\db\ActiveRecord
     {
         return [
             [['question_id'], 'required'],
-            [['question_id', 'activity_id', 'user_id', 'is_finish', 'is_send', 'send_at', 'created_at', 'updated_at', 'status'], 'integer'],
+            [['question_id', 'activity_id', 'user_id', 'is_finish', 'is_send', 'send_at', 'created_at', 'updated_at', 'status', 'wechat_template_push_at', 'wechat_template_is_send', 'wechat_template_msg_id'], 'integer'],
             [['question_id', 'user_id'], 'unique', 'targetAttribute' => ['question_id', 'user_id'], 'message' => 'The combination of 问题ID and 用户ID has already been taken.'],
             [['status'], 'default', 'value' => static::STATUS_REVIEW_YET]
         ];
