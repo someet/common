@@ -47,7 +47,7 @@ class MemberController extends BackendController
                     'index',
                     'search',
                     'update',
-                    'search-principal',
+                    'search-by-auth',
                     'fetch-white-list',
                     'fetch-black-list',
                     'fetch-user-list-by-role-name',
@@ -258,15 +258,16 @@ class MemberController extends BackendController
     /**
      * 搜索PMA, 供通知时使用
      * @param string $username 用户名
+     * @param string $auth 权限, 是什么用户
      * @return array
      */
-    public function actionSearchPrincipal($username) {
+    public function actionSearchByAuth($username, $auth = "pma") {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $users = User::find()
             ->joinWith('assignment')
             ->where([
                 'status' => User::STATUS_ACTIVE,
-                'auth_assignment.item_name' => 'pma',
+                'auth_assignment.item_name' => $auth,
             ])
             ->andWhere(
                 ['like', 'username', $username]

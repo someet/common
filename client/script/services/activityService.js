@@ -31,11 +31,17 @@ angular.module('backendServices')
         tags: function(query) {
           return $http.get('/activity-tag/list?query=' + query);
         },
+        //搜索用户
         searchUser: function(query) {
           return $http.get('/member/search?username=' + query);
         },
+        //搜索发起人
+        searchFounder: function(query) {
+          return $http.get('/member/search-by-auth?username=' + query + '&auth=founder');
+        },
+        //搜索pma
         searchPrincipal: function(query) {
-          return $http.get('/member/search-principal?username=' + query);
+          return $http.get('/member/search-by-auth?username=' + query + '&auth=pma');
         },
       };
     }]);
