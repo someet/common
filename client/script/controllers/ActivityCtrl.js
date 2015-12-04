@@ -262,7 +262,7 @@ angular.module('controllers', ['ngTagsInput'])
       // 搜索用户功能
       $scope.getUsers = function(query) {
         console.log(query);
-        return $activityManage.searchUser(query);
+        return $activityManage.searchFounder(query);
       }
 
       // 搜索PMA功能

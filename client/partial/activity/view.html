@@ -88,7 +88,7 @@
                         <label>发起人</label>
                         <md-autocomplete md-selected-item="user" placeholder="请选择发起人" md-search-text="username" md-items="user in getUsers(username)" md-item-text="user.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
                             <md-item-template>
-                                <span md-highlight-text="principalname">{{user.username}}</span>
+                                <span md-highlight-text="username">{{user.username}}</span>
                                 <img ng-if="user" width="50" style="border-radius:25px" ng-src="{{user.profile.headimgurl}}" />                
                             </md-item-template>
                             <md-not-found>No matches found.</md-not-found>
@@ -96,10 +96,10 @@
                     </div>
                     <div flex="">
                         <label>PMA</label>
-                        <md-autocomplete md-selected-item="principal" placeholder="请选择PMA" md-search-text="principalname" md-items="principal in getPrincipals(principalname)" md-item-text="principal.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
+                        <md-autocomplete md-selected-item="pma" placeholder="请选择PMA" md-search-text="principalname" md-items="pma in getPrincipals(principalname)" md-item-text="pma.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
                             <md-item-template>
-                                <span md-highlight-text="principalname">{{principal.username}}</span>
-                                <img width="50" style="border-radius:25px" ng-src="{{principal.profile.headimgurl}}" />                
+                                <span md-highlight-text="principalname">{{pma.username}}</span>
+                                <img width="50" style="border-radius:25px" ng-src="{{pma.profile.headimgurl}}" />
                             </md-item-template>
                             <md-not-found>No matches found.</md-not-found>
                         </md-autocomplete>
