@@ -12,7 +12,7 @@ ALTER TABLE `social_account`
 CHANGE COLUMN `union_id` `unionid` VARCHAR(60) NULL DEFAULT NULL ;
 
 ALTER TABLE `user`
-ADD COLUMN `unionid` VARCHAR(60) NULL DEFAULT NULL COMMENT '现在只考虑微信登录的                   union_id' AFTER `cancel_follow_at`;
+ADD COLUMN `unionid` VARCHAR(60) NULL DEFAULT NULL COMMENT '现在只考虑微信登录的                   union_id' AFTER `activities_count`;
 SQL;
         $this->execute($sql);
         return true;
