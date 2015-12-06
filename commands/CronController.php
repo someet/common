@@ -255,14 +255,16 @@ class CronController  extends \yii\console\Controller
                 }
 
                 //尝试发送短消息
-                if (Yii::$app->yunpian->sendSms($mobile, $smsData)) {
+                $smsRes = Yii::$app->yunpian->sendSms($mobile, $smsData);
+                if (!$smsRes) {
+                    Yii::error('短信发送失败, 响应的结果是: '.join(',', $smsRes));
 
-                    //修改短信发送状态为成功, 以及修改发送时间
-                    Answer::updateAll(['is_send' => Answer::STATUS_SMS_SUCC, 'send_at' => time()],
+                    //修改短信发送状态为失败, 以及修改发送时间[方便以后单独发送短信]
+                    Answer::updateAll(['is_send' => Answer::STATUS_SMS_Fail, 'send_at' => time()],
                         ['id' => $answer->id]);
                 } else {
-                    //修改短信发送状态为失败, 以及修改发送时间[方便以后单独发送短信]
-                    Answer::updateAll(['is_send' => Answer::STATUS_SMS_YET, 'send_at' => time()],
+                    //修改短信发送状态为成功, 以及修改发送时间
+                    Answer::updateAll(['is_send' => Answer::STATUS_SMS_SUCC, 'send_at' => time()],
                         ['id' => $answer->id]);
                 }
 
@@ -336,6 +338,20 @@ class CronController  extends \yii\console\Controller
         $result = Yii::$app->db->createCommand($sql)->execute();
 
         Yii::info($result ? 'clean punish score monthly success' : 'clean punish score monthly failed');
+    }
+
+    /**
+     * 测试发短信
+     */
+    public function actionTest()
+    {
+        $answer = Answer::find()->where(['is_send' => '0'])->with(['user', 'activity', 'activity.pma'])->one();
+        $smsData = $this->fetchWaitSmsData('', $answer->activity);
+        $mobile = '18518368050';
+        //尝试发送短消息
+        $res = Yii::$app->yunpian->sendSms($mobile, $smsData);
+        var_dump($res);
+
     }
 
 
