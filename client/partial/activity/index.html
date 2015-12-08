@@ -35,7 +35,8 @@
     </div>
 </div>
 
-<div class="activityList container">
+<md-content md-scroll-y="" flex="" layout-padding="" class="layout-padding ng-scope flex container">
+<div class="activityList container" id="activityList"> 
     <ul class="activityListProperty">
         <li ng-repeat="entity in list | orderBy: 'display_order' ">
             <!-- <div ng-if="entity.status==10" class="panel panel-default"> -->
@@ -122,3 +123,4 @@
         </li>
     </ul>
 </div>
+  </md-content>
