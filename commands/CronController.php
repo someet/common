@@ -266,7 +266,7 @@ class CronController  extends \yii\console\Controller
                     Yii::error('短信发送失败');
 
                     //修改短信发送状态为失败, 以及修改发送时间[方便以后单独发送短信]
-                    Answer::updateAll(['is_send' => Answer::STATUS_SMS_Fail, 'send_at' => time()],
+                    Answer::updateAll(['send_at' => time()],
                         ['id' => $answer->id]);
                 } else {
                     //修改短信发送状态为成功, 以及修改发送时间
