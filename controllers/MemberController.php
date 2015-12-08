@@ -218,7 +218,7 @@ class MemberController extends BackendController
                 'pageSize' => $perPage
             ]);
 
-            return $pagination->pageCount;
+            return $pagination->totalCount;
         } elseif ($scenario == "page") {
             $countQuery = clone $query;
             $pagination = new Pagination([
