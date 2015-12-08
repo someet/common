@@ -31,7 +31,7 @@ class CronController  extends \yii\console\Controller
     private function fetchSuccessWechatTemplateData($openid, $account, $activity) {
         //获取成功的模板消息id
         $template_id = Yii::$app->params['sms.success_template_id'];
-        if (!$template_id) {
+        if (empty($template_id)) {
             //记录一个错误, 请设置成功的模板消息id
             Yii::error('请设置成功的模板消息id');
         }
@@ -80,7 +80,7 @@ class CronController  extends \yii\console\Controller
     private function fetchWaitWechatTemplateData($openid, $activity) {
         //获取等待的模板消息id
         $template_id = Yii::$app->params['sms.wait_template_id'];
-        if (!$template_id) {
+        if (empty($template_id)) {
             //记录一个错误, 请设置等待的模板消息id
             Yii::error('请设置等待的模板消息id');
         }
@@ -126,7 +126,7 @@ class CronController  extends \yii\console\Controller
     private function fetchFailedWechatTemplateData($openid, $account, $activity) {
         //获取失败的模板消息id
         $template_id = Yii::$app->params['sms.failed_template_id'];
-        if (!$template_id) {
+        if (empty($template_id)) {
             //记录一个错误, 请设置失败的模板消息id
             Yii::error('请设置失败的模板消息id');
         }
@@ -234,7 +234,7 @@ class CronController  extends \yii\console\Controller
                 //设置默认的短信为等待的短信内容
                 $smsData = $this->fetchWaitSmsData($answer->activity->title);
                 //判断状态是通过
-                if ($answer->status = Answer::STATUS_REVIEW_PASS) {
+                if (Answer::STATUS_REVIEW_PASS == $answer->status ) {
 
                     // 给一个默认的pma的微信id[此id可能是我们工作人员的微信id]
                     $pma_wechat_id = $default_pma_wechat_id;
@@ -249,7 +249,7 @@ class CronController  extends \yii\console\Controller
                     }
                     //获取通过的短信内容
                     $smsData = $this->fetchSuccessSmsData($answer->activity->title, $pma_wechat_id);
-                } elseif ($answer->status = Answer::STATUS_REVIEW_REJECT) {
+                } elseif (Answer::STATUS_REVIEW_REJECT == $answer->status) {
                     //获取不通过的短信内容
                     $smsData = $this->fetchFailSmsData($answer->activity->title);
                 }
@@ -257,7 +257,7 @@ class CronController  extends \yii\console\Controller
                 //尝试发送短消息
                 $smsRes = Yii::$app->yunpian->sendSms($mobile, $smsData);
                 //如果是未审核,则只修改发送时间
-                if ($answer->status == Answer::STATUS_REVIEW_YET) {
+                if (Answer::STATUS_REVIEW_YET == $answer->status) {
 
                     //修改发送时间, 不修改状态, 不然后台没办法再进行筛选了
                     Answer::updateAll(['send_at' => time()],
@@ -282,18 +282,18 @@ class CronController  extends \yii\console\Controller
                     'user_id' => $answer->user->id,
                 ])->with('user')->one();
 
-                //如果绑定了微信对象
-                if ($account) {
+                //如果短信发送成功绑定了微信对象
+                if ($smsRes && $account) {
                     //获取微信的openid
                     $openid = $account->client_id;
 
                     //设置模板消息默认为等待的模板消息内容
                     $templateData = $this->fetchWaitWechatTemplateData($openid, $answer->activity);
                     //如果通过
-                    if ($answer->status == Answer::STATUS_REVIEW_PASS) {
+                    if (Answer::STATUS_REVIEW_PASS == $answer->status) {
                         //获取通过的模板消息内容
                         $templateData = $this->fetchSuccessWechatTemplateData($openid, $answer->user, $answer->activity);
-                    } elseif ($answer->status == Answer::STATUS_REVIEW_REJECT) {
+                    } elseif (Answer::STATUS_REVIEW_REJECT == $answer->status) {
                         //获取不通过的模板消息内容
                         $templateData = $this->fetchFailedWechatTemplateData($openid, $answer->user, $answer->activity);
                     }
