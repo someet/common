@@ -209,13 +209,13 @@ class MemberController extends BackendController
             ->asArray()
             ->where(['status' => User::STATUS_ACTIVE])
             ->orderBy(['id' => SORT_DESC]);
-        if ($id != null) {
+        if ($id) {
             $users = User::find()->where(['id' => $id])->with(['profile', 'assignment'])->asArray()->one();
         } elseif ($scenario == "total") {
             $countQuery = clone $query;
             $pagination = new Pagination([
                 'totalCount' => $countQuery->count(),
-                'defaultPageSize' => $perPage
+                'pageSize' => $perPage
             ]);
 
             return $pagination->pageCount;
@@ -223,7 +223,7 @@ class MemberController extends BackendController
             $countQuery = clone $query;
             $pagination = new Pagination([
                 'totalCount' => $countQuery->count(),
-                'defaultPageSize' => $perPage
+                'pageSize' => $perPage
             ]);
 
             $users = $query->offset($pagination->offset)

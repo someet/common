@@ -77,7 +77,7 @@ angular.module('backendServices')
 
         var params = {
           'page': page,
-          'per-page': 20
+          'perPage': 20  //每页20条
         };
 
         return $http.get('/member?scenario=page', {
