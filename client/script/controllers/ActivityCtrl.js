@@ -3,10 +3,8 @@ angular.module('controllers', ['ngTagsInput'])
     function($scope, $routeParams, $location, $questionManage, $activityManage, $activityTypeManage, $mdDialog, lodash, $mdToast) {
 
       var type_id = $routeParams.type_id;
-      $activityManage.listByType(type_id).then(function(data) {
-        console.log(data);
+      $activityManage.listByType(type_id).then(function(data) {        
         $scope.list = data;
-
       }, function(err) {
         alert(err);
       });
@@ -29,6 +27,7 @@ angular.module('controllers', ['ngTagsInput'])
         });
       };
 
+      // 内部编辑状态
       $scope.onEditStatusChangeClick = function(activity, edit_status) {
         var newActivity = activity;
         newActivity.edit_status = edit_status;
@@ -271,11 +270,13 @@ angular.module('controllers', ['ngTagsInput'])
         return $activityManage.searchPrincipal(query);
       }
 
+      // 开始时间
       $scope.onStartTimeSet = function(newDate, oldDate) {
         $scope.start_time_str = getTimeByTimestamp(getTimestamp(newDate));
         $scope.entity.start_time = getTimestamp(newDate);
       }
 
+      // 结束时间
       $scope.onStopTimeSet = function(newDate, oldDate) {
         $scope.end_time_str = getTimeByTimestamp(getTimestamp(newDate));
         $scope.entity.end_time = getTimestamp(newDate);
@@ -288,7 +289,7 @@ angular.module('controllers', ['ngTagsInput'])
         return $activityManage.tags(query);
       };
 
-      // qiniu upload poster start //
+      // qiniu upload 海报 start //
       $scope.selectPoster = null;
 
       var startPoster = function() {
@@ -327,9 +328,9 @@ angular.module('controllers', ['ngTagsInput'])
         };
         startPoster();
       };
-      // qiniu upload poster end //
+      // qiniu upload 海报 end //
 
-      // qiniu upload code start //
+      // qiniu upload 群二维码 start //
       $scope.selectCode = null;
 
       var startCode = function() {
@@ -368,7 +369,7 @@ angular.module('controllers', ['ngTagsInput'])
         };
         startCode();
       };
-      // qiniu upload group code end //
+      // qiniu upload 群二维码 end //
 
       var id = $routeParams.id;
       if (id > 0) {
@@ -404,6 +405,7 @@ angular.module('controllers', ['ngTagsInput'])
         $location.path('/activity/list/0');
       }
 
+      //保存活动
       $scope.save = function() {
         var newEntity = $scope.entity;
         newEntity.start_time = $scope.entity.start_time;
