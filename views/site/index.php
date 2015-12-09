@@ -28,7 +28,7 @@ use yii\helpers\Url;
 
 
   <md-toolbar class="site-content-toolbar" aria-hidden="false" style="background-color:#FFF;">
-    <nav class="navbar navbar-default" role="navigation">
+    <nav class="navbar navbar-default container" role="navigation">
       <!-- Brand and toggle get grouped for better mobile display -->
 
       <div class="navbar-header">        
