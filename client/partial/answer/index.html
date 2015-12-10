@@ -76,8 +76,8 @@
                         <span > <font size="+2"><strong>{{entity.user.profile.name}}</strong></font> 
                         </span>
                         <div class="pull-right">
-                            <button ng-if="entity.is_send==0" class="btn btn-success" ng-click="pass(entity)">通过</button>
-                            <button ng-if="entity.is_send==0" class="btn btn-danger" ng-click="reject(entity)">不通过</button>
+                            <button ng-if="entity.is_send==0||entity.status==10" class="btn btn-success" ng-click="pass(entity)">通过</button>
+                            <button ng-if="entity.is_send==0||entity.status==10" class="btn btn-danger" ng-click="reject(entity)">不通过</button>
                         </div>
                     </div>
                     <div>
