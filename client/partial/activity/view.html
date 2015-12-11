@@ -15,73 +15,84 @@
       <div class="col-md-5" style="top:5em;padding:0;border:solid 10px rgba(10,10,10,0.5)">
         <input type="hidden" ng-model="entity.id" />
 
-        <div class="activity-card">
-          <img width="100%" class="activity-image" ng-src="{{poster}}">
-          <img class="activity-img-mask" src="/static/image/activity-mask.png" >
-          <div class="activity-location">
-            <span class="so-float-right"> <i class="icon"><img src="/static/image/location.png"></i>
-              {{entity.area}}
-            </span>
+        <div class="detail-page">
+          <img class="activity-photo" ng-src="{{poster}}">
+          <div class="detail-title">
+            <div>{{entity.title}}</div>
+            <label>{{entity.desc}}</label>
           </div>
-          <div class="activity-desc">
-            <span class="so-float-right"> <i class="icon"><img src="/static/image/time.png"></i>
-              {{start_time_str}} - {{end_time_str}}
-            </span>
-          </div>
-          <div class="activity-title">
-            <span class="so-float-right">{{entity.title}} - {{entity.desc}}</span>
-          </div>
-        </div>
 
-        <!-- 文案 -->
-        <div ng-bind-html="entity.content"></div>
+          <div class="divider"></div>
 
-        <div class="detail-host">
-          <img class="activity-img-mask" src="/static/image/activity-mask-left.png" >
-          <div class="detail-above-mask">
-            <div>
-              <span class="detail-mask-label"> <strong><font color="red">––––</font>
-                  发起人</strong> 
+          <div class="detail-info">
+            <!-- 时间 -->
+            <div class="detail-label">
+              <span> <i class="icon"><img src="/static/image/time-shadow.png"></i>
+                {{start_time_str}} - {{end_time_str}}
               </span>
             </div>
-            <img class="detail-host-avatar" ng-src="{{entity.user.profile.headimgurl}}"/>
-            <div>
-              <span class="detail-host-name">{{entity.user.username}}</span>
+
+            <!-- 地点 -->
+            <div class="detail-label">
+              <span> <i class="icon"><img src="/static/image/location-shadow.png"></i>
+                {{entity.area}}
+              </span>
+            </div>
+            <div class="detail-label">
+              <span> <i class="icon"><img src="/static/image/location-shadow.png"></i>
+                {{entity.address}}【报名成功后出现】
+              </span>
+            </div>
+
+            <!-- 收费情况 -->
+            <div class="detail-label">
+              <span>
+                <i class="icon">
+                  <img src="/static/image/money-shadow.png"></i>
+                  <span ng-show="entity.cost>0">
+                    {{entity.cost}}元/人</span>
+                  <div ng-show="entity.cost>0" class="description">{{entity.cost_list}}</div>
+                  <span ng-show="entity.cost==0">免费</span>
+              </span>
+            </div>
+            <!-- 微信二维码 -->
+            <div class="detail-label">
+              <span>
+                <i class="icon">
+                  <img src="/static/image/wechat-shadow.png"></i>
+                活动微信群(长按识别二维码入群)【报名成功后出现】
+                  <img ng-src="{{group_code}}">
+              </span>
             </div>
           </div>
-        </div>
 
-        <div class="detail-mask-block">
-          <div class="detail-mask-text ">{{entity.user.profile.bio}}</div>
-        </div>
+          <div class="divider"></div>
 
-        <div class="detail-label">
-          <span class="so-float-right"> <strong>活动详情 <font color="red">––––</font></strong> 
-          </span>
-        </div>
+          <!-- 文案 -->
+          <div ng-bind-html="entity.content"></div>
 
-        <!-- 绑定后显示富文本 -->
-        <div ng-bind-html="entity.details"></div>
+          <!-- 活动详情 -->
+          <div ng-bind-html="entity.details"></div>
 
-        <div ng-show="entity.cost>
-          0">
-          <div>收费金额:{{entity.cost}}元/人</div>
-          <div>{{entity.cost_list}}</div>
-        </div>
-        <div ng-show="entity.cost==0">收费金额: 免费</div>
-        <div  class="activity-card" layout="row">人数限制: {{entity.peoples}}</div>
+          <!-- 发起人 -->
+          <div class="detail-host">
+            <label>关于发起人</label>
+            <div class="hoster">
+              <img ng-src="{{entity.user.profile.headimgurl}}"/>
+              <div class="name"> <strong>{{entity.user.username}}</strong>
+              </div>
+            </div>
+            <div class="description">{{entity.user.profile.bio}}</div>
+          </div>
 
-        <div class="activity-card">
-          <h3>报名成功后出现</h3>
-          <div layout="row">详细地址: {{entity.address}}</div>
-          <div layout="row">微信群二维码：</div>
-          <img width="100%" class="activity-image" ng-src="{{group_code}}"></div>
-
+        <div class="divider"></div>
+        <h3>备用信息</h3>
+        <div class="activity-card" layout="row">人数限制: {{entity.peoples}}</div>
         <div >
-          <h3>活动结束后出现</h3>
           <div>活动回顾: {{entity.review}}</div>
         </div>
       </div>
+    </div>
       <!-- 预览 end -->
 
       <div class="col-md-7">
