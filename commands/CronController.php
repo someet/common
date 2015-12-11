@@ -255,22 +255,29 @@ class CronController  extends \yii\console\Controller
                 }
 
                 //尝试发送短消息
-                $smsRes = Yii::$app->yunpian->sendSms($mobile, $smsData);
+                $sms = Yii::$app->yunpian;
+                $smsRes = $sms->sendSms($mobile, $smsData);
+
                 //如果是未审核,则只修改发送时间
                 if (Answer::STATUS_REVIEW_YET == $answer->status) {
 
                     //修改发送时间, 不修改状态, 不然后台没办法再进行筛选了
                     Answer::updateAll(['send_at' => time()],
                         ['id' => $answer->id]);
-                } elseif (!$smsRes) {
-                    Yii::error('短信发送失败');
+                } elseif ($smsRes) {
+
+                    //修改短信发送状态为成功, 以及修改发送时间
+                    Answer::updateAll(['is_send' => Answer::STATUS_SMS_SUCC, 'send_at' => time()],
+                        ['id' => $answer->id]);
+                } elseif ($sms->hasError()) {
+
+                    $error = $sms->getLastError();
+                    $msg = is_array($error) && isset($error['msg']) ? $error['msg'] : '发送短信失败';
+
+                    Yii::error('短信发送失败, 请检查'. is_array($error) ? json_encode($error) : $error);
 
                     //修改短信发送状态为失败, 以及修改发送时间[方便以后单独发送短信]
                     Answer::updateAll(['send_at' => time()],
-                        ['id' => $answer->id]);
-                } else {
-                    //修改短信发送状态为成功, 以及修改发送时间
-                    Answer::updateAll(['is_send' => Answer::STATUS_SMS_SUCC, 'send_at' => time()],
                         ['id' => $answer->id]);
                 }
 

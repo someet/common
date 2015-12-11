@@ -59,6 +59,26 @@ class MemberController extends BackendController
     }
 
     /**
+     * 获取黑名单列表
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function actionFetchBlackList()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $users = User::find()
+            ->where(['in_black_list' => User::BLACK_LIST_YES])
+            ->with([
+                'profile'
+            ])
+            ->asArray()
+            ->orderBy([
+                'id' => SORT_DESC,
+            ])
+            ->all();
+        return $users;
+    }
+
+    /**
      * 获取白名单列表
      * @return array|\yii\db\ActiveRecord[]
      */
