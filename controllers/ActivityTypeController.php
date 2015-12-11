@@ -118,7 +118,7 @@ class ActivityTypeController extends BackendController
         $model = new ActivityType;
 
         if ($model->load($data, '') && $model->save()) {
-            \someet\common\models\AdminLog::saveLog($this->searchById($model->id), $model->primaryKey);
+            \someet\common\models\AdminLog::saveLog('活动类型添加失败', $model->primaryKey);
             return ActivityType::findOne($model->id);
         } elseif ($model->hasErrors()) {
             $errors = $model->getFirstErrors();
@@ -204,7 +204,7 @@ class ActivityTypeController extends BackendController
             throw new ServerErrorHttpException();
         }
 
-        \someet\common\models\AdminLog::saveLog($this->searchById($model->id), $model->primaryKey);
+        \someet\common\models\AdminLog::saveLog('更新活动类型', $model->primaryKey);
         return $this->findModel($id);
     }
 

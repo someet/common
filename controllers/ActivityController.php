@@ -175,7 +175,7 @@ class ActivityController extends BackendController
 
         if ($model->load($data, '') && $model->save()) {
             // 保存操作记录
-            \someet\common\models\AdminLog::saveLog($this->searchById($model->id), $model->primaryKey);
+            \someet\common\models\AdminLog::saveLog('添加活动', $model->primaryKey);
             return Activity::findOne($model->id);
         } elseif ($model->hasErrors()) {
             $errors = $model->getFirstErrors();
@@ -402,7 +402,7 @@ class ActivityController extends BackendController
         if (!$model->save()) {
             throw new ServerErrorHttpException();
         }
-        \someet\common\models\AdminLog::saveLog($this->searchById($model->id), $model->primaryKey);
+        \someet\common\models\AdminLog::saveLog('更新活动', $model->primaryKey);
 
         return $this->findModel($id);
     }
@@ -436,7 +436,7 @@ class ActivityController extends BackendController
         if ($model->save() === false) {
             throw new ServerErrorHttpException('删除失败');
         }
-        \someet\common\models\AdminLog::saveLog($this->searchById($model->id), $model->primaryKey);
+        \someet\common\models\AdminLog::saveLog('删除活动', $model->primaryKey);
 
         return [];
     }
@@ -480,14 +480,6 @@ class ActivityController extends BackendController
             return $model;
         } else {
             throw new NotFoundHttpException("活动不存在");
-        }
-    }
-
-    public function searchById($id){
-        if (($model = Activity::findOne($id)) !== null) {
-            return json_encode($model->toArray());
-        } else {
-            throw new \yii\web\NotFoundHttpException('The requested page does not exist.');
         }
     }
 }

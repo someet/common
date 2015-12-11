@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7ef9d7b8feecbefbea115387df28af74",
-    "content-hash": "15977aa46e777027f517ac4572c247cb",
+    "hash": "ec65d4dfb5a1bc1b0314c4d9bf1b6317",
+    "content-hash": "08786409a3ddfcad766db1e72d142c23",
     "packages": [
         {
             "name": "bazilio/yii2-newrelic",
@@ -425,16 +425,16 @@
         },
         {
             "name": "dcb9/yii2-yunpian",
-            "version": "v0.0.1",
+            "version": "v0.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dcb9/yii2-yunpian.git",
-                "reference": "b36f7f7ab4bc6b6b32474bc2b787b28572644263"
+                "reference": "f3634a6eb9e3a6add5d9392168d0610097cfa224"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dcb9/yii2-yunpian/zipball/b36f7f7ab4bc6b6b32474bc2b787b28572644263",
-                "reference": "b36f7f7ab4bc6b6b32474bc2b787b28572644263",
+                "url": "http://packagist.phpcomposer.com/files/dcb9/yii2-yunpian/f3634a6eb9e3a6add5d9392168d0610097cfa224.zip",
+                "reference": "f3634a6eb9e3a6add5d9392168d0610097cfa224",
                 "shasum": ""
             },
             "require": {
@@ -475,7 +475,7 @@
                 "yii2",
                 "yunpian"
             ],
-            "time": "2015-09-07 11:31:12"
+            "time": "2015-12-04 10:06:56"
         },
         {
             "name": "dektrium/yii2-rbac",

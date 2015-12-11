@@ -26,15 +26,6 @@
           <span ng-if="entity.status==30" class="btn-float-right" style="color:#E33;">未通过</span>
         </div>
       </li>
-      <li class="list-group-item" ng-repeat="entity in list | filter: {status:'10', is_send: 1}" ng-click="view(entity)">
-        <div class="media">
-          <a class="pull-left" href="">
-            <img  width="50" height="50" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="..."></a>
-          <span> <strong>{{entity.user.profile.name}}</strong>
-          </span>
-          <span class="btn-float-right" style="color:#33E;">待筛选</span>
-        </div>
-      </li>
     </ul>
     <!-- 可以调整部分 end -->
 
