@@ -18,8 +18,11 @@
         <li ng-class="{active:isActive('founder')}">
           <a href="/#/member/list/founder">发起人</a>
         </li>
-          <li ng-class="{active:isActive('admin')}">
-              <a href="/#/member/list/admin">管理员</a>
+        <li ng-class="{active:isActive('admin')}">
+          <a href="/#/member/list/admin">管理员</a>
+        </li>
+          <li ng-class="{active:isActive('delete')}">
+              <a href="/#/member/list/delete">已删除</a>
           </li>
       </ul>
     </div>
@@ -50,14 +53,14 @@
       
     </md-list-item>
   </md-list>
-  </div>
-  <div ng-show="userPagination" class="someet-pagination user-pagination">
-    <pagination total-items="userPagination.totalItems" ng-model="userPagination.currentPage" ng-change="userPagination.pageChange()" items-per-page="userPagination.itemsPerPage" max-size="userPagination.maxSize" class="pagination-sm" boundary-links="false" rotate="false" >
-          <a href="javascript:void(0)" ng-click="userPagination.currentPage=1;changePage(1)">首页</a>
-          <a href="javascript:void(0);" ng-click="prev()">上一页</a>
-          <a href="javascript:void(0);" ng-click="changePage(page)" ng-repeat="page in pages">{{ page }}</a>
-          <a href="javascript:void(0);" ng-click="next()">下一页</a>
-          <a href="javascript:void(0)" ng-click="userPagination.currentPage=userPagination.totalItems;changePage(userPagination.totalItems)">末页</a>
-    </pagination>
+   <div ng-show="userPagination" class="someet-pagination user-pagination">
+     <pagination total-items="userPagination.totalItems" ng-model="userPagination.currentPage" ng-change="userPagination.pageChange()" items-per-page="userPagination.itemsPerPage" max-size="userPagination.maxSize" class="pagination-sm" boundary-links="false" rotate="false" >
+       <a href="javascript:void(0)" ng-click="userPagination.currentPage=1;changePage(1)">首页</a>
+       <a href="javascript:void(0);" ng-click="prev()">上一页</a>
+       <a href="javascript:void(0);" ng-click="changePage(page)" ng-repeat="page in pages">{{ page }}</a>
+       <a href="javascript:void(0);" ng-click="next()">下一页</a>
+       <a href="javascript:void(0)" ng-click="userPagination.currentPage=userPagination.totalItems;changePage(userPagination.totalItems)">末页</a>
+     </pagination>
+   </div>
   </div>
 </div>

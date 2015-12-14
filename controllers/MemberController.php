@@ -48,94 +48,11 @@ class MemberController extends BackendController
                     'search',
                     'update',
                     'search-by-auth',
-                    'fetch-white-list',
-                    'fetch-black-list',
-                    'fetch-user-list-by-role-name',
                     'update-assignment',
                     'set-user-in-white-list',
                 ]
             ],
         ];
-    }
-
-    /**
-     * 获取黑名单列表
-     * @return array|\yii\db\ActiveRecord[]
-     */
-    public function actionFetchBlackList()
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $users = User::find()
-            ->where(['in_black_list' => User::BLACK_LIST_YES])
-            ->with([
-                'profile'
-            ])
-            ->asArray()
-            ->orderBy([
-                'id' => SORT_DESC,
-            ])
-            ->all();
-        return $users;
-    }
-
-    /**
-     * 获取白名单列表
-     * @return array|\yii\db\ActiveRecord[]
-     */
-    public function actionFetchWhiteList()
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $users = User::find()
-            ->where(['in_white_list' => User::WHITE_LIST_YES])
-            ->with([
-                'profile'
-            ])
-            ->asArray()
-            ->orderBy([
-                'id' => SORT_DESC,
-            ])
-            ->all();
-        return $users;
-    }
-
-    /**
-     * 获取用户列表, 根据角色名称
-     * @param string $role_name 角色名称
-     * @return array 用户列表
-     */
-    public function actionFetchUserListByRoleName($role_name) {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        //检查参数
-        if (empty($role_name)) {
-            return ['msg' => '角色名称不能为空'];
-        }
-
-        //获取权限管理组件
-        $auth = Yii::$app->authManager;
-
-        //获取角色列表
-        $roles = $auth->getRoles();
-
-        //角色判断
-        if (!array_key_exists($role_name, $roles)) {
-            //提示角色不存在
-            return ['msg' => '角色'.$role_name.'不存在'];
-        }
-
-        //查询列表
-        $users = User::find()
-            ->joinWith('assignment')
-            ->where([
-                'status' => User::STATUS_ACTIVE,
-                'auth_assignment.item_name' => $role_name,
-            ])
-            ->with(['profile'])
-            ->orderBy(['id' => SORT_DESC])
-            ->asArray()
-            ->all();
-
-        //返回列表
-        return $users;
     }
 
     /**
@@ -218,17 +135,73 @@ class MemberController extends BackendController
      * 联系人列表
      * @param integer $id
      * @param string $scenario 场景
-     * @param int $perPage
+     * @param string $type 类型,例如黑白名单或所有名单
+     * @param int $perPage 每页多少条
      * @return array|int|null|\yii\db\ActiveRecord|\yii\db\ActiveRecord[]
      */
-    public function actionIndex($id = null, $scenario = null, $perPage = 20)
+    public function actionIndex($id = null, $scenario = null, $perPage = 20, $type = null)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $query = User::find()
-            ->with(['profile'])
-            ->asArray()
-            ->where(['status' => User::STATUS_ACTIVE])
-            ->orderBy(['id' => SORT_DESC]);
+
+        switch($type) {
+
+            //黑名单用户列表
+            case 'black':
+                $where = ['status' => User::STATUS_ACTIVE, 'in_black_list' => User::BLACK_LIST_YES];
+                $query = User::find()
+                    ->with(['profile'])
+                    ->asArray()
+                    ->where($where)
+                    ->orderBy(['id' => SORT_DESC]);
+                break;
+
+            //白名单用户列表
+            case 'white':
+                $where = ['status' => User::STATUS_ACTIVE, 'in_white_list' => User::WHITE_LIST_YES];
+                $query = User::find()
+                    ->with(['profile'])
+                    ->asArray()
+                    ->where($where)
+                    ->orderBy(['id' => SORT_DESC]);
+                break;
+
+            //不同权限的用户列表
+            case 'pma':
+            case 'founder':
+            case 'admin':
+                $query = User::find()
+                    ->joinWith('assignment')
+                    ->where([
+                        'status' => User::STATUS_ACTIVE,
+                        'auth_assignment.item_name' => $type,
+                    ])
+                    ->with(['profile'])
+                    ->orderBy(['id' => SORT_DESC])
+                    ->asArray();
+
+                break;
+
+            //已删除的用户
+            case 'delete':
+                $where = ['status' => User::STATUS_DELETED];
+                $query = User::find()
+                    ->with(['profile'])
+                    ->asArray()
+                    ->where($where)
+                    ->orderBy(['id' => SORT_DESC]);
+                break;
+
+            //全部用户列表
+            default:
+                $where = ['status' => User::STATUS_ACTIVE];
+                $query = User::find()
+                    ->with(['profile'])
+                    ->asArray()
+                    ->where($where)
+                    ->orderBy(['id' => SORT_DESC]);
+                break;
+        }
+
         if ($id) {
             $users = User::find()->where(['id' => $id])->with(['profile', 'assignment'])->asArray()->one();
         } elseif ($scenario == "total") {

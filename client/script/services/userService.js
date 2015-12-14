@@ -8,27 +8,6 @@ angular.module('backendServices')
           return userList;
         });
       },
-      //白名单
-      fetchWhiteList: function() {
-        return $http.get('/member/fetch-white-list', {
-        }).then(function(userList) {
-          return userList;
-        });
-      },
-      //黑名单
-      fetchBlackList: function() {
-        return $http.get('/member/fetch-black-list', {
-        }).then(function(userList) {
-          return userList;
-        });
-      },
-      //获取用户的列表, 根据角色名
-      fetchUserListByRoleName: function(role_name) {
-        return $http.get('/member/fetch-user-list-by-role-name?role_name='+role_name, {
-        }).then(function(userList) {
-          return userList;
-        });
-      },
       //设置用户为白名单
       setUserInWhiteList: function(user_id, in_white_list){
          return $http.post('/member/set-user-in-white-list?user_id='+user_id+'&in_white_list='+in_white_list).then(function(data) {
@@ -66,16 +45,17 @@ angular.module('backendServices')
           return data;
         });
       },
-      userPageMeta: function(pageNum) {
+      userPageMeta: function(type, pageNum) {
 
-        return $http.get('/member?scenario=total&perPage='+pageNum).then(function(data) {
+        return $http.get('/member?scenario=total&perPage='+pageNum+'&type='+type).then(function(data) {
           return data;
         });
       },
-      fetchPage: function(page) {
+      fetchPage: function(type, page) {
         page = page || 1;
 
         var params = {
+          'type': type,
           'page': page,
           'perPage': 20  //每页20条
         };
