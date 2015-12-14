@@ -2,12 +2,86 @@ angular.module('controllers', ['ngTagsInput'])
   .controller('ActivityListCtrl', ['$scope', '$routeParams', '$location', '$questionManage', '$activityManage', '$activityTypeManage', '$mdDialog', 'lodash', '$mdToast',
     function($scope, $routeParams, $location, $questionManage, $activityManage, $activityTypeManage, $mdDialog, lodash, $mdToast) {
 
+      /*
       var type_id = $routeParams.type_id;
       $activityManage.listByType(type_id).then(function(data) {        
         $scope.list = data;
       }, function(err) {
         alert(err);
       });
+      */
+
+      //活动列表开始
+      var listtype = $routeParams.type_id;
+      if (listtype>0) {
+          normalPagination(listtype);
+      } else {
+          normalPagination();
+      }
+
+      function normalPagination(type) {
+        $scope.modelPagination = {
+          totalItems: 0,
+          currentPage: 1,
+          maxSize: 5,
+          itemsPerPage: 2,//每页多少条
+          pageChange: function() {
+            fetchPage(type, this.currentPage);
+          }
+        };
+
+        $activityManage.modelPageMeta(type, $scope.modelPagination.itemsPerPage).then(function(total) {
+          $scope.modelPagination.totalItems = total;
+        });
+
+        $scope.userList = fetchPage(type, $scope.modelPagination.currentPage);
+      }
+
+      $scope.changePage = function(type, page) {
+        fetchPage(type, page);
+      }
+      $scope.prev = function (type) {
+        var page = $scope.modelPagination.currentPage - 1;
+        if(page < 1){
+          page = 1;
+        }
+        fetchPage(type, page);
+      }
+      $scope.next = function(type){
+        var page = $scope.modelPagination.currentPage + 1;
+        if(page > $scope.modelPagination.totalItems){
+          page = $scope.modelPagination.totalItems;
+        }
+        fetchPage(type, page);
+      }
+
+      function fetchPage(type, page) {
+        $activityManage.fetchPage(type, page).then(function (modelList) {
+          $scope.list = modelList;
+          $scope.modelPagination.currentPage = page;
+          //纯js分页
+          if ($scope.modelPagination.currentPage > 1 && $scope.modelPagination.currentPage < $scope.modelPagination.totalItems) {
+            $scope.pages = [
+              $scope.modelPagination.currentPage - 1,
+              $scope.modelPagination.currentPage,
+              $scope.modelPagination.currentPage + 1
+            ];
+          } else if ($scope.modelPagination.currentPage <= 1 && $scope.modelPagination.totalItems > 1) {
+            $scope.modelPagination.currentPage = 1;
+            $scope.pages = [
+              $scope.modelPagination.currentPage,
+              $scope.modelPagination.currentPage + 1
+            ];
+          } else if ($scope.modelPagination.currentPage >= $scope.modelPagination.totalItems && $scope.modelPagination.totalItems > 1) {
+            $scope.modelPagination.currentPage = $scope.modelPagination.totalItems;
+            $scope.pages = [
+              $scope.modelPagination.currentPage - 1,
+              $scope.modelPagination.currentPage
+            ];
+          }
+        });
+      }
+      //活动列表结束
 
       // 活动类型列表
       $activityTypeManage.fetch().then(function(data) {

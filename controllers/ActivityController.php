@@ -10,6 +10,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
+use yii\data\Pagination;
 
 /**
  *
@@ -44,6 +45,88 @@ class ActivityController extends BackendController
                 ]
             ],
         ];
+    }
+
+    /**
+     * 联系人列表
+     * @param integer $id
+     * @param string $scenario 场景
+     * @param string $type 类型,例如黑白名单或所有名单
+     * @param int $perPage 每页多少条
+     * @return array|int|null|\yii\db\ActiveRecord|\yii\db\ActiveRecord[]
+     */
+    public function actionIndex($id = null, $scenario = null, $perPage = 20, $type = null)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        if ($type>0) {
+            $where = ['status' => Activity::STATUS_RELEASE, 'type_id' => $type];
+            $query = Activity::find()
+                ->with([
+                    'type',
+                    'tags',
+                    'question',
+                    'answerList',
+                    'feedbackList'
+                ])
+                ->asArray()
+                ->where($where)
+                ->orderBy(['id' => SORT_DESC]);
+        } else {
+            $where = ['status' => Activity::STATUS_RELEASE];
+            $query = Activity::find()
+                ->with([
+                    'type',
+                    'tags',
+                    'question',
+                    'answerList',
+                    'feedbackList'
+                ])
+                ->asArray()
+                ->where($where)
+                ->orderBy(['id' => SORT_DESC]);
+        }
+
+        if ($id) {
+            $query = Activity::find()
+                ->where(['id' => $id])
+                ->with([
+                    'type',
+                    'tags',
+                    'question',
+                    'answerList',
+                    'feedbackList'
+                ])
+                ->asArray()
+                ->one();
+        } elseif ($scenario == "total") {
+            $countQuery = clone $query;
+            $pagination = new Pagination([
+                'totalCount' => $countQuery->count(),
+                'pageSize' => $perPage
+            ]);
+
+            return $pagination->totalCount;
+        } elseif ($scenario == "page") {
+            $countQuery = clone $query;
+            $pagination = new Pagination([
+                'totalCount' => $countQuery->count(),
+                'pageSize' => $perPage
+            ]);
+
+            $activities = $query->offset($pagination->offset)
+                ->limit($pagination->limit)
+                ->all();
+
+
+            foreach($activities as $key => $activity) {
+                $activities[$key]['answer_count'] = count($activity['answerList']);
+                $activities[$key]['feedback_count'] = count($activity['feedbackList']);
+                $activities[$key]['preview_url'] = Yii::$app->params['domain'].'preview/'.$activity['id'];
+                $activities[$key]['filter_url'] = Yii::$app->params['domain'].'filter/'.$activity['id'];
+            }
+        }
+        return $activities;
     }
 
     /**
@@ -106,7 +189,6 @@ class ActivityController extends BackendController
      * 活动列表
      *
      * @return array|\yii\db\ActiveRecord[]
-     */
     public function actionIndex()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -124,6 +206,7 @@ class ActivityController extends BackendController
 
         return $activities;
     }
+     */
 
     /**
      * 添加一个活动

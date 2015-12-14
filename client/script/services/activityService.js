@@ -43,5 +43,28 @@ angular.module('backendServices')
         searchPrincipal: function(query) {
           return $http.get('/member/search-by-auth?username=' + query + '&auth=pma');
         },
+        modelPageMeta: function(type, pageNum) {
+
+          return $http.get('/activity?scenario=total&perPage='+pageNum+'&type='+type).then(function(data) {
+            return data;
+          });
+        },
+        fetchPage: function(type, page) {
+          page = page || 1;
+
+          var params = {
+            'type': type,
+            'page': page,
+            'perPage': 2  //每页20条
+          };
+
+          return $http.get('/activity?scenario=page', {
+            params: params
+          }).then(function(data) {
+
+            return data;
+          });
+
+        }
       };
     }]);
