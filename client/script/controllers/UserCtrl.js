@@ -30,7 +30,6 @@ angular.module('controllers')
     }
   }
 
-
   function checkUser(){
     if($scope.user.password == ""){
       $scope.checkUserResult = "密码不能为空！";
@@ -83,94 +82,78 @@ angular.module('controllers')
 
       var listtype = $routeParams.type;
       console.log(listtype);
-      //白名单
-      if (listtype == 'white') {
-        $userManage.fetchWhiteList().then(function(data) {
-          $scope.userList = data;
-        });
-        //黑名单
-      } else if (listtype == 'black') {
-        $userManage.fetchBlackList().then(function(data) {
-          $scope.userList = data;
-        });
-        // pma
-      } else if (listtype=='pma') {
-        $userManage.fetchUserListByRoleName(listtype).then(function(data) {
-          $scope.userList = data;
-        });
-        //发起人
-      } else if (listtype=='founder') {
-        $userManage.fetchUserListByRoleName(listtype).then(function(data) {
-          $scope.userList = data;
-        });
-      } else if (listtype=='admin') {
-        $userManage.fetchUserListByRoleName(listtype).then(function(data) {
-          $scope.userList = data;
-        });
-
-        // 正常的所有用户
-      } else {
-        normalPagination();
+      switch (listtype){
+        case 'white'://白名单
+        case 'black'://黑名单
+        case 'pma'://PMA
+        case 'founder'://发起人
+        case 'admin'://管理员
+        case 'delete'://已删除
+          normalPagination(listtype);
+          break;
+        default:
+          normalPagination();
+          break;
       }
 
-    function normalPagination() {
-      $scope.userPagination = {
+    function normalPagination(type) {
+      $scope.modelPagination = {
         totalItems: 0,
         currentPage: 1,
         maxSize: 5,
-        itemsPerPage: 20,
+        itemsPerPage: 20,//每页多少条
         pageChange: function() {
-          fetchPage(this.currentPage);
+          fetchPage(type, this.currentPage);
         }
       };
 
-      $userManage.userPageMeta($scope.userPagination.itemsPerPage).then(function(total) {
-        $scope.userPagination.totalItems = total;
+      $userManage.userPageMeta(type, $scope.modelPagination.itemsPerPage).then(function(total) {
+        $scope.modelPagination.totalItems = total;
       });
 
-      $scope.userList = fetchPage($scope.userPagination.currentPage);
+      $scope.userList = fetchPage(type, $scope.modelPagination.currentPage);
     }
 
-    $scope.changePage = function(page) {
-      fetchPage(page);
+    $scope.changePage = function(type, page) {
+      fetchPage(type, page);
     }
-    $scope.prev = function () {
-      var page = $scope.userPagination.currentPage - 1;
+    $scope.prev = function (type) {
+      var page = $scope.modelPagination.currentPage - 1;
       if(page < 1){
         page = 1;
       }
-      fetchPage(page);
+      fetchPage(type, page);
     }
-    $scope.next = function(){
-      var page = $scope.userPagination.currentPage + 1;
-      if(page > $scope.userPagination.totalItems){
-        page = $scope.userPagination.totalItems;
+    $scope.next = function(type){
+      var page = $scope.modelPagination.currentPage + 1;
+      if(page > $scope.modelPagination.totalItems){
+        page = $scope.modelPagination.totalItems;
       }
-      fetchPage(page);
+      fetchPage(type, page);
     }
 
-    function fetchPage(page) {
-      $userManage.fetchPage(page).then(function (userList) {
+    function fetchPage(type, page) {
+      $userManage.fetchPage(type, page).then(function (userList) {
         $scope.userList = userList;
-        $scope.userPagination.currentPage = page;
+        $scope.modelPagination.currentPage = page;
         //纯js分页
-        if ($scope.userPagination.currentPage > 1 && $scope.userPagination.currentPage < $scope.userPagination.totalItems) {
+        if ($scope.modelPagination.currentPage > 1 && $scope.modelPagination.currentPage < $scope.modelPagination.totalItems) {
           $scope.pages = [
-            $scope.userPagination.currentPage - 1,
-            $scope.userPagination.currentPage,
-            $scope.userPagination.currentPage + 1
+            $scope.modelPagination.currentPage - 1,
+            $scope.modelPagination.currentPage,
+            $scope.modelPagination.currentPage + 1
           ];
-        } else if ($scope.userPagination.currentPage <= 1 && $scope.userPagination.totalItems > 1) {
-          $scope.userPagination.currentPage = 1;
+        } else if ($scope.modelPagination.currentPage <= 1 && $scope.modelPagination.totalItems > 1) {
+          $scope.modelPagination.currentPage = 1;
           $scope.pages = [
-            $scope.userPagination.currentPage,
-            $scope.userPagination.currentPage + 1
+            $scope.modelPagination.currentPage,
+            $scope.modelPagination.currentPage + 1
           ];
-        } else if ($scope.userPagination.currentPage >= $scope.userPagination.totalItems && $scope.userPagination.totalItems > 1) {
-          $scope.userPagination.currentPage = $scope.userPagination.totalItems;
+        } else if ($scope.modelPagination.currentPage >= $scope.modelPagination.totalItems && $scope.modelPagination.totalItems > 1) {
+          $scope.modelPagination.currentPage = $scope.modelPagination.totalItems;
           $scope.pages = [
-            $scope.userPagination.currentPage - 1,
-            $scope.userPagination.currentPage
+            $scope.modelPagination.currentPage - 1,
+            $scope.modelPagination.currentPage
           ];
         }
       });
