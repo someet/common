@@ -1,182 +1,254 @@
+@charset "UTF-8";
 body {
-  overflow-x: hidden; /*隐藏水平滚动条*/  
-}
-.activity-card {
-  position: relative;
-  margin-bottom: 12px;
-  -webkit-box-shadow: 0 5px 5px rgba(0, 0, 0, .5);
-  box-shadow: 0 5px 5px rgba(0, 0, 0, .5);
-}
-.activity-image {
-  position: relative;
-}
-.activity-img-mask {
-  position: absolute;
-  left:0;
-  bottom: 0;
-  width: 100%;
-  z-index: 10;
-}
-.bg-color-pink {
-  background-color: rgba(232, 21, 47, 1);
-}
-.bg-color-white {
-  background-color: white;
-}
-.bg-color-black {
+  overflow-x: hidden;
+  /*隐藏水平滚动条*/ }
+
+.list-block ul:before {
+  height: 0; }
+
+.list-block .item-inner:after {
+  background-color: black; }
+
+.list-so {
   background-color: black;
+  padding: 0.4em 1em 0.4em 1em; }
+
+.list-so-item {
+  background-color: white;
+  border-radius: 1.5em; }
+
+.so-padding-left {
+  padding-left: 1em; }
+
+
+/*完善资料页面 end*/
+
+/*活动列表卡片*/
+.activity-block {
+  position: relative; /* 
+          padding: 0;
+          margin-bottom: 10px;
+          line-height: 0;
+          -webkit-box-shadow: 0px 5px 5px #888;
+          -moz-box-shadow: 0px 5px 5px #888;
+          box-shadow: 0px 5px 5px #888;*/
 }
-.activity-card {
+.activity-block .mask {
+  position: absolute;
+  display:block;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  background: #000;
+  filter: alpha(opacity=10);
+  -moz-opacity: 0.1;
+  -khtml-opacity: 0.1;
+  opacity: 0.1;
+}
+.activity-host img {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border: 2px solid #FFF;
+}
+.activity-host label {
+  position: absolute;
+  font: normal 12px/18px Arial Black, Arial, Helvetica, sans-serif;
+  text-align: right;
+  text-shadow: #333 0 1px 0;
+  color: #fff;
+  top: 73px;
+  right: 16px;
+  width: 200px;
+  height: 44px;
+}
+.activity-host .divider {
+  position: absolute;
+  top: 67px;
+  right: 16px;
+  width: 44px;
+  height: 1px;
+  background: #eee;
+  overflow: hidden;
+}
+.activity-photo {
+  width: 100%;
+  display: inline-block;
+}
+.activity-info {
   position: relative;
-  margin-bottom: 12px;
-  -webkit-box-shadow: 0 5px 5px rgba(0, 0, 0, .5);
-  box-shadow: 0 5px 5px rgba(0, 0, 0, .5);
-}
-.so-float-right {
-  float: right;
+  height: 0;
+  top: -130px;
+  width: 100%;
+  left: 25px;
+  font: bold 1em Arial Black, Arial, Helvetica, sans-serif;
+  color: #fff;
+  text-shadow: #333 0 1px 0;
 }
 .activity-title {
   position: absolute;
-  color: white;
-  content: "";
-  font-size: 1.25em;
-  height: 40px;
-  width: 80%;
-  bottom: 5px;
-  right: 10px;
-  z-index: 50;
+  bottom: -95px;/*-95 = -130 + 35*/
+  padding-right: 1em;
+  left: 85px;
 }
-.activity-desc {
+.activity-title .main-title {
+  font-size: 1.1em;
+  line-height: 1.15em;
+}
+.activity-title label {
+  font-size: 0.9em;
+  line-height: 0.95em;
+}
+.activity-title .divider {  
+  width: 174px;
+  height: 1px;
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+  background: #eee;
+  overflow: hidden;
+}
+.activity-title .location {
+  font: normal 1em Arial Black, Arial, Helvetica, sans-serif;
+  font-size: 0.6em;
+  line-height: 0.65em;
+}
+.activity-title .location img {
+  width: 1em;
+  height: 1em;
+}
+.calendar {
   position: absolute;
-  color: white;
-  content: "";
-  font-size: 0.75em;
-  height: 30px;
-  width: 80%;
-  bottom: 50px;
-  right: 10px;
-  z-index: 50;
-}
-.activity-host {
-  position: absolute;
-  color: white;
-  content: "";
-  font-size: 0.75em;
-  height: 30px;
-  width: 80%;
-  bottom: 75px;
-  right: 10px;
-  z-index: 50;
-}
-
-.activity-location {
-  position: absolute;
-  color: white;
-  content: "";
-  font-size: 0.75em;
-  height: 30px;
-  width: 80%;
-  top: 0;
-  right: 10px;
-  z-index: 50;
-}
-
-.activity-icon {
-  width: 16px;
-  height: 16px;
-}
-
-.detail-text {
-  margin-bottom: 12px;
-  font-size: 0.7em;
-  margin-top: 12px;
+  margin: 0 10px 10px 0;
+  float: left;  /*height: 0;*/
+  overflow: hidden;
+  width: 75px;
+  background: rgba(0, 0, 0, 0);
+  font: normal 36px/60px Arial Black, Arial, Helvetica, sans-serif;
   text-align: center;
+  color: #FFF;
+  text-shadow: #333 0 1px 0;
+  border: 3px solid #FFF;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  -moz-box-shadow: 0 1px 1px #333;
+  -webkit-box-shadow: 0 1px 1px #333;
+  box-shadow: 0 1px 1px #333;
 }
-.detail-above-mask {
-  position: absolute;
-  color: white;
-  z-index: 50;
+.calendar label {
+  display: block;
+  font: bold 14px/30px Arial, Helvetica, sans-serif;
+  color: #fff;
+  margin-top: -15px;
+  text-shadow: #333 0 1px 0;
+  background: rgba(0, 0, 0, 0);
 }
-.detail-host {
-  height: 140px;
-  position: relative;
+.calendar em {
+  display: block;
+  font: bold 10px/30px Arial, Helvetica, sans-serif;
+  color: #000;
+  text-shadow: #333 0 0 0;
+  background: #FFF;
+  line-height: 20px;
 }
-.detail-host-avatar {
-  position: absolute;
-  top: 120px;
-  left: 30px;
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  z-index: 60;
+
+/*活动列表卡片end*/
+
+/*活动详情页面*/
+.detail-page {
+  background-color: #fff;
+  color: #333;
 }
-.detail-mask-label {
-  position: absolute;
-  color: white;
-  content: "";
+.detail-page .divider {
+  display: block;
+  margin-right: 24%;
+  width: 76%;
+  height: 1px;
+  float: left;
+  background-color: #d6d6d6;
+  overflow: hidden;
+}
+.detail-title {
+  display: block;
+  margin: 2em;
+  font: bold 1em Arial Black, Arial, Helvetica, sans-serif;
+  color: #111;
+  text-shadow: #555 0px 0px 1px;
+}
+.detail-title div {
+  font-size: 1.1em;
+  line-height: 1.15em;
+}
+.detail-title label {
   font-size: 1em;
-  height: 40px;
-  width: 300px;
-  top: 70px;
-  left: 0;
-  z-index: 50;
+  line-height: 1.05em;
+}
+.detail-info {
+  margin-top: 2em;
+  margin-right: 2em;
+  margin-left: 2em;
+  margin-bottom: 0em;
+  padding-bottom: 1em;
+  padding-top: 1em;
 }
 .detail-label {
-  color: black;
-  content: "";
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  font-size: 0.8em;
+  line-height: 1.05em;
+  font-weight: bold;
+  color: #262626;
+}
+.detail-label img {
+  width: 1.6em;
+  height: 1.6em;
+  margin-right: 0.2em;
+}
+.detail-host {
+  position: relative;
+  margin: 1em;
+}
+.description {
+  padding-left: 80px;
+  color: #aaa;
+  font-size: 0.6em;
+}
+.detail-host label {
+  padding-left: 1em;
+  text-align: left;
+  font: bold 1em Arial Black, Arial, Helvetica, sans-serif;
+  color: #111;
+  text-shadow: #555 0px 0px 1px;
+}
+.detail-host .hoster {
+  width: 100%;
+  height: 75px;
+  font-size: 0.8em;
+}
+.detail-host .hoster img {
+  float: left;
+  margin: 8px 8px 8px 28px;
+  width: 64px;
+  height: 64px;
+  border-radius: 32px;
+  -webkit-border-radius: 32px;
+  -moz-border-radius: 32px;
+  border: 4px solid #FFF;
+  -webkit-box-shadow: 0px 0px 1px #333;
+  -moz-box-shadow: 0px 0px 1px #333;
+  box-shadow: 0px 0px 1px #333;
+}
+.detail-host .hoster .name {
+  margin-left: 10px;
+  line-height: 75px;
+  height: 75px;
+  text-align: left;
   font-size: 1em;
-  height: 40px;
-  width: 100%;
-  padding-top: 12px;
-  padding-bottom: 12px;  
-  z-index: 50;
+  color: #262626;
 }
 
-.detail-host-name {
-  position: absolute;
-  color: white;
-  content: "";
-  font-size: 0.80em;
-  width: 100px;
-  height: 40px;
-  top: 160px;
-  left: 150px;
-  z-index: 50;
-}
-.detail-mask-block {
-  background-color: rgba(29, 28, 30, .8);
-  padding-top: 90px;
-  padding-bottom: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
-  content: "";
-  bottom: 0;
-  width: 100%;
-  z-index: 0;
-}
-.detail-mask-text {
-  z-index: 30;
-  color:white;
-}
-
-.list-block ul:before {
-    height:0;
-}
-
-.list-block .item-inner:after {
-    background-color: black;
-}
-
-.list-so {
-    background-color:black;
-    padding:0.4em 1em 0.4em 1em;
-}
-
-.list-so-item {
-    background-color:white;
-    border-radius: 1.5em;
-}
-
-.so-padding-left {
-    padding-left: 1em;
-}
+/*活动详情页end*/
