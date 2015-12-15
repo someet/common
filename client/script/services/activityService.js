@@ -55,7 +55,7 @@ angular.module('backendServices')
           var params = {
             'type': type,
             'page': page,
-            'perPage': 2  //每页20条
+            'perPage': 20  //每页20条
           };
 
           return $http.get('/activity?scenario=page', {

@@ -24,7 +24,7 @@ angular.module('controllers', ['ngTagsInput'])
           totalItems: 0,
           currentPage: 1,
           maxSize: 5,
-          itemsPerPage: 2,//每页多少条
+          itemsPerPage: 20,//每页多少条
           pageChange: function() {
             fetchPage(type, this.currentPage);
           }
