@@ -213,7 +213,7 @@ class CronController  extends \yii\console\Controller
         $wechat = Yii::$app->wechat;
 
         // 给审核的用户发短信, 包括通过的, 等待的, 拒绝的
-        $answerList = Answer::find()->where(['is_send' => '0'])->with(['user', 'activity', 'activity.pma'])->all();
+        $answerList = Answer::find()->where(['is_send' => Answer::STATUS_SMS_YET])->with(['user', 'activity', 'activity.pma'])->all();
         //遍历列表
         foreach($answerList as $answer) {
 
@@ -316,8 +316,8 @@ class CronController  extends \yii\console\Controller
                         Answer::updateAll(['wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_Fail, 'wechat_template_push_at' => time()], ['id' => $answer->id]);
                     }
                 } else {
-                    //记录一个错误, 当前报名用户没有绑定微信
-                    Yii::error('报名用户id: '.$answer->user->id.' 的用户没有绑定微信');
+                    //记录一个错误, 当前报名用户短信发送失败或者没有绑定微信
+                    Yii::error('报名用户id: '.$answer->user->id.' 的用户短信发送失败或者没有绑定微信');
                 }
             } else {
                 //报一个错误, 用户手机号码有误, 无法发送短信

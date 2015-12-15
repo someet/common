@@ -144,7 +144,6 @@ class ActivityController extends BackendController
                 ->andWhere(['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE]])
                 ->with([
                     'type',
-                    'tags',
                     'question',
                     'answerList',
                     'feedbackList'
@@ -161,7 +160,6 @@ class ActivityController extends BackendController
                 ->where(['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE]])
                 ->with([
                     'type',
-                    'tags',
                     'question',
                     'answerList',
                     'feedbackList'
@@ -195,7 +193,6 @@ class ActivityController extends BackendController
         $activities = Activity::find()
             ->with([
                 'type',
-                'tags',
             ])
             ->orderBy([
                 'is_top' => SORT_DESC,
@@ -541,7 +538,6 @@ class ActivityController extends BackendController
                 'user.profile',
                 'pma',
                 'pma.profile',
-                'tags'
             ])
             ->asArray()
             ->one();
