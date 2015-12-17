@@ -60,7 +60,7 @@ class ActivityController extends BackendController
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         if ($type>0) {
-            $where = ['status' => Activity::STATUS_RELEASE, 'type_id' => $type];
+            $where = ['type_id' => $type];
             $query = Activity::find()
                 ->with([
                     'type',
@@ -73,7 +73,6 @@ class ActivityController extends BackendController
                 ->where($where)
                 ->orderBy(['id' => SORT_DESC]);
         } else {
-            $where = ['status' => Activity::STATUS_RELEASE];
             $query = Activity::find()
                 ->with([
                     'type',
@@ -83,7 +82,6 @@ class ActivityController extends BackendController
                     'feedbackList'
                 ])
                 ->asArray()
-                ->where($where)
                 ->orderBy(['id' => SORT_DESC]);
         }
 
