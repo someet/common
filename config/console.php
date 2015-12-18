@@ -9,6 +9,7 @@ return [
     'controllerNamespace' => 'app\commands',
     'components' => [
         'db' => $web['components']['db'],
+        'beanstalk' => $web['components']['beanstalk'],
         'log' => [
             'targets' => [
                 [
@@ -28,44 +29,20 @@ return [
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
-        'yunpian' => [
-            'class' => 'dcb9\Yunpian\sdk\Yunpian',
-            'apiKey' => \DockerEnv::get('YUNPIAN_API_KEY'),
-            'useFileTransport' => false, // 如果该值为 true 则不会真正的发送短信，而是把内容写到文件里面，测试环境经常需要用到！
-        ],
-        'wechat' => [
-            'class' => 'callmez\wechat\sdk\MpWechat',
-            'appId' => \DockerEnv::get('WEIXIN_APP_ID'),
-            'appSecret' => \DockerEnv::get('WEIXIN_APP_SECRET'),
-            'token' => \DockerEnv::get('WEIXIN_TOKEN'),
-            'encodingAesKey' => \DockerEnv::get('WEIXIN_ENCODING_AES_KEY')
-        ],
-        'cache' => [
-            'class' => 'yii\redis\Cache',
-        ],
-        'redis' => [
-            'class' => 'yii\redis\Connection',
-            'hostname' => \DockerEnv::get('REDIS_PORT_6379_TCP_ADDR'),
-            'port' => 6379,
-            'password' => \DockerEnv::get('REDIS_1_ENV_REDIS_PASSWORD'),
-            'database' => 0,
-        ],
+        'yunpian' => $web['components']['yunpian'],
+        'wechat' => $web['components']['wechat'],
+        'redis' => $web['components']['redis'],
+        'cache' => $web['components']['cache'],
     ],
     'modules' => [
-        'user' => [
-            'class' => 'dektrium\user\Module',
-            'enableRegistration' => true,
-            'enableConfirmation' => false,
-            'enableUnconfirmedLogin' => true,
-            'enablePasswordRecovery' => true,
-            'confirmWithin' => 21600,
-            'rememberFor' => 1209600, //如果没有点击记住密码则默认保持1天的登录时间
-            'admins' => ['admin'],
-            'modelMap' => [
-                'User' => 'someet\common\models\User',
-                'Profile' => 'someet\common\models\Profile',
-            ],
-        ],
+        'user' => $web['modules']['user'],
     ],
     'params' => $web['params'],
+    // add you controller with name and class name next to params.
+    'controllerMap' => [
+        'worker'=>[
+            'class' => 'app\commands\WorkerController',
+        ]
+
+    ],
 ];

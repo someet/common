@@ -30,6 +30,13 @@ $config = [
             'password' => \DockerEnv::get('REDIS_1_ENV_REDIS_PASSWORD'),
             'database' => 0,
         ],
+        'beanstalk'=>[
+            'class' => 'udokmeci\yii2beanstalk\Beanstalk',
+            'host'=> "192.168.99.100", // default host
+            'port'=>11300, //default port
+            'connectTimeout'=> 1,
+            'sleep' => false, // or int for usleep after every job
+        ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],

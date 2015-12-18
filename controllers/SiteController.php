@@ -35,7 +35,6 @@ class SiteController extends BackendController
                 'allowActions' => [
                     'error',
                     'logout',
-                    'test-sentry',
                     'fetch'
                 ]
             ],

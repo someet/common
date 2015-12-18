@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ec65d4dfb5a1bc1b0314c4d9bf1b6317",
-    "content-hash": "08786409a3ddfcad766db1e72d142c23",
+    "hash": "2ec4a9572aa991975f122c9e2742c9d4",
+    "content-hash": "69008c84a12e587d2623c2426409c620",
     "packages": [
         {
             "name": "bazilio/yii2-newrelic",
@@ -483,7 +483,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/yii2-rbac/",
-                "reference": "",
+                "reference": "5ee052aa34fc347489e04b4c89dc2d82",
                 "shasum": null
             },
             "require": {
@@ -499,7 +499,6 @@
                     "dektrium\\rbac\\": ""
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -520,7 +519,10 @@
                 "yii2",
                 "yii2-rbac"
             ],
-            "time": "2015-10-03 18:34:36"
+            "support": {
+                "issues": "https://github.com/dektrium/yii2-rbac/issues?state=open",
+                "source": "https://github.com/dektrium/yii2-rbac"
+            }
         },
         {
             "name": "dektrium/yii2-user",
@@ -833,16 +835,16 @@
         },
         {
             "name": "kartik-v/yii2-krajee-base",
-            "version": "v1.7.7",
+            "version": "v1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-krajee-base.git",
-                "reference": "c0adff9d9762f4fd3bf0e7cd0000fcab0bf00f19"
+                "reference": "602e7203680642ac4a2a5f9355316eaa9939b6ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/c0adff9d9762f4fd3bf0e7cd0000fcab0bf00f19",
-                "reference": "c0adff9d9762f4fd3bf0e7cd0000fcab0bf00f19",
+                "url": "http://packagist.phpcomposer.com/files/kartik-v/yii2-krajee-base/602e7203680642ac4a2a5f9355316eaa9939b6ff.zip",
+                "reference": "602e7203680642ac4a2a5f9355316eaa9939b6ff",
                 "shasum": ""
             },
             "require": {
@@ -875,20 +877,20 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2015-06-16 05:19:57"
+            "time": "2015-12-11 19:01:49"
         },
         {
             "name": "kartik-v/yii2-widget-select2",
-            "version": "v2.0.3",
+            "version": "v2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-widget-select2.git",
-                "reference": "e72880e7e8dfc845c112ed7df275bf1c929be6db"
+                "reference": "ffc59cef18864d773c79f3b2da2f34c948ff5648"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-widget-select2/zipball/e72880e7e8dfc845c112ed7df275bf1c929be6db",
-                "reference": "e72880e7e8dfc845c112ed7df275bf1c929be6db",
+                "url": "http://packagist.phpcomposer.com/files/kartik-v/yii2-widget-select2/ffc59cef18864d773c79f3b2da2f34c948ff5648.zip",
+                "reference": "ffc59cef18864d773c79f3b2da2f34c948ff5648",
                 "shasum": ""
             },
             "require": {
@@ -923,20 +925,70 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2015-09-12 19:56:48"
+            "time": "2015-12-16 19:38:06"
         },
         {
-            "name": "qiniu/php-sdk",
-            "version": "v7.0.5",
+            "name": "pda/pheanstalk",
+            "version": "v3.1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/qiniu/php-sdk.git",
-                "reference": "96850c80398ccaebe9d0923509145d1fb76459ee"
+                "url": "https://github.com/pda/pheanstalk.git",
+                "reference": "430e77c551479aad0c6ada0450ee844cf656a18b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/qiniu/php-sdk/zipball/96850c80398ccaebe9d0923509145d1fb76459ee",
-                "reference": "96850c80398ccaebe9d0923509145d1fb76459ee",
+                "url": "http://packagist.phpcomposer.com/files/pda/pheanstalk/430e77c551479aad0c6ada0450ee844cf656a18b.zip",
+                "reference": "430e77c551479aad0c6ada0450ee844cf656a18b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pheanstalk\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Paul Annesley",
+                    "email": "paul@annesley.cc",
+                    "homepage": "http://paul.annesley.cc/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP client for beanstalkd queue",
+            "homepage": "https://github.com/pda/pheanstalk",
+            "keywords": [
+                "beanstalkd"
+            ],
+            "time": "2015-08-07 21:42:41"
+        },
+        {
+            "name": "qiniu/php-sdk",
+            "version": "v7.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/qiniu/php-sdk.git",
+                "reference": "798ae5501ef1148d09720ca7a28b2044c2f16a53"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://packagist.phpcomposer.com/files/qiniu/php-sdk/798ae5501ef1148d09720ca7a28b2044c2f16a53.zip",
+                "reference": "798ae5501ef1148d09720ca7a28b2044c2f16a53",
                 "shasum": ""
             },
             "require": {
@@ -974,7 +1026,7 @@
                 "sdk",
                 "storage"
             ],
-            "time": "2015-10-29 14:27:31"
+            "time": "2015-12-05 14:34:30"
         },
         {
             "name": "raven/raven",
@@ -1127,7 +1179,7 @@
             "dist": {
                 "type": "path",
                 "url": "./packages/someet-common/",
-                "reference": "",
+                "reference": "7bc254901375e89bc62c10780e1b232f",
                 "shasum": null
             },
             "require": {
@@ -1196,6 +1248,60 @@
                 "mailer"
             ],
             "time": "2015-06-06 14:19:39"
+        },
+        {
+            "name": "udokmeci/yii2-beanstalk",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/udokmeci/yii2-beanstalk.git",
+                "reference": "ef661621c120ba10b688ae4022faf6b247c8940a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://packagist.phpcomposer.com/files/udokmeci/yii2-beanstalk/ef661621c120ba10b688ae4022faf6b247c8940a.zip",
+                "reference": "ef661621c120ba10b688ae4022faf6b247c8940a",
+                "shasum": ""
+            },
+            "require": {
+                "pda/pheanstalk": "3.*@dev",
+                "php": ">=5.3.0",
+                "yiisoft/yii2": "*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "udokmeci\\yii2beanstalk": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Uğur DÖKMECİ",
+                    "email": "ugurdokmeci@gmail.com",
+                    "homepage": "https://github.com/udokmeci/yii2-beanstalk",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Yii2 Beanstalk Client at the top of Paul Annesley's pheanstalk",
+            "homepage": "https://github.com/udokmeci/yii2-beanstalk",
+            "keywords": [
+                "beanstalk client",
+                "beanstalkd",
+                "yii2"
+            ],
+            "time": "2015-12-04 08:49:31"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -1945,7 +2051,8 @@
         "dektrium/yii2-rbac": 20,
         "yiisoft/yii2-redis": 20,
         "e96/yii2-sentry": 20,
-        "callmez/yii2-wechat-sdk": 20
+        "callmez/yii2-wechat-sdk": 20,
+        "udokmeci/yii2-beanstalk": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

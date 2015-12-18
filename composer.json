@@ -21,7 +21,8 @@
         "e96/yii2-sentry": "dev-master",
         "callmez/yii2-wechat-sdk": "dev-master",
         "dcb9/yii2-yunpian": "^0.0.2",
-        "bazilio/yii2-newrelic": "~0.0.1"
+        "bazilio/yii2-newrelic": "~0.0.1",
+		"udokmeci/yii2-beanstalk" : "dev-master"
 	},
 	"require-dev": {
 		"yiisoft/yii2-debug": "~2.0.0",
