@@ -10,7 +10,7 @@ RUN composer self-update \
   # 优化自动加载
   #&& composer dump-autoload --optimize \
   # install bower
-  && npm install -g cnpm --registry=https://registry.npm.taobao.org \
+  #&& npm install -g cnpm --registry=https://registry.npm.taobao.org \
   && npm install gulp \
   && npm install \
   && bower install --allow-root --config.interactive=false \
