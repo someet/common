@@ -44,6 +44,13 @@ class Answer extends \yii\db\ActiveRecord
     /* 微信模板消息发送失败 */
     const STATUS_WECHAT_TEMPLATE_Fail = 2;
 
+    /* 参加活动的短信未发送 */
+    const JOIN_NOTI_IS_SEND_YET = 0;
+    /* 参加活动的短信发送成功 */
+    const JOIN_NOTI_IS_SEND_SUCC = 1;
+    /* 参加活动的短信发送失败 */
+    const JOIN_NOTI_IS_SEND_FAIL = 2;
+
     /**
      * @inheritdoc
      */
@@ -59,7 +66,7 @@ class Answer extends \yii\db\ActiveRecord
     {
         return [
             [['question_id'], 'required'],
-            [['question_id', 'activity_id', 'user_id', 'is_finish', 'is_send', 'send_at', 'created_at', 'updated_at', 'status', 'wechat_template_push_at', 'wechat_template_is_send', 'wechat_template_msg_id'], 'integer'],
+            [['question_id', 'activity_id', 'user_id', 'is_finish', 'is_send', 'send_at', 'created_at', 'updated_at', 'status', 'wechat_template_push_at', 'wechat_template_is_send', 'wechat_template_msg_id', 'join_noti_is_send', 'join_noti_send_at', 'join_noti_wechat_template_push_at', 'join_noti_wechat_template_is_send', 'join_noti_wechat_template_msg_id'], 'integer'],
             [['question_id', 'user_id'], 'unique', 'targetAttribute' => ['question_id', 'user_id'], 'message' => 'The combination of 问题ID and 用户ID has already been taken.'],
             [['status'], 'default', 'value' => static::STATUS_REVIEW_YET]
         ];
@@ -81,6 +88,11 @@ class Answer extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'status' => '0 删除 10 正常',
+            'join_noti_is_send' => '参加提醒短信是否已发送',
+            'join_noti_send_at' => '参加提醒短信的发送时间',
+            'join_noti_wechat_template_push_at' => '参加提醒的微信模板消息发送时间',
+            'join_noti_wechat_template_is_send' => '参加提醒的微信模板消息是否发送',
+            'join_noti_wechat_template_msg_id' => '参加提醒的模板消息id',
         ];
     }
 
