@@ -167,6 +167,52 @@ class CronController  extends \yii\console\Controller
         ];
         return $data;
     }
+    /*
+     * 获取参加活动通知的微信模板消息
+     * @param $openid openid
+     * @param $account Account对象
+     * @param $activity 活动对象
+     * @return array
+     */
+    private function fetchNotiWechatTemplateData($openid, $account, $activity) {
+        //获取失败的模板消息id
+        $template_id = Yii::$app->params['sms.noti_template_id'];
+        if (empty($template_id)) {
+            //记录一个错误, 请设置失败的模板消息id
+            Yii::error('请设置失败的模板消息id');
+        }
+        $start_time = date('Y年m月d日', $activity['start_time']);
+        $data = [
+            "touser" => "{$openid}",
+            "template_id" => $template_id,
+            "url" => Yii::$app->params['domain'],
+            "topcolor" => "#FF0000",
+            "data" => [
+                "first" => [
+                    "value" => "您好，您预定的活动马上开始！",
+                    "color" => "#173177"
+                ],
+                "keyword1" => [
+                    "value" => "{$activity['title']}",
+                    "color" => "#173177"
+                ],
+                "keyword2" => [
+                    "value" => "{$activity['address']}",
+                    "color" =>"#173177"
+                ],
+                "keyword3" => [
+                    "value" => "{$start_time}",
+                    "color" => "#173177"
+                ],
+                "remark" => [
+                    "value" => "请合理安排时间出行，不要迟到哦。",
+                    "color" => "#173177"
+                ],
+            ]
+        ];
+        return $data;
+    }
+
     /**
      * 获取成功的短信内容
      * @param string $activity_name 活动名称
@@ -194,6 +240,16 @@ class CronController  extends \yii\console\Controller
     private function fetchFailSmsData($activity_name) {
         //获取拒绝的短信模板
         return "【Someet活动平台】Someet用户您好，很抱歉您报名的“{$activity_name}”活动未通过筛选。关于如何提高报名的成功率，这里有几个小tips，1.认真回答筛选问题； 2.尽早报名，每周二周三是活动推送时间，周四周五报名的成功概率会相对降低很多 3.自己发起活动，优质的发起人是有参与活动特权的哦~ 当然，您还可以添加我们的官方客服Someet小海豹（微信号：someetxhb）随时与我们联系。期待下次活动和你相遇。系统短信，请勿回复。";
+    }
+
+    /**
+     * 获取通知参加活动的短信内容
+     * @param string $activity_name 活动名称
+     * @return string 通知参加活动的短信内容
+     */
+    private function fetchNotiSmsData($activity_name, $start_time, $weather) {
+        //获取通知参加活动的短信
+        return "【Someet活动平台】亲爱的Someet用户，您报名的活动“{$activity_name}”会在今天的{$start_time}开始，请合理安排时间出行，不要迟到哦。天气情况：{$weather}";
     }
 
     /**
@@ -327,6 +383,93 @@ class CronController  extends \yii\console\Controller
 
                         //更新报名的模板消息发送的时间和状态, 状态为失败,后面可以单独的重新发送模板消息
                         Answer::updateAll(['wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_Fail, 'wechat_template_push_at' => time()], ['id' => $answer['id']]);
+                    }
+                } else {
+                    //记录一个错误, 当前报名用户短信发送失败或者没有绑定微信
+                    Yii::error('报名用户id: '.$answer['user']['id'].' 的用户短信发送失败或者没有绑定微信');
+                }
+            } else {
+                //报一个错误, 用户手机号码有误, 无法发送短信
+                Yii::error('报名用户id: '.$answer['user']['id'].' 的用户手机号码未设置, 或者设置的不正确');
+            }
+        } // foreach结束
+    }
+
+    /**
+     * 发送参加活动的提醒在活动前2小时发送
+     */
+    public function actionSendJoinNoti()
+    {
+        //获取微信组件
+        $wechat = Yii::$app->wechat;
+
+        //查询需要发送提醒的用户
+        $answerList = Answer::find()
+            ->where(['join_noti_is_send' => Answer::JOIN_NOTI_IS_SEND_YET])
+            ->with(['user', 'activity'])
+            ->asArray()
+            ->all();
+
+        //查询今天北京的天气情况
+        $weather = "北京今天多云，最高气温15℃，PM2.5值300。";
+
+        //遍历列表
+        foreach($answerList as $answer) {
+
+            //判断报名的用户是否存在
+            if (!$answer['user']) {
+                //记录一个错误, 提示计划任务中报名的用户不存在, 请检查
+                Yii::error('参加活动提醒的计划任务中活动id为'.$answer['activity']['id'].' 的报名的用户不存在, 请检查');
+                //继续下一个
+                continue;
+            }
+
+            // 用户的手机号码不为空, 并且手机号码是合法的手机号
+            if (!empty($answer['user']['mobile']) && $this->isTelNumber($answer['user']['mobile'])) {
+
+                //手机号
+                $mobile = $answer['user']['mobile'];
+
+                //设置默认的短信为等待的短信内容
+                $smsData = $this->fetchNotiSmsData($answer['activity']['title'], date('HH:ii', $answer['activity']['start_time']), $weather);
+
+                $mixedData = [
+                    'mobile' => $mobile,
+                    'smsData' => $smsData,
+                    'answer' => $answer,
+                ];
+
+                $sms = Yii::$app->beanstalk
+                    ->putInTube('noti', $mixedData);
+                if (!$sms) {
+                    Yii::error('参加活动提醒短信添加到消息队列失败, 请检查');
+                }
+
+                //尝试发送微信模板消息
+                //获取绑定的微信对象
+                /* @var $account Account */
+                $account = Account::find()->where([
+                    'provider' => 'wechat',
+                    'user_id' => $answer['user']['id'],
+                ])->with('user')->one();
+
+                //如果短信发送成功绑定了微信对象
+                if ($account) {
+                    //获取微信的openid
+                    $openid = $account->client_id;
+
+                    //设置模板消息默认为等待的模板消息内容
+                    $templateData = $this->fetchNotiWechatTemplateData($openid, $answer['activity']);
+
+                    //尝试发送模板消息
+                    if ($msgid = $wechat->sendTemplateMessage($templateData)) { //模板消息发送成功
+
+                        //更新报名的模板消息的id, 发送的时间和状态
+                        Answer::updateAll(['join_noti_wechat_template_msg_id' => $msgid, 'join_noti_wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_SUCC, 'join_noti_wechat_template_push_at' => time()], ['id' => $answer['id']]);
+                    } else {
+
+                        //更新报名的模板消息发送的时间和状态, 状态为失败,后面可以单独的重新发送模板消息
+                        Answer::updateAll(['join_noti_wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_Fail, 'join_noti_wechat_template_push_at' => time()], ['id' => $answer['id']]);
                     }
                 } else {
                     //记录一个错误, 当前报名用户短信发送失败或者没有绑定微信
