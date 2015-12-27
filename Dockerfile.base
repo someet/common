@@ -1,5 +1,5 @@
-#FROM codemix/yii2-base:2.0.6-php-fpm
-FROM daocloud.io/someetinc/yii2-base:master-init
+FROM codemix/yii2-base:2.0.6-php-fpm
+#FROM daocloud.io/someetinc/yii2-base:master-init
 
 ADD http://npmjs.org/install.sh /npmjs.install.sh
 
