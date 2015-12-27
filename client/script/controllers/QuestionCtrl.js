@@ -50,7 +50,6 @@ angular.module('controllers')
               };
               newEntity.questionItemList.push(questionItem);
             }
-            console.log(newEntity);
 
             $questionManage.update($scope.entity.id, newEntity).then(function(data) {
               $location.path('/activity/list/0');
