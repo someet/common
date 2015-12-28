@@ -106,6 +106,10 @@ $config = [
             'accessKey' => \DockerEnv::get('QINIU_ACCESS_KEY'),
             'secretKey' => \DockerEnv::get('QINIU_SECRET_KEY'),
         ],
+        'weather' => [
+            'class' => 'app\components\WeatherComponent',
+            'key' => \DockerEnv::get('WEATHER_KEY'),
+        ],
         'wechat' => [
             'class' => 'callmez\wechat\sdk\MpWechat',
             'appId' => \DockerEnv::get('WEIXIN_APP_ID'),

@@ -33,6 +33,7 @@ return [
         'wechat' => $web['components']['wechat'],
         'redis' => $web['components']['redis'],
         'cache' => $web['components']['cache'],
+        'weather' => $web['components']['weather'],
     ],
     'modules' => [
         'user' => $web['modules']['user'],
