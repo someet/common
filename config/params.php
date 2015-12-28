@@ -23,4 +23,6 @@ return [
     'sms.noti_template_id' => \DockerEnv::get('WEIXIN_TEMPLATE_NOTI_ID'),
 
     'domain' => \DockerEnv::get('WECHAT_DOMAIN'),
+
+    'weather.cityid' => \DockerEnv::get('WEATHER_CITYID'),
 ];

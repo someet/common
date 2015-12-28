@@ -171,7 +171,6 @@ class CronController  extends \yii\console\Controller
     /*
      * 获取参加活动通知的微信模板消息
      * @param $openid openid
-     * @param $account Account对象
      * @param $activity 活动对象
      * @return array
      */
@@ -250,7 +249,7 @@ class CronController  extends \yii\console\Controller
      */
     private function fetchNotiSmsData($activity_name, $start_time, $weather) {
         //获取通知参加活动的短信
-        return "【Someet活动平台】亲爱的Someet用户，您报名的活动“{$activity_name}”会在今天的{$start_time}开始，请合理安排时间出行，不要迟到哦。天气情况：{$weather}";
+        return "【Someet活动平台】您报名的活动“{$activity_name}”在今天的{$start_time}开始。{$weather}请合理安排时间出行，不要迟到哦。";
     }
 
     /**
@@ -414,7 +413,13 @@ class CronController  extends \yii\console\Controller
             ->all();
 
         //查询今天北京的天气情况
-        $weather = "北京今天多云，最高气温15℃，PM2.5值300。";
+        //"您报名的活动“#activity_title#”在今天的#start_time#开始。当前室外温度1℃，PM25指数95，请合理安排时间出行，不要迟到哦。"
+        $weatherArr = Yii::$app->weather->getWeather();
+        if (0 == $weatherArr['success']) {
+            $weather = "";
+        } else {
+            $weather = "当前室外温度{$weatherArr['temperature']}℃ ，PM2.5指数{$weatherArr['pm25']}，";
+        }
 
         //遍历列表
         foreach($answerList as $answer) {
@@ -434,7 +439,7 @@ class CronController  extends \yii\console\Controller
                 $mobile = $answer['user']['mobile'];
 
                 //设置默认的短信为等待的短信内容
-                $smsData = $this->fetchNotiSmsData($answer['activity']['title'], date('HH:ii', $answer['activity']['start_time']), $weather);
+                $smsData = $this->fetchNotiSmsData($answer['activity']['title'], date('H:i', $answer['activity']['start_time']), $weather);
 
                 $mixedData = [
                     'mobile' => $mobile,
