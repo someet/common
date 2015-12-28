@@ -1,6 +1,7 @@
 <?php
 namespace app\commands;
 
+use someet\common\models\Activity;
 use Yii;
 use someet\common\models\Answer;
 use dektrium\user\models\Account;
@@ -174,7 +175,7 @@ class CronController  extends \yii\console\Controller
      * @param $activity 活动对象
      * @return array
      */
-    private function fetchNotiWechatTemplateData($openid, $account, $activity) {
+    private function fetchNotiWechatTemplateData($openid, $activity) {
         //获取失败的模板消息id
         $template_id = Yii::$app->params['sms.noti_template_id'];
         if (empty($template_id)) {
@@ -400,13 +401,15 @@ class CronController  extends \yii\console\Controller
      */
     public function actionSendJoinNoti()
     {
-        //获取微信组件
-        $wechat = Yii::$app->wechat;
 
-        //查询需要发送提醒的用户
+        //查询需要发送提醒的用户, 并且活动在2个小时内即将开始, 并且当时时间不能大于开始时间
         $answerList = Answer::find()
-            ->where(['join_noti_is_send' => Answer::JOIN_NOTI_IS_SEND_YET])
-            ->with(['user', 'activity'])
+            ->where(['join_noti_is_send' => Answer::JOIN_NOTI_IS_SEND_YET]) //还未给用户发送过参加活动通知
+                ->innerJoin('activity', "start_time > ".time()." and start_time<". (time()+7200) ." and activity.status = ".Activity::STATUS_RELEASE)
+            ->with([
+                'user',
+                'activity'
+            ])
             ->asArray()
             ->all();
 
@@ -439,12 +442,16 @@ class CronController  extends \yii\console\Controller
                     'answer' => $answer,
                 ];
 
+                //add noti beanstalk
                 $sms = Yii::$app->beanstalk
                     ->putInTube('noti', $mixedData);
                 if (!$sms) {
                     Yii::error('参加活动提醒短信添加到消息队列失败, 请检查');
+                } else {
+                    Yii::info('添加短信到消息队列成功');
                 }
 
+                //add noti wechat beanstalk
                 //尝试发送微信模板消息
                 //获取绑定的微信对象
                 /* @var $account Account */
@@ -461,15 +468,11 @@ class CronController  extends \yii\console\Controller
                     //设置模板消息默认为等待的模板消息内容
                     $templateData = $this->fetchNotiWechatTemplateData($openid, $answer['activity']);
 
-                    //尝试发送模板消息
-                    if ($msgid = $wechat->sendTemplateMessage($templateData)) { //模板消息发送成功
-
-                        //更新报名的模板消息的id, 发送的时间和状态
-                        Answer::updateAll(['join_noti_wechat_template_msg_id' => $msgid, 'join_noti_wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_SUCC, 'join_noti_wechat_template_push_at' => time()], ['id' => $answer['id']]);
+                    $wechat_template = Yii::$app->beanstalk->putInTube('notiwechat', ['templateData' => $templateData, 'answer' => $answer]);
+                    if (!$wechat_template) {
+                        Yii::error('参加活动提醒微信消息模板加到队列失败，请检查');
                     } else {
-
-                        //更新报名的模板消息发送的时间和状态, 状态为失败,后面可以单独的重新发送模板消息
-                        Answer::updateAll(['join_noti_wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_Fail, 'join_noti_wechat_template_push_at' => time()], ['id' => $answer['id']]);
+                        Yii::info('添加微信模板消息到消息队列成功');
                     }
                 } else {
                     //记录一个错误, 当前报名用户短信发送失败或者没有绑定微信
