@@ -265,8 +265,8 @@ class CronController  extends \yii\console\Controller
 
         // 给活动开始时间大于当前时间的, 审核的用户发短信, 包括通过的, 等待的, 拒绝的
         $answerList = Answer::find()
-            ->where(['is_send' => Answer::STATUS_SMS_YET])
-            ->innerJoin('activity', "start_time > ".time()." and activity.status = ".Activity::STATUS_RELEASE)
+            ->where(['answer.is_send' => Answer::STATUS_SMS_YET])
+            ->innerJoin('activity', "activity.start_time > ".time()." and activity.status = ".Activity::STATUS_RELEASE)
             ->with(['user', 'activity', 'activity.pma'])
             ->asArray()
             ->all();
@@ -371,10 +371,9 @@ class CronController  extends \yii\console\Controller
      */
     public function actionSendJoinNoti()
     {
-        //查询需要发送提醒的用户, 并且活动在2个小时内即将开始, 并且当时时间不能大于开始时间, 并且只给审核通过的人发提醒
+        //查询需要发送提醒的用户, 并且活动在2个小时内即将开始, 并且当时时间不能大于开始时间, 并且只给审核通过的人发提醒, 并且已经给用户发送过通知短信
         $answerList = Answer::find()
-                ->where(['join_noti_is_send' => Answer::JOIN_NOTI_IS_SEND_YET]) //还未给用户发送过参加活动通知
-                ->andWhere(['status' => Answer::STATUS_REVIEW_PASS])
+                ->where(['answer.join_noti_is_send' => Answer::JOIN_NOTI_IS_SEND_YET, 'answer.status' => Answer::STATUS_REVIEW_PASS, 'answer.is_send' => Answer::STATUS_SMS_SUCC]) //还未给用户发送过参加活动通知
                 ->innerJoin('activity', "start_time > ".time()." and start_time<". (time()+7200) ." and activity.status = ".Activity::STATUS_RELEASE)
                 ->with([
                     'user',
@@ -499,8 +498,5 @@ class CronController  extends \yii\console\Controller
         //尝试发送短消息
         $res = Yii::$app->yunpian->sendSms($mobile, $smsData);
         var_dump($res);
-
     }
-
-
 }

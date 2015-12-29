@@ -63,8 +63,15 @@ class WeatherComponent extends Component
             $res = curl_exec($ch);
             $weather = json_decode($res, true);
 
-            $pm25 = $weather["HeWeather data service 3.0"][0]["aqi"]['city']["pm25"];
-            $temperature = $weather["HeWeather data service 3.0"][0]["now"]['tmp'];
+            if (isset($weather['HeWeather data service 3.0'][0]['aqi']['city']['pm25']) && isset($weather["HeWeather data service 3.0"][0]["now"]['tmp'])) {
+                $pm25 = $weather["HeWeather data service 3.0"][0]["aqi"]['city']["pm25"];
+                $temperature = $weather["HeWeather data service 3.0"][0]["now"]['tmp'];
+            } else {
+                Yii::error('获取天气情况发生异常,请检查, 返回内容为: '.$res);
+                return [
+                    'success' => 0,
+                ];
+            }
         } catch (Exception $e) {
 
             Yii::error('获取天气情况发生异常,请检查, '
