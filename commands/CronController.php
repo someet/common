@@ -263,9 +263,10 @@ class CronController  extends \yii\console\Controller
         //获取微信组件
         $wechat = Yii::$app->wechat;
 
-        // 给审核的用户发短信, 包括通过的, 等待的, 拒绝的
+        // 给活动开始时间大于当前时间的, 审核的用户发短信, 包括通过的, 等待的, 拒绝的
         $answerList = Answer::find()
             ->where(['is_send' => Answer::STATUS_SMS_YET])
+            ->andWhere("start_time > ".time())
             ->with(['user', 'activity', 'activity.pma'])
             ->asArray()
             ->all();
@@ -321,34 +322,6 @@ class CronController  extends \yii\console\Controller
                 if (!$sms) {
                     Yii::error('短信添加到消息队列失败, 请检查');
                 }
-                /*
-                //尝试发送短消息
-                $sms = Yii::$app->yunpian;
-                $smsRes = $sms->sendSms($mobile, $smsData);
-
-                //如果是未审核,则只修改发送时间
-                if (Answer::STATUS_REVIEW_YET == $answer->status) {
-
-                    //修改发送时间, 不修改状态, 不然后台没办法再进行筛选了
-                    Answer::updateAll(['send_at' => time()],
-                        ['id' => $answer->id]);
-                } elseif ($smsRes) {
-
-                    //修改短信发送状态为成功, 以及修改发送时间
-                    Answer::updateAll(['is_send' => Answer::STATUS_SMS_SUCC, 'send_at' => time()],
-                        ['id' => $answer->id]);
-                } elseif ($sms->hasError()) {
-
-                    $error = $sms->getLastError();
-                    $msg = is_array($error) && isset($error['msg']) ? $error['msg'] : '发送短信失败';
-
-                    Yii::error('短信发送失败, 请检查'. is_array($error) ? json_encode($error) : $error);
-
-                    //修改短信发送状态为失败, 以及修改发送时间[方便以后单独发送短信]
-                    Answer::updateAll(['send_at' => time()],
-                        ['id' => $answer->id]);
-                }
-                */
 
                 //尝试发送微信模板消息
                 //获取绑定的微信对象
@@ -360,6 +333,7 @@ class CronController  extends \yii\console\Controller
 
                 //如果短信发送成功绑定了微信对象
                 if ($account) {
+
                     //获取微信的openid
                     $openid = $account->client_id;
 
@@ -374,16 +348,13 @@ class CronController  extends \yii\console\Controller
                         $templateData = $this->fetchFailedWechatTemplateData($openid, $answer['user'], $answer['activity']);
                     }
 
-                    //尝试发送模板消息
-                    if ($msgid = $wechat->sendTemplateMessage($templateData)) { //模板消息发送成功
-
-                        //更新报名的模板消息的id, 发送的时间和状态
-                        Answer::updateAll(['wechat_template_msg_id' => $msgid, 'wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_SUCC, 'wechat_template_push_at' => time()], ['id' => $answer['id']]);
+                    $wechat_template = Yii::$app->beanstalk->putInTube('wechat', ['templateData' => $templateData, 'answer' => $answer]);
+                    if (!$wechat_template) {
+                        Yii::error('参加活动提醒微信消息模板加到队列失败，请检查');
                     } else {
-
-                        //更新报名的模板消息发送的时间和状态, 状态为失败,后面可以单独的重新发送模板消息
-                        Answer::updateAll(['wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_Fail, 'wechat_template_push_at' => time()], ['id' => $answer['id']]);
+                        Yii::info('添加微信模板消息到消息队列成功');
                     }
+
                 } else {
                     //记录一个错误, 当前报名用户短信发送失败或者没有绑定微信
                     Yii::error('报名用户id: '.$answer['user']['id'].' 的用户短信发送失败或者没有绑定微信');
@@ -400,17 +371,17 @@ class CronController  extends \yii\console\Controller
      */
     public function actionSendJoinNoti()
     {
-
         //查询需要发送提醒的用户, 并且活动在2个小时内即将开始, 并且当时时间不能大于开始时间
         $answerList = Answer::find()
-            ->where(['join_noti_is_send' => Answer::JOIN_NOTI_IS_SEND_YET]) //还未给用户发送过参加活动通知
+                ->where(['join_noti_is_send' => Answer::JOIN_NOTI_IS_SEND_YET]) //还未给用户发送过参加活动通知
+                ->andWhere("start_time>".time())
                 ->innerJoin('activity', "start_time > ".time()." and start_time<". (time()+7200) ." and activity.status = ".Activity::STATUS_RELEASE)
-            ->with([
-                'user',
-                'activity'
-            ])
-            ->asArray()
-            ->all();
+                ->with([
+                    'user',
+                    'activity'
+                ])
+                ->asArray()
+                ->all();
 
         //查询今天北京的天气情况
         //"您报名的活动“#activity_title#”在今天的#start_time#开始。当前室外温度1℃，PM25指数95，请合理安排时间出行，不要迟到哦。"
