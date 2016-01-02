@@ -108,6 +108,32 @@ class User extends BaseUser
         ];
     }
 
+    public function fields()
+    {
+        $fields = parent::fields();
+
+        unset(
+            $fields['password_hash'],
+            $fields['auth_key'],
+            $fields['email_confirmation_token'],
+            $fields['password_reset_token'],
+            $fields['email'],
+            $fields['confirmed_at'],
+            $fields['blacked_at'],
+            $fields['registration_ip'],
+            $fields['in_white_list'],
+            $fields['is_email_verified'],
+            $fields['unionid']
+        );
+
+        return $fields;
+    }
+
+    public function extraFields()
+    {
+        return ['profile'];
+    }
+
     /**
      * @inheritdoc
      */
@@ -268,6 +294,12 @@ class User extends BaseUser
         $this->email_confirmation_token = null;
         $this->is_email_verified = 1;
         return $this->save();
+    }
+
+    // Profile
+    public function getProfile()
+    {
+        return $this->hasOne(Profile::className(), ['user_id' => 'id']);
     }
 
     // 活动列表
