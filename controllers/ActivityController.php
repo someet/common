@@ -59,6 +59,9 @@ class ActivityController extends BackendController
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
+        // only show draft and release activities
+        $andwhere = ['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE]];
+
         if ($type>0) {
             $where = ['type_id' => $type];
             $query = Activity::find()
@@ -71,6 +74,7 @@ class ActivityController extends BackendController
                 ])
                 ->asArray()
                 ->where($where)
+                ->andWhere($andwhere)
                 ->orderBy(['id' => SORT_DESC]);
         } else {
             $query = Activity::find()
@@ -81,6 +85,7 @@ class ActivityController extends BackendController
                     'answerList',
                     'feedbackList'
                 ])
+                ->where($andwhere)
                 ->asArray()
                 ->orderBy(['id' => SORT_DESC]);
         }
@@ -136,10 +141,13 @@ class ActivityController extends BackendController
     public function actionListByTypeId($type_id=0)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
+        // only show draft and release activities
+        $andwhere = ['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE]];
+
         if ($type_id > 0) {
             $activities = Activity::find()
                 ->where(['type_id' => $type_id])
-                ->andWhere(['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE]])
+                ->andWhere($andwhere)
                 ->with([
                     'type',
                     'question',
@@ -155,7 +163,7 @@ class ActivityController extends BackendController
                 ->all();
         } else {
             $activities = Activity::find()
-                ->where(['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE]])
+                ->where($andwhere)
                 ->with([
                     'type',
                     'question',
