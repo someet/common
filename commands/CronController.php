@@ -1,6 +1,7 @@
 <?php
 namespace app\commands;
 
+use someet\common\models\Activity;
 use Yii;
 use someet\common\models\Answer;
 use dektrium\user\models\Account;
@@ -167,6 +168,51 @@ class CronController  extends \yii\console\Controller
         ];
         return $data;
     }
+    /*
+     * 获取参加活动通知的微信模板消息
+     * @param $openid openid
+     * @param $activity 活动对象
+     * @return array
+     */
+    private function fetchNotiWechatTemplateData($openid, $activity) {
+        //获取失败的模板消息id
+        $template_id = Yii::$app->params['sms.noti_template_id'];
+        if (empty($template_id)) {
+            //记录一个错误, 请设置失败的模板消息id
+            Yii::error('请设置失败的模板消息id');
+        }
+        $start_time = date('Y年m月d日', $activity['start_time']);
+        $data = [
+            "touser" => "{$openid}",
+            "template_id" => $template_id,
+            "url" => Yii::$app->params['domain'],
+            "topcolor" => "#FF0000",
+            "data" => [
+                "first" => [
+                    "value" => "您好，您预定的活动马上开始！",
+                    "color" => "#173177"
+                ],
+                "keyword1" => [
+                    "value" => "{$activity['title']}",
+                    "color" => "#173177"
+                ],
+                "keyword2" => [
+                    "value" => "{$activity['address']}",
+                    "color" =>"#173177"
+                ],
+                "keyword3" => [
+                    "value" => "{$start_time}",
+                    "color" => "#173177"
+                ],
+                "remark" => [
+                    "value" => "请合理安排时间出行，不要迟到哦。",
+                    "color" => "#173177"
+                ],
+            ]
+        ];
+        return $data;
+    }
+
     /**
      * 获取成功的短信内容
      * @param string $activity_name 活动名称
@@ -197,6 +243,16 @@ class CronController  extends \yii\console\Controller
     }
 
     /**
+     * 获取通知参加活动的短信内容
+     * @param string $activity_name 活动名称
+     * @return string 通知参加活动的短信内容
+     */
+    private function fetchNotiSmsData($activity_name, $start_time, $weather) {
+        //获取通知参加活动的短信
+        return "【Someet活动平台】您报名的活动“{$activity_name}”在今天的{$start_time}开始。{$weather}请合理安排时间出行，不要迟到哦。";
+    }
+
+    /**
      * 发送审核通知
      * 每天晚上8点执行
      */
@@ -207,9 +263,10 @@ class CronController  extends \yii\console\Controller
         //获取微信组件
         $wechat = Yii::$app->wechat;
 
-        // 给审核的用户发短信, 包括通过的, 等待的, 拒绝的
+        // 给活动开始时间大于当前时间的, 审核的用户发短信, 包括通过的, 等待的, 拒绝的
         $answerList = Answer::find()
-            ->where(['is_send' => Answer::STATUS_SMS_YET])
+            ->where(['answer.is_send' => Answer::STATUS_SMS_YET])
+            ->innerJoin('activity', "activity.start_time > ".time()." and activity.status = ".Activity::STATUS_RELEASE)
             ->with(['user', 'activity', 'activity.pma'])
             ->asArray()
             ->all();
@@ -265,34 +322,6 @@ class CronController  extends \yii\console\Controller
                 if (!$sms) {
                     Yii::error('短信添加到消息队列失败, 请检查');
                 }
-                /*
-                //尝试发送短消息
-                $sms = Yii::$app->yunpian;
-                $smsRes = $sms->sendSms($mobile, $smsData);
-
-                //如果是未审核,则只修改发送时间
-                if (Answer::STATUS_REVIEW_YET == $answer->status) {
-
-                    //修改发送时间, 不修改状态, 不然后台没办法再进行筛选了
-                    Answer::updateAll(['send_at' => time()],
-                        ['id' => $answer->id]);
-                } elseif ($smsRes) {
-
-                    //修改短信发送状态为成功, 以及修改发送时间
-                    Answer::updateAll(['is_send' => Answer::STATUS_SMS_SUCC, 'send_at' => time()],
-                        ['id' => $answer->id]);
-                } elseif ($sms->hasError()) {
-
-                    $error = $sms->getLastError();
-                    $msg = is_array($error) && isset($error['msg']) ? $error['msg'] : '发送短信失败';
-
-                    Yii::error('短信发送失败, 请检查'. is_array($error) ? json_encode($error) : $error);
-
-                    //修改短信发送状态为失败, 以及修改发送时间[方便以后单独发送短信]
-                    Answer::updateAll(['send_at' => time()],
-                        ['id' => $answer->id]);
-                }
-                */
 
                 //尝试发送微信模板消息
                 //获取绑定的微信对象
@@ -304,6 +333,7 @@ class CronController  extends \yii\console\Controller
 
                 //如果短信发送成功绑定了微信对象
                 if ($account) {
+
                     //获取微信的openid
                     $openid = $account->client_id;
 
@@ -318,15 +348,106 @@ class CronController  extends \yii\console\Controller
                         $templateData = $this->fetchFailedWechatTemplateData($openid, $answer['user'], $answer['activity']);
                     }
 
-                    //尝试发送模板消息
-                    if ($msgid = $wechat->sendTemplateMessage($templateData)) { //模板消息发送成功
-
-                        //更新报名的模板消息的id, 发送的时间和状态
-                        Answer::updateAll(['wechat_template_msg_id' => $msgid, 'wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_SUCC, 'wechat_template_push_at' => time()], ['id' => $answer['id']]);
+                    $wechat_template = Yii::$app->beanstalk->putInTube('wechat', ['templateData' => $templateData, 'answer' => $answer]);
+                    if (!$wechat_template) {
+                        Yii::error('参加活动提醒微信消息模板加到队列失败，请检查');
                     } else {
+                        Yii::info('添加微信模板消息到消息队列成功');
+                    }
 
-                        //更新报名的模板消息发送的时间和状态, 状态为失败,后面可以单独的重新发送模板消息
-                        Answer::updateAll(['wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_Fail, 'wechat_template_push_at' => time()], ['id' => $answer['id']]);
+                } else {
+                    //记录一个错误, 当前报名用户短信发送失败或者没有绑定微信
+                    Yii::error('报名用户id: '.$answer['user']['id'].' 的用户短信发送失败或者没有绑定微信');
+                }
+            } else {
+                //报一个错误, 用户手机号码有误, 无法发送短信
+                Yii::error('报名用户id: '.$answer['user']['id'].' 的用户手机号码未设置, 或者设置的不正确');
+            }
+        } // foreach结束
+    }
+
+    /**
+     * 发送参加活动的提醒在活动前2小时发送
+     */
+    public function actionSendJoinNoti()
+    {
+        //查询需要发送提醒的用户, 并且活动在2个小时内即将开始, 并且当时时间不能大于开始时间, 并且只给审核通过的人发提醒, 并且已经给用户发送过通知短信
+        $answerList = Answer::find()
+                ->where(['answer.join_noti_is_send' => Answer::JOIN_NOTI_IS_SEND_YET, 'answer.status' => Answer::STATUS_REVIEW_PASS, 'answer.is_send' => Answer::STATUS_SMS_SUCC]) //还未给用户发送过参加活动通知
+                ->innerJoin('activity', "start_time > ".time()." and start_time<". (time()+7200) ." and activity.status = ".Activity::STATUS_RELEASE)
+                ->with([
+                    'user',
+                    'activity'
+                ])
+                ->asArray()
+                ->all();
+
+        //查询今天北京的天气情况
+        //"您报名的活动“#activity_title#”在今天的#start_time#开始。当前室外温度1℃，PM25指数95，请合理安排时间出行，不要迟到哦。"
+        $weatherArr = Yii::$app->weather->getWeather();
+        if (0 == $weatherArr['success']) {
+            $weather = "";
+        } else {
+            $weather = "当前室外温度{$weatherArr['temperature']}℃ ，PM2.5指数{$weatherArr['pm25']}，";
+        }
+
+        //遍历列表
+        foreach($answerList as $answer) {
+
+            //判断报名的用户是否存在
+            if (!$answer['user']) {
+                //记录一个错误, 提示计划任务中报名的用户不存在, 请检查
+                Yii::error('参加活动提醒的计划任务中活动id为'.$answer['activity']['id'].' 的报名的用户不存在, 请检查');
+                //继续下一个
+                continue;
+            }
+
+            // 用户的手机号码不为空, 并且手机号码是合法的手机号
+            if (!empty($answer['user']['mobile']) && $this->isTelNumber($answer['user']['mobile'])) {
+
+                //手机号
+                $mobile = $answer['user']['mobile'];
+
+                //设置默认的短信为等待的短信内容
+                $smsData = $this->fetchNotiSmsData($answer['activity']['title'], date('H:i', $answer['activity']['start_time']), $weather);
+
+                $mixedData = [
+                    'mobile' => $mobile,
+                    'smsData' => $smsData,
+                    'answer' => $answer,
+                ];
+
+                //add noti beanstalk
+                $sms = Yii::$app->beanstalk
+                    ->putInTube('noti', $mixedData);
+                if (!$sms) {
+                    Yii::error('参加活动提醒短信添加到消息队列失败, 请检查');
+                } else {
+                    Yii::info('添加短信到消息队列成功');
+                }
+
+                //add noti wechat beanstalk
+                //尝试发送微信模板消息
+                //获取绑定的微信对象
+                /* @var $account Account */
+                $account = Account::find()->where([
+                    'provider' => 'wechat',
+                    'user_id' => $answer['user']['id'],
+                ])->with('user')->one();
+
+                //如果短信发送成功绑定了微信对象
+                if ($account) {
+                    //获取微信的openid
+                    $openid = $account->client_id;
+
+                    //设置模板消息默认为等待的模板消息内容
+                    $templateData = $this->fetchNotiWechatTemplateData($openid, $answer['activity']);
+
+                    $wechat_template = Yii::$app->beanstalk->putInTube('notiwechat', ['templateData' => $templateData, 'answer' => $answer]);
+                    if (!$wechat_template) {
+                        Yii::error('参加活动提醒微信消息模板加到队列失败，请检查');
+                    } else {
+                        Yii::info('添加微信模板消息到消息队列成功');
                     }
                 } else {
                     //记录一个错误, 当前报名用户短信发送失败或者没有绑定微信
@@ -377,8 +498,5 @@ class CronController  extends \yii\console\Controller
         //尝试发送短消息
         $res = Yii::$app->yunpian->sendSms($mobile, $smsData);
         var_dump($res);
-
     }
-
-
 }

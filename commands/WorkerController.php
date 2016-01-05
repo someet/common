@@ -17,11 +17,11 @@ class WorkerController extends BeanstalkController
     const DELAY_MAX = 3;
 
     public function listenTubes(){
-        return ["sms"];
+        return ["sms", "wechat", "noti", "notiwechat"];
     }
 
     /**
-     *
+     * 发送活动是否通完， 或者等待的短信
      * @param Pheanstalk\Job $job
      * @return string  self::BURY
      *                 self::RELEASE
@@ -34,7 +34,6 @@ class WorkerController extends BeanstalkController
     public function actionSms($job){
         $sentData = $job->getData();
         try {
-            // something useful here
             $mobile = $sentData->mobile;
             $smsData = $sentData->smsData;
             $answer = $sentData->answer;
@@ -66,33 +65,9 @@ class WorkerController extends BeanstalkController
                     ['id' => $answer->id]);
             }
 
-            $everthingIsAllRight = true;
-            $everthingWillBeAllRight = false;
-            $IWantSomethingCustom = false;
-
-            if($everthingIsAllRight == true){
-                fwrite(STDOUT, Console::ansiFormat("- Everything is allright"."\n", [Console::FG_GREEN]));
-                //Delete the job from beanstalkd
-                return self::DELETE;
-            }
-
-            if($everthingWillBeAllRight == true){
-                fwrite(STDOUT, Console::ansiFormat("- Everything will be allright"."\n", [Console::FG_GREEN]));
-                //Delay the for later try
-                //You may prefer decay to avoid endless loop
-                return self::DELAY;
-            }
-
-            if($IWantSomethingCustom==true){
-                Yii::$app->beanstalk->release($job);
-                return self::NO_ACTION;
-            }
-
-            fwrite(STDOUT, Console::ansiFormat("- Not everything is allright!!!"."\n", [Console::FG_GREEN]));
-            //Decay the job to try DELAY_MAX times.
-            return self::DECAY;
-
-            // if you return anything else job is burried.
+            fwrite(STDOUT, Console::ansiFormat("- Everything is allright"."\n", [Console::FG_GREEN]));
+            //Delete the job from beanstalkd
+            return self::DELETE;
         } catch (\Exception $e) {
             //If there is anything to do.
             fwrite(STDERR, Console::ansiFormat($e."\n", [Console::FG_RED]));
@@ -100,4 +75,138 @@ class WorkerController extends BeanstalkController
             return self::BURY;
         }
     }
+
+    /**
+     * 发送活动是否通完， 或者等待的微信消息模板
+     * @param Pheanstalk\Job $job
+     * @return string  self::BURY
+     *                 self::RELEASE
+     *                 self::DELAY
+     *                 self::DELETE
+     *                 self::NO_ACTION
+     *                 self::DECAY
+     *
+     */
+    public function actionWechat($job){
+        $sentData = $job->getData();
+        try {
+            $templateData = $sentData->templateData;
+            $answer = $sentData->answer;
+
+            //获取微信组
+            $wechat = Yii::$app->wechat;
+
+            //尝试发送模板消息
+            if ($msgid = $wechat->sendTemplateMessage($templateData)) { //模板消息发送成功
+
+                //更新报名的模板消息的id, 发送的时间和状态
+                Answer::updateAll(['wechat_template_msg_id' => $msgid, 'wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_SUCC, 'wechat_template_push_at' => time()], ['id' => $answer['id']]);
+            } else {
+
+                //更新报名的模板消息发送的时间和状态, 状态为失败,后面可以单独的重新发送模板消息
+                Answer::updateAll(['wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_Fail, 'wechat_template_push_at' => time()], ['id' => $answer['id']]);
+            }
+
+            fwrite(STDOUT, Console::ansiFormat("- Everything is allright"."\n", [Console::FG_GREEN]));
+            //Delete the job from beanstalkd
+            return self::DELETE;
+        } catch (\Exception $e) {
+            //If there is anything to do.
+            fwrite(STDERR, Console::ansiFormat($e."\n", [Console::FG_RED]));
+            // you can also bury jobs to examine later
+            return self::BURY;
+        }
+    }
+
+    /**
+     * 活动开始前的提醒通知消息队列
+     * @param Pheanstalk\Job $job
+     * @return string  self::BURY
+     *                 self::RELEASE
+     *                 self::DELAY
+     *                 self::DELETE
+     *                 self::DECAY
+     *
+     */
+    public function actionNoti($job) {
+        $sentData = $job->getData();
+        try {
+            $mobile = $sentData->mobile;
+            $smsData = $sentData->smsData;
+            $answer = $sentData->answer;
+
+            //尝试发送短消息
+            $sms = Yii::$app->yunpian;
+            $smsRes = $sms->sendSms($mobile, $smsData);
+
+            if ($smsRes) {
+
+                //修改参加活动通知的短信发送状态为成功, 以及修改发送时间
+                Answer::updateAll(['join_noti_is_send' => Answer::JOIN_NOTI_IS_SEND_SUCC, 'join_noti_send_at' => time()],
+                    ['id' => $answer->id]);
+            } elseif ($sms->hasError()) {
+
+                $error = $sms->getLastError();
+                $msg = is_array($error) && isset($error['msg']) ? $error['msg'] : '发送短信失败';
+
+                Yii::error('短信发送失败, 请检查'. is_array($error) ? json_encode($error) : $error);
+
+                //修改短信发送状态为失败, 以及修改发送时间[方便以后单独发送短信]
+                Answer::updateAll(['join_noti_send_at' => time()],
+                    ['id' => $answer->id]);
+            }
+
+            fwrite(STDOUT, Console::ansiFormat("- Everything is allright"."\n", [Console::FG_GREEN]));
+            //Delete the job from beanstalkd
+            return self::DELETE;
+
+        } catch (\Exception $e) {
+            //If there is anything to do.
+            fwrite(STDERR, Console::ansiFormat($e."\n", [Console::FG_RED]));
+            // you can also bury jobs to examine later
+            return self::BURY;
+        }
+    }
+
+    /**
+     * 发送活动即将开始的微信消息模板
+     * @param Pheanstalk\Job $job
+     * @return string  self::BURY
+     *                 self::RELEASE
+     *                 self::DELAY
+     *                 self::DELETE
+     *                 self::NO_ACTION
+     *                 self::DECAY
+     *
+     */
+    public function actionNotiwechat($job){
+        $sentData = $job->getData();
+        try {
+            $templateData = $sentData->templateData;
+            $answer = $sentData->answer;
+
+            //获取微信组
+            $wechat = Yii::$app->wechat;
+            //尝试发送模板消息
+            if ($msgid = $wechat->sendTemplateMessage($templateData)) { //模板消息发送成功
+
+                //更新报名的模板消息的id, 发送的时间和状态
+                Answer::updateAll(['join_noti_wechat_template_msg_id' => $msgid, 'join_noti_wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_SUCC, 'join_noti_wechat_template_push_at' => time()], ['id' => $answer['id']]);
+            } else {
+
+                //更新报名的模板消息发送的时间和状态, 状态为失败,后面可以单独的重新发送模板消息
+                Answer::updateAll(['join_noti_wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_Fail, 'join_noti_wechat_template_push_at' => time()], ['id' => $answer['id']]);
+            }
+
+            fwrite(STDOUT, Console::ansiFormat("- Everything is allright"."\n", [Console::FG_GREEN]));
+            //Delete the job from beanstalkd
+            return self::DELETE;
+        } catch (\Exception $e) {
+            //If there is anything to do.
+            fwrite(STDERR, Console::ansiFormat($e."\n", [Console::FG_RED]));
+            // you can also bury jobs to examine later
+            return self::BURY;
+        }
+    }
+
 }

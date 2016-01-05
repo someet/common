@@ -20,6 +20,9 @@ return [
     'sms.success_template_id' => \DockerEnv::get('WEIXIN_TEMPLATE_SUCCESS_ID'),
     'sms.wait_template_id' => \DockerEnv::get('WEIXIN_TEMPLATE_WAIT_ID'),
     'sms.failed_template_id' => \DockerEnv::get('WEIXIN_TEMPLATE_FAILED_ID'),
+    'sms.noti_template_id' => \DockerEnv::get('WEIXIN_TEMPLATE_NOTI_ID'),
 
     'domain' => \DockerEnv::get('WECHAT_DOMAIN'),
+
+    'weather.cityid' => \DockerEnv::get('WEATHER_CITYID'),
 ];
