@@ -45,6 +45,9 @@ angular.module('backendServices')
           return data;
         });
       },
+      search: function(username) {
+        return $http.get('/member/search?username='+username);
+      },
       userPageMeta: function(type, pageNum) {
 
         return $http.get('/member?scenario=total&perPage='+pageNum+'&type='+type).then(function(data) {

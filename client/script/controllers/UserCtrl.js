@@ -60,6 +60,14 @@ angular.module('controllers')
       // return .indexOf(route) != -1;
     }
 
+    //搜索用户
+    $scope.searchUser = function() {
+      var username = $scope.username;
+      $userManage.search(username).then(function (userList) {
+        $scope.userList = userList;
+      });
+    }
+
     // 查看用户详情
     $scope.viewUser = function(user) {
       $location.path('/member/' + user.id);

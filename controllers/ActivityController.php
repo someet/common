@@ -57,6 +57,7 @@ class ActivityController extends BackendController
      */
     public function actionIndex($id = null, $scenario = null, $perPage = 20, $type = null)
     {
+        
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         if ($type>0) {
