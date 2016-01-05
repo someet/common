@@ -12,10 +12,10 @@ class m160105_103033_add_permission extends Migration
             '/mobile/activity/index' => ['user'],
             '/mobile/activity/page' => ['user'],
             '/mobile/activity/fetch-time-conflict-activity' => ['user'],
-            'mobile/answer/filter' => ['founder'],
-            'mobile/member/complete-user' => ['user'],
-            'mobile/member/complete-assist' => ['user'],
-            'mobile/member/verify' => ['user'],
+            '/mobile/answer/filter' => ['founder'],
+            '/mobile/member/complete-user' => ['user'],
+            '/mobile/member/complete-assist' => ['user'],
+            '/mobile/member/verify' => ['user'],
         ];
 
         $authItemTemplate = <<<SQL
