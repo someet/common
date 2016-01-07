@@ -175,7 +175,7 @@ class CronController  extends \yii\console\Controller
                     "color" => "#173177"
                 ],
                 "remark" => [
-                    "value" => "每个人都有没拒绝的时候，点击详情，试试更多其他活动吧！",
+                    "value" => "每个人都有被拒绝的时候，点击详情，试试更多其他活动吧！",
                     "color" => "#173177"
                 ],
             ]
