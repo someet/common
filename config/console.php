@@ -7,6 +7,8 @@ return [
     'vendorPath' => $web['vendorPath'],
     'bootstrap' => ['log'],
     'controllerNamespace' => 'app\commands',
+    'timeZone' => 'Asia/Chongqing',
+    'language' => 'zh-CN',
     'components' => [
         'db' => $web['components']['db'],
         'beanstalk' => $web['components']['beanstalk'],
