@@ -56,7 +56,9 @@
               <!-- 活动标题 -->
               {{entity.id}}#
               <span ng-if="entity.status==10" >[草稿] {{entity.title}}</span>
+              <span ng-if="entity.status==20" >{{entity.user.username}}</span>：
               <span ng-if="entity.status==20" >{{entity.title}}</span>
+              
 
               <!-- 内部使用的状态标签 -->
               <div class="btn-group btn-group-xs">
@@ -64,7 +66,7 @@
                 <button ng-class="{true: 'label-warning', false: 'label'}[entity.edit_status==20]" type="button" class="btn label" ng-click="onEditStatusChangeClick(entity, 20)">pause</button>
                 <button ng-class="{true: 'label-success', false: 'label'}[entity.edit_status==30]" type="button" class="btn label" ng-click="onEditStatusChangeClick(entity, 30)">done</button>
               </div>
-              
+
               <span ng-if="entity.status==20">
                 <!-- 查看反馈信息 -->
                 <button ng-if="entity.feedback_count>0" class="btn btn-warning btn-float-right" type="button" ng-click="viewFeedback(entity)">

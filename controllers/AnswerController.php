@@ -188,6 +188,7 @@ class AnswerController extends BackendController
                     },
                     'user',
                     'user.profile',
+                    'activity',
                 ]
             )
             ->all();
