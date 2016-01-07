@@ -141,7 +141,7 @@ class CronController  extends \yii\console\Controller
                     "color" => "#173177"
                 ],
                 "keyword1" => [
-                    "value" => "{$account->username}",
+                    "value" => "{$account['username']}",
                     "color" => "#173177"
                 ],
                 "keyword2" => [
