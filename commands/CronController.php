@@ -10,6 +10,15 @@ use someet\common\models\User;
 class CronController  extends \yii\console\Controller
 {
 
+    private $week = [
+      0 => '周天',
+        1 => '周一',
+        2 => '周二',
+        3 => '周三',
+        4 => '周四',
+        5 => '周五',
+        6 => '周六',
+    ];
     /**
      * 验证是否是手机号码
      *
@@ -36,7 +45,10 @@ class CronController  extends \yii\console\Controller
             //记录一个错误, 请设置成功的模板消息id
             Yii::error('请设置成功的模板消息id');
         }
-        $start_time = date('Y年m月d日', $activity['start_time']);
+        $start_time = date('m月d日', $activity['start_time'])
+            . $this->week[date('w', $activity['start_time'])]
+            . date('H:i', $activity['start_time'])
+            . '开始';
         $data = [
             "touser" => "{$openid}",
             "template_id" => $template_id,
@@ -44,7 +56,7 @@ class CronController  extends \yii\console\Controller
             "topcolor" => "#FF0000",
             "data" => [
                 "first" => [
-                    "value" => "您好, 您已成功报名{$activity['title']}",
+                    "value" => "恭喜，你报名的“{$activity['user']['username']}：{$activity['title']}”活动已通过筛选！",
                     "color" => "#173177"
                 ],
                 "keyword1" => [
@@ -64,7 +76,7 @@ class CronController  extends \yii\console\Controller
                     "color" => "#173177"
                 ],
                 "remark" => [
-                    "value" => "期待您的参与",
+                    "value" => "点击查看详情，并扫码进入活动群。",
                     "color" => "#173177"
                 ],
             ]
@@ -84,7 +96,10 @@ class CronController  extends \yii\console\Controller
             //记录一个错误, 请设置等待的模板消息id
             Yii::error('请设置等待的模板消息id');
         }
-        $start_time = date('Y年m月d日', $activity['start_time']);
+        $start_time = date('m月d日', $activity['start_time'])
+            . $this->week[date('w', $activity['start_time'])]
+            . date('H:i', $activity['start_time'])
+            . '开始';
         $data = [
             "touser" => "{$openid}",
             "template_id" => $template_id,
@@ -92,7 +107,7 @@ class CronController  extends \yii\console\Controller
             "topcolor" => "#FF0000",
             "data" => [
                 "first" => [
-                    "value" => "您参加的活动现在正在筛选, 请等待",
+                    "value" => "您报名的活动“{$activity['user']['username']}：{$activity['title']}”正在筛选，请耐心等待",
                     "color" => "#173177"
                 ],
                 "keyword1" => [
@@ -108,7 +123,7 @@ class CronController  extends \yii\console\Controller
                     "color" => "#173177"
                 ],
                 "remark" => [
-                    "value" => "请随时关注活动的更新",
+                    "value" => "请随时关注Someet服务号的通知，及时收到筛选结果信息。",
                     "color" => "#173177"
                 ],
             ]
@@ -129,7 +144,6 @@ class CronController  extends \yii\console\Controller
             //记录一个错误, 请设置失败的模板消息id
             Yii::error('请设置失败的模板消息id');
         }
-        $start_time = date('Y年m月d日', $activity['start_time']);
         $data = [
             "touser" => "{$openid}",
             "template_id" => $template_id,
@@ -137,7 +151,7 @@ class CronController  extends \yii\console\Controller
             "topcolor" => "#FF0000",
             "data" => [
                 "first" => [
-                    "value" => "您好, 您已报名被拒绝",
+                    "value" => "抱歉，你报名的“{$activity['user']['username']}：{$activity['title']}”活动未通过筛选",
                     "color" => "#173177"
                 ],
                 "keyword1" => [
@@ -149,19 +163,19 @@ class CronController  extends \yii\console\Controller
                     "color" =>"#173177"
                 ],
                 "keyword3" => [
-                    "value" => "{$start_time}",
+                    "value" => "",
                     "color" => "#173177"
                 ],
                 "keyword4" => [
-                    "value" => "{$activity['area']}",
+                    "value" => "",
                     "color" => "#173177"
                 ],
                 "keyword5" => [
-                    "value" => "您未通过活动筛选",
+                    "value" => "发起人未通过你的报名申请。",
                     "color" => "#173177"
                 ],
                 "remark" => [
-                    "value" => "期待您的参与",
+                    "value" => "每个人都有没拒绝的时候，点击详情，试试更多其他活动吧！",
                     "color" => "#173177"
                 ],
             ]
@@ -221,7 +235,7 @@ class CronController  extends \yii\console\Controller
      */
     private function fetchSuccessSmsData($activity_name, $pma_wechat_id) {
         //获取通过的短信模板
-        return "【Someet活动平台】您好，恭喜您报名的“{$activity_name}”活动已通过筛选。具体事宜请您添加工作人员微信（微信号：{$pma_wechat_id}）后会进行说明。添加时请注明活动名称，期待与您共同玩耍，系统短信，请勿回复。";
+        return "【Someet活动平台】您好，恭喜您报名的“{$activity_name}”活动已通过筛选。活动地点等详细信息将在活动微信群中和大家沟通。请您按以下操作步骤加入活动微信群：进入Someet活动平台（服务号）——点击屏幕下栏“我”——点击进入报名通过的活动详情页面——点击微信群组——扫描二维码加入活动群。期待与您共同玩耍，系统短信，请勿回复。";
     }
     /**
      * 获取等待的短信内容
@@ -267,13 +281,12 @@ class CronController  extends \yii\console\Controller
         $answerList = Answer::find()
             ->where(['answer.is_send' => Answer::STATUS_SMS_YET])
             ->innerJoin('activity', "activity.start_time > ".time()." and activity.status = ".Activity::STATUS_RELEASE)
-            ->with(['user', 'activity', 'activity.pma'])
+            ->with(['user', 'activity', 'activity.pma', 'activity.user'])
             ->asArray()
             ->all();
 
         //遍历列表
         foreach($answerList as $answer) {
-
             //判断报名的用户是否存在
             if (!$answer['user']) {
                 //记录一个错误, 提示计划任务中报名的用户不存在, 请检查
