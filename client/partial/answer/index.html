@@ -115,13 +115,13 @@
         <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">想要：</div>
         {{entity.user.profile.want}}
       </div>
-            <div ng-show="!entity.user.profile.mobile">
+            <div ng-show="entity.user.mobile">
         <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">手机号：</div>
-        {{entity.user.profile.mobile}}
+        {{entity.user.mobile}}
       </div>      
-      <div ng-show="!entity.user.profile.wechat_id">
+      <div ng-show="entity.user.wechat_id">
         <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">微信id：</div>
-        {{entity.user.profile.wechat_id}}
+        {{entity.user.wechat_id}}
       </div>
     </div>
     <br />
