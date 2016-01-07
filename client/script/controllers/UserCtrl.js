@@ -41,6 +41,7 @@ angular.module('controllers')
 }])
   .controller('UserListCtrl', ['$scope', '$routeParams', '$location', '$userManage', function($scope, $routeParams, $location, $userManage){
     $scope.$parent.pageName = '用户管理';
+    $scope.today = new Date();
 
     $scope.userList = [];
     $scope.userPageList = [];
