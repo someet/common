@@ -57,7 +57,7 @@ class ActivityController extends BackendController
      */
     public function actionIndex($id = null, $scenario = null, $perPage = 20, $type = null)
     {
-        
+
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         // only show draft and release activities
@@ -70,6 +70,7 @@ class ActivityController extends BackendController
                     'type',
                     'tags',
                     'question',
+                    'user',
                     'answerList',
                     'feedbackList'
                 ])
@@ -83,6 +84,7 @@ class ActivityController extends BackendController
                     'type',
                     'tags',
                     'question',
+                    'user',
                     'answerList',
                     'feedbackList'
                 ])
@@ -99,7 +101,8 @@ class ActivityController extends BackendController
                     'tags',
                     'question',
                     'answerList',
-                    'feedbackList'
+                    'feedbackList',
+                    'user',
                 ])
                 ->asArray()
                 ->one();

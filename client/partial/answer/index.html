@@ -1,4 +1,13 @@
 <!-- 筛选用户页面 -->
+<div class="container-fluid">
+  <div class="row">
+<div class="col-md-3  panel-default">
+  <div class="panel-body" style="font-size:18px">
+    活动标题： <strong>{{list[0].activity.title}}</strong>
+  </div>
+</div>
+</div>
+</div>
 <!-- <h3>发起人 - 当前活动标题 （活动时间）</h3> -->
 <div layout="row" flex id="content">
 
@@ -8,22 +17,26 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         <h3 class="panel-title">可调整状态用户</h3>
-        <!--如果发送时间不为空则表示发送短信失败, 考虑重新发送--> </div>
+        <!--如果发送时间不为空则表示发送短信失败, 考虑重新发送-->
+      </div>
     </div>
+
     <ul class="list-group">
       <li class="list-group-item" ng-repeat="entity in list | filter: {is_send: 0}" ng-click="view(entity)">
         <div class="media">
           <a class="pull-left" href="">
-            <img width="50" height="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像"></a>
-          <span> <strong>{{entity.user.profile.name}}</strong>
+            <img width="50" height="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像">
+          </a>
+          <span>
+            <strong>{{entity.user.profile.name}}</strong>
           </span>
           <span ng-if="entity.send_at!=0">
             短信发送失败,请检查
             <a class="btn" target="_blank" href="http://www.yunpian.com">云片</a>
           </span>
-          <span ng-if="entity.status==10" class="btn-float-right" style="color:#33E;">待筛选</span>
-          <span ng-if="entity.status==20" class="btn-float-right" style="color:#3E3;">已通过</span>
-          <span ng-if="entity.status==30" class="btn-float-right" style="color:#E33;">未通过</span>
+          <span ng-if="entity.status==10" class="btn-float-right">待筛选</span>
+          <span ng-if="entity.status==20" class="btn-float-right">已通过</span>
+          <span ng-if="entity.status==30" class="btn-float-right">未通过</span>
         </div>
       </li>
     </ul>
@@ -39,7 +52,7 @@
       <li class="list-group-item" ng-repeat="entity in list | filter: {status:20, is_send: 1}" ng-click="view(entity)">
         <div class="media">
           <a class="pull-left" href="">
-            <img width="50" height="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像"/>
+            <img width="50" height="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像" />
           </a>
           <span>
             <strong>{{entity.user.profile.name}}</strong>
@@ -50,7 +63,8 @@
       <li class="list-group-item" ng-repeat="entity in list | filter: {status:30, is_send: 1}" ng-click="view(entity)">
         <div class="media">
           <a class="pull-left" href="">
-            <img width="50" height="50" style="border-radius: 25px"  class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像"></a>
+            <img width="50" height="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像">
+          </a>
           <span>
             <strong>{{entity.user.profile.name}}</strong>
           </span>
@@ -66,11 +80,15 @@
   <div class="col-md-6" ng-show="entity.user" style="padding:0;border:solid 10px rgba(10,10,10,0.5)">
     <div class="media">
       <div style="padding:20px;">
-        <div class="pull-left" >
-          <img width="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="..."></div>
+        <div class="pull-left">
+          <img width="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="...">
+        </div>
         <div style="margin-left:80px;top:0;">
           <div style="width:100%;display:inline-block;">
-            <span > <font size="+2"><strong>{{entity.user.profile.name}}</strong></font> 
+            <span>
+              <font size="+2">
+                <strong>{{entity.user.profile.name}}</strong>
+              </font>
             </span>
             <div class="pull-right">
               <button ng-if="entity.is_send==0||entity.status==10" class="btn btn-success" ng-click="pass(entity)">通过</button>
@@ -95,13 +113,16 @@
               </span>
             </div>
           </div>
-        </div>      
+        </div>
       </div>
     </div>
     <div style="margin-left:20px;">
       <div>
         <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">注册时间：</div>
-        {{ entity.user.created_at * 1000 | date: "yyyy年MM月dd日"}}
+        {{ entity.user.created_at * 1000 | date: "yyyy年MM月dd日 HH:mm:ss"}}
+
+        <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">报名时间：</div>
+        {{ entity.updated_at * 1000 | date: "yyyy年MM月dd日 HH:mm:ss"}}
       </div>
       <div ng-show="entity.user.profile.occupation">
         <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">职业：</div>
@@ -109,27 +130,30 @@
       </div>
       <div ng-show="entity.user.profile.from>0">
         <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">来自：</div>
-        {{entity.user.profile.from}}
+        <span ng-if="entity.user.profile.from==1">朋友圈看到，就手抖点进来了</span>
+        <span ng-if="entity.user.profile.from==2">朋友专门给我安利过</span>
+        <span ng-if="entity.user.profile.from==3">有所耳闻，自己一路找过来的</span>
       </div>
       <div ng-show="entity.user.profile.want>0">
         <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">想要：</div>
         {{entity.user.profile.want}}
       </div>
-            <div ng-show="entity.user.mobile">
+      <div ng-show="entity.user.mobile">
         <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">手机号：</div>
         {{entity.user.mobile}}
-      </div>      
+      </div>
       <div ng-show="entity.user.wechat_id">
         <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">微信id：</div>
         {{entity.user.wechat_id}}
       </div>
+
     </div>
     <br />
-    <div>
+    <!-- <div>
       <div>报名次数</div>
       <div>参加次数</div>
       <div>反馈次数</div>
-    </div>
+    </div> -->
     <br />
     <div style="margin:10px;" ng-repeat="answer in answerItemList">
       <div style="margin:5px;color:#999">问题{{$index+1}}: {{answer.question_label}}</div>
