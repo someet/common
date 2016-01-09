@@ -56,6 +56,11 @@ class ActivityFeedbackController extends BackendController
             ->orderBy([
                 'id' => SORT_DESC,
             ])
+            ->with([
+                'activity',
+            ])
+            ->asArray()
+
             ->all();
 
         return $feedback;
@@ -138,6 +143,9 @@ class ActivityFeedbackController extends BackendController
             ->where(['activity_id' => $activity_id])
             ->with([
                 'user',
+                'user.profile',
+                'activity',
+                'activity.user',
             ])
             ->asArray()
             ->all();
