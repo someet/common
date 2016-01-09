@@ -30,11 +30,20 @@ use dektrium\user\models\User as BaseUser;
  */
 class User extends BaseUser
 {
+    /** * 用户状态是删除 */
     const STATUS_DELETED = 0;
+    /** * 用户状态是正常 */
     const STATUS_ACTIVE = 10;
 
+    /** * 用户在白名单 */
     const WHITE_LIST_YES = 1;
+    /** * 用户不在白名单 */
     const WHITE_LIST_NO = 0;
+
+    /** * 用户在黑名单 */
+    const BLACK_LIST_YES = 1;
+    /** * 用户不在黑名单 */
+    const BLACK_LIST_NO = 0;
 
     /**
      * @var string|null the current password value from form input
@@ -57,6 +66,7 @@ class User extends BaseUser
     public function scenarios()
     {
         return array_merge(parent::scenarios(), [
+            'register' => ['username', 'password', 'unionid'],
             'update'   => ['id', 'mobile', 'wechat_id', 'last_login_at'],
             'default'   => ['mobile', 'wechat_id', 'last_login_at'],
         ]);
