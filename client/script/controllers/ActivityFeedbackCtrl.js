@@ -10,10 +10,30 @@ angular.module('controllers')
       // 活动反馈列表
       $activityFeedbackManage.fetch(activity_id).then(function (data) {
         $scope.list = data;
+        var countScore = '';
+        // for(var i = 0; i<data.length; i++;){
+          // var countScore += ((data[i].stars * 0.8) +(data[i].sponsor_stars*0.2))/(data.length -1)
+          // console.log(data)
+
+        // }
+        // var objs =[{a:1},{a:2}];
+        angular.forEach(data, function(list,index,array){
+        //data等价于array[index]
+          countScore = ((list.stars * 0.8) + (list.sponsor_stars*0.2));
+          // list.length
+           // countScore += list.stars * 0.8
+          // console.log(countScore);
+          // console.log(data.length)
+        });
+            var countScore = countScore/data.length;
+            $scope.countScore = countScore;
+            // console.log(countScore);
       }, function (err) {
         alert(err);
       });
-
+        $scope.view = function(entity) {
+          $scope.entity = entity;
+        }
       // 跳转到更新反馈页面
       $scope.update = function (feedback) {
         $location.path('/activity-feedback/' + feedback.id);
@@ -45,6 +65,9 @@ angular.module('controllers')
               .position("top right"));
           });
         });
+
+
+
       };
 
       // 跳转到添加页面
