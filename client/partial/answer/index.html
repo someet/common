@@ -3,10 +3,10 @@
   <div class="row">
 <div class="col-md-12  panel-default">
   <div class="panel-body" style="font-size:18px">
-    活动标题：{{list[0].activity.title}}&nbsp;&nbsp;|
-    发起人:{{list[0].activity.user.username}}&nbsp;&nbsp;|
-    活动时间:{{list[0].activity.start_time * 1000 | date: "MM月dd日 HH:mm"}} - {{list[0].activity.end_time * 1000 | date:"MM月dd日 HH:mm"}}&nbsp;&nbsp;|
-    活动地址:{{list[0].activity.address}}&nbsp;&nbsp;|
+    活动标题：{{list[0].activity.title}}&nbsp;&nbsp;<br>
+    发起人：{{list[0].activity.user.username}}&nbsp;&nbsp;<br>
+    活动时间：{{list[0].activity.start_time * 1000 | date: "MM月dd日 HH:mm"}} - {{list[0].activity.end_time * 1000 | date:"MM月dd日 HH:mm"}}&nbsp;&nbsp;<br>
+    活动地址：{{list[0].activity.address}}&nbsp;&nbsp;<br>
     整体评分：{{ countScore }}&nbsp;&nbsp;
   </div>
 </div>
@@ -32,7 +32,7 @@
             <img width="50" height="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像">
           </a>
           <span>
-            <strong>{{entity.user.profile.name}}</strong>
+            <strong>{{entity.user.profile.name}}（{{entity.user.username}}）</strong>
           </span>
           <span ng-if="entity.send_at!=0">
             短信发送失败,请检查
@@ -59,7 +59,7 @@
             <img width="50" height="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像" />
           </a>
           <span>
-            <strong>{{entity.user.profile.name}}</strong>
+            <strong>{{entity.user.profile.name}}（{{entity.user.username}}）</strong>
           </span>
           <span class="btn-float-right" style="color:#3E3;">已通过</span>
 
@@ -73,7 +73,7 @@
             <img width="50" height="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像">
           </a>
           <span>
-            <strong>{{entity.user.profile.name}}</strong>
+            <strong>{{entity.user.profile.name}}（{{entity.user.username}}）</strong>
           </span>
           <span class="btn-float-right" style="color:#E33;">未通过</span>
         </div>
@@ -94,7 +94,7 @@
           <div style="width:100%;display:inline-block;">
             <span>
               <font size="+2">
-                <strong>{{entity.user.profile.name}}</strong>
+                <strong>{{entity.user.profile.name}}（{{entity.user.username}}）</strong>
               </font>
             </span>
             <div class="pull-right">
@@ -134,7 +134,8 @@
       <div>
         <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">注册时间：</div>
         {{ entity.user.created_at * 1000 | date: "yyyy年MM月dd日 HH:mm:ss"}}
-
+      </div>
+      <div>
         <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">报名时间：</div>
         {{ entity.updated_at * 1000 | date: "yyyy年MM月dd日 HH:mm:ss"}}
       </div>
@@ -162,26 +163,29 @@
       </div>
 
     </div>
-    <br />
-    <!-- <div>
+      <!-- <div>
       <div>报名次数</div>
       <div>参加次数</div>
       <div>反馈次数</div>
     </div> -->
-    <br />
     <div style="margin:10px;" ng-repeat="answer in answerItemList">
       <div style="margin:5px;color:#999">问题{{$index+1}}: {{answer.question_label}}</div>
       <div style="margin:5px;padding:5px;border-radius:10px;border:1px solid rgba(10,10,10,0.1)">{{answer.question_value}}</div>
     </div>
     <br />
-    <div ng-show="entity.feedback">
-      <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">活动打分情况</div>
-      整体评分{{entity.feedback.stars}}
-      发起人评分{{entity.feedback.sponsor_stars}}
+    <div ng-show="entity.feedback" style="margin-left:20px;">
+      <div>
+        <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">活动得分：</div>
+        {{entity.feedback.stars}}
+      </div>
+      <div>
+        <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">发起人分：</div>
+        {{entity.feedback.sponsor_stars}}
+      </div>
     </div>
     <div ng-show="entity.feedback">
-      <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">用户评价</div>
-      {{entity.feedback.feedback}}
+      <div style="margin:10px;margin:5px;color:#999">用户评价：</div>
+       <div style="margin:5px;padding:5px;border-radius:10px;border:1px solid rgba(10,10,10,0.1)"> {{entity.feedback.feedback}}</div>     
     </div>
   </div>
 </div>
