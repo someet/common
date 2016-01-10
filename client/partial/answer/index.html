@@ -1,13 +1,13 @@
 <!-- 筛选用户页面 -->
 <div class="container-fluid">
   <div class="row">
-<div class="col-md-3  panel-default">
+<div class="col-md-12  panel-default">
   <div class="panel-body" style="font-size:18px">
-    活动标题：{{list[0].activity.title}}<br />
-    发起人:{{list[0].activity.user.username}}<br />
-    活动时间:{{list[0].activity.start_time * 1000 | date: "MM月dd日 HH:mm"}} - {{list[0].activity.end_time * 1000 | date:"MM月dd日 HH:mm"}}<br />
-    活动地址:{{list[0].activity.address}}<br />
-    整体评分：{{ countScore }}
+    活动标题：{{list[0].activity.title}}&nbsp;&nbsp;|
+    发起人:{{list[0].activity.user.username}}&nbsp;&nbsp;|
+    活动时间:{{list[0].activity.start_time * 1000 | date: "MM月dd日 HH:mm"}} - {{list[0].activity.end_time * 1000 | date:"MM月dd日 HH:mm"}}&nbsp;&nbsp;|
+    活动地址:{{list[0].activity.address}}&nbsp;&nbsp;|
+    整体评分：{{ countScore }}&nbsp;&nbsp;
   </div>
 </div>
 </div>

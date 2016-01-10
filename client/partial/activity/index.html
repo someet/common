@@ -71,8 +71,7 @@
                 <!-- 查看反馈信息 -->
                 <!-- 查看报名情况 -->
                 <button ng-class="{true: 'btn-danger', false: 'btn-default'}[entity.question.status==10]" ng-if="entity.question" class="btn  btn-float-right" type="button" ng-click="viewAnswer(entity)">
-                  <span ng-if="entity.question.status==20">报名关闭</span>
-                  <span ng-if="entity.question.status==10">报名打开</span>
+                  <span>管理</span>
                   （{{entity.answer_count}}/{{entity.peoples}}）
                   <span class="badge">{{entity.feedback_count}}</span>
                 </button>
@@ -115,13 +114,6 @@
                 </li>
                 <li>
                   <a ng-click="copy(entity)">复制活动</a>
-                </li>
-                <li class="divider"></li>
-                <li ng-if="entity.question.status==10">
-                  <a ng-click="applyStatus(entity, 20)">关闭报名</a>
-                </li>
-                <li ng-if="entity.question.status==20">
-                  <a ng-click="applyStatus(entity, 10)">打开报名</a>
                 </li>
               </ul>
             </div>
