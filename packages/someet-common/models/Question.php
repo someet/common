@@ -74,4 +74,10 @@ class Question extends \yii\db\ActiveRecord
     {
         return $this->hasMany(QuestionItem::className(), ['question_id' => 'id']);
     }
+
+    public function getActivity()
+    {
+        return $this->hasOne(Activity::className(), ['id' => 'activity_id']);
+    }
+
 }
