@@ -8,6 +8,19 @@ angular.module('controllers')
         $answerManage.fetchByActivityId(activity_id).then(function (data) {
           $scope.list = data;
           $scope.answerItemList = data[0].answerItemList;
+
+          //将所有的反馈给放到一个数组
+          var feedbacks = [];
+          angular.forEach(data, function(list,index,array){
+            feedbacks.push( list.feedback );
+          });
+
+          var countScore = '';
+          angular.forEach(feedbacks, function(list,index,array){
+            countScore = ((list.stars * 0.8) + (list.sponsor_stars*0.2));
+          });
+          var countScore = countScore/feedbacks.length;
+          $scope.countScore = countScore;
         }, function (err) {
 
         });
@@ -18,7 +31,37 @@ angular.module('controllers')
           $scope.entity = entity;
         }
 
-        //通过审核
+        //未到,迟到，准时功能, 0未到 1 迟到 2准时
+        $scope.arrive = function(entity, status) {
+          $answerManage.arrive(entity.id, status).then(function(data) {
+            $mdToast.show($mdToast.simple()
+              .content('已操作成功')
+              .hideDelay(5000)
+              .position("top right"));
+          }, function(err){
+            $mdToast.show($mdToast.simple()
+              .content(err.toString())
+              .hideDelay(5000)
+              .position("top right"));
+          });
+        }
+
+        //请假状态
+        $scope.leave = function(entity, status) {
+          $answerManage.leave(entity.id, status).then(function(data) {
+            $mdToast.show($mdToast.simple()
+              .content('已操作成功')
+              .hideDelay(5000)
+              .position("top right"));
+          }, function(err){
+            $mdToast.show($mdToast.simple()
+              .content(err.toString())
+              .hideDelay(5000)
+              .position("top right"));
+          });
+        }
+
+          //通过审核
         $scope.pass = function(entity) {
           $answerManage.filter(entity.id, 1).then(function(data) {
             $mdToast.show($mdToast.simple()

@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\components\DataValidationFailedException;
 use dektrium\user\models\Account;
+use someet\common\models\ActivityFeedback;
 use someet\common\models\AdminLog;
 use someet\common\models\Answer;
 use someet\common\models\AnswerItem;
@@ -46,7 +47,9 @@ class AnswerController extends BackendController
                 'allowActions' => [
                     'create',
                     'view-by-activity-id',
-                    'filter',
+                    'filter',//审核
+                    'arrive',//到场情况
+                    'leave'//请假
                 ]
             ],
         ];
@@ -111,7 +114,85 @@ class AnswerController extends BackendController
     {
 
     }
+    /**
+     * 更新用户请假
+     * @param $id 更新的对象id
+     * @param $leave_status 请假状态 0 未请假 1 已请假
+     * @return array|null|\yii\db\ActiveRecord
+     * @throws DataValidationFailedException
+     * @throws NotFoundHttpException
+     * @throws ServerErrorHttpException
+     */
+    public function actionLeave($id, $leave_status)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
 
+        // 参数验证
+        if ($id < 1 || !in_array($leave_status, [0,1])) {
+            return ['msg' => '参数不正确'];
+        }
+
+        //后台操作日志记录
+        AdminLog::saveLog('更新用户请假状态', $id);
+
+        //获取报名信息
+        $model = Answer::find()->where(['id' => $id])->with(['user', 'activity'])->one();
+        //修改当前报名的状态为通过或者不通过
+
+        //设置答案的状态为通过或不通过
+        $model->leave_status = $leave_status;
+        if (!$model->save()) {
+            //返回错误信息
+            return ['msg' => '操作失败'];
+        } else {
+            //返回正确的消息
+            return Answer::find()
+                ->where(['id' => $model->id])
+                ->asArray()
+                ->with('answerItemList')
+                ->one();
+        }
+    }
+
+    /**
+     * 更新用户到场情况
+     * @param $id 更新的对象id
+     * @param $arrive_status 0 未到场  1迟到 2准时
+     * @return array|null|\yii\db\ActiveRecord
+     * @throws DataValidationFailedException
+     * @throws NotFoundHttpException
+     * @throws ServerErrorHttpException
+     */
+    public function actionArrive($id, $arrive_status)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        // 参数验证
+        if ($id < 1 || !in_array($arrive_status, [0,1, 2])) {
+            return ['msg' => '参数不正确'];
+        }
+
+        //后台操作日志记录
+        AdminLog::saveLog('更新用户到场情况', $id);
+
+        //获取报名信息
+        $model = Answer::find()->where(['id' => $id])->with(['user', 'activity'])->one();
+        //修改当前报名的状态为通过或者不通过
+
+        //设置答案的状态为通过或不通过
+        $model->arrive_status = $arrive_status;
+        if (!$model->save()) {
+            //返回错误信息
+            return ['msg' => '操作失败'];
+        } else {
+            //返回正确的消息
+            return Answer::find()
+                ->where(['id' => $model->id])
+                ->asArray()
+                ->with('answerItemList')
+                ->one();
+        }
+    }
 
     /**
      * 过滤报名是否通过
@@ -181,7 +262,6 @@ class AnswerController extends BackendController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $models = Answer::find()
             ->where(['activity_id' => $activity_id])
-            ->asArray()
             ->with(
                 [
                     'answerItemList' => function ($q) {
@@ -191,19 +271,24 @@ class AnswerController extends BackendController
                     'activity',
                 ]
             )
+            ->asArray()
             ->all();
 
-        /*
-        // 遍历问题
-        foreach($models as &$answer) {
-            // 将同一个用户的回答合并成一条记录
-            $answerItemList = [];
-            foreach($answer['answerItemList'] as $answerItem) {
-                $answerItemList[] = $answerItem['question_value'];
+        $feedbacks = ActivityFeedback::find()
+            ->where(['activity_id' => $activity_id])
+            ->asArray()
+            ->all();
+
+        // 遍历反馈
+        foreach($feedbacks as $feedback) {
+            // 将同一个用户的反馈放到报名对象上面
+            foreach($models as &$model) {
+                if ($model['user_id'] == $feedback['user_id']) {
+                    $model['feedback'] = $feedback;
+                }
             }
-            $answer['answerItemList'] = $answerItemList;
+            //$answer['feedback'] = $feedbacks;
         }
-        */
 
         return $models;
     }

@@ -23,6 +23,19 @@ angular.module('backendServices')
             return data;
           });
         },
+        //请假情况
+        leave: function (id, leave_status) {
+          return $http.post('/answer/leave?id=' + id + '&leave_status=' + leave_status).then(function (data) {
+            return data;
+          });
+        },
+        //到场情况
+        arrive: function (id, arrive_status) {
+          return $http.post('/answer/arrive?id=' + id + '&arrive_status=' + arrive_status).then(function (data) {
+            return data;
+          });
+        },
+        //筛选
         filter: function (id, pass_or_not) {
           return $http.post('/answer/filter?id=' + id + '&pass_or_not=' + pass_or_not).then(function (data) {
             return data;

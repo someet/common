@@ -3,7 +3,11 @@
   <div class="row">
 <div class="col-md-3  panel-default">
   <div class="panel-body" style="font-size:18px">
-    活动标题： <strong>{{list[0].activity.title}}</strong>
+    活动标题：{{list[0].activity.title}}<br />
+    发起人:{{list[0].activity.user.username}}<br />
+    活动时间:{{list[0].activity.start_time * 1000 | date: "MM月dd日 HH:mm"}} - {{list[0].activity.end_time * 1000 | date:"MM月dd日 HH:mm"}}<br />
+    活动地址:{{list[0].activity.address}}<br />
+    整体评分：{{ countScore }}
   </div>
 </div>
 </div>
@@ -91,6 +95,13 @@
               </font>
             </span>
             <div class="pull-right">
+              <button class="btn btn-default" ng-click="leave(entity, 1)">请假</button>
+              <button class="btn btn-default" ng-click="leave(entity, 0)">取消请假</button>
+
+              <button class="btn btn-default" ng-click="arrive(entity, 0)">未到</button>
+              <button class="btn btn-default" ng-click="arrive(entity, 1)">迟到</button>
+              <button class="btn btn-default" ng-click="arrive(entity, 2)">准时</button>
+
               <button ng-if="entity.is_send==0||entity.status==10" class="btn btn-success" ng-click="pass(entity)">通过</button>
               <button ng-if="entity.is_send==0||entity.status==10" class="btn btn-danger" ng-click="reject(entity)">不通过</button>
             </div>
@@ -158,6 +169,16 @@
     <div style="margin:10px;" ng-repeat="answer in answerItemList">
       <div style="margin:5px;color:#999">问题{{$index+1}}: {{answer.question_label}}</div>
       <div style="margin:5px;padding:5px;border-radius:10px;border:1px solid rgba(10,10,10,0.1)">{{answer.question_value}}</div>
+    </div>
+    <br />
+    <div ng-show="entity.feedback">
+      <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">活动打分情况</div>
+      整体评分{{entity.feedback.stars}}
+      发起人评分{{entity.feedback.sponsor_stars}}
+    </div>
+    <div ng-show="entity.feedback">
+      <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">用户评价</div>
+      {{entity.feedback.feedback}}
     </div>
   </div>
 </div>
