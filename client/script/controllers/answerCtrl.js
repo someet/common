@@ -12,15 +12,21 @@ angular.module('controllers')
           //将所有的反馈给放到一个数组
           var feedbacks = [];
           angular.forEach(data, function(list,index,array){
-            feedbacks.push( list.feedback );
+            if (list.feedback) {
+              feedbacks.push(list.feedback);
+            }
           });
 
-          var countScore = '';
-          angular.forEach(feedbacks, function(list,index,array){
-            countScore = ((list.stars * 0.8) + (list.sponsor_stars*0.2));
-          });
-          var countScore = countScore/feedbacks.length;
-          $scope.countScore = countScore;
+          if (feedbacks.length > 0) {
+            var countScore = '';
+            angular.forEach(feedbacks, function(list,index,array){
+              countScore = ((list.stars * 0.8) + (list.sponsor_stars*0.2));
+            });
+            var countScore = countScore/feedbacks.length;
+            $scope.countScore = countScore;
+          } else {
+            $scope.countScore = 0;
+          }
         }, function (err) {
 
         });
