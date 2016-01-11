@@ -229,6 +229,25 @@ angular.module('controllers', ['ngTagsInput'])
         })
       }
 
+      function copyTextToClipboard(url){
+        window.prompt("复制链接：Command + C, Enter\n关闭窗口：Esc", url);
+      }
+
+      // 复制预览链接
+      $scope.copyPreviewUrl = function(activity) {
+        copyTextToClipboard(activity.preview_url);
+      }
+
+      // 复制筛选链接
+      $scope.copyFilterUrl = function(activity) {
+        copyTextToClipboard(activity.filter_url);
+      }
+
+      // 复制活动链接
+      $scope.copyActivityUrl = function(activity) {        
+        copyTextToClipboard('https://m.someet.cc/activity/' + activity.id);
+      }
+
       // 设置问题
       $scope.viewQuestion = function(activity) {
         $location.path('/question/view/' + activity.id);
