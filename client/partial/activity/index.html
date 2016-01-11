@@ -42,6 +42,7 @@
   <div class="activityList" id="activityList">
     <ul class="activityListProperty">
       <li ng-repeat="entity in list | orderBy: 'display_order' ">
+        <!--针对过往的活动显示一个灰色的背景,如果活动的结束时间小于当周一之前-->
         <div ng-class="{true: 'panel-default', false: 'panel-danger'}[entity.status==10]" class="panel">
           <div class="panel-heading">
             <h3 class="panel-title">
@@ -54,7 +55,7 @@
               </button>
 
               <!-- 活动标题 -->
-              {{entity.id}}#
+              ID: {{entity.id}}
               <span ng-if="entity.status==10" >[草稿] {{entity.title}}</span>
               <span ng-if="entity.status==20" >{{entity.user.username}}</span>：
               <span ng-if="entity.status==20" >{{entity.title}}</span>

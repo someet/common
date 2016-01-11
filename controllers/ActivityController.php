@@ -42,6 +42,7 @@ class ActivityController extends BackendController
                 'class' => '\app\components\AccessControl',
                 'allowActions' => [
                     'list-by-type-id',
+                    't'
                 ]
             ],
         ];
@@ -131,6 +132,9 @@ class ActivityController extends BackendController
                 $activities[$key]['feedback_count'] = count($activity['feedbackList']);
                 $activities[$key]['preview_url'] = Yii::$app->params['domain'].'preview/'.$activity['id'];
                 $activities[$key]['filter_url'] = Yii::$app->params['domain'].'filter/'.$activity['id'];
+
+                //set last week days
+                $activities[$key]['this_week'] = $this->judgeThisWeek($activity['end_time']) ? 1 : 0;
             }
         }
         return $activities;
@@ -187,10 +191,28 @@ class ActivityController extends BackendController
             $activities[$key]['feedback_count'] = count($activity['feedbackList']);
             $activities[$key]['preview_url'] = Yii::$app->params['domain'].'preview/'.$activity['id'];
             $activities[$key]['filter_url'] = Yii::$app->params['domain'].'filter/'.$activity['id'];
+
+            //set last week days
+            $activities[$key]['this_week'] = $this->judgeThisWeek($activity['end_time']) ? 1 : 0;
         }
 
-
         return $activities;
+    }
+
+    /**
+     * 判断是否是本周活动
+     * @param $time integer 当前活动的时间
+     * @return bool true:本周活动 | false:上周活动
+     */
+    private function judgeThisWeek($time)
+    {
+        $date=date('Y-m-d');  //当前日期
+        $first=1; //$first =1 表示每周星期一为开始日期 0表示每周日为开始日期
+        $w=date('w',strtotime($date));  //获取当前周的第几天 周日是 0 周一到周六是 1 - 6
+        $now_start=date('Y-m-d',strtotime("$date -".($w ? $w - $first : 6).' days')); //获取本周开始日期，如果$w是0，则表示周日，减去 6 天
+        $last_end_time = strtotime($now_start." 00:00:00");
+
+        return $last_end_time  < $time ;
     }
 
     /**
