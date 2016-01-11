@@ -18,9 +18,9 @@ angular.module('controllers')
           });
 
           if (feedbacks.length > 0) {
-            var countScore = '';
+            var countScore = 0;
             angular.forEach(feedbacks, function(list,index,array){
-              countScore = ((list.stars * 0.8) + (list.sponsor_stars*0.2));
+              countScore += ((list.stars * 0.8) + (list.sponsor_stars*0.2));
             });
             var countScore = countScore/feedbacks.length;
             $scope.countScore = countScore;
