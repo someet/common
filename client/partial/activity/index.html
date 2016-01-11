@@ -98,11 +98,11 @@
             <button class="btn btn-info" class="btn" ng-click="copyActivityUrl(entity)">活动链接</button>
             <button class="btn btn-info" class="btn" ng-click="copyPreviewUrl(entity)">预览链接</button>
             <button class="btn btn-info" class="btn" ng-click="copyFilterUrl(entity)">筛选链接</button>
-            <a class="btn btn-success" href="#/activity/{{entity.id}}">编辑</a>
+            <a class="btn btn-primary" target="_blank" href="http://bshare.optimix.asia/barCode?site=weixin&url=https://m.someet.cc/activity/{{entity.id}}">生成活动二维码</a>
             <button ng-if="!entity.question" class="btn" ng-click="viewQuestion(entity)">设置表单</button>
             <button ng-if="entity.question" class="btn" ng-click="viewQuestion(entity)">修改表单</button>
             <button ng-if="entity.question" class="btn" ng-click="previewQuestion(entity)">预览表单</button>
-            <a class="btn btn-primary" target="_blank" href="http://bshare.optimix.asia/barCode?site=weixin&url=https://m.someet.cc/activity/{{entity.id}}">生成活动二维码</a>
+            <a class="btn btn-success" href="#/activity/{{entity.id}}">编辑</a>
 
             <!-- 下拉功能 -->
             <div class="btn-group btn-float-right">
