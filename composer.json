@@ -40,6 +40,12 @@
 			"bower-asset-library": "/var/www/vendor/bower"
 		}
 	},
+	"autoload": {
+		"files": [
+			"./packages/someet-common/components/SomeetValidator.php",
+			"./packages/someet-common/components/GlobalFunctions.php"
+		]
+	},
 	"repositories": [
 		{
 			"type": "path",
