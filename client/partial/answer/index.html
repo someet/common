@@ -34,10 +34,6 @@
           <span>
             <strong>{{entity.user.profile.name}}（{{entity.user.username}}）</strong>
           </span>
-          <span ng-if="entity.send_at!=0">
-            短信发送失败,请检查
-            <a class="btn" target="_blank" href="http://www.yunpian.com">云片</a>
-          </span>
           <span ng-if="entity.status==10" class="btn-float-right">待筛选</span>
           <span ng-if="entity.status==20" class="btn-float-right">已通过</span>
           <span ng-if="entity.status==30" class="btn-float-right">未通过</span>

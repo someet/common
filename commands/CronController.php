@@ -1,6 +1,7 @@
 <?php
 namespace app\commands;
 
+use someet\common\components\SomeetValidator;
 use someet\common\models\Activity;
 use Yii;
 use someet\common\models\Answer;
@@ -19,17 +20,6 @@ class CronController  extends \yii\console\Controller
         5 => '周五',
         6 => '周六',
     ];
-    /**
-     * 验证是否是手机号码
-     *
-     * 国际区号-手机号码
-     *
-     * @param string $number 待验证的号码
-     * @return boolean 如果验证失败返回false,验证成功返回true
-     */
-    public static function isTelNumber($number) {
-        return 0 < preg_match('/^\+?[0\s]*[\d]{0,4}[\-\s]?\d{4,12}$/', $number);
-    }
 
     /**
      * 获取成功的微信模板消息
@@ -56,7 +46,7 @@ class CronController  extends \yii\console\Controller
             "topcolor" => "#FF0000",
             "data" => [
                 "first" => [
-                    "value" => "恭喜，你报名的“{$activity['user']['username']}：{$activity['title']}”活动已通过筛选！",
+                    "value" => "恭喜，你报名的活动已通过筛选！",
                     "color" => "#173177"
                 ],
                 "keyword1" => [
@@ -107,7 +97,7 @@ class CronController  extends \yii\console\Controller
             "topcolor" => "#FF0000",
             "data" => [
                 "first" => [
-                    "value" => "您报名的活动“{$activity['user']['username']}：{$activity['title']}”正在筛选，请耐心等待",
+                    "value" => "您报名的活动正在筛选，请耐心等待",
                     "color" => "#173177"
                 ],
                 "keyword1" => [
@@ -151,7 +141,7 @@ class CronController  extends \yii\console\Controller
             "topcolor" => "#FF0000",
             "data" => [
                 "first" => [
-                    "value" => "抱歉，你报名的“{$activity['user']['username']}：{$activity['title']}”活动未通过筛选",
+                    "value" => "抱歉，你报名的活动未通过筛选",
                     "color" => "#173177"
                 ],
                 "keyword1" => [
@@ -296,7 +286,7 @@ class CronController  extends \yii\console\Controller
             }
 
             // 用户的手机号码不为空, 并且手机号码是合法的手机号
-            if (!empty($answer['user']['mobile']) && $this->isTelNumber($answer['user']['mobile'])) {
+            if (!empty($answer['user']['mobile']) && SomeetValidator::isTelNumber($answer['user']['mobile'])) {
 
                 //手机号
                 $mobile = $answer['user']['mobile'];
@@ -416,7 +406,7 @@ class CronController  extends \yii\console\Controller
             }
 
             // 用户的手机号码不为空, 并且手机号码是合法的手机号
-            if (!empty($answer['user']['mobile']) && $this->isTelNumber($answer['user']['mobile'])) {
+            if (!empty($answer['user']['mobile']) && SomeetValidator::isTelNumber($answer['user']['mobile'])) {
 
                 //手机号
                 $mobile = $answer['user']['mobile'];
@@ -505,11 +495,10 @@ class CronController  extends \yii\console\Controller
      */
     public function actionTest()
     {
-        $answer = Answer::find()->where(['is_send' => '0'])->with(['user', 'activity', 'activity.pma'])->one();
-        $smsData = $this->fetchWaitSmsData('', $answer->activity);
         $mobile = '18518368050';
+        $smsData = "test in cron/test";
         //尝试发送短消息
-        $res = Yii::$app->yunpian->sendSms($mobile, $smsData);
+        $res = Yii::$app->sms->sendSms($mobile, $smsData);
         var_dump($res);
     }
 }
