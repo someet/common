@@ -281,4 +281,10 @@ class User extends BaseUser
     {
         return $this->hasMany(AuthAssignment::className(), ['user_id' => 'id']);
     }
+
+    // 活动报名列表
+    public function getAnswerList()
+    {
+        return $this->hasMany(Answer::className(), ['user_id' => 'id']);
+    }
 }
