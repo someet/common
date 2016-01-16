@@ -62,6 +62,13 @@
         {
           "type": "path",
           "url": "./packages/yii2-redis"
+		},
+		{
+          "type": "composer",
+          "url": "http://packagist.phpcomposer.com"
+		},
+        {
+          "packagist": false
         }
 	]
 }
