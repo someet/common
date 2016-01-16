@@ -31,7 +31,7 @@ return [
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
-        'yunpian' => $web['components']['yunpian'],
+        'sms' => $web['components']['sms'],
         'wechat' => $web['components']['wechat'],
         'redis' => $web['components']['redis'],
         'cache' => $web['components']['cache'],

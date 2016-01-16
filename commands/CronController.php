@@ -1,6 +1,7 @@
 <?php
 namespace app\commands;
 
+use someet\common\components\SomeetValidator;
 use someet\common\models\Activity;
 use Yii;
 use someet\common\models\Answer;
@@ -19,17 +20,6 @@ class CronController  extends \yii\console\Controller
         5 => '周五',
         6 => '周六',
     ];
-    /**
-     * 验证是否是手机号码
-     *
-     * 国际区号-手机号码
-     *
-     * @param string $number 待验证的号码
-     * @return boolean 如果验证失败返回false,验证成功返回true
-     */
-    public static function isTelNumber($number) {
-        return 0 < preg_match('/^\+?[0\s]*[\d]{0,4}[\-\s]?\d{4,12}$/', $number);
-    }
 
     /**
      * 获取成功的微信模板消息
@@ -56,7 +46,7 @@ class CronController  extends \yii\console\Controller
             "topcolor" => "#FF0000",
             "data" => [
                 "first" => [
-                    "value" => "恭喜，你报名的“{$activity['user']['username']}：{$activity['title']}”活动已通过筛选！",
+                    "value" => "恭喜，你报名的活动已通过筛选！",
                     "color" => "#173177"
                 ],
                 "keyword1" => [
@@ -107,7 +97,7 @@ class CronController  extends \yii\console\Controller
             "topcolor" => "#FF0000",
             "data" => [
                 "first" => [
-                    "value" => "您报名的活动“{$activity['user']['username']}：{$activity['title']}”正在筛选，请耐心等待",
+                    "value" => "您报名的活动正在筛选，请耐心等待",
                     "color" => "#173177"
                 ],
                 "keyword1" => [
@@ -151,7 +141,7 @@ class CronController  extends \yii\console\Controller
             "topcolor" => "#FF0000",
             "data" => [
                 "first" => [
-                    "value" => "抱歉，你报名的“{$activity['user']['username']}：{$activity['title']}”活动未通过筛选",
+                    "value" => "抱歉，你报名的活动未通过筛选",
                     "color" => "#173177"
                 ],
                 "keyword1" => [
@@ -235,7 +225,7 @@ class CronController  extends \yii\console\Controller
      */
     private function fetchSuccessSmsData($activity_name, $pma_wechat_id) {
         //获取通过的短信模板
-        return "【Someet活动平台】您好，恭喜您报名的“{$activity_name}”活动已通过筛选。活动地点等详细信息将在活动微信群中和大家沟通。请您按以下操作步骤加入活动微信群：进入Someet活动平台（服务号）——点击屏幕下栏“我”——点击进入报名通过的活动详情页面——点击微信群组——扫描二维码加入活动群。期待与您共同玩耍，系统短信，请勿回复。";
+        return "您好，恭喜您报名的“{$activity_name}”活动已通过筛选。活动地点等详细信息将在活动微信群中和大家沟通。请您按以下操作步骤加入活动微信群：进入Someet活动平台（服务号）——点击屏幕下栏“我”——点击进入报名通过的活动详情页面——点击微信群组——扫描二维码加入活动群。期待与您共同玩耍，系统短信，请勿回复。";
     }
     /**
      * 获取等待的短信内容
@@ -244,7 +234,7 @@ class CronController  extends \yii\console\Controller
      */
     private function fetchWaitSmsData($activity_name) {
         //获取拒绝的短信模板
-        return "【Someet活动平台】您好，您报名的“{$activity_name}”活动发起人正在筛选中，我们将会在24小时内短信给您最终筛选结果，请耐心等待。谢谢您的支持，系统短信，请勿回复。";
+        return "您好，您报名的“{$activity_name}”活动发起人正在筛选中，我们将会在24小时内短信给您最终筛选结果，请耐心等待。谢谢您的支持，系统短信，请勿回复。";
     }
     /**
      * 获取失败的短信内容
@@ -253,7 +243,7 @@ class CronController  extends \yii\console\Controller
      */
     private function fetchFailSmsData($activity_name) {
         //获取拒绝的短信模板
-        return "【Someet活动平台】Someet用户您好，很抱歉您报名的“{$activity_name}”活动未通过筛选。关于如何提高报名的成功率，这里有几个小tips，1.认真回答筛选问题； 2.尽早报名，每周二周三是活动推送时间，周四周五报名的成功概率会相对降低很多 3.自己发起活动，优质的发起人是有参与活动特权的哦~ 当然，您还可以添加我们的官方客服Someet小海豹（微信号：someetxhb）随时与我们联系。期待下次活动和你相遇。系统短信，请勿回复。";
+        return "Someet用户您好，很抱歉您报名的“{$activity_name}”活动未通过筛选。关于如何提高报名的成功率，这里有几个小tips，1.认真回答筛选问题； 2.尽早报名，每周二周三是活动推送时间，周四周五报名的成功概率会相对降低很多 3.自己发起活动，优质的发起人是有参与活动特权的哦~ 当然，您还可以添加我们的官方客服Someet小海豹（微信号：someetxhb）随时与我们联系。期待下次活动和你相遇。系统短信，请勿回复。";
     }
 
     /**
@@ -263,7 +253,7 @@ class CronController  extends \yii\console\Controller
      */
     private function fetchNotiSmsData($activity_name, $start_time, $weather) {
         //获取通知参加活动的短信
-        return "【Someet活动平台】您报名的活动“{$activity_name}”在今天的{$start_time}开始。{$weather}请合理安排时间出行，不要迟到哦。";
+        return "您报名的活动“{$activity_name}”在今天的{$start_time}开始。{$weather}请合理安排时间出行，不要迟到哦。";
     }
 
     /**
@@ -296,7 +286,7 @@ class CronController  extends \yii\console\Controller
             }
 
             // 用户的手机号码不为空, 并且手机号码是合法的手机号
-            if (!empty($answer['user']['mobile']) && $this->isTelNumber($answer['user']['mobile'])) {
+            if (!empty($answer['user']['mobile']) && SomeetValidator::isTelNumber($answer['user']['mobile'])) {
 
                 //手机号
                 $mobile = $answer['user']['mobile'];
@@ -416,7 +406,7 @@ class CronController  extends \yii\console\Controller
             }
 
             // 用户的手机号码不为空, 并且手机号码是合法的手机号
-            if (!empty($answer['user']['mobile']) && $this->isTelNumber($answer['user']['mobile'])) {
+            if (!empty($answer['user']['mobile']) && SomeetValidator::isTelNumber($answer['user']['mobile'])) {
 
                 //手机号
                 $mobile = $answer['user']['mobile'];
@@ -505,11 +495,10 @@ class CronController  extends \yii\console\Controller
      */
     public function actionTest()
     {
-        $answer = Answer::find()->where(['is_send' => '0'])->with(['user', 'activity', 'activity.pma'])->one();
-        $smsData = $this->fetchWaitSmsData('', $answer->activity);
         $mobile = '18518368050';
+        $smsData = "test in cron/test";
         //尝试发送短消息
-        $res = Yii::$app->yunpian->sendSms($mobile, $smsData);
+        $res = Yii::$app->sms->sendSms($mobile, $smsData);
         var_dump($res);
     }
 }

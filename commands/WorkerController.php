@@ -39,7 +39,7 @@ class WorkerController extends BeanstalkController
             $answer = $sentData->answer;
 
             //尝试发送短消息
-            $sms = Yii::$app->yunpian;
+            $sms = Yii::$app->sms;
             $smsRes = $sms->sendSms($mobile, $smsData);
 
             //如果是未审核,则只修改发送时间
@@ -65,7 +65,7 @@ class WorkerController extends BeanstalkController
                     ['id' => $answer->id]);
             }
 
-            fwrite(STDOUT, Console::ansiFormat("- Everything is allright"."\n", [Console::FG_GREEN]));
+            fwrite(STDOUT, Console::ansiFormat("Sms - Everything is allright"."\n", [Console::FG_GREEN]));
             //Delete the job from beanstalkd
             return self::DELETE;
         } catch (\Exception $e) {
@@ -107,7 +107,7 @@ class WorkerController extends BeanstalkController
                 Answer::updateAll(['wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_Fail, 'wechat_template_push_at' => time()], ['id' => $answer->id]);
             }
 
-            fwrite(STDOUT, Console::ansiFormat("- Everything is allright"."\n", [Console::FG_GREEN]));
+            fwrite(STDOUT, Console::ansiFormat("Wechat - Everything is allright"."\n", [Console::FG_GREEN]));
             //Delete the job from beanstalkd
             return self::DELETE;
         } catch (\Exception $e) {
@@ -136,7 +136,7 @@ class WorkerController extends BeanstalkController
             $answer = $sentData->answer;
 
             //尝试发送短消息
-            $sms = Yii::$app->yunpian;
+            $sms = Yii::$app->sms;
             $smsRes = $sms->sendSms($mobile, $smsData);
 
             if ($smsRes) {
@@ -156,7 +156,7 @@ class WorkerController extends BeanstalkController
                     ['id' => $answer->id]);
             }
 
-            fwrite(STDOUT, Console::ansiFormat("- Everything is allright"."\n", [Console::FG_GREEN]));
+            fwrite(STDOUT, Console::ansiFormat("Noti - Everything is allright"."\n", [Console::FG_GREEN]));
             //Delete the job from beanstalkd
             return self::DELETE;
 
@@ -198,7 +198,7 @@ class WorkerController extends BeanstalkController
                 Answer::updateAll(['join_noti_wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_Fail, 'join_noti_wechat_template_push_at' => time()], ['id' => $answer->id]);
             }
 
-            fwrite(STDOUT, Console::ansiFormat("- Everything is allright"."\n", [Console::FG_GREEN]));
+            fwrite(STDOUT, Console::ansiFormat("NotiWechat - Everything is allright"."\n", [Console::FG_GREEN]));
             //Delete the job from beanstalkd
             return self::DELETE;
         } catch (\Exception $e) {

@@ -20,7 +20,7 @@
         "yiisoft/yii2-redis": "*@dev",
         "e96/yii2-sentry": "dev-master",
         "callmez/yii2-wechat-sdk": "dev-master",
-        "dcb9/yii2-yunpian": "^0.0.2",
+        "maxwelldu/yii2-sms": "^1.0",
         "bazilio/yii2-newrelic": "~0.0.1",
 		"udokmeci/yii2-beanstalk" : "dev-master"
 	},
@@ -62,13 +62,13 @@
         {
           "type": "path",
           "url": "./packages/yii2-redis"
-        },
-		{
-			"type": "composer",
-			"url": "http://packagist.phpcomposer.com"
 		},
 		{
-			"packagist": false
-		}
+          "type": "composer",
+          "url": "http://packagist.phpcomposer.com"
+		},
+        {
+          "packagist": false
+        }
 	]
 }
