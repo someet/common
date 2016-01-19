@@ -90,6 +90,8 @@
         <div class="activity-card" layout="row">人数限制: {{entity.peoples}}</div>
         <div >
           <div>活动流程: {{entity.review}}</div>
+          <div>活动人数: {{entity.field1}}</div>
+          <div>Tips: {{entity.field2}}</div>
         </div>
       </div>
     </div>
@@ -255,6 +257,16 @@
         <md-input-container>
           <label>活动流程</label>
           <text-angular  ng-model="entity.review" placeholder="活动流程"></text-angular >
+        </md-input-container>
+
+        <md-input-container flex="100">
+          <label>活动人数</label>
+          <textarea ng-model="entity.field1"></textarea>
+        </md-input-container>
+
+        <md-input-container flex="100">
+          <label>Tips</label>
+          <textarea ng-model="entity.field2"></textarea>
         </md-input-container>
 
         <md-input-container layout="row" class="btn-float-right">
