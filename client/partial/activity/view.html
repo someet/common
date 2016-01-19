@@ -89,7 +89,7 @@
         <h3>备用信息</h3>
         <div class="activity-card" layout="row">人数限制: {{entity.peoples}}</div>
         <div >
-          <div>活动回顾: {{entity.review}}</div>
+          <div>活动流程: {{entity.review}}</div>
         </div>
       </div>
     </div>
@@ -149,20 +149,23 @@
           </md-input-container>
         </div>
 
+          <md-input-container flex="100">
+            <label>文案</label>
+            <textarea ng-model="entity.content"></textarea>
+          </md-input-container>
+
         <div layout="row">
           <div ng-file-select="onPosterSelect($files)" data-multiple="false" title="select file" onclick="this.value = null" class="btn btn-upload">
             <md-button  class="md-raised md-info">标题图片</md-button>
           </div>
           <p>
             {{ selectPoster.progress.p }}%
-            <md-button class="md-raised md-warn" ng-click="posterAbort()">移除标题图片</md-button>
           </p>
           <div ng-file-select="onCodeSelect($files)" data-multiple="false" title="select file" onclick="this.value = null" class="btn btn-upload">
             <md-button  class="md-raised md-info">活动群二维码</md-button>
           </div>
           <p>
             {{ selectCode.progress.p }}%
-            <md-button class="md-raised md-warn" ng-click="codeAbort()">移除群二维码</md-button>
           </p>
         </div>
 
@@ -229,10 +232,7 @@
           </md-input-container>
         </div>
 
-        <md-input-container>
-          <label>文案</label>
-          <text-angular  ng-model="entity.content" placeholder="文案"></text-angular >
-        </md-input-container>
+
 
         <md-input-container>
           <label>收费金额(0为免费)</label>
@@ -242,7 +242,7 @@
           </div>
         </md-input-container>
 
-        <md-input-container ng-show="entity.cost">
+        <md-input-container>
           <label>收费明细</label>
           <textarea ng-model="entity.cost_list"></textarea>
         </md-input-container>
@@ -253,8 +253,8 @@
         </md-input-container>
 
         <md-input-container>
-          <label>活动回顾</label>
-          <textarea ng-model="entity.review"></textarea>
+          <label>活动流程</label>
+          <text-angular  ng-model="entity.review" placeholder="活动流程"></text-angular >
         </md-input-container>
 
         <md-input-container layout="row" class="btn-float-right">
