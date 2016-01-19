@@ -36,6 +36,14 @@ use Yii;
  * @property integer $status
  * @property integer $edit_status
  * @property integer $content
+ * @property string $field1
+ * @property string $field2
+ * @property string $field3
+ * @property string $field4
+ * @property string $field5
+ * @property string $field6
+ * @property string $field7
+ * @property string $field8
  */
 class Activity extends \yii\db\ActiveRecord
 {
@@ -65,7 +73,7 @@ class Activity extends \yii\db\ActiveRecord
         return [
             [['title', 'desc', 'poster', 'area', 'address', 'details' ], 'required'],
             [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'created_at', 'created_by', 'updated_at', 'updated_by', 'status', 'edit_status'], 'integer'],
-            [['details', 'review', 'content'], 'string'],
+            [['details', 'review', 'content', 'field1', 'field2', 'field3', 'field4', 'field5', 'field6', 'field7', 'field8'], 'string'],
             [['longitude', 'latitude'], 'number'],
             [['longitude', 'latitude'], 'default', 'value' => 0],
             ['group_code', 'default', 'value' => '0'],
@@ -110,6 +118,14 @@ class Activity extends \yii\db\ActiveRecord
             'status' => '0 删除 10 草稿 20 发布',
             'edit_status' => '扩展字段, 前端自定义状态',
             'content' => '文案',
+            'field1' => '扩展字段1',
+            'field2' => '扩展字段2',
+            'field3' => '扩展字段3',
+            'field4' => '扩展字段4',
+            'field5' => '扩展字段5',
+            'field6' => '扩展字段6',
+            'field7' => '扩展字段7',
+            'field8' => '扩展字段8',
         ];
     }
 
