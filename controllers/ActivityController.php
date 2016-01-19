@@ -494,6 +494,63 @@ class ActivityController extends BackendController
             }
         }
 
+        //扩展字段一
+        if (isset($data['field1'])) {
+            $model->field1= $data['field1'];
+            if (!$model->validate('field1')) {
+                throw new DataValidationFailedException($model->getFirstError('field1'));
+            }
+        }
+        //扩展字段二
+        if (isset($data['field2'])) {
+            $model->field2= $data['field2'];
+            if (!$model->validate('field2')) {
+                throw new DataValidationFailedException($model->getFirstError('field2'));
+            }
+        }
+        //扩展字段三
+        if (isset($data['field3'])) {
+            $model->field1= $data['field3'];
+            if (!$model->validate('field3')) {
+                throw new DataValidationFailedException($model->getFirstError('field3'));
+            }
+        }
+        //扩展字段四
+        if (isset($data['field4'])) {
+            $model->field1= $data['field4'];
+            if (!$model->validate('field4')) {
+                throw new DataValidationFailedException($model->getFirstError('field4'));
+            }
+        }
+        //扩展字段五
+        if (isset($data['field5'])) {
+            $model->field1= $data['field5'];
+            if (!$model->validate('field5')) {
+                throw new DataValidationFailedException($model->getFirstError('field5'));
+            }
+        }
+        //扩展字段六
+        if (isset($data['field6'])) {
+            $model->field1= $data['field6'];
+            if (!$model->validate('field6')) {
+                throw new DataValidationFailedException($model->getFirstError('field6'));
+            }
+        }
+        //扩展字段七
+        if (isset($data['field7'])) {
+            $model->field1= $data['field7'];
+            if (!$model->validate('field7')) {
+                throw new DataValidationFailedException($model->getFirstError('field7'));
+            }
+        }
+        //扩展字段八
+        if (isset($data['field8'])) {
+            $model->field1= $data['field8'];
+            if (!$model->validate('field8')) {
+                throw new DataValidationFailedException($model->getFirstError('field8'));
+            }
+        }
+
         if (!$model->save()) {
             throw new ServerErrorHttpException();
         }
