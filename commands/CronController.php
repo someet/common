@@ -374,10 +374,21 @@ class CronController  extends \yii\console\Controller
      */
     public function actionSendJoinNoti()
     {
-        //查询需要发送提醒的用户, 并且活动在2个小时内即将开始, 并且当时时间不能大于开始时间, 并且只给审核通过的人发提醒, 并且已经给用户发送过通知短信
+        //先找到在2个小时内即将开始的活动IDs, 并且活动在2个小时内即将开始, 并且当时时间不能大于开始时间
+        $activities = Activity::find()
+            ->where(['status' => Activity::STATUS_RELEASE])
+            ->andWhere(" start_time > " . time() . " and start_time < " . (time()+7200) )
+            ->asArray()
+            ->all();
+        if (count($activities)<=0) {
+            return;
+        }
+
+        $activities_ids = array_column($activities, 'id');
+        //查询需要发送提醒的用户, 并且只给审核通过的人发提醒, 并且已经给用户发送过通知短信
         $answerList = Answer::find()
-                ->where(['answer.join_noti_is_send' => Answer::JOIN_NOTI_IS_SEND_YET, 'answer.status' => Answer::STATUS_REVIEW_PASS, 'answer.is_send' => Answer::STATUS_SMS_SUCC]) //还未给用户发送过参加活动通知
-                ->innerJoin('activity', "start_time > ".time()." and start_time<". (time()+7200) ." and activity.status = ".Activity::STATUS_RELEASE)
+                ->where(['in', 'id', $activities_ids])
+                ->andWhere(['answer.join_noti_is_send' => Answer::JOIN_NOTI_IS_SEND_YET, 'answer.status' => Answer::STATUS_REVIEW_PASS, 'answer.is_send' => Answer::STATUS_SMS_SUCC]) //还未给用户发送过参加活动通知
                 ->with([
                     'user',
                     'activity'
