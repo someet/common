@@ -55,8 +55,8 @@ class WorkerController extends BeanstalkController
                     ['id' => $answer->id]);
             } elseif ($sms->hasError()) {
 
-                $error = $sms->getLastError();
-                $msg = is_array($error) && isset($error['msg']) ? $error['msg'] : '发送短信失败';
+                $error = $sms->getError();
+                $msg = is_array($error) && isset($error) ? $error : '发送短信失败';
 
                 Yii::error('短信发送失败, 请检查'. is_array($error) ? json_encode($error) : $error);
 
@@ -146,8 +146,8 @@ class WorkerController extends BeanstalkController
                     ['id' => $answer->id]);
             } elseif ($sms->hasError()) {
 
-                $error = $sms->getLastError();
-                $msg = is_array($error) && isset($error['msg']) ? $error['msg'] : '发送短信失败';
+                $error = $sms->getError();
+                $msg = is_array($error) && isset($error) ? $error : '发送短信失败';
 
                 Yii::error('短信发送失败, 请检查'. is_array($error) ? json_encode($error) : $error);
 
