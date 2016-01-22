@@ -25,4 +25,5 @@ return [
     'domain' => \DockerEnv::get('WECHAT_DOMAIN'),
 
     'weather.cityid' => \DockerEnv::get('WEATHER_CITYID'),
+    'activity.test_type_id' => \DockerEnv::get('ACTIVITY_TEST_TYPE_ID'),
 ];

@@ -71,11 +71,11 @@
               <span ng-if="entity.status==20">
                 <!-- 查看反馈信息 -->
                 <!-- 查看报名情况 -->
-                <button ng-class="{true: 'btn-danger', false: 'btn-default'}[entity.question.status==10]" ng-if="entity.question" class="btn  btn-float-right" type="button" ng-click="viewAnswer(entity)">
+                <a href="#/answer/{{entity.id}}" target="_blank" ng-class="{true: 'btn-danger', false: 'btn-default'}[entity.question.status==10]" ng-if="entity.question" class="btn  btn-float-right" type="button">
                   <span>管理</span>
                   （{{entity.answer_count}}/{{entity.peoples}}）
                   <span class="badge">{{entity.feedback_count}}</span>
-                </button>
+                </a>
               </span>
               <button ng-if="entity.status==10" class="btn btn-primary btn-float-right" ng-click="release(entity)" type="button">发布</button>
             </h3>
@@ -103,7 +103,7 @@
             <button ng-if="!entity.question" class="btn" ng-click="viewQuestion(entity)">设置表单</button>
             <button ng-if="entity.question" class="btn" ng-click="viewQuestion(entity)">修改表单</button>
             <button ng-if="entity.question" class="btn" ng-click="previewQuestion(entity)">预览表单</button>
-            <a class="btn btn-success" href="#/activity/{{entity.id}}">编辑</a>
+            <a class="btn btn-success" href="#/activity/{{entity.id}}" target="_blank">编辑</a>
 
             <!-- 下拉功能 -->
             <div class="btn-group btn-float-right">

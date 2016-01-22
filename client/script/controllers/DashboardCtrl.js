@@ -1,6 +1,12 @@
 angular.module('controllers').controller('DashboardCtrl', [
-  '$scope', '$mdDialog', '$mdToast',
-  function ($scope, $mdDialog, $mdToast) {
+  '$scope', '$mdDialog', '$mdToast','$dashboardManage',
+  function ($scope, $mdDialog, $mdToast, $dashboardManage) {
+
+
+    $dashboardManage.fetch().then(function(data){
+      $scope.entity = data;
+    })
+
     $scope.$parent.pageName = 'Dashboard';
 
     $scope.clickMe = function () {
