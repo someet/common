@@ -25,3 +25,18 @@ function random($length = 6 , $numeric = 0) {
     }
     return $hash;
 }
+
+/**
+ * 判断是否是本周活动
+ * @param $time integer 当前活动的时间
+ * @return bool true:本周活动 | false:上周活动
+ */
+function getLastEndTime()
+{
+    $date = date('Y-m-d');  //当前日期
+    $first = 1; //$first =1 表示每周星期一为开始日期 0表示每周日为开始日期
+    $w = date('w',strtotime($date));  //获取当前周的第几天 周日是 0 周一到周六是 1 - 6
+    $now_start = date('Y-m-d',strtotime("$date -".($w ? $w - $first : 6).' days')); //获取本周开始日期，如果$w是0，则表示周日，减去 6 天
+    $last_end_time = strtotime($now_start." 00:00:00");
+    return $last_end_time;
+}
