@@ -77,7 +77,10 @@ class ActivityController extends BackendController
                 ->asArray()
                 ->where($where)
                 ->andWhere($andwhere)
-                ->orderBy(['id' => SORT_DESC]);
+                ->orderBy([
+                    'is_top' => SORT_DESC,
+                    'display_order' => SORT_ASC,
+                ]);
         } else {
             $query = Activity::find()
                 ->with([
@@ -90,7 +93,10 @@ class ActivityController extends BackendController
                 ])
                 ->where($andwhere)
                 ->asArray()
-                ->orderBy(['id' => SORT_DESC]);
+                ->orderBy([
+                    'is_top' => SORT_DESC,
+                    'display_order' => SORT_ASC,
+                ]);
         }
 
         if ($id) {
@@ -164,8 +170,7 @@ class ActivityController extends BackendController
                 ->asArray()
                 ->orderBy([
                     'is_top' => SORT_DESC,
-                    'updated_at' => SORT_DESC,
-                    'id' => SORT_DESC,
+                    'display_order' => SORT_ASC,
                 ])
                 ->all();
         } else {
@@ -180,8 +185,7 @@ class ActivityController extends BackendController
                 ->asArray()
                 ->orderBy([
                     'is_top' => SORT_DESC,
-                    'updated_at' => SORT_DESC,
-                    'id' => SORT_DESC,
+                    'display_order' => SORT_ASC,
                 ])
                 ->all();
         }
