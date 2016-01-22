@@ -220,12 +220,11 @@ class CronController  extends \yii\console\Controller
     /**
      * 获取成功的短信内容
      * @param string $activity_name 活动名称
-     * @param string $pma_wechat_id PMA的微信id
      * @return string 短信内容
      */
-    private function fetchSuccessSmsData($activity_name, $pma_wechat_id) {
+    private function fetchSuccessSmsData($activity_name) {
         //获取通过的短信模板
-        return "您好，恭喜您报名的“{$activity_name}”活动已通过筛选。活动地点等详细信息将在活动微信群中和大家沟通。请您按以下操作步骤加入活动微信群：进入Someet活动平台（服务号）——点击屏幕下栏“我”——点击进入报名通过的活动详情页面——点击微信群组——扫描二维码加入活动群。期待与您共同玩耍，系统短信，请勿回复。";
+        return "恭喜，你报名的“{$activity_name}”活动已通过筛选。活动地点等详细信息将在活动微信群中和大家沟通。请您按以下操作步骤加入活动微信群：进入Someet活动平台（服务号ID：SomeetInc）——点击屏幕下栏“我”——进入相应活动页面——点击微信群组——扫描二维码加入活动群。期待与您共同玩耍，系统短信，请勿回复。";
     }
     /**
      * 获取等待的短信内容
@@ -234,7 +233,7 @@ class CronController  extends \yii\console\Controller
      */
     private function fetchWaitSmsData($activity_name) {
         //获取拒绝的短信模板
-        return "您好，您报名的“{$activity_name}”活动发起人正在筛选中，我们将会在24小时内短信给您最终筛选结果，请耐心等待。谢谢您的支持，系统短信，请勿回复。";
+        return "你好，你报名的“{$activity_name}”活动，发起人正在筛选中，我们将会在24小时内短信给您最终筛选结果，请耐心等待。谢谢您的支持，系统短信，请勿回复。";
     }
     /**
      * 获取失败的短信内容
@@ -243,7 +242,7 @@ class CronController  extends \yii\console\Controller
      */
     private function fetchFailSmsData($activity_name) {
         //获取拒绝的短信模板
-        return "Someet用户您好，很抱歉您报名的“{$activity_name}”活动未通过筛选。关于如何提高报名的成功率，这里有几个小tips，1.认真回答筛选问题； 2.尽早报名，每周二周三是活动推送时间，周四周五报名的成功概率会相对降低很多 3.自己发起活动，优质的发起人是有参与活动特权的哦~ 当然，您还可以添加我们的官方客服Someet小海豹（微信号：someetxhb）随时与我们联系。期待下次活动和你相遇。系统短信，请勿回复。";
+        return "Shit happens!很抱歉你报名的“ {$activity_name}”活动未通过筛选。你可添加官方客服Someet小海豹（微信ID：someetxhb）随时与我们联系。期待下次活动和你相遇。系统短信，请勿回复。";
     }
 
     /**
@@ -253,7 +252,7 @@ class CronController  extends \yii\console\Controller
      */
     private function fetchNotiSmsData($activity_name, $start_time, $weather) {
         //获取通知参加活动的短信
-        return "您报名的活动“{$activity_name}”在今天的{$start_time}开始。{$weather}请合理安排时间出行，不要迟到哦。";
+        return "你报名的活动“{$activity_name}”在今天的{$start_time}开始。{$weather}请合理安排时间出行，不要迟到哦。";
     }
 
     /**
@@ -308,7 +307,7 @@ class CronController  extends \yii\console\Controller
                         Yii::error("活动id为: {$answer['activity']['id']} 的活动没有设置pma, 或者对应pma的微信id为空");
                     }
                     //获取通过的短信内容
-                    $smsData = $this->fetchSuccessSmsData($answer['activity']['title'], $pma_wechat_id);
+                    $smsData = $this->fetchSuccessSmsData($answer['activity']['title']);
                 } elseif (Answer::STATUS_REVIEW_REJECT == $answer['status']) {
                     //获取不通过的短信内容
                     $smsData = $this->fetchFailSmsData($answer['activity']['title']);
