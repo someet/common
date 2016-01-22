@@ -19,7 +19,9 @@ body {
 
 .so-padding-left {
   padding-left: 1em; }
-
+.list-group-item{
+  text-align: center;
+}
 
 /*完善资料页面 end*/
 

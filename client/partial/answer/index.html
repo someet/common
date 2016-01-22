@@ -57,8 +57,13 @@
           <span>
             <strong>{{entity.user.profile.name}}（{{entity.user.username}}）</strong>
           </span>
+          <span ng-if="entity.leave_status == 1" class="btn-float-right">请假</span>
+          <span ng-if="entity.leave_status == 0">
+                <span ng-if="entity.arrive_status == 1" class="btn-float-right">迟到</span>
+                <span ng-if="entity.arrive_status == 0" class="btn-float-right">未到</span>
+                <span ng-if="entity.arrive_status == 2" class="btn-float-right">准时</span>
+          </span>
           <span class="btn-float-right" style="color:#3E3;">已通过</span>
-
           <span ng-if="entity.feedback" class="btn-float-right">已反馈</span>
           <span ng-if="!entity.feedback" class="btn-float-right">未反馈</span>
         </div>
