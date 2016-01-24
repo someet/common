@@ -554,6 +554,34 @@ class ActivityController extends BackendController
                 throw new DataValidationFailedException($model->getFirstError('field8'));
             }
         }
+        //联合发起人1
+        if (isset($data['co_founder1'])) {
+            $model->co_founder1= $data['co_founder1'];
+            if (!$model->validate('co_founder1')) {
+                throw new DataValidationFailedException($model->getFirstError('co_founder1'));
+            }
+        }
+        //联合发起人2
+        if (isset($data['co_founder2'])) {
+            $model->co_founder2= $data['co_founder2'];
+            if (!$model->validate('co_founder2')) {
+                throw new DataValidationFailedException($model->getFirstError('co_founder2'));
+            }
+        }
+        //联合发起人3
+        if (isset($data['co_founder3'])) {
+            $model->co_founder3= $data['co_founder3'];
+            if (!$model->validate('co_founder3')) {
+                throw new DataValidationFailedException($model->getFirstError('co_founder3'));
+            }
+        }
+        //联合发起人4
+        if (isset($data['co_founder4'])) {
+            $model->co_founder4= $data['co_founder4'];
+            if (!$model->validate('co_founder4')) {
+                throw new DataValidationFailedException($model->getFirstError('co_founder4'));
+            }
+        }
 
         if (!$model->save()) {
             throw new ServerErrorHttpException();
@@ -614,6 +642,10 @@ class ActivityController extends BackendController
                 'user.profile',
                 'pma',
                 'pma.profile',
+                'cofounder1',
+                'cofounder1.profile',
+                'cofounder2',
+                'cofounder2.profile',
             ])
             ->asArray()
             ->one();

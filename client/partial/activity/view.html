@@ -122,6 +122,29 @@
           </div>
         </div>
 
+        <div layout="row">
+          <div flex="">
+            <label>联合发起人1</label>
+            <md-autocomplete md-selected-item="co_founder1" placeholder="请选择联合发起人1" md-search-text="co_founder1_name" md-items="co_founder1 in getUsers(co_founder1_name)" md-item-text="co_founder1.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
+              <md-item-template>
+                <span md-highlight-text="co_founder1_name">{{co_founder1.username}}</span>
+                <img ng-if="user" width="50" style="border-radius:25px" ng-src="{{co_founder1.profile.headimgurl}}" />
+              </md-item-template>
+              <md-not-found>No matches found.</md-not-found>
+            </md-autocomplete>
+          </div>
+          <div flex="">
+            <label>联合发起人2</label>
+            <md-autocomplete md-selected-item="co_founder2" placeholder="请选择联合发起人2" md-search-text="co_founder2_name" md-items="co_founder2 in getUsers(co_founder2_name)" md-item-text="co_founder2.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
+              <md-item-template>
+                <span md-highlight-text="co_founder2_name">{{co_founder2.username}}</span>
+                <img ng-if="user" width="50" style="border-radius:25px" ng-src="{{co_founder2.profile.headimgurl}}" />
+              </md-item-template>
+              <md-not-found>No matches found.</md-not-found>
+            </md-autocomplete>
+          </div>
+        </div>
+
         <md-input-container>
           <md-select name="group" required ng-model="entity.type_id" placeholder="选择分类">
             <md-option ng-value="opt.id" ng-repeat="opt in type_list">{{ opt.name }}</md-option>
