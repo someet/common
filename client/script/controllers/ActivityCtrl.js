@@ -475,6 +475,8 @@ angular.module('controllers', ['ngTagsInput'])
           $scope.group_code = data.group_code;
           $scope.user = data.user;
           $scope.pma = data.pma;
+          $scope.co_founder1 = data.cofounder1;
+          $scope.co_founder2 = data.cofounder2;
 
           var tags = [];
           for (var k in data.tags) {
@@ -510,6 +512,12 @@ angular.module('controllers', ['ngTagsInput'])
         }
         if ($scope.pma) {
           newEntity.principal = $scope.pma.id;
+        }
+        if ($scope.co_founder1) {
+          newEntity.co_founder1 = $scope.co_founder1.id;
+        }
+        if ($scope.co_founder2) {
+          newEntity.co_founder2 = $scope.co_founder2.id;
         }
 
         var tags = [];
