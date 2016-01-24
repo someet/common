@@ -115,6 +115,9 @@ class SiteController extends BackendController
         // 当前活动总报名名额， select activity_id ,count(activity_id) FROM answer GROUP BY activity_id  
         $activity_test_type_id = Yii::$app->params['activity.test_type_id'];
 
+        $countJoinAsc = [];
+        $countJoinDesc = [];
+        
         $countJoin = Answer::find()
                     ->select(['answer.activity_id activity_id','count(answer.activity_id) as countJoin','activity.title title','activity.peoples peoples'])
                     ->where('type_id!='.$activity_test_type_id)
@@ -123,6 +126,7 @@ class SiteController extends BackendController
                     ->leftJoin('activity','answer.activity_id = activity.id')
                     ->asArray()
                     ->all();
+
         if (!empty($countJoin)) {
 
             foreach ($countJoin as $key => $value) {
