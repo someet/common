@@ -36,6 +36,7 @@ use Yii;
  * @property integer $status
  * @property integer $edit_status
  * @property integer $content
+ * @property integer $display_order
  * @property string $field1
  * @property string $field2
  * @property string $field3
@@ -72,7 +73,7 @@ class Activity extends \yii\db\ActiveRecord
     {
         return [
             [['title', 'desc', 'poster', 'area', 'address', 'details' ], 'required'],
-            [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'created_at', 'created_by', 'updated_at', 'updated_by', 'status', 'edit_status'], 'integer'],
+            [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'created_at', 'created_by', 'updated_at', 'updated_by', 'status', 'edit_status', 'display_order'], 'integer'],
             [['details', 'review', 'content', 'field1', 'field2', 'field3', 'field4', 'field5', 'field6', 'field7', 'field8'], 'string'],
             [['longitude', 'latitude'], 'number'],
             [['longitude', 'latitude'], 'default', 'value' => 0],
@@ -118,6 +119,7 @@ class Activity extends \yii\db\ActiveRecord
             'status' => '0 删除 10 草稿 20 发布',
             'edit_status' => '扩展字段, 前端自定义状态',
             'content' => '文案',
+            'display_order' => '显示排序',
             'field1' => '扩展字段1',
             'field2' => '扩展字段2',
             'field3' => '扩展字段3',
