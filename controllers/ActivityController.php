@@ -48,7 +48,7 @@ class ActivityController extends BackendController
     }
 
     /**
-     * 联系人列表
+     * 活动列表
      * @param integer $id
      * @param string $scenario 场景
      * @param string $type 类型,例如黑白名单或所有名单
@@ -68,7 +68,6 @@ class ActivityController extends BackendController
             $query = Activity::find()
                 ->with([
                     'type',
-                    'tags',
                     'question',
                     'user',
                     'answerList',
@@ -85,7 +84,6 @@ class ActivityController extends BackendController
             $query = Activity::find()
                 ->with([
                     'type',
-                    'tags',
                     'question',
                     'user',
                     'answerList',
@@ -104,7 +102,6 @@ class ActivityController extends BackendController
                 ->where(['id' => $id])
                 ->with([
                     'type',
-                    'tags',
                     'question',
                     'answerList',
                     'feedbackList',
