@@ -49,12 +49,13 @@ angular.module('backendServices')
             return data;
           });
         },
-        fetchPage: function(type, page) {
+        fetchPage: function(type, page, isWeek) {
           page = page || 1;
 
           var params = {
             'type': type,
             'page': page,
+            'isWeek': isWeek,
             'perPage': 20  //每页20条
           };
 

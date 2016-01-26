@@ -55,9 +55,10 @@ angular.module('controllers', ['ngTagsInput'])
         fetchPage(type, page);
       }
 
-      function fetchPage(type, page) {
-        $activityManage.fetchPage(type, page).then(function (modelList) {
+      function fetchPage(type, page,isWeek) {
+        $activityManage.fetchPage(type, page,isWeek).then(function (modelList) {
           $scope.list = modelList;
+          console.log(modelList);
           $scope.modelPagination.currentPage = page;
           //纯js分页
           if ($scope.modelPagination.currentPage > 1 && $scope.modelPagination.currentPage < $scope.modelPagination.totalItems) {
@@ -90,6 +91,29 @@ angular.module('controllers', ['ngTagsInput'])
         alert(err);
       });
 
+      // 本周活动 
+      $scope.weekActivity = function(){
+        var  type = 0;
+        var page = 20;
+        fetchPage(type, page, 0);
+      }
+
+      // 历史活动
+      $scope.historyActivity = function(){
+        var  type = 0;
+        var page = 20;
+        fetchPage(type, page, 1);
+      }
+
+      // 调整顺序
+      $scope.adjust_order = function(entity){
+        // entity.display_order 
+        $activityManage.update(entity.id, entity).then(function(data) {
+          // $location.path('/activity/list/' + type_id);
+        }, function(err) {
+          alert(err);
+        });
+      }
       // 更新活动类型
       $scope.onTypeChangeClick = function(activity, type_id) {
         var old_type_id = activity.type_id;
@@ -232,6 +256,14 @@ angular.module('controllers', ['ngTagsInput'])
       function copyTextToClipboard(url){
         window.prompt("复制链接：Command + C, Enter\n关闭窗口：Esc", url);
       }
+
+
+      // 更新活动排名序号
+      // $scope.$watch($scope.list,function(newvalue,oldvalue){
+      //   console.log(newvalue+'----'+oldvalue);
+      // })
+
+
 
       // 复制预览链接
       $scope.copyPreviewUrl = function(activity) {
@@ -469,7 +501,9 @@ angular.module('controllers', ['ngTagsInput'])
         $activityManage.fetch(id).then(function(data) {
           $scope.user = {};
           $scope.entity = data;
+
           $scope.start_time_str = getTimeByTimestamp(data.start_time);
+          // $scope.start_time_str = getTimeByTimestamp(data.start_time);
           $scope.end_time_str = getTimeByTimestamp(data.end_time);
           $scope.poster = data.poster;
           $scope.group_code = data.group_code;
