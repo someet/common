@@ -45,6 +45,10 @@ use Yii;
  * @property string $field6
  * @property string $field7
  * @property string $field8
+ * @property integer $co_founder1
+ * @property integer $co_founder2
+ * @property integer $co_founder3
+ * @property integer $co_founder4
  */
 class Activity extends \yii\db\ActiveRecord
 {
@@ -73,7 +77,7 @@ class Activity extends \yii\db\ActiveRecord
     {
         return [
             [['title', 'desc', 'poster', 'area', 'address', 'details' ], 'required'],
-            [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'created_at', 'created_by', 'updated_at', 'updated_by', 'status', 'edit_status', 'display_order'], 'integer'],
+            [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'created_at', 'created_by', 'updated_at', 'updated_by', 'status', 'edit_status', 'display_order', 'co_founder1', 'co_founder2', 'co_founder3', 'co_founder4'], 'integer'],
             [['details', 'review', 'content', 'field1', 'field2', 'field3', 'field4', 'field5', 'field6', 'field7', 'field8'], 'string'],
             [['longitude', 'latitude'], 'number'],
             [['longitude', 'latitude'], 'default', 'value' => 0],
@@ -128,6 +132,10 @@ class Activity extends \yii\db\ActiveRecord
             'field6' => '扩展字段6',
             'field7' => '扩展字段7',
             'field8' => '扩展字段8',
+            'co_founder1' => '联合创始人1',
+            'co_founder2' => '联合创始人2',
+            'co_founder3' => '联合创始人3',
+            'co_founder4' => '联合创始人4',
         ];
     }
 
@@ -177,6 +185,28 @@ class Activity extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'created_by']);
+    }
+
+    // 联合发起人1
+    public function getCofounder1()
+    {
+        return $this->hasOne(User::className(), ['id' => 'co_founder1']);
+    }
+
+    // 联合发起人2
+    public function getCofounder2()
+    {
+        return $this->hasOne(User::className(), ['id' => 'co_founder2']);
+    }
+    // 联合发起人3
+    public function getCofounder3()
+    {
+        return $this->hasOne(User::className(), ['id' => 'co_founder3']);
+    }
+    // 联合发起人4
+    public function getCofounder4()
+    {
+        return $this->hasOne(User::className(), ['id' => 'co_founder4']);
     }
 
     // 活动的类型
