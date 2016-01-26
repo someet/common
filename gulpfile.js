@@ -103,6 +103,11 @@ gulp.task('copy-image', function() {
     .pipe(plumber())
     .pipe(gulp.dest('./web/static/image'));
 });
+gulp.task('copy-svg', function(){
+  gulp.src('./client/svg/*')
+    .pipe(plumber())
+    .pipe(gulp.dest('./web/static/svg'));
+})
 
 // 合并，压缩文件
 gulp.task('script', function(){
@@ -146,6 +151,7 @@ gulp.task('dist', [
   'copy-bundle',
   'copy-other',
   'copy-image',
+  'copy-svg',
   'copy-font',
   'copy-js-map',
   'copy-css-map',

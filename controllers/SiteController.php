@@ -59,6 +59,8 @@ class SiteController extends BackendController
     public function actionFetch()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
+        $activity_test_type_id = Yii::$app->params['activity.test_type_id'];
+
         // 所有授权关注的人数
         $countUser = User::find()->count('id');
         // 所有已经完善资料的人数
@@ -107,13 +109,11 @@ class SiteController extends BackendController
                 // print_r($countFounder);
 
         // 本周活动数量（不包括测试）
-        
-
         $countWeekActivity = Activity::find()
+                            ->where('type_id!='.$activity_test_type_id)
                             ->where('start_time > '.getLastEndTime())
                             ->count('id');
         // 当前活动总报名名额， select activity_id ,count(activity_id) FROM answer GROUP BY activity_id  
-        $activity_test_type_id = Yii::$app->params['activity.test_type_id'];
 
         $countJoinAsc = [];
         $countJoinDesc = [];
@@ -126,6 +126,17 @@ class SiteController extends BackendController
                     ->leftJoin('activity','answer.activity_id = activity.id')
                     ->asArray()
                     ->all();
+
+        // 当前活动总报名名额
+        $countAllJoin = 0;
+        // 及已报名数量
+        $countAlreadyJoin = 0;
+
+        foreach ($countJoin as $key => $value) {
+            $countAllJoin += $value['peoples'];
+            $countAlreadyJoin += $value['countJoin'];
+        }
+
 
         if (!empty($countJoin)) {
 
@@ -158,18 +169,19 @@ class SiteController extends BackendController
 
             // 处理多维数组 降序
             array_multisort($arrSort[$sort_desc['field']], constant($sort_desc['direction']), $countJoin);  //降序
-            $countJoinDesc =  $countJoin;
+            $countJoinDesc = array_slice($countJoin,0,10);
         }
 
         // 当前活动总报名名额
-        $countAllJoin = Answer::find()
-                    ->where('created_at > '.getLastEndTime())
-                    ->count();  
+        // $countAllJoin = Answer::find()
+        //             ->where('created_at > '.getLastEndTime())
+        //             ->count();  
         // 报名数量
-        $countAlreadyJoin = Activity::find()
-                    ->where('type_id!='.$activity_test_type_id)
-                    ->andwhere('start_time > '.getLastEndTime())
-                    ->count();
+        // $countAlreadyJoin = Activity::find()
+        //             ->where('type_id!='.$activity_test_type_id)
+        //             ->andwhere()
+        //             ->andwhere('start_time > '.getLastEndTime())
+        //             ->count();
         // 及已报名数量
          return [
             'countUser' => $countUser,

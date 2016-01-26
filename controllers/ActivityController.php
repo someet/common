@@ -53,9 +53,10 @@ class ActivityController extends BackendController
      * @param string $scenario 场景
      * @param string $type 类型,例如黑白名单或所有名单
      * @param int $perPage 每页多少条
+     * @param int $isWeek  是否是本周活动  0 本周 1 非本周
      * @return array|int|null|\yii\db\ActiveRecord|\yii\db\ActiveRecord[]
      */
-    public function actionIndex($id = null, $scenario = null, $perPage = 20, $type = null)
+    public function actionIndex($id = null, $scenario = null, $perPage = 20, $type = null, $isWeek = 0)
     {
 
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -64,8 +65,29 @@ class ActivityController extends BackendController
         $andwhere = ['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE]];
 
         if ($type>0) {
-            $where = ['type_id' => $type];
-            $query = Activity::find()
+            //判断周末非周末
+            if ($isWeek == 0) {
+                $where = ['type_id' => $type];
+                $query = Activity::find()
+                ->with([
+                    'type',
+                    'tags',
+                    'question',
+                    'user',
+                    'answerList',
+                    'feedbackList'
+                ])
+                ->asArray()
+                ->where($where)
+                ->andWhere('start_time > '.getLastEndTime())
+                ->andWhere($andwhere)
+                ->orderBy([
+                    'is_top' => SORT_DESC,
+                    'display_order' => SORT_ASC,
+                ]);
+            }else{
+                $where = ['type_id' => $type];
+                $query = Activity::find()
                 ->with([
                     'type',
                     'question',
@@ -75,13 +97,19 @@ class ActivityController extends BackendController
                 ])
                 ->asArray()
                 ->where($where)
+                ->andWhere('start_time < '.getLastEndTime())
                 ->andWhere($andwhere)
                 ->orderBy([
                     'is_top' => SORT_DESC,
                     'display_order' => SORT_ASC,
                 ]);
+            }
+
+
         } else {
-            $query = Activity::find()
+            //判断周末非周末
+            if ($isWeek == 0) {
+                $query = Activity::find()
                 ->with([
                     'type',
                     'question',
@@ -90,11 +118,31 @@ class ActivityController extends BackendController
                     'feedbackList'
                 ])
                 ->where($andwhere)
+                ->andWhere('start_time > '.getLastEndTime())
                 ->asArray()
                 ->orderBy([
                     'is_top' => SORT_DESC,
                     'display_order' => SORT_ASC,
                 ]);
+            }else {
+                $query = Activity::find()
+                ->with([
+                    'type',
+                    'tags',
+                    'question',
+                    'user',
+                    'answerList',
+                    'feedbackList'
+                ])
+                ->where($andwhere)
+                ->andWhere('start_time < '.getLastEndTime())
+                ->asArray()
+                ->orderBy([
+                    'is_top' => SORT_DESC,
+                    'display_order' => SORT_ASC,
+                ]);
+            }
+            
         }
 
         if ($id) {
@@ -494,6 +542,15 @@ class ActivityController extends BackendController
                 throw new DataValidationFailedException($model->getFirstError('principal'));
             }
         }
+
+        //排序更新
+        if (isset($data['display_order'])) {
+            $model->display_order= $data['display_order'];
+            if (!$model->validate('display_order')) {
+                throw new DataValidationFailedException($model->getFirstError('display_order'));
+            }
+        }
+
 
         //扩展字段一
         if (isset($data['field1'])) {
