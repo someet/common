@@ -10,8 +10,8 @@ RUN composer install --no-progress
 # 优化自动加载
 RUN composer dump-autoload --optimize
 # install bower
-RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
-RUN cnpm install
+#RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
+RUN npm install
 RUN bower install --allow-root --config.interactive=false
 RUN gulp dist
 RUN mkdir -p runtime web/assets

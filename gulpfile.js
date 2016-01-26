@@ -140,6 +140,7 @@ gulp.task('watch', function() {
   gulp.watch('./client/style/**/*.scss', ['sass']);
   gulp.watch('./client/other/*', ['copy-other']);
   gulp.watch('./client/image/*', ['copy-image']);
+  gulp.watch('./client/svg/*', ['copy-svg']);
   gulp.watch('./client/partial/**/*.html', ['template']);
 });
 
