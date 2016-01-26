@@ -14,19 +14,20 @@ angular.module('controllers', ['ngTagsInput'])
       //活动列表开始
       var listtype = $routeParams.type_id;
       if (listtype>0) {
-          normalPagination(listtype);
+          normalPagination(listtype,0);
       } else {
-          normalPagination();
+          normalPagination(0,0);
       }
 
-      function normalPagination(type) {
+      function normalPagination(type,isWeek) {
         $scope.modelPagination = {
           totalItems: 0,
           currentPage: 1,
           maxSize: 5,
+          isWeek: isWeek,
           itemsPerPage: 20,//每页多少条
           pageChange: function() {
-            fetchPage(type, this.currentPage);
+            fetchPage(type, this.currentPage, isWeek);
           }
         };
 
@@ -34,25 +35,25 @@ angular.module('controllers', ['ngTagsInput'])
           $scope.modelPagination.totalItems = total;
         });
 
-        $scope.userList = fetchPage(type, $scope.modelPagination.currentPage);
+        $scope.userList = fetchPage(type, $scope.modelPagination.currentPage, $scope.modelPagination.isWeek);
       }
 
       $scope.changePage = function(type, page) {
-        fetchPage(type, page);
+        fetchPage(type, page, $scope.modelPagination.isWeek);
       }
       $scope.prev = function (type) {
         var page = $scope.modelPagination.currentPage - 1;
         if(page < 1){
           page = 1;
         }
-        fetchPage(type, page);
+        fetchPage(type, page, $scope.modelPagination.isWeek);
       }
       $scope.next = function(type){
         var page = $scope.modelPagination.currentPage + 1;
         if(page > $scope.modelPagination.totalItems){
           page = $scope.modelPagination.totalItems;
         }
-        fetchPage(type, page);
+        fetchPage(type, page, $scope.modelPagination.isWeek);
       }
 
       function fetchPage(type, page,isWeek) {
@@ -93,16 +94,20 @@ angular.module('controllers', ['ngTagsInput'])
 
       // 本周活动 
       $scope.weekActivity = function(){
-        var  type = 0;
-        var page = 20;
-        fetchPage(type, page, 0);
+        if (listtype>0) {
+          normalPagination(listtype,0);
+        } else {
+            normalPagination(0, 0);
+        }
       }
 
       // 历史活动
       $scope.historyActivity = function(){
-        var  type = 0;
-        var page = 20;
-        fetchPage(type, page, 1);
+        if (listtype>0) {
+          normalPagination(listtype,1);
+        } else {
+            normalPagination(0, 1);
+        }
       }
 
       // 调整顺序

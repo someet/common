@@ -149,7 +149,7 @@ class SiteController extends BackendController
                 'field'     => 'order',       //排序字段  
             );         
 
-            $sort_asc = array(  
+            $sort_asc = array(
                 'direction' => 'SORT_ASC', //排序顺序标志  SORT_DESC  降序；  SORT_ASC 升序  
                 'field'     => 'order',       //排序字段  
             ); 
@@ -164,12 +164,14 @@ class SiteController extends BackendController
             // 处理多维数组 升序
             array_multisort($arrSort[$sort_asc['field']], constant($sort_asc['direction']), $countJoin);  //升序
 
-            $countJoinAsc =  array_slice($countJoin,0,10);
+            $countJoinAsc =  $countJoin;  
+            // array_slice($countJoin,0,10);
 
 
             // 处理多维数组 降序
             array_multisort($arrSort[$sort_desc['field']], constant($sort_desc['direction']), $countJoin);  //降序
-            $countJoinDesc = array_slice($countJoin,0,10);
+            $countJoinDesc = $countJoin;
+            // array_slice($countJoin,0,10);
         }
 
         // 当前活动总报名名额

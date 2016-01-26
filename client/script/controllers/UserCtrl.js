@@ -61,6 +61,10 @@ angular.module('controllers')
       // return .indexOf(route) != -1;
     }
 
+
+
+
+
     //搜索用户
     $scope.searchUser = function() {
       var username = $scope.username;
@@ -170,8 +174,51 @@ angular.module('controllers')
 
 
   }])
-  .controller('UserUpdateCtrl', ['$scope', '$location', '$routeParams', '$userManage','$mdToast', function($scope, $location, $routeParams, $userManage, $mdToast){
+  .controller('UserUpdateCtrl', ['$scope', '$location', '$routeParams','$qiniuManage',  '$qupload', '$userManage','$mdToast', function($scope, $location, $routeParams, $qiniuManage, $qupload, $userManage, $mdToast){
     $scope.$parent.pageName = '用户详情';
+
+    // qiniu upload 头像 start //
+      $scope.selectHeader = null;
+
+      var startHeader = function() {
+        $qiniuManage.fetchUploadToken().then(function(token) {
+
+          $qupload.upload({
+            key: '',
+            file: $scope.selectHeader.file,
+            token: token
+          }).then(function(response) {
+            $qiniuManage.completelyUrl(response.key).then(function(url) {
+              $scope.profile.headimgurl = url;
+            });
+          }, function(response) {
+            console.log(response);
+          }, function(evt) {
+            if ($scope.selectHeader !== null) {
+              $scope.selectHeader.progress.p = Math.floor(100 * evt.loaded / evt.totalSize);
+            }
+          });
+
+        });
+      };
+
+      $scope.headerAbort = function() {
+        $scope.selectHeader.upload.abort();
+        $scope.selectHeader = null;
+      };
+
+      $scope.onHeaderSelect = function($files) {
+        console.log($files);
+        $scope.selectHeader = {
+          file: $files[0],
+          progress: {
+            p: 0
+          }
+        };
+        startHeader();
+      };
+      // qiniu upload 海报 end //
+
 
     var userId = $routeParams.id;
     if(userId != null){
@@ -180,6 +227,7 @@ angular.module('controllers')
       }
     }
       $scope.data = {};
+      $scope.profile = {};
 
     $userManage.fetch(params).then(function(data) {
       var isFounder = false;
@@ -193,6 +241,7 @@ angular.module('controllers')
         }
       }
       $scope.user = data;
+      $scope.profile.headimgurl = data.profile.headimgurl;
       $scope.data.cb3 = data.in_white_list == 1;
       $scope.data.cb2 = isFounder;
       $scope.data.cb = isPma;
@@ -204,12 +253,36 @@ angular.module('controllers')
       $scope.cancel = function() {
         $location.path('/member');
       }
+      $scope.updateHeader = function(){
+        var user_id = $scope.user.id;
 
+        var userData = {
+          headimgurl: $scope.user.profile.headimgurl,
+        };
+
+        $userManage.update(user_id, userData).then(function(data){
+        $mdToast.show($mdToast.simple()
+                .content('设置用户属性成功')
+                .hideDelay(5000)
+                .position("top right"));
+          $location.path('/member');
+        }, function (err) {
+          $mdToast.show($mdToast.simple()
+                .content('设置用户属性发生错误：' + err + '')
+                .hideDelay(5000)
+                .position("top right"));
+        });
+
+
+      }
+   
     $scope.updateUser = function() {
       var userData = {
+        headimgurl: $scope.profile.headimgurl,
         email: $scope.user.email,
         password: $scope.user.password,
-        bio: $scope.user.profile.bio
+        bio: $scope.user.profile.bio,
+        username: $scope.user.username,
       };
 
       var user_id = $scope.user.id;
