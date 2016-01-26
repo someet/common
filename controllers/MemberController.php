@@ -317,6 +317,12 @@ class MemberController extends BackendController
                 throw new DataValidationFailedException($model->getFirstError('email'));
             }
         }
+        if (isset($data['username'])) {
+            $model->username = $data['username'];
+            if (!$model->validate('username')) {
+                throw new DataValidationFailedException($model->getFirstError('username'));
+            }
+        }
 
         if (isset($data['password']) && $data['password']!='') {
             $model->password = $data['password'];
@@ -337,9 +343,44 @@ class MemberController extends BackendController
             }
         }
 
+        if (isset($data['headimgurl'])) {
+            $profile = Profile::find()->where(['user_id' => $model->id])->one();
+            $profile->headimgurl = $data['headimgurl'];
+
+            if (!$profile->validate('headimgurl')) {
+                throw new DataValidationFailedException($profile->getFirstError('headimgurl'));
+            }
+
+            if (!$profile->save()) {
+                throw new ServerErrorHttpException();
+            }
+        }
+
+
+
         \someet\common\models\AdminLog::saveLog('更新联系人', $model->primaryKey);
 
         return $this->findOne($id);
+    }
+
+    /**
+    *更新用户profile表
+    * @param integer $id 联系人ID
+    *  暂时没用
+    */
+
+    public function updateProfile($id,$profile){
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $data = Yii::$app->request->post();
+
+        $modelProfile = $this->findProfile($id);
+
+        if (isset($data['headimgurl'])) {
+            $model->headimgurl = $data['headimgurl'];
+        }
+
+        return $this->findProfile($id);
+
     }
 
     /**
@@ -351,6 +392,24 @@ class MemberController extends BackendController
     public function findOne($id)
     {
         $model = User::findOne($id);
+        if (isset($model)) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('该用户不存在');
+        }
+    }    
+
+    /**
+     * 查找一个联系人profile表
+     * @param integer $id 联系人ID
+     * @return null|static
+     * @throws NotFoundHttpException 查找不到联系人则抛出404异常
+     */
+    public function findProfile($id)
+    {
+        $model = Profile::find()
+                ->where(['user_id' => $id])
+                ->one();
         if (isset($model)) {
             return $model;
         } else {

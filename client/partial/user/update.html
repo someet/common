@@ -8,16 +8,17 @@
   <legend>用户资料修改</legend>
   <div class="media" >
     <a class="pull-left">
-      <img width="40" style="border-radius:20px" class="media-object avatarSize" ng-src="{{user.headimgurl}}"></a>
-    <md-button class="md-raised" ng-click="">设置头像</md-button>
-    <div ng-file-select="onPosterSelect($files)" data-multiple="false" title="select file" onclick="this.value = null" class="btn btn-upload">
-        <md-button class="md-raised md-info">上传头像</md-button>
+    <!-- <div ng-if='headerImg'></div> -->
+      <img width="40" style="border-radius:20px" class="media-object avatarSize" ng-src="{{profile.headimgurl}}"></a>
+      <img width="40" style="border-radius:20px" class="media-object avatarSize" ng-src="{{headerImg}}"></a>
+    <div class="md-raised" ng-file-select="onHeaderSelect($files)" data-multiple="false" title="select file" onclick="this.value = null" class="btn btn-upload">
+        <md-button class="md-raised md-info">设置头像</md-button>
     </div>
   </div>
 
     <md-input-container flex="40">
       <label>用户名</label>
-      <input type="text" ng-model="user.username" readonly required />
+      <input type="text" ng-model="user.username"  required />
     </md-input-container>
     <md-input-container flex="40">
       <label>邮箱</label>
