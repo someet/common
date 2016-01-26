@@ -47,6 +47,12 @@ class ActivityController extends BackendController
         ];
     }
 
+    private $activity_order = [
+                        'is_top' => SORT_DESC,
+                        'display_order' => SORT_ASC,
+                        'id' => SORT_DESC,
+                    ];
+
     /**
      * 联系人列表
      * @param integer $id
@@ -81,10 +87,7 @@ class ActivityController extends BackendController
                 ->where($where)
                 ->andWhere('start_time > '.getLastEndTime())
                 ->andWhere($andwhere)
-                ->orderBy([
-                    'is_top' => SORT_DESC,
-                    'display_order' => SORT_ASC,
-                ]);
+                ->orderBy($this->activity_order);
             }else{
                 $where = ['type_id' => $type];
                 $query = Activity::find()
@@ -100,10 +103,7 @@ class ActivityController extends BackendController
                 ->where($where)
                 ->andWhere('start_time < '.getLastEndTime())
                 ->andWhere($andwhere)
-                ->orderBy([
-                    'is_top' => SORT_DESC,
-                    'display_order' => SORT_ASC,
-                ]);
+                ->orderBy($this->activity_order);
             }
 
 
@@ -122,10 +122,7 @@ class ActivityController extends BackendController
                 ->where($andwhere)
                 ->andWhere('start_time > '.getLastEndTime())
                 ->asArray()
-                ->orderBy([
-                    'is_top' => SORT_DESC,
-                    'display_order' => SORT_ASC,
-                ]);
+                ->orderBy($this->activity_order);
             }else {
                 $query = Activity::find()
                 ->with([
@@ -139,10 +136,7 @@ class ActivityController extends BackendController
                 ->where($andwhere)
                 ->andWhere('start_time < '.getLastEndTime())
                 ->asArray()
-                ->orderBy([
-                    'is_top' => SORT_DESC,
-                    'display_order' => SORT_ASC,
-                ]);
+                ->orderBy($this->activity_order);
             }
             
         }
@@ -216,10 +210,7 @@ class ActivityController extends BackendController
                     'feedbackList'
                 ])
                 ->asArray()
-                ->orderBy([
-                    'is_top' => SORT_DESC,
-                    'display_order' => SORT_ASC,
-                ])
+                ->orderBy($this->activity_order)
                 ->all();
         } else {
             $activities = Activity::find()
@@ -231,10 +222,7 @@ class ActivityController extends BackendController
                     'feedbackList'
                 ])
                 ->asArray()
-                ->orderBy([
-                    'is_top' => SORT_DESC,
-                    'display_order' => SORT_ASC,
-                ])
+                ->orderBy($this->activity_order)
                 ->all();
         }
         foreach($activities as $key => $activity) {
