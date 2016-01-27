@@ -118,12 +118,20 @@ class SiteController extends BackendController
         $countJoinAsc = [];
         $countJoinDesc = [];
         
-        $countJoin = Answer::find()
-                    ->select(['answer.activity_id activity_id','count(answer.activity_id) as countJoin','activity.title title','activity.peoples peoples'])
+        // $countJoin = Answer::find()
+        //             ->select(['answer.activity_id activity_id','count(answer.activity_id) as countJoin','activity.title title','activity.peoples peoples'])
+        //             ->where('type_id!='.$activity_test_type_id)
+        //             ->andwhere('answer.created_at > '.getLastEndTime())
+        //             ->groupBy('answer.activity_id')
+        //             ->leftJoin('activity','answer.activity_id = activity.id')
+        //             ->asArray()
+        //             ->all();        
+        $countJoin = Activity::find()
+                    ->select(['activity.id activity_id','count(activity.id) as countJoin','activity.title title','activity.peoples peoples','activity.field1'])
                     ->where('type_id!='.$activity_test_type_id)
-                    ->andwhere('answer.created_at > '.getLastEndTime())
-                    ->groupBy('answer.activity_id')
-                    ->leftJoin('activity','answer.activity_id = activity.id')
+                    ->andwhere('activity.start_time > '.getLastEndTime())
+                    ->groupBy('activity.id')
+                    ->leftJoin('answer','answer.activity_id = activity.id')
                     ->asArray()
                     ->all();
 
@@ -141,7 +149,11 @@ class SiteController extends BackendController
         if (!empty($countJoin)) {
 
             foreach ($countJoin as $key => $value) {
-                $countJoin[$key]['order'] = round($value['countJoin'] / $value['peoples']*100);
+                if ($value['peoples'] == 0) {
+                    $countJoin[$key]['order'] = 0;
+                }else {
+                    $countJoin[$key]['order'] = round($value['countJoin'] / $value['peoples']*100);
+                }
             }
 
             $sort_desc = array(  

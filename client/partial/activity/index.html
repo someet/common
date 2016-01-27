@@ -8,8 +8,8 @@
    <button type="button" class="btn btn-info btn-lg" ng-click="historyActivity()">历史活动</button>  
   <form class="navbar-form navbar-right" role="search">
     <div class="form-group">
-      <input type="text" class="form-control" placeholder="标题"></div>
-    <button type="submit" class="btn btn-default">
+      <input type="text" class="form-control" ng-model="title" placeholder="标题"></div>
+    <button type="submit" class="btn btn-default" ng-click='getActivity()'>
       <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
       搜索
     </button>
@@ -22,7 +22,7 @@
     <li ng-class="{active:isActive('0')}">
       <a href="#/activity/list/0">全部</a>
     </li>
-    <li ng-class="{active:isActive(entity.id)}" ng-repeat="entity in activityTypeList | orderBy: 'display_order' " >
+    <li ng-class="{active:isActive(entity.id)}" ng-repeat="entity in activityTypeList | orderBy: display_order " >
       <a href="#/activity/list/{{entity.id}}">{{entity.name}}</a>
     </li>
     <li>
@@ -43,7 +43,7 @@
 <md-content md-scroll-y="" flex="" layout-padding="" class="layout-padding ng-scope flex container">
   <div class="activityList" id="activityList">
     <ul class="activityListProperty">
-      <li ng-repeat="entity in list">
+      <li ng-repeat="entity in list | filter:query">
         <!--针对过往的活动显示一个灰色的背景,如果活动的结束时间小于当周一之前 orderBy: 'display_order' -->
         <div ng-class="{true: 'panel-default', false: 'panel-danger'}[entity.status==10]" class="panel">
           <div class="panel-heading">
@@ -60,10 +60,9 @@
               </button>
 
               <!-- 活动标题 -->
-              ID: {{entity.id}}
+              {{entity.id}}#
               <span ng-if="entity.status==10" >[草稿] {{entity.title}}</span>
-              <span ng-if="entity.status==20" >{{entity.user.username}}</span>：
-              <span ng-if="entity.status==20" >{{entity.title}}</span>
+              <span ng-if="entity.status==20" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}</span>
               
 
               <!-- 内部使用的状态标签 -->
