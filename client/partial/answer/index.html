@@ -1,192 +1,187 @@
 <!-- 筛选用户页面 -->
 <div class="container-fluid">
-  <div class="row">
-<div class="col-md-12  panel-default">
-  <div class="panel-body" style="font-size:18px">
-    活动标题：{{list[0].activity.title}}&nbsp;&nbsp;<br>
-    发起人：{{list[0].activity.user.username}}&nbsp;&nbsp;<br>
-    活动时间：{{list[0].activity.start_time * 1000 | date: "MM月dd日 HH:mm"}} - {{list[0].activity.end_time * 1000 | date:"MM月dd日 HH:mm"}}&nbsp;&nbsp;<br>
-    活动地址：{{list[0].activity.address}}&nbsp;&nbsp;<br>
-    整体评分：{{ countScore }}&nbsp;&nbsp;
-  </div>
-</div>
-</div>
+    <div class="row">
+        <div class="col-md-12  panel-default">
+            <div class="panel-body" style="font-size:18px">
+                活动标题：{{list[0].activity.title}}&nbsp;&nbsp;
+                <br> 发起人：{{list[0].activity.user.username}}&nbsp;&nbsp;
+                <br> 活动时间：{{list[0].activity.start_time * 1000 | date: "MM月dd日 HH:mm"}} - {{list[0].activity.end_time * 1000 | date:"MM月dd日 HH:mm"}}&nbsp;&nbsp;
+                <br> 活动地址：{{list[0].activity.address}}&nbsp;&nbsp;
+                <br> 整体评分：{{ countScore }}&nbsp;&nbsp;
+            </div>
+        </div>
+    </div>
 </div>
 <!-- <h3>发起人 - 当前活动标题 （活动时间）</h3> -->
 <div layout="row" flex id="content">
-
-  <!-- 用户列表 -->
-  <div class="col-md-6">
-    <!-- 可以调整部分 -->
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">可调整状态用户</h3>
-        <!--如果发送时间不为空则表示发送短信失败, 考虑重新发送-->
-      </div>
-    </div>
-
-    <ul class="list-group">
-      <li class="list-group-item" ng-repeat="entity in list | filter: {is_send: 0}" ng-click="view(entity)">
-        <div class="media">
-          <a class="pull-left" href="">
-            <img width="50" height="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像">
-          </a>
-          <span>
-            <strong>{{entity.user.profile.name}}（{{entity.user.username}}）</strong>
-          </span>
-          <span ng-if="entity.status==10" class="btn-float-right">待筛选</span>
-          <span ng-if="entity.status==20" class="btn-float-right">已通过</span>
-          <span ng-if="entity.status==30" class="btn-float-right">未通过</span>
+    <!-- 用户列表 -->
+    <div class="col-md-6">
+        <!-- 可以调整部分 -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">可调整状态用户</h3>
+                <!--如果发送时间不为空则表示发送短信失败, 考虑重新发送-->
+            </div>
         </div>
-      </li>
-    </ul>
-    <!-- 可以调整部分 end -->
-
-    <!-- 不可调整部分 -->
-    <div class="panel panel-primary">
-      <div class="panel-heading">
-        <h3 class="panel-title">不可变更状态用户</h3>
-      </div>
-    </div>
-    <ul class="list-group">
-      <li class="list-group-item" ng-repeat="entity in list | filter: {status:20, is_send: 1}" ng-click="view(entity)">
-        <div class="media">
-          <a class="pull-left" href="">
-            <img width="50" height="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像" />
-          </a>
-          <span>
+        <ul class="list-group">
+            <li class="list-group-item" ng-repeat="entity in list | filter: {is_send: 0}" ng-click="view(entity)">
+                <div class="media">
+                    <a class="pull-left" href="">
+                        <img width="50" height="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像">
+                    </a>
+                    <span>
             <strong>{{entity.user.profile.name}}（{{entity.user.username}}）</strong>
           </span>
-          <span ng-if="entity.leave_status == 1" class="btn-float-right">请假</span>
-          <span ng-if="entity.leave_status == 0">
+                    <span ng-if="entity.status==10" class="btn-float-right">待筛选</span>
+                    <span ng-if="entity.status==20" class="btn-float-right">已通过</span>
+                    <span ng-if="entity.status==30" class="btn-float-right">未通过</span>
+                </div>
+            </li>
+        </ul>
+        <!-- 可以调整部分 end -->
+        <!-- 不可调整部分 -->
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">不可变更状态用户</h3>
+            </div>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item" ng-repeat="entity in list | filter: {status:20, is_send: 1}" ng-click="view(entity)">
+                <div class="media">
+                    <a class="pull-left" href="">
+                        <img width="50" height="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像" />
+                    </a>
+                    <span>
+            <strong>{{entity.user.profile.name}}（{{entity.user.username}}）</strong>
+          </span>
+                    <span ng-if="entity.leave_status == 1" class="btn-float-right">请假</span>
+                    <span ng-if="entity.leave_status == 0">
                 <span ng-if="entity.arrive_status == 1" class="btn-float-right">迟到</span>
-                <span ng-if="entity.arrive_status == 0" class="btn-float-right">未到</span>
-                <span ng-if="entity.arrive_status == 2" class="btn-float-right">准时</span>
-          </span>
-          <span class="btn-float-right" style="color:#3E3;">已通过</span>
-          <span ng-if="entity.feedback" class="btn-float-right">已反馈</span>
-          <span ng-if="!entity.feedback" class="btn-float-right">未反馈</span>
-        </div>
-      </li>
-      <li class="list-group-item" ng-repeat="entity in list | filter: {status:30, is_send: 1}" ng-click="view(entity)">
-        <div class="media">
-          <a class="pull-left" href="">
-            <img width="50" height="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像">
-          </a>
-          <span>
+                    <span ng-if="entity.arrive_status == 0" class="btn-float-right">未到</span>
+                    <span ng-if="entity.arrive_status == 2" class="btn-float-right">准时</span>
+                    </span>
+                    <span class="btn-float-right" style="color:#3E3;">已通过</span>
+                    <span ng-if="entity.feedback" class="btn-float-right">已反馈</span>
+                    <span ng-if="!entity.feedback" class="btn-float-right">未反馈</span>
+                </div>
+            </li>
+            <li class="list-group-item" ng-repeat="entity in list | filter: {status:30, is_send: 1}" ng-click="view(entity)">
+                <div class="media">
+                    <a class="pull-left" href="">
+                        <img width="50" height="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像">
+                    </a>
+                    <span>
             <strong>{{entity.user.profile.name}}（{{entity.user.username}}）</strong>
           </span>
-          <span class="btn-float-right" style="color:#E33;">未通过</span>
-        </div>
-      </li>
-    </ul>
-    <!-- 不可调整部分 end -->
-  </div>
-  <!-- 用户列表 end -->
-
-  <!-- 用户资料详情 -->
-  <div class="col-md-6" ng-show="entity.user" style="padding:0;border:solid 10px rgba(10,10,10,0.5)">
-    <div class="media">
-      <div style="padding:20px;">
-        <div class="pull-left">
-          <img width="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="...">
-        </div>
-        <div style="margin-left:80px;top:0;">
-          <div style="width:100%;display:inline-block;">
-            <span>
+                    <span class="btn-float-right" style="color:#E33;">未通过</span>
+                </div>
+            </li>
+        </ul>
+        <!-- 不可调整部分 end -->
+    </div>
+    <!-- 用户列表 end -->
+    <!-- 用户资料详情 -->
+    <div class="col-md-6" ng-show="entity.user" style="padding:0;border:solid 10px rgba(10,10,10,0.5)">
+        <div class="media">
+            <div style="padding:20px;">
+                <div class="pull-left">
+                    <img width="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="...">
+                </div>
+                <div style="margin-left:80px;top:0;">
+                    <div style="width:100%;display:inline-block;">
+                        <span>
               <font size="+2">
                 <strong>{{entity.user.profile.name}}（{{entity.user.username}}）</strong>
               </font>
             </span>
-            <div class="pull-right">
-              <button class="btn btn-default" ng-click="leave(entity, 1)">请假</button>
-              <button class="btn btn-default" ng-click="leave(entity, 0)">取消请假</button>
-
-              <button class="btn btn-default" ng-click="arrive(entity, 0)">未到</button>
-              <button class="btn btn-default" ng-click="arrive(entity, 1)">迟到</button>
-              <button class="btn btn-default" ng-click="arrive(entity, 2)">准时</button>
-
-              <button ng-if="entity.is_send==0||entity.status==10" class="btn btn-success" ng-click="pass(entity)">通过</button>
-              <button ng-if="entity.is_send==0||entity.status==10" class="btn btn-danger" ng-click="reject(entity)">不通过</button>
-            </div>
-          </div>
-          <div>
-            <span style="color:#777;">
+                        <div class="pull-right">
+                            <button class="btn btn-default" ng-click="leave(entity, 1)">请假</button>
+                            <button class="btn btn-default" ng-click="leave(entity, 0)">取消请假</button>
+                            <button class="btn btn-default" ng-click="arrive(entity, 0)">未到</button>
+                            <button class="btn btn-default" ng-click="arrive(entity, 1)">迟到</button>
+                            <button class="btn btn-default" ng-click="arrive(entity, 2)">准时</button>
+                            <button ng-if="entity.is_send==0||entity.status==10" class="btn btn-success" ng-click="pass(entity)">通过</button>
+                            <button ng-if="entity.is_send==0||entity.status==10" class="btn btn-danger" ng-click="reject(entity)">不通过</button>
+                        </div>
+                    </div>
+                    <div>
+                        <span style="color:#777;">
               {{entity.user.profile.sex==1 ? '男' : entity.user.profile.sex==2 ? '女' : '性别不明'}}
             </span>
-            <span ng-show="entity.user.profile.birth_year" style="color:#777;">
+                        <span ng-show="entity.user.profile.birth_year" style="color:#777;">
               {{ (today | date:'yyyy') - entity.user.profile.birth_year }}岁
             </span>
-            <span style="color:#777;" ng-show="!entity.user.profile.birth_year">年纪不知</span>
-            <div class="pull-right">
-              当前状态：
-              <span ng-if="entity.status==10" style="color:#33E;">待筛选</span>
-              <span ng-if="entity.status==20" style="color:#3E3;">已通过</span>
-              <span ng-if="entity.status==30" style="color:#E33;">未通过</span>
-              <span ng-if="entity.is_send==1" style="color:#333;">
+                        <span style="color:#777;" ng-show="!entity.user.profile.birth_year">年纪不知</span>
+                        <div class="pull-right">
+                            当前状态：
+                            <span ng-if="entity.status==10" style="color:#33E;">待筛选</span>
+                            <span ng-if="entity.status==20" style="color:#3E3;">已通过</span>
+                            <span ng-if="entity.status==30" style="color:#E33;">未通过</span>
+                            <span ng-if="entity.is_send==1" style="color:#333;">
                 <p>已于 {{entity.send_at|date}} 发送通知</p>
               </span>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
+        <div class="row">
+            <div class="col-md-offset-3">
+                <button class="btn btn-info" type="submit" ng-click='sendMessage(entity.user.id)'>发送通知</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-7">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-success">注册时间： {{ entity.user.created_at * 1000 | date: "yyyy年MM月dd日 HH:mm:ss"}}</li>
+                    <li class="list-group-item list-group-item-info">报名时间：{{ entity.updated_at * 1000 | date: "yyyy年MM月dd日 HH:mm:ss"}}</li>
+                    <li class="list-group-item list-group-item-danger">
+                        <div ng-show="entity.user.profile.from>0">
+                            来自：
+                            <span ng-if="entity.user.profile.from==1">朋友圈看到，就手抖点进来了</span>
+                            <span ng-if="entity.user.profile.from==2">朋友专门给我安利过</span>
+                            <span ng-if="entity.user.profile.from==3">有所耳闻，自己一路找过来的</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-5">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-success">
+                        <div ng-show="entity.user.mobile">
+                            手机号： {{entity.user.mobile}}
+                        </div>
+                    </li>
+                    <li class="list-group-item list-group-item-info">
+                        <div ng-show="entity.user.wechat_id">
+                            微信id： {{entity.user.wechat_id}}
+                        </div>
+                    </li>
+                    <li class="list-group-item list-group-item-warning">
+                        <div ng-show="entity.user.profile.occupation">
+                            职业：{{entity.user.profile.occupation}}
+                        </div>
+                </ul>
+            </div>
+        </div>
+        <div style="margin:10px;" class="col-md-12" ng-repeat="answer in answerItemList">
+            <div style="margin:5px;color:#999">问题{{$index+1}}: {{answer.question_label}}</div>
+            <div style="margin:5px;padding:5px;border-radius:10px;border:1px solid rgba(10,10,10,0.1)">{{answer.question_value}}</div>
+        </div>
+        <br />
+        <div ng-show="entity.feedback" style="margin-left:20px;">
+            <div>
+                <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">活动得分：</div>
+                {{entity.feedback.stars}}
+            </div>
+            <div>
+                <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">发起人分：</div>
+                {{entity.feedback.sponsor_stars}}
+            </div>
+        </div>
+        <div ng-show="entity.feedback">
+            <div style="margin:10px;margin:5px;color:#999">用户评价：</div>
+            <div style="margin:5px;padding:5px;border-radius:10px;border:1px solid rgba(10,10,10,0.1)"> {{entity.feedback.feedback}}</div>
+        </div>
     </div>
-    <div style="margin-left:20px;">
-      <div>
-        <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">注册时间：</div>
-        {{ entity.user.created_at * 1000 | date: "yyyy年MM月dd日 HH:mm:ss"}}
-      </div>
-      <div>
-        <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">报名时间：</div>
-        {{ entity.updated_at * 1000 | date: "yyyy年MM月dd日 HH:mm:ss"}}
-      </div>
-      <div ng-show="entity.user.profile.occupation">
-        <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">职业：</div>
-        {{entity.user.profile.occupation}}
-      </div>
-      <div ng-show="entity.user.profile.from>0">
-        <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">来自：</div>
-        <span ng-if="entity.user.profile.from==1">朋友圈看到，就手抖点进来了</span>
-        <span ng-if="entity.user.profile.from==2">朋友专门给我安利过</span>
-        <span ng-if="entity.user.profile.from==3">有所耳闻，自己一路找过来的</span>
-      </div>
-      <div ng-show="entity.user.profile.want>0">
-        <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">想要：</div>
-        {{entity.user.profile.want}}
-      </div>
-      <div ng-show="entity.user.mobile">
-        <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">手机号：</div>
-        {{entity.user.mobile}}
-      </div>
-      <div ng-show="entity.user.wechat_id">
-        <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">微信id：</div>
-        {{entity.user.wechat_id}}
-      </div>
-
-    </div>
-      <!-- <div>
-      <div>报名次数</div>
-      <div>参加次数</div>
-      <div>反馈次数</div>
-    </div> -->
-    <div style="margin:10px;" ng-repeat="answer in answerItemList">
-      <div style="margin:5px;color:#999">问题{{$index+1}}: {{answer.question_label}}</div>
-      <div style="margin:5px;padding:5px;border-radius:10px;border:1px solid rgba(10,10,10,0.1)">{{answer.question_value}}</div>
-    </div>
-    <br />
-    <div ng-show="entity.feedback" style="margin-left:20px;">
-      <div>
-        <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">活动得分：</div>
-        {{entity.feedback.stars}}
-      </div>
-      <div>
-        <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">发起人分：</div>
-        {{entity.feedback.sponsor_stars}}
-      </div>
-    </div>
-    <div ng-show="entity.feedback">
-      <div style="margin:10px;margin:5px;color:#999">用户评价：</div>
-       <div style="margin:5px;padding:5px;border-radius:10px;border:1px solid rgba(10,10,10,0.1)"> {{entity.feedback.feedback}}</div>     
-    </div>
-  </div>
 </div>

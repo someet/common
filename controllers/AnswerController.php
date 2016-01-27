@@ -2,11 +2,13 @@
 
 namespace app\controllers;
 
+
 use app\components\DataValidationFailedException;
 use dektrium\user\models\Account;
 use someet\common\models\ActivityFeedback;
 use someet\common\models\AdminLog;
 use someet\common\models\Answer;
+use someet\common\models\User;
 use someet\common\models\AnswerItem;
 use someet\common\models\Question;
 use Yii;
@@ -47,6 +49,7 @@ class AnswerController extends BackendController
                 'allowActions' => [
                     'create',
                     'view-by-activity-id',
+                    'send-message',
                     'filter',//审核
                     'arrive',//到场情况
                     'leave'//请假
@@ -309,4 +312,87 @@ class AnswerController extends BackendController
             throw new NotFoundHttpException("答案不存在");
         }
     }
+
+
+    /**
+     * 获取成功的短信内容
+     * @param string $activity_name 活动名称
+     * @return string 短信内容
+     */
+    private function fetchSuccessSmsData($activity_name) {
+        //获取通过的短信模板
+        return "恭喜，你报名的“{$activity_name}”活动已通过筛选。活动地点等详细信息将在活动微信群中和大家沟通。请您按以下操作步骤加入活动微信群：进入Someet活动平台（服务号ID：SomeetInc）——点击屏幕下栏“我”——进入相应活动页面——点击微信群组——扫描二维码加入活动群。期待与您共同玩耍，系统短信，请勿回复。";
+    }
+    /**
+     * 获取等待的短信内容
+     * @param string $activity_name 活动名称
+     * @return string 等待的短信内容
+     */
+    private function fetchWaitSmsData($activity_name) {
+        //获取拒绝的短信模板
+        return "你好，你报名的“{$activity_name}”活动，发起人正在筛选中，我们将会在24小时内短信给您最终筛选结果，请耐心等待。谢谢您的支持，系统短信，请勿回复。";
+    }
+    /**
+     * 获取失败的短信内容
+     * @param string $activity_name 活动名称
+     * @return string 失败的短信内容
+     */
+    private function fetchFailSmsData($activity_name) {
+        //获取拒绝的短信模板
+        return "Shit happens!很抱歉你报名的“ {$activity_name}”活动未通过筛选。你可添加官方客服Someet小海豹（微信ID：someetxhb）随时与我们联系。期待下次活动和你相遇。系统短信，请勿回复。";
+    }
+
+    /**
+     * 获取通知参加活动的短信内容
+     * @param string $activity_name 活动名称
+     * @return string 通知参加活动的短信内容
+     */
+    private function fetchNotiSmsData($activity_name, $start_time, $weather) {
+        //获取通知参加活动的短信
+        return "你报名的活动“{$activity_name}”在今天的{$start_time}开始。{$weather}请合理安排时间出行，不要迟到哦。";
+    }
+
+
+
+    /**
+    * 发送通知
+    * @param 
+    *
+    *
+    */
+    public function actionSendMessage($user_id){
+        $id =$user_id;
+        $model = User::findOne($user_id);
+
+                // 用户的手机号码不为空, 并且手机号码是合法的手机号
+        $mobile = $model->mobile;
+
+        if (!empty($answer['user']['mobile']) && SomeetValidator::isTelNumber($answer['user']['mobile'])) {
+            
+        
+        // $model = User::find()
+        //         ->where(['id' => $user_id])
+        //         ->one();
+        // $mobile = '18032067618';
+        // print_r($model);
+        // print_r($mobile);
+
+        $mixedData = [
+            'mobile' => $mobile,
+            'smsData' => $smsData,
+            'answer' => $answer
+        ];
+
+        // $sms = Yii::$app->beanstalk
+        //     ->putInTube('sms', $mixedData);
+        // if (!$sms) {
+        //     Yii::error('短信添加到消息队列失败, 请检查');
+        // }
+        // $smsData = "test in cron/test";
+        //尝试发送短消息
+            $res = Yii::$app->sms->sendSms($mobile, $smsData);
+        }
+        // var_dump($res);
+    }
+
 }

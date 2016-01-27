@@ -96,7 +96,22 @@ angular.module('controllers')
                 .position("top right"));
           });
         }
+        //发送消息
+        $scope.sendMessage = function(user_id){
+          console.log(user_id);
+          $answerManage.sendMessage(user_id).then(function(data) {
+            $mdToast.show($mdToast.simple()
+                .content('已发送成功')
+                .hideDelay(5000)
+                .position("top right"));
+          }, function(err){
+            $mdToast.show($mdToast.simple()
+                .content(err.toString())
+                .hideDelay(5000)
+                .position("top right"));
+          });
 
+        }
       }])
     .controller('AnswerAddCtrl',
     ['$scope', '$location', '$routeParams', '$questionManage', '$answerManage',

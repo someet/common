@@ -45,6 +45,12 @@ angular.module('backendServices')
           return $http.get('/answer/view-by-activity-id?activity_id=' + activity_id).then(function (data) {
             return data;
           });
+        },
+        // 发送消息
+        sendMessage: function (user_id) {
+          return $http.get('/answer/send-message?user_id=' + user_id).then(function (data) {
+            return data;
+          });
         }
       };
     }]);
