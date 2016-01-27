@@ -31,6 +31,10 @@ angular.module('backendServices')
         tags: function(query) {
           return $http.get('/activity-tag/list?query=' + query);
         },
+        //搜索活动名字
+        search: function(query){
+          return $http.get('/activity/search?title=' + query);
+        },
         //搜索用户
         searchUser: function(query) {
           return $http.get('/member/search?username=' + query);

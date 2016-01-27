@@ -42,6 +42,7 @@ class ActivityController extends BackendController
                 'class' => '\app\components\AccessControl',
                 'allowActions' => [
                     'list-by-type-id',
+                    'search',
                 ]
             ],
         ];
@@ -184,6 +185,33 @@ class ActivityController extends BackendController
         return $activities;
     }
 
+
+    /**
+     * 搜索活动, 供给活动分配发起人的自动完成功能使用
+     * @param string $username 标题
+     * @return array
+     */
+    public function actionSearch($title) {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $activity = Activity::find()
+                    ->with([
+                            'type',
+                            'tags',
+                            'question',
+                            'user',
+                            'answerList',
+                            'feedbackList'
+                        ])
+                    ->where(
+                        ['like', 'title', $title]
+                    )
+                    ->andWhere('start_time > '.getLastEndTime())
+                    ->limit(50)
+                    ->orderBy(['id' => SORT_DESC])
+                    ->asArray()
+                    ->all();
+        return $activity;
+    }
     /**
      * 根据活动类型查询活动列表
      *
@@ -711,4 +739,6 @@ class ActivityController extends BackendController
             throw new NotFoundHttpException("活动不存在");
         }
     }
+
+
 }

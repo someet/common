@@ -72,14 +72,14 @@
             <div class="col-md-6">
                 <ul class="list-group">
                     <li class="list-group-item list-group-item-success" ng-repeat="activityList in entity.countJoinDesc">
-                        {{activityList.title}} ({{activityList.countJoin}} / {{activityList.peoples}})
+                        {{activityList.title}} ({{activityList.countJoin}} / {{activityList.peoples}}) {{activityList.field1}}
                     </li>
                 </ul>
             </div>            
             <div class="col-md-6">
                 <ul class="list-group">
                     <li class="list-group-item list-group-item-danger" ng-repeat="activityList in entity.countJoinAsc">
-                        {{activityList.title}} ({{activityList.countJoin}} / {{activityList.peoples}})
+                        {{activityList.title}} ({{activityList.countJoin}} / {{activityList.peoples}}){{activityList.field1}}
                     </li>
                 </ul>
             </div>

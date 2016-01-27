@@ -317,6 +317,15 @@ angular.module('controllers', ['ngTagsInput'])
         $scope.showAddForm = true;
       };
 
+      //搜索活动
+      $scope.getActivity = function(query){
+        var title = $scope.title;
+        console.log(title);
+        $activityManage.search(title).then(function (activityList) {
+          $scope.list = activityList;
+        });
+      }
+
       //ng-if会增加新的child，需要设置初始值
       $scope.addForm = {
         newType: ""
@@ -572,7 +581,7 @@ angular.module('controllers', ['ngTagsInput'])
               .content('活动保存成功')
               .hideDelay(5000)
               .position("top right"));
-            $location.path('/activity/list/0');
+            // $location.path('/activity/list/0');
           }, function(err) {
             $mdToast.show($mdToast.simple()
               .content(err.toString())
