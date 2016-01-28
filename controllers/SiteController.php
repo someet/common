@@ -111,7 +111,8 @@ class SiteController extends BackendController
         // 本周活动数量（不包括测试）
         $countWeekActivity = Activity::find()
                             ->where('type_id!='.$activity_test_type_id)
-                            ->where('start_time > '.getLastEndTime())
+                            ->andWhere('start_time > '.getLastEndTime())
+                            ->andWhere(['status' => '20'])
                             ->count('id');
         // 当前活动总报名名额， select activity_id ,count(activity_id) FROM answer GROUP BY activity_id  
 
@@ -129,7 +130,8 @@ class SiteController extends BackendController
         $countJoin = Activity::find()
                     ->select(['activity.id activity_id','count(activity.id) as countJoin','activity.title title','activity.peoples peoples','activity.field1'])
                     ->where('type_id!='.$activity_test_type_id)
-                    ->andwhere('activity.start_time > '.getLastEndTime())
+                    ->andWhere(['activity.status' => '20'])
+                    ->andWhere('activity.start_time > '.getLastEndTime())
                     ->groupBy('activity.id')
                     ->leftJoin('answer','answer.activity_id = activity.id')
                     ->asArray()
