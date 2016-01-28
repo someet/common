@@ -21,6 +21,7 @@ return [
     'sms.wait_template_id' => \DockerEnv::get('WEIXIN_TEMPLATE_WAIT_ID'),
     'sms.failed_template_id' => \DockerEnv::get('WEIXIN_TEMPLATE_FAILED_ID'),
     'sms.noti_template_id' => \DockerEnv::get('WEIXIN_TEMPLATE_NOTI_ID'),
+    'sms.feedback_template_id' => \DockerEnv::get('WEIXIN_TEMPLATE_FEEDBACK_ID'),
 
     'domain' => \DockerEnv::get('WECHAT_DOMAIN'),
 

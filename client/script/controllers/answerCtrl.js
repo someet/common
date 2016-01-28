@@ -97,9 +97,19 @@ angular.module('controllers')
           });
         }
         //发送消息
-        $scope.sendMessage = function(user_id){
-          console.log(user_id);
-          $answerManage.sendMessage(user_id).then(function(data) {
+        $scope.feedbackResult = '点击按钮发送通知';
+        $scope.sendMessage = function(entity){
+          var user_id = entity.user.id;
+          var activity_id = entity.activity_id;
+          console.log(user_id + '----'+activity_id);
+          $answerManage.sendMessage(user_id,activity_id).then(function(data) {
+            console.log(data);
+            // var feedbackResult = '未手动发送过通知';
+            if (data.status == 0) {
+              $scope.feedbackResult = data.sms +'--'+data.wechatResult;
+            }else{
+              $scope.feedbackResult = '消息发送失败';
+            }
             $mdToast.show($mdToast.simple()
                 .content('已发送成功')
                 .hideDelay(5000)

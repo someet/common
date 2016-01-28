@@ -208,5 +208,45 @@ class WorkerController extends BeanstalkController
             return self::BURY;
         }
     }
+    /**
+     * 需要用户反馈的微信消息模板
+     * @param Pheanstalk\Job $job
+     * @return string  self::BURY
+     *                 self::RELEASE
+     *                 self::DELAY
+     *                 self::DELETE
+     *                 self::NO_ACTION
+     *                 self::DECAY
+     *
+     */
+/*    public function actionFeedbackchat($job){
+        $sentData = $job->getData();
+        try {
+            $templateData = (array) $sentData->templateData ;
+            $answer = $sentData->answer;
+
+            //获取微信组
+            $wechat = Yii::$app->wechat;
+            //尝试发送模板消息
+            if ($msgid = $wechat->sendTemplateMessage($templateData)) { //模板消息发送成功
+
+                //更新报名的模板消息的id, 发送的时间和状态
+                Answer::updateAll(['join_noti_wechat_template_msg_id' => $msgid, 'join_noti_wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_SUCC, 'join_noti_wechat_template_push_at' => time()], ['id' => $answer->id]);
+            } else {
+
+                //更新报名的模板消息发送的时间和状态, 状态为失败,后面可以单独的重新发送模板消息
+                Answer::updateAll(['join_noti_wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_Fail, 'join_noti_wechat_template_push_at' => time()], ['id' => $answer->id]);
+            }
+
+            fwrite(STDOUT, Console::ansiFormat("Feedbackchat - Everything is allright"."\n", [Console::FG_GREEN]));
+            //Delete the job from beanstalkd
+            return self::DELETE;
+        } catch (\Exception $e) {
+            //If there is anything to do.
+            fwrite(STDERR, Console::ansiFormat($e."\n", [Console::FG_RED]));
+            // you can also bury jobs to examine later
+            return self::BURY;
+        }
+    }*/
 
 }

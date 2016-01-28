@@ -47,8 +47,8 @@ angular.module('backendServices')
           });
         },
         // 发送消息
-        sendMessage: function (user_id) {
-          return $http.get('/answer/send-message?user_id=' + user_id).then(function (data) {
+        sendMessage: function (user_id,activity_id) {
+          return $http.get('/answer/send-notification?user_id=' + user_id + '&activity_id=' + activity_id).then(function (data) {
             return data;
           });
         }
