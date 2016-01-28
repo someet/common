@@ -70,7 +70,7 @@ class SiteController extends BackendController
         // 今日新增授权关注人数
         $todayStart = strtotime("today");
         $todayEnd = $todayStart + 60*60*24;
-        // print_r($todayEnd);
+
         $newToday = User::find()->where(['between','created_at',$todayStart,$todayEnd])->count('id');
         // 今日已经完善资料人数
         $newTodayUserInfo = User::find()
@@ -95,7 +95,7 @@ class SiteController extends BackendController
                             ->orderBy(['id' => SORT_DESC])
                             ->asArray()
                             ->count();
-        // print_r($countPma);
+
         $countFounder = User::find()
                             ->joinWith('assignment')
                             ->where([
@@ -106,31 +106,23 @@ class SiteController extends BackendController
                             ->orderBy(['id' => SORT_DESC])
                             ->asArray()
                             ->count();
-                // print_r($countFounder);
+
 
         // 本周活动数量（不包括测试）
         $countWeekActivity = Activity::find()
                             ->where('type_id!='.$activity_test_type_id)
                             ->andWhere('start_time > '.getLastEndTime())
-                            ->andWhere(['status' => '20'])
+                            ->andWhere(['status' => Activity::STATUS_RELEASE])
                             ->count('id');
         // 当前活动总报名名额， select activity_id ,count(activity_id) FROM answer GROUP BY activity_id  
 
         $countJoinAsc = [];
         $countJoinDesc = [];
-        
-        // $countJoin = Answer::find()
-        //             ->select(['answer.activity_id activity_id','count(answer.activity_id) as countJoin','activity.title title','activity.peoples peoples'])
-        //             ->where('type_id!='.$activity_test_type_id)
-        //             ->andwhere('answer.created_at > '.getLastEndTime())
-        //             ->groupBy('answer.activity_id')
-        //             ->leftJoin('activity','answer.activity_id = activity.id')
-        //             ->asArray()
-        //             ->all();        
+              
         $countJoin = Activity::find()
                     ->select(['activity.id activity_id','count(activity.id) as countJoin','activity.title title','activity.peoples peoples','activity.field1'])
                     ->where('type_id!='.$activity_test_type_id)
-                    ->andWhere(['activity.status' => '20'])
+                    ->andWhere(['activity.status' => Activity::STATUS_RELEASE])
                     ->andWhere('activity.start_time > '.getLastEndTime())
                     ->groupBy('activity.id')
                     ->leftJoin('answer','answer.activity_id = activity.id')
@@ -188,17 +180,6 @@ class SiteController extends BackendController
             // array_slice($countJoin,0,10);
         }
 
-        // 当前活动总报名名额
-        // $countAllJoin = Answer::find()
-        //             ->where('created_at > '.getLastEndTime())
-        //             ->count();  
-        // 报名数量
-        // $countAlreadyJoin = Activity::find()
-        //             ->where('type_id!='.$activity_test_type_id)
-        //             ->andwhere()
-        //             ->andwhere('start_time > '.getLastEndTime())
-        //             ->count();
-        // 及已报名数量
          return [
             'countUser' => $countUser,
             'countUserInfo' => $countUserInfo,
