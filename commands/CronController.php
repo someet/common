@@ -28,7 +28,7 @@ class CronController  extends \yii\console\Controller
      * @param $activity 活动对象
      * @return array
      */
-    private function fetchSuccessWechatTemplateData($openid, $account, $activity) {
+    public static function fetchSuccessWechatTemplateData($openid, $account, $activity) {
         //获取成功的模板消息id
         $template_id = Yii::$app->params['sms.success_template_id'];
         if (empty($template_id)) {

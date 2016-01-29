@@ -22,6 +22,16 @@ use yii\data\Pagination;
 class ActivityController extends BackendController
 {
 
+    private $week = [
+        0 => '周天',
+        1 => '周一',
+        2 => '周二',
+        3 => '周三',
+        4 => '周四',
+        5 => '周五',
+        6 => '周六',
+    ];
+
     /**
      * @inheritdoc
      */
