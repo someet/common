@@ -95,4 +95,10 @@ class ActivityFeedback extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Activity::className(), ['id' => 'activity_id']);
     }
+
+    //活动报名的对象
+    public function getAnswer()
+    {
+        return $this->hasOne(Answer::className(), ['user_id' => 'user_id', 'activity_id' => 'activity_id']);
+    }
 }
