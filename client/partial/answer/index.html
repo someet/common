@@ -127,7 +127,7 @@
         </div>
         <div class="row">
             <div class="col-md-3">
-                <button class="btn btn-info" type="submit" ng-click='sendMessage(entity)'>发送通知</button>
+            <md-button ng-disabled="dbtn" class="md-raised md-warn" ng-click='sendMessage(entity,dbtn)'>发送通知</md-button>
             </div>
             <div class="col-md-8">
               {{feedbackResult}}
@@ -167,6 +167,7 @@
                 </ul>
             </div>
         </div>
+
         <div style="margin:10px;" class="col-md-12" ng-repeat="answer in answerItemList">
             <div style="margin:5px;color:#999">问题{{$index+1}}: {{answer.question_label}}</div>
             <div style="margin:5px;padding:5px;border-radius:10px;border:1px solid rgba(10,10,10,0.1)">{{answer.question_value}}</div>

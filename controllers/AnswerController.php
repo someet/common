@@ -331,7 +331,7 @@ class AnswerController extends BackendController
      */
     private function fetchSuccessSmsData($activity_name) {
         //获取通过的短信模板
-        return "恭喜，你报名的“{$activity_name}”活动已通过筛选。活动地点等详细信息将在活动微信群中和大家沟通。请你按以下操作步骤加入活动微信群：进入Someet活动平台（服务号ID：SomeetInc）——点击屏幕下栏“我”——进入相应活动页面——点击微信群组——扫描二维码加入活动群。期待与你共同玩耍，系统短信，请勿回复。";
+        return "恭喜，你报名的“{$activity_name}”活动已通过筛选。活动地点等详细信息将在活动微信群中和大家沟通。请你按以下操作步骤加入活动微信群：进入Someet活动平台（服务号ID：SomeetInc）——点击屏幕下栏“本周活动”——进入相应活动页面——点击微信群组——扫描二维码加入活动群。期待与你共同玩耍，系统短信，请勿回复。";
     }
     /**
      * 获取等待的短信内容
@@ -349,7 +349,7 @@ class AnswerController extends BackendController
      */
     private function fetchFailSmsData($activity_name) {
         //获取拒绝的短信模板
-        return "Shit happens!很抱歉你报名的“ {$activity_name}”活动未通过筛选。你可添加官方客服Someet小海豹（微信ID：someetxhb）随时与我们联系。期待下次活动和你相遇。系统短信，请勿回复。";
+        return "Shit happens!很抱歉你报名的“{$activity_name}”活动未通过筛选。你可添加官方客服Someet小海豹（微信ID：someetxhb）随时与我们联系。期待下次活动和你相遇。系统短信，请勿回复。";
     }
 
     /**
@@ -369,7 +369,7 @@ class AnswerController extends BackendController
      */
     private function fetchNeedFeedbackSmsData($activity_name) {
         //获取需要反馈的短信内容
-       return " 你好，你已成功参加Someet{$activity_name}的活动，请及时对活动进行反馈，之后会提高下次通过筛选概率哦。";
+       return " 你好，你已成功参加“{$activity_name}”活动，请及时对活动进行反馈，之后会提高下次通过筛选概率哦。";
     }
 
     
@@ -723,55 +723,16 @@ class AnswerController extends BackendController
                 } else {
                     //记录一个错误, 当前报名用户短信发送失败或者没有绑定微信
                     Yii::error('报名用户id: '.$answer['user']['id'].' 的用户短信发送失败或者没有绑定微信');
+                    $wechat_template = '报名用户id: '.$answer['user']['id'].' 的用户短信发送失败或者没有绑定微信';
                 }
             } else {
                 //报一个错误, 用户手机号码有误, 无法发送短信
                 Yii::error('报名用户id: '.$answer['user']['id'].' 的用户手机号码未设置, 或者设置的不正确');
+                $smsData = '报名用户id: '.$answer['user']['id'].' 的用户手机号码未设置, 或者设置的不正确';
             }
         
         return $result = ['status' => '0','sms' => $smsData,'wechatResult' => $wechatResult];
 
-    }
-
-    /**
-    * 发送通知
-    * @param 
-    *
-    *
-    */
-    public function actionSendMessage($user_id){
-        $id =$user_id;
-        $model = User::findOne($user_id);
-
-                // 用户的手机号码不为空, 并且手机号码是合法的手机号
-        $mobile = $model->mobile;
-
-        if (!empty($answer['user']['mobile']) && SomeetValidator::isTelNumber($answer['user']['mobile'])) {
-            
-        
-        // $model = User::find()
-        //         ->where(['id' => $user_id])
-        //         ->one();
-        // $mobile = '18032067618';
-        // print_r($model);
-        // print_r($mobile);
-
-        $mixedData = [
-            'mobile' => $mobile,
-            'smsData' => $smsData,
-            'answer' => $answer
-        ];
-
-        // $sms = Yii::$app->beanstalk
-        //     ->putInTube('sms', $mixedData);
-        // if (!$sms) {
-        //     Yii::error('短信添加到消息队列失败, 请检查');
-        // }
-        // $smsData = "test in cron/test";
-        //尝试发送短消息
-            $res = Yii::$app->sms->sendSms($mobile, $smsData);
-        }
-        // var_dump($res);
     }
 
 }

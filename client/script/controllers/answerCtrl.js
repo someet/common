@@ -98,7 +98,8 @@ angular.module('controllers')
         }
         //发送消息
         $scope.feedbackResult = '点击按钮发送通知';
-        $scope.sendMessage = function(entity){
+        $scope.sendMessage = function(entity,dbtn){
+          $scope.dbtn = true;
           var user_id = entity.user.id;
           var activity_id = entity.activity_id;
           console.log(user_id + '----'+activity_id);

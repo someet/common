@@ -68,10 +68,10 @@ class Answer extends \yii\db\ActiveRecord
     /* 已请假 */
     const STATUS_LEAVE_YES  = 1;
 
+    /*  已反馈*/
+    const FEEDBACK_IS    = 1;
     /* 未反馈 */
-    const FEEDBACK_IS    = 0;
-    /* 已反馈 */
-    const FEEDBACK_NO  = 1;
+    const FEEDBACK_NO  = 0;
 
     /**
      * @inheritdoc
