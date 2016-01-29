@@ -86,7 +86,8 @@ class Activity extends \yii\db\ActiveRecord
             [['desc', 'poster', 'group_code', 'address', 'cost_list', 'tagNames'], 'string', 'max' => 255],
             [['area'], 'string', 'max' => 10],
             [['tagNames'], 'safe'],
-            [['status'], 'default', 'value' => 10]
+            [['status'], 'default', 'value' => 10],
+            [['display_order'], 'default', 'value' => 99]
         ];
     }
 
