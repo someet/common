@@ -63,69 +63,62 @@ class SiteController extends BackendController
 
         // 所有授权关注的人数
         $countUser = User::find()->count('id');
+
         // 所有已经完善资料的人数
         $countUserInfo = User::find()
-                        ->andwhere(['not',['wechat_id'=> null]])
+                        ->andwhere(['not', ['wechat_id'=> null]])
                         ->count('wechat_id');
+
         // 今日新增授权关注人数
         $todayStart = strtotime("today");
         $todayEnd = $todayStart + 60*60*24;
-
-        $newToday = User::find()->where(['between','created_at',$todayStart,$todayEnd])->count('id');
-        // 今日已经完善资料人数
-        $newTodayUserInfo = User::find()
-                            ->where(['between','created_at',$todayStart,$todayEnd])
-                            ->andwhere(['not',['wechat_id'=> null]])
-                            ->count('id');
-        // 发起人数量（不包括admin）
+        $newToday = User::find()->where(['between', 'created_at', $todayStart, $todayEnd])->count('id');
 
         // 今日已经完善资料人数
         $newTodayUserInfo = User::find()
-                            ->where(['between','created_at',$todayStart,$todayEnd])
-                            ->andwhere(['not',['wechat_id'=> null]])
+                            ->where(['between', 'created_at', $todayStart, $todayEnd])
+                            ->andwhere(['not', ['wechat_id'=> null]])
                             ->count('id');
-        // PMA数量（不包括admin）
+
+        // PMA数量
         $countPma = User::find()
                             ->joinWith('assignment')
                             ->where([
                                 'status' => User::STATUS_ACTIVE,
                                 'auth_assignment.item_name' => 'pma',
                             ])
-                            ->with(['profile'])
-                            ->orderBy(['id' => SORT_DESC])
                             ->asArray()
                             ->count();
 
+        // 发起人数量
         $countFounder = User::find()
                             ->joinWith('assignment')
                             ->where([
                                 'status' => User::STATUS_ACTIVE,
                                 'auth_assignment.item_name' => 'founder',
                             ])
-                            ->with(['profile'])
-                            ->orderBy(['id' => SORT_DESC])
                             ->asArray()
                             ->count();
 
 
         // 本周活动数量（不包括测试）
         $countWeekActivity = Activity::find()
-                            ->where('type_id!='.$activity_test_type_id)
-                            ->andWhere('start_time > '.getLastEndTime())
+                            ->where('type_id!=' . $activity_test_type_id)
+                            ->andWhere('start_time > ' . getLastEndTime())
                             ->andWhere(['status' => Activity::STATUS_RELEASE])
                             ->count('id');
-        // 当前活动总报名名额， select activity_id ,count(activity_id) FROM answer GROUP BY activity_id  
 
+        // 当前活动总报名名额， select activity_id ,count(activity_id) FROM answer GROUP BY activity_id
         $countJoinAsc = [];
         $countJoinDesc = [];
               
         $countJoin = Activity::find()
                     ->select(['activity.id activity_id','count(activity.id) as countJoin','activity.title title','activity.peoples peoples','activity.field1'])
-                    ->where('type_id!='.$activity_test_type_id)
+                    ->where('type_id!=' . $activity_test_type_id)
                     ->andWhere(['activity.status' => Activity::STATUS_RELEASE])
-                    ->andWhere('activity.start_time > '.getLastEndTime())
+                    ->andWhere('activity.start_time > ' . getLastEndTime())
                     ->groupBy('activity.id')
-                    ->leftJoin('answer','answer.activity_id = activity.id')
+                    ->leftJoin('answer', 'answer.activity_id = activity.id')
                     ->asArray()
                     ->all();
 
@@ -139,9 +132,7 @@ class SiteController extends BackendController
             $countAlreadyJoin += $value['countJoin'];
         }
 
-
         if (!empty($countJoin)) {
-
             foreach ($countJoin as $key => $value) {
                 if ($value['peoples'] == 0) {
                     $countJoin[$key]['order'] = 0;
@@ -173,26 +164,25 @@ class SiteController extends BackendController
             $countJoinAsc =  $countJoin;  
             // array_slice($countJoin,0,10);
 
-
             // 处理多维数组 降序
             array_multisort($arrSort[$sort_desc['field']], constant($sort_desc['direction']), $countJoin);  //降序
             $countJoinDesc = $countJoin;
             // array_slice($countJoin,0,10);
         }
 
-         return [
-            'countUser' => $countUser,
-            'countUserInfo' => $countUserInfo,
-            'countNewToday' => $newToday,
-            'countnewNewTodayUserInfo' => $newTodayUserInfo,
-            'countWeekActivity' => $countWeekActivity,
-            'countJoin' => $countJoin,
-            'countFounder'=>$countFounder,
-            'countPma'=>$countPma,
-            'countAllJoin'=>$countAllJoin,
-            'countAlreadyJoin'=>$countAlreadyJoin,
-            'countJoinAsc'=>$countJoinAsc,
-            'countJoinDesc'=>$countJoinDesc,
+        return [
+           'countUser' => $countUser,
+           'countUserInfo' => $countUserInfo,
+           'countNewToday' => $newToday,
+           'countnewNewTodayUserInfo' => $newTodayUserInfo,
+           'countWeekActivity' => $countWeekActivity,
+           'countJoin' => $countJoin,
+           'countFounder'=>$countFounder,
+           'countPma'=>$countPma,
+           'countAllJoin'=>$countAllJoin,
+           'countAlreadyJoin'=>$countAlreadyJoin,
+           'countJoinAsc'=>$countJoinAsc,
+           'countJoinDesc'=>$countJoinDesc,
         ];
 
     }
