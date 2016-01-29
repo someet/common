@@ -347,20 +347,20 @@ class AnswerController extends BackendController
             $mobile = $answer['user']['mobile'];
 
             //设置默认的短信为等待的短信内容
-            $smsData = notificationTemplate::fetchWaitSmsData($answer['activity']['title']);
+            $smsData = NotificationTemplate::fetchWaitSmsData($answer['activity']['title']);
             //判断状态是通过
             if (Answer::STATUS_REVIEW_PASS == $answer['status']) {
 
                     //获取通过的短信内容
-                    $smsData = notificationTemplate::fetchSuccessSmsData($answer['activity']['title']);
+                    $smsData = NotificationTemplate::fetchSuccessSmsData($answer['activity']['title']);
 
                     if ( Answer::STATUS_ARRIVE_YET != $answer['arrive_status'] && $answer['is_feedback'] == Answer::FEEDBACK_NO ) {
                         //获取需要反馈的短信内容
-                        $smsData = notificationTemplate::fetchNeedFeedbackSmsData($answer['activity']['title']);  
+                        $smsData = NotificationTemplate::fetchNeedFeedbackSmsData($answer['activity']['title']);  
                     }
                 } elseif (Answer::STATUS_REVIEW_REJECT == $answer['status']) {
                     //获取不通过的短信内容
-                    $smsData = notificationTemplate::fetchFailSmsData($answer['activity']['title']);
+                    $smsData = NotificationTemplate::fetchFailSmsData($answer['activity']['title']);
                 }
 
                 $mixedData = [
@@ -391,20 +391,20 @@ class AnswerController extends BackendController
                     $openid = $account->client_id;
 
                     //设置模板消息默认为等待的模板消息内容
-                    $templateData = notificationTemplate::fetchWaitWechatTemplateData($openid, $answer['activity']);
+                    $templateData = NotificationTemplate::fetchWaitWechatTemplateData($openid, $answer['activity']);
                     //如果通过
                     if (Answer::STATUS_REVIEW_PASS == $answer['status']) {
                         //获取通过的模板消息内容
-                        $templateData = notificationTemplate::fetchSuccessWechatTemplateData($openid, $answer['user'], $answer['activity']);
+                        $templateData = NotificationTemplate::fetchSuccessWechatTemplateData($openid, $answer['user'], $answer['activity']);
                         if ( Answer::STATUS_ARRIVE_YET != $answer['arrive_status'] && $answer['is_feedback'] == Answer::FEEDBACK_NO ) {
                             //获取需要反馈的短信内容
-                            $templateData = notificationTemplate::fetchNeedFeedbackWechatTemplateData($openid, $answer['user'], $answer['activity']);  
+                            $templateData = NotificationTemplate::fetchNeedFeedbackWechatTemplateData($openid, $answer['user'], $answer['activity']);  
                             $wechatResult = $templateData['data']['first']['value'];
                             // print_r($templateData);
                             }
                     } elseif (Answer::STATUS_REVIEW_REJECT == $answer['status']) {
                         //获取不通过的模板消息内容
-                        $templateData = notificationTemplate::fetchFailedWechatTemplateData($openid, $answer['user'], $answer['activity']);
+                        $templateData = NotificationTemplate::fetchFailedWechatTemplateData($openid, $answer['user'], $answer['activity']);
                         $wechatResult = $templateData['data']['first']['value'];
                     }
 
