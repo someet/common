@@ -96,7 +96,33 @@ angular.module('controllers')
                 .position("top right"));
           });
         }
+        //发送消息
+        $scope.feedbackResult = '点击按钮发送通知';
+        $scope.sendMessage = function(entity,dbtn){
+          $scope.dbtn = true;
+          var user_id = entity.user.id;
+          var activity_id = entity.activity_id;
+          console.log(user_id + '----'+activity_id);
+          $answerManage.sendMessage(user_id,activity_id).then(function(data) {
+            console.log(data);
+            // var feedbackResult = '未手动发送过通知';
+            if (data.status == 0) {
+              $scope.feedbackResult = data.sms +'--'+data.wechatResult;
+            }else{
+              $scope.feedbackResult = '消息发送失败';
+            }
+            $mdToast.show($mdToast.simple()
+                .content('已发送成功')
+                .hideDelay(5000)
+                .position("top right"));
+          }, function(err){
+            $mdToast.show($mdToast.simple()
+                .content(err.toString())
+                .hideDelay(5000)
+                .position("top right"));
+          });
 
+        }
       }])
     .controller('AnswerAddCtrl',
     ['$scope', '$location', '$routeParams', '$questionManage', '$answerManage',
