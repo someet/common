@@ -1,6 +1,6 @@
 <?php
 namespace app\commands;
-
+use app\components\NotificationTemplate;
 use someet\common\components\SomeetValidator;
 use someet\common\models\Activity;
 use Yii;
@@ -10,250 +10,6 @@ use someet\common\models\User;
 
 class CronController  extends \yii\console\Controller
 {
-
-    private $week = [
-      0 => '周天',
-        1 => '周一',
-        2 => '周二',
-        3 => '周三',
-        4 => '周四',
-        5 => '周五',
-        6 => '周六',
-    ];
-
-    /**
-     * 获取成功的微信模板消息
-     * @param $openid openid
-     * @param $account Account对象
-     * @param $activity 活动对象
-     * @return array
-     */
-    private function fetchSuccessWechatTemplateData($openid, $account, $activity) {
-        //获取成功的模板消息id
-        $template_id = Yii::$app->params['sms.success_template_id'];
-        if (empty($template_id)) {
-            //记录一个错误, 请设置成功的模板消息id
-            Yii::error('请设置成功的模板消息id');
-        }
-        $start_time = date('m月d日', $activity['start_time'])
-            . $this->week[date('w', $activity['start_time'])]
-            . date('H:i', $activity['start_time'])
-            . '开始';
-        $data = [
-            "touser" => "{$openid}",
-            "template_id" => $template_id,
-            "url" => Yii::$app->params['domain'].'activity/'.$activity['id'],
-            "topcolor" => "#FF0000",
-            "data" => [
-                "first" => [
-                    "value" => "恭喜，你报名的活动已通过筛选！",
-                    "color" => "#173177"
-                ],
-                "keyword1" => [
-                    "value" => "{$account['username']}",
-                    "color" => "#173177"
-                ],
-                "keyword2" => [
-                    "value" => "{$activity['title']}",
-                    "color" =>"#173177"
-                ],
-                "keyword3" => [
-                    "value" => "{$start_time}",
-                    "color" => "#173177"
-                ],
-                "keyword4" => [
-                    "value" => "{$activity['address']}",
-                    "color" => "#173177"
-                ],
-                "remark" => [
-                    "value" => "点击查看详情，并扫码进入活动群。",
-                    "color" => "#173177"
-                ],
-            ]
-        ];
-        return $data;
-    }
-    /*
-     * 获取等待的微信模板消息
-     * @param $openid openid
-     * @param $activity 活动对象
-     * @return array
-     */
-    private function fetchWaitWechatTemplateData($openid, $activity) {
-        //获取等待的模板消息id
-        $template_id = Yii::$app->params['sms.wait_template_id'];
-        if (empty($template_id)) {
-            //记录一个错误, 请设置等待的模板消息id
-            Yii::error('请设置等待的模板消息id');
-        }
-        $start_time = date('m月d日', $activity['start_time'])
-            . $this->week[date('w', $activity['start_time'])]
-            . date('H:i', $activity['start_time'])
-            . '开始';
-        $data = [
-            "touser" => "{$openid}",
-            "template_id" => $template_id,
-            "url" => Yii::$app->params['domain'],
-            "topcolor" => "#FF0000",
-            "data" => [
-                "first" => [
-                    "value" => "您报名的活动正在筛选，请耐心等待",
-                    "color" => "#173177"
-                ],
-                "keyword1" => [
-                    "value" => "{$activity['title']}",
-                    "color" =>"#173177"
-                ],
-                "keyword2" => [
-                    "value" => "{$start_time}",
-                    "color" => "#173177"
-                ],
-                "keyword3" => [
-                    "value" => "{$activity['area']}",
-                    "color" => "#173177"
-                ],
-                "remark" => [
-                    "value" => "请随时关注Someet服务号的通知，及时收到筛选结果信息。",
-                    "color" => "#173177"
-                ],
-            ]
-        ];
-        return $data;
-    }
-    /*
-     * 获取失败的微信模板消息
-     * @param $openid openid
-     * @param $account Account对象
-     * @param $activity 活动对象
-     * @return array
-     */
-    private function fetchFailedWechatTemplateData($openid, $account, $activity) {
-        //获取失败的模板消息id
-        $template_id = Yii::$app->params['sms.failed_template_id'];
-        if (empty($template_id)) {
-            //记录一个错误, 请设置失败的模板消息id
-            Yii::error('请设置失败的模板消息id');
-        }
-        $data = [
-            "touser" => "{$openid}",
-            "template_id" => $template_id,
-            "url" => Yii::$app->params['domain'],
-            "topcolor" => "#FF0000",
-            "data" => [
-                "first" => [
-                    "value" => "抱歉，你报名的活动未通过筛选",
-                    "color" => "#173177"
-                ],
-                "keyword1" => [
-                    "value" => "{$account['username']}",
-                    "color" => "#173177"
-                ],
-                "keyword2" => [
-                    "value" => "{$activity['title']}",
-                    "color" =>"#173177"
-                ],
-                "keyword3" => [
-                    "value" => "",
-                    "color" => "#173177"
-                ],
-                "keyword4" => [
-                    "value" => "",
-                    "color" => "#173177"
-                ],
-                "keyword5" => [
-                    "value" => "发起人未通过你的报名申请。",
-                    "color" => "#173177"
-                ],
-                "remark" => [
-                    "value" => "每个人都有被拒绝的时候，点击详情，试试更多其他活动吧！",
-                    "color" => "#173177"
-                ],
-            ]
-        ];
-        return $data;
-    }
-    /*
-     * 获取参加活动通知的微信模板消息
-     * @param $openid openid
-     * @param $activity 活动对象
-     * @return array
-     */
-    private function fetchNotiWechatTemplateData($openid, $activity) {
-        //获取失败的模板消息id
-        $template_id = Yii::$app->params['sms.noti_template_id'];
-        if (empty($template_id)) {
-            //记录一个错误, 请设置失败的模板消息id
-            Yii::error('请设置失败的模板消息id');
-        }
-        $start_time = date('Y年m月d日', $activity['start_time']);
-        $data = [
-            "touser" => "{$openid}",
-            "template_id" => $template_id,
-            "url" => Yii::$app->params['domain'],
-            "topcolor" => "#FF0000",
-            "data" => [
-                "first" => [
-                    "value" => "您好，您预定的活动马上开始！",
-                    "color" => "#173177"
-                ],
-                "keyword1" => [
-                    "value" => "{$activity['title']}",
-                    "color" => "#173177"
-                ],
-                "keyword2" => [
-                    "value" => "{$activity['address']}",
-                    "color" =>"#173177"
-                ],
-                "keyword3" => [
-                    "value" => "{$start_time}",
-                    "color" => "#173177"
-                ],
-                "remark" => [
-                    "value" => "请合理安排时间出行，不要迟到哦。",
-                    "color" => "#173177"
-                ],
-            ]
-        ];
-        return $data;
-    }
-
-    /**
-     * 获取成功的短信内容
-     * @param string $activity_name 活动名称
-     * @return string 短信内容
-     */
-    private function fetchSuccessSmsData($activity_name) {
-        //获取通过的短信模板
-        return "恭喜，你报名的“{$activity_name}”活动已通过筛选。活动地点等详细信息将在活动微信群中和大家沟通。请您按以下操作步骤加入活动微信群：进入Someet活动平台（服务号ID：SomeetInc）——点击屏幕下栏“我”——进入相应活动页面——点击微信群组——扫描二维码加入活动群。期待与您共同玩耍，系统短信，请勿回复。";
-    }
-    /**
-     * 获取等待的短信内容
-     * @param string $activity_name 活动名称
-     * @return string 等待的短信内容
-     */
-    private function fetchWaitSmsData($activity_name) {
-        //获取拒绝的短信模板
-        return "你好，你报名的“{$activity_name}”活动，发起人正在筛选中，我们将会在24小时内短信给您最终筛选结果，请耐心等待。谢谢您的支持，系统短信，请勿回复。";
-    }
-    /**
-     * 获取失败的短信内容
-     * @param string $activity_name 活动名称
-     * @return string 失败的短信内容
-     */
-    private function fetchFailSmsData($activity_name) {
-        //获取拒绝的短信模板
-        return "Shit happens!很抱歉你报名的“ {$activity_name}”活动未通过筛选。你可添加官方客服Someet小海豹（微信ID：someetxhb）随时与我们联系。期待下次活动和你相遇。系统短信，请勿回复。";
-    }
-
-    /**
-     * 获取通知参加活动的短信内容
-     * @param string $activity_name 活动名称
-     * @return string 通知参加活动的短信内容
-     */
-    private function fetchNotiSmsData($activity_name, $start_time, $weather) {
-        //获取通知参加活动的短信
-        return "你报名的活动“{$activity_name}”在今天的{$start_time}开始。{$weather}请合理安排时间出行，不要迟到哦。";
-    }
 
     /**
      * 发送审核通知
@@ -291,7 +47,7 @@ class CronController  extends \yii\console\Controller
                 $mobile = $answer['user']['mobile'];
 
                 //设置默认的短信为等待的短信内容
-                $smsData = $this->fetchWaitSmsData($answer['activity']['title']);
+                $smsData = notificationTemplate::fetchWaitSmsData($answer['activity']['title']);
                 //判断状态是通过
                 if (Answer::STATUS_REVIEW_PASS == $answer['status']) {
 
@@ -307,10 +63,10 @@ class CronController  extends \yii\console\Controller
                         Yii::error("活动id为: {$answer['activity']['id']} 的活动没有设置pma, 或者对应pma的微信id为空");
                     }
                     //获取通过的短信内容
-                    $smsData = $this->fetchSuccessSmsData($answer['activity']['title']);
+                    $smsData = notificationTemplate::fetchSuccessSmsData($answer['activity']['title']);
                 } elseif (Answer::STATUS_REVIEW_REJECT == $answer['status']) {
                     //获取不通过的短信内容
-                    $smsData = $this->fetchFailSmsData($answer['activity']['title']);
+                    $smsData = notificationTemplate::fetchFailSmsData($answer['activity']['title']);
                 }
 
                 $mixedData = [
@@ -340,14 +96,14 @@ class CronController  extends \yii\console\Controller
                     $openid = $account->client_id;
 
                     //设置模板消息默认为等待的模板消息内容
-                    $templateData = $this->fetchWaitWechatTemplateData($openid, $answer['activity']);
+                    $templateData = notificationTemplate::fetchWaitWechatTemplateData($openid, $answer['activity']);
                     //如果通过
                     if (Answer::STATUS_REVIEW_PASS == $answer['status']) {
                         //获取通过的模板消息内容
-                        $templateData = $this->fetchSuccessWechatTemplateData($openid, $answer['user'], $answer['activity']);
+                        $templateData = notificationTemplate::fetchSuccessWechatTemplateData($openid, $answer['user'], $answer['activity']);
                     } elseif (Answer::STATUS_REVIEW_REJECT == $answer['status']) {
                         //获取不通过的模板消息内容
-                        $templateData = $this->fetchFailedWechatTemplateData($openid, $answer['user'], $answer['activity']);
+                        $templateData = notificationTemplate::fetchFailedWechatTemplateData($openid, $answer['user'], $answer['activity']);
                     }
 
                     $wechat_template = Yii::$app->beanstalk->putInTube('wechat', ['templateData' => $templateData, 'answer' => $answer]);
@@ -422,7 +178,7 @@ class CronController  extends \yii\console\Controller
                 $mobile = $answer['user']['mobile'];
 
                 //设置默认的短信为等待的短信内容
-                $smsData = $this->fetchNotiSmsData($answer['activity']['title'], date('H:i', $answer['activity']['start_time']), $weather);
+                $smsData = notificationTemplate::fetchNotiSmsData($answer['activity']['title'], date('H:i', $answer['activity']['start_time']), $weather);
 
                 $mixedData = [
                     'mobile' => $mobile,
@@ -454,7 +210,7 @@ class CronController  extends \yii\console\Controller
                     $openid = $account->client_id;
 
                     //设置模板消息默认为等待的模板消息内容
-                    $templateData = $this->fetchNotiWechatTemplateData($openid, $answer['activity']);
+                    $templateData = notificationTemplate::fetchNotiWechatTemplateData($openid, $answer['activity']);
 
                     $wechat_template = Yii::$app->beanstalk->putInTube('notiwechat', ['templateData' => $templateData, 'answer' => $answer]);
                     if (!$wechat_template) {
