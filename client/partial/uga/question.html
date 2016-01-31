@@ -1,0 +1,23 @@
+<div layout="column" flex id="content" class="container" style="font-size:18px;">
+
+<div class="list-group">
+  <a href="#" class="list-group-item active">
+    Cras justo odio
+  </a>
+  <div ng-repeat="entity in list">
+  	<a href="#/uga-answer-list/{{entity.id}}" class="list-group-item">
+  	<div class="row">
+  		<div class="col-md-8">
+  			{{entity.content}}
+  		</div>
+  		<div class="col-md-2">
+  			回答：{{entity.anwers_num}}
+  		</div>
+  		<div class="col-md-2">
+  			点赞：{{entity.praise_num}}
+  		</div>
+  	</div>
+  	</a>
+  </div>
+</div>
+</div>

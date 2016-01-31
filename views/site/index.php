@@ -47,6 +47,9 @@ use yii\helpers\Url;
           </li>
           <li ng-class="{active:isActive('/member')}">
             <a href="#/member">联系人</a>
+          </li>          
+          <li ng-class="{active:isActive('/uga')}">
+            <a href="#/uga">UGA问题系统</a>
           </li>
         </ul>
 

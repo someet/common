@@ -40,7 +40,10 @@ class UgaQuestionController extends \yii\web\Controller
 
         //查询出有多少个赞和多少个回答
         $question = UgaQuestion::find()
+        			->with(['answerList'])
+        			->asArray()
         			->all();
+
         return $question;
     }
 

@@ -7,7 +7,22 @@ function($routeProvider) {
       templateUrl: '/partial/dashboard.html',
       controller: 'DashboardCtrl'
     })
+    //uga数据统计
+    .when('/uga',{
+      templateUrl: '/partial/uga/index.html',
+      controller :'UgaCtrl'
+    })    
+    //uga问题列表
+    .when('/uga-question-list',{
+      templateUrl: '/partial/uga/question.html',
+      controller :'UgaQuestionListCtrl'
+    })    
 
+    //uga回答列表
+    .when('/uga-answer-list/:id',{
+      templateUrl: '/partial/uga/answer.html',
+      controller :'UgaAnswerListCtrl'
+    })
     //活动类型列表
     .when('/activity-type', {
       templateUrl: '/partial/activity-type/index.html',
