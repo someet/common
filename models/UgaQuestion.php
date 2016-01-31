@@ -64,4 +64,16 @@ class UgaQuestion extends \yii\db\ActiveRecord
             'status' => 'Status',
         ];
     }
+
+    // 回答列表
+    public function getAnswerList()
+    {
+        return $this->hasMany(UgaAnswer::className(), ['question_id' => 'id']);
+    }
+
+    // 用户
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
 }
