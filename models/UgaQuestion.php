@@ -20,10 +20,14 @@ class UgaQuestion extends \yii\db\ActiveRecord
 {
     
     /* 是官方  */
-    const OFFICIAL_IS = 1;
-     /* 不是官方 */
+    const OFFICIAL_IS = 10;
+     /* 民间 */
     const OFFICIAL_NO = 0;
-        /* 删除 */
+     /* 民间公开库 */
+    const FOLK_PUBLICK = 1;
+     /* 民间私有库 */
+    const FOLK_PRIVATE = 2;
+    /* 删除 */
     const STATUS_DELETED = 0;
     /* 正常 */
     const STATUS_NORMAL = 1;
