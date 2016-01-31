@@ -20,21 +20,43 @@ class UgaAnswerController extends \yii\web\Controller
     	Yii::$app->response->format = Response::FORMAT_JSON;
 
         //查询答案列表，带上被赞的数量
-        $answerList = UgaAnswer::find()
-        			->where(['question_id'=>$question_id])
-        			->all();
+        $answerList = UgaQuestion::find()
+        			->with(['answerList','answerList.user','answerList.user.profile'])
+        			->where(['id'=>$question_id])
+        			->andWhere(['status'=>UgaQuestion::STATUS_NORMAL])
+        			->asArray()
+        			->one();
 
         return $answerList;
     }
 
     /**
      * 审核答案
-     * @param int $delete 1|0 删除|恢复
+     * @param int $id 1|0 删除|恢复
      */
-    public function actionReview($delete)
+    public function actionDelete($id,$status)
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         //状态 = $delete ? 0 : 1;
         //更新答案的状态
+        if (empty($id)) {
+
+        	return 'id不存在';
+        }
+
+        $model = UgaAnswer::findOne($id);
+      	if(UgaAnswer::STATUS_DELETED == $status ){
+        	$model->status = UgaAnswer::STATUS_DELETED;
+      	}elseif (UgaAnswer::STATUS_NORMAL == $status) {
+        	$model->status = UgaAnswer::STATUS_DELETED;
+      	}
+        if ($model->save() === false) {
+            throw new ServerErrorHttpException('删除失败');
+        }
+        \someet\common\models\AdminLog::saveLog('删除活动', $model->primaryKey);
+
+        return [];
+    
     }
 
 }

@@ -4,6 +4,8 @@ namespace app\controllers;
 use yii\web\Response;
 use Yii;
 use someet\common\models\UgaQuestion;
+use yii\data\Pagination;
+
 /**
 *	Uga问题系统控制器
 *
@@ -31,20 +33,66 @@ class UgaQuestionController extends \yii\web\Controller
      * 获取所有的问题列表
      * @param int $order ups|times 按赞|间
      */
-    public function actionList($order)
+    public function actionList($id = null, $is_official=10,$order = 'id', $perPage = 20, $scenario = null)
     {
 
     	Yii::$app->response->format = Response::FORMAT_JSON;
         //分页查询所有的问题，两种排序方式，按时间或者按赞降序
+        if ( 10 == $is_official || 0 == $is_official || 2 == $is_official || 1 == $is_official) {
+            
+            //官方问题
+            $officialQuestion = UgaQuestion::find()
+            			->with(['answerList'])
+                        ->where(['is_official'=>$is_official])
+                        ->orderBy([$order => SORT_DESC])
+            			->asArray();
+            			// ->all();
 
 
-        //查询出有多少个赞和多少个回答
-        $question = UgaQuestion::find()
-        			->with(['answerList'])
-        			->asArray()
-        			->all();
+            // print_r($officialQuestions);
+            if ($id) {
+                $officialQuestion = UgaQuestion::find()
+                            ->with(['answerList'])
+                            ->where(['id' => $id])
+                            ->andWhere(['is_official'=>$is_official])
+                            ->orderBy([$order => SORT_DESC])
+                            ->asArray()
+                            ->one();
 
-        return $question;
+
+            } elseif ($scenario == "total") {
+
+                $countOfficialQuestion = clone $officialQuestion;
+                $pagination = new Pagination([
+                        'totalCount' => $countOfficialQuestion->count(),
+                        'pageSize' => $perPage
+                    ]);
+                return $pagination->totalCount;
+
+            } elseif ($scenario == "page") {
+                $countOfficialQuestion = clone $officialQuestion;
+                $pagination = new Pagination([
+                    'totalCount' => $countOfficialQuestion->count(),
+                    'pageSize' => $perPage
+                ]);
+
+                $officialQuestions = $officialQuestion->offset($pagination->offset)
+                    ->limit($pagination->limit)
+                    ->all();
+                foreach($officialQuestions as $key => $officialQuestion) {
+                    $officialQuestions[$key]['preview_url'] = Yii::$app->params['domain'].'preview/'.$officialQuestion['id'];
+                    $officialQuestions[$key]['filter_url'] = Yii::$app->params['domain'].'filter/'.$officialQuestion['id'];
+
+                }
+
+                return $officialQuestions;
+            }
+
+
+
+        }else {
+            return '参数不正确';
+        }
     }
 
     /**

@@ -1,25 +1,54 @@
 <div layout="column" flex id="content" class="container" style="font-size:18px;">
-<div class="page-header">
-  <h1>UGA问答 民间问题 <small>Subtext for header</small></h1>
-</div>
-<div class="list-group">
-  <a href="#" class="list-group-item active">
-    Cras justo odio
-  </a>
-  <div ng-repeat="entity in list">
-  	<a href="{{entity.id}}" class="list-group-item">
-  	<div class="row">
-  		<div class="col-md-8">
-  			{{entity.content}}
-  		</div>
-  		<div class="col-md-2">
-  			{{entity.praise}}
-  		</div>
-  		<div class="col-md-2">
+    <div class="page-header" layout-align='right'>
+        <div class="row">
+            <div class="col-md-4">
+                <h1>UGA问答 民间问题 </h1>
+            </div>
+            <div class="col-md-8 text-right">
+                <div class="btn-group text-right" role="group" aria-label="...">
+                    <button type="button" class="btn btn-default">还原</button>
+                    <button type="button" class="btn btn-default">删除</button>
+                    <a href="#/uga-question-list" target="_blank" type="button" class="btn btn-default">返回</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="list-group">
+        <div class="list-group-item active">
+            <div class="row">
+                <div class="col-md-8">
+                    #{{list.id}} {{list.content}}
+                </div>
+                <div class="col-md-2">
+                    回答{{list.answer_num}}
+                </div>
+                <div class="col-md-2">
+                    点赞{{list.praise_num}}
+                </div>
+            </div>
+        </div>
+        <div ng-repeat="entity in list.answerList">
+            <div  class="list-group-item">
+                <div class="row">
+                    <div class="col-md-2">
+                        <img width="60" height="60" src="{{entity.user.profile.headimgurl}}" alt=""> {{entity.user.username}}
+                    </div>
+                    <div class="col-md-6">
+                      <del ng-if="entity.status == 0">  {{entity.content}} </del>
+                      <span ng-if="entity.status == 1">  {{entity.content}} </span>
+                    </div>
+                    <div class="col-md-1">
+                        {{entity.praise}}
+                    </div>
+                    <div class="col-md-3">
+                        <div class="btn-group text-right" role="group" aria-label="...">
+                            <button type="button" class="btn btn-default" ng-click="delete(entity,1)">还原</button>
+                            <button type="button" class="btn btn-default" ng-click="delete(entity,0)">删除</button>
 
-  		</div>
-  	</div>
-  	</a>
-  </div>
-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
