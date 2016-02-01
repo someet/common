@@ -79,16 +79,8 @@ class UgaQuestionController extends \yii\web\Controller
                 $officialQuestions = $officialQuestion->offset($pagination->offset)
                     ->limit($pagination->limit)
                     ->all();
-                foreach($officialQuestions as $key => $officialQuestion) {
-                    $officialQuestions[$key]['preview_url'] = Yii::$app->params['domain'].'preview/'.$officialQuestion['id'];
-                    $officialQuestions[$key]['filter_url'] = Yii::$app->params['domain'].'filter/'.$officialQuestion['id'];
-
-                }
-
                 return $officialQuestions;
             }
-
-
 
         }else {
             return '参数不正确';
@@ -99,20 +91,54 @@ class UgaQuestionController extends \yii\web\Controller
      * 审核问题
      * @param int $delete 1|0 删除|恢复
      */
-    public function actionReview($delete)
+    public function actionReview($id,$status)
     {
-        //状态 = $delete ? 0 : 1;
-        //更新问题的状态
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        if (empty($id) && empty($status)) {
+            return '参数不正确';
+        }
+        
+        $model = UgaQuestion::findOne($id);
+
+        if(UgaQuestion::STATUS_DELETED == $status ){
+            $model->status = UgaQuestion::STATUS_DELETED;
+        }elseif (UgaQuestion::STATUS_NORMAL == $status) {
+            $model->status = UgaQuestion::STATUS_NORMAL;
+        }
+        if ($model->save() === false) {
+            throw new ServerErrorHttpException('删除失败');
+        }
+        \someet\common\models\AdminLog::saveLog('删除活动', $model->primaryKey);
+
+        return [];
     }
 
     /**
      * 放入公共库
      * @param int $open 1|0 公共库|私有库
      */
-    public function actionPublic($open)
+    public function actionPublic($id,$open)
     {
         //状态 = $open ? 1 : 0;
-        //更新问题的状态
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        if (empty($id) && empty($open)) {
+            return '参数不存在';
+        }
+
+        $model = UgaQuestion::findOne($id);
+
+        if(UgaQuestion::FOLK_PUBLICK == $open ){
+            $model->is_official = UgaQuestion::FOLK_PUBLICK;
+        }elseif (UgaQuestion::FOLK_PRIVATE == $open) {
+            $model->is_official = UgaQuestion::FOLK_PRIVATE;
+        }
+        if ($model->save() === false) {
+            throw new ServerErrorHttpException('放入公共库');
+        }
+        \someet\common\models\AdminLog::saveLog('移除公共库', $model->primaryKey);
+
+        return [];
     }
 
 }

@@ -12,7 +12,7 @@ use Yii;
  * @property string $content
  * @property integer $is_official
  * @property integer $praise_num
- * @property integer $anwers_num
+ * @property integer $answer_num
  * @property integer $created_at
  * @property integer $status
  */
@@ -47,7 +47,7 @@ class UgaQuestion extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'is_official', 'praise_num', 'anwers_num', 'created_at', 'status'], 'integer'],
+            [['user_id', 'is_official', 'praise_num', 'answer_num', 'created_at', 'status'], 'integer'],
             [['content'], 'string', 'max' => 190]
         ];
     }
@@ -63,7 +63,7 @@ class UgaQuestion extends \yii\db\ActiveRecord
             'content' => 'Content',
             'is_official' => 'Is Official',
             'praise_num' => 'Praise Num',
-            'anwers_num' => 'Anwers Num',
+            'answer_num' => 'Answer Num',
             'created_at' => 'Created At',
             'status' => 'Status',
         ];

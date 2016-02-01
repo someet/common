@@ -5,6 +5,7 @@
                 <div class="col-md-4">
                     UGA 问答
                     <span ng-if="is_official == 0">民间问题</span>
+                    <span ng-if="is_official == 1">民间公开库</span>
                     <span ng-if="is_official == 10">官方问题</span>
                 </div>
                 <div class="col-md-8 text-right">
@@ -14,7 +15,7 @@
             <div class="row">
                 <div class="col-md-offset-8 text-right">
                     <div class="btn-group" role="group" aria-label="...">
-                        <button type="button" class="btn btn-default btn-xs" ng-click="viewPublic(1)">只看公众库</button>
+                    <button ng-if="is_official == 0 || is_official == 1" type="button" class="btn btn-default btn-xs" ng-click="viewPublic(1)">只看公众库</button>
                         <button type="button" class="btn btn-default btn-xs" ng-click="order('created_at')">按时间排序</button>
                         <button type="button" class="btn btn-default btn-xs" ng-click="order('praise_num')">按赞排序</button>
                     </div>
@@ -24,7 +25,7 @@
         <div ng-repeat="entity in list">
             <a href="#/uga-answer-list/{{entity.id}}" target="_blank" class="list-group-item">
                 <div class="row">
-                    <del ng-if="entity.status == 10">
+                    <del ng-if="entity.status == 0">
                         <del class="col-md-8">
                             #{{entity.id}}{{entity.content}}
                         </del>

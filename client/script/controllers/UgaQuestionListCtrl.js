@@ -5,7 +5,7 @@ angular.module('controllers').controller('UgaQuestionListCtrl', [
         $scope.is_official = $routeParams.is_official;
 
     	// 初始化活动列表
-    	normalPagination($scope.is_official,0)
+    	normalPagination($scope.is_official)
 
         // $ugaManage.fetch($scope.is_official).then(function(data) {
         //     $scope.list = data;
@@ -15,21 +15,14 @@ angular.module('controllers').controller('UgaQuestionListCtrl', [
 
         // 排序
         $scope.order = function(order) {
-            $ugaManage.fetch($scope.is_official, order).then(function(data) {
-                $scope.list = data;
-            }, function(err) {
-                alert(err)
-            })
+			$scope.orderBy = order;
+            fetchPage($scope.is_official, 1,$scope.orderBy);
         }
 
         // 只看公开库
         $scope.viewPublic = function(is_official) {
             $scope.is_official = is_official;
-            $ugaManage.fetch($scope.is_official).then(function(data) {
-                $scope.list = data;
-            }, function(err) {
-                alert(err)
-            })
+			fetchPage($scope.is_official, 1,$scope.orderBy);
         }
 
         function normalPagination(type) {
@@ -58,19 +51,19 @@ angular.module('controllers').controller('UgaQuestionListCtrl', [
             if (page < 1) {
                 page = 1;
             }
-            fetchPage($scope.is_official, page);
+            fetchPage($scope.is_official, page ,$scope.orderBy = order);
         }
         $scope.next = function(type) {
             var page = $scope.modelPagination.currentPage + 1;
             if (page > $scope.modelPagination.totalItems) {
                 page = $scope.modelPagination.totalItems;
             }
-            fetchPage($scope.is_official, page);
+            fetchPage($scope.is_official, page ,$scope.orderBy = order);
         }
 
         // 分页
-        function fetchPage(type, page) {
-            $ugaManage.fetchPage(type, page).then(function(data) {
+        function fetchPage(type, page, order) {
+            $ugaManage.fetchPage(type, page , order).then(function(data) {
                 $scope.list = data;
                 $scope.modelPagination.currentPage = page;
                 //纯js分页

@@ -65,4 +65,10 @@ class UgaAnswer extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
+    // 问题
+    public function getQuestion()
+    {
+        return $this->hasMany(UgaQuestion::className(), ['id' => 'question_id']);
+    }
 }

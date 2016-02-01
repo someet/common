@@ -13,5 +13,39 @@ angular.module('backendServices')
                     return data;
                 });
             },
+            order: function(order) {
+                if (order == null) {
+                    var orderBy = '&order=id';
+                } else {
+                    var orderBy = '&order=' + order;
+                }
+                var url = '/uga-answer/list?question_id=' + question_id + orderBy;
+                return $http.get(url).then(function(data) {
+                    console.log(data);
+                    return data;
+                })
+            },
+            ugaPageMeta: function(question_id,pageNum) {
+                return $http.get('/uga-answer/list?question_id='+ question_id +'&scenario=total&perPage=' + pageNum ).then(function(data) {
+                    return data;
+                });
+            },
+            fetchPage: function(question_id, page, order) {
+                page = page || 1;
+                order = order || 'id';
+                var params = {
+                    'question_id':question_id,
+                    'order':order,
+                    'page': page,
+                    'perPage': 3 //每页20条
+                };
+
+                return $http.get('/uga-answer/list?scenario=page', {
+                    params: params
+                }).then(function(data) {
+                    return data;
+                });
+
+            },
         };
     }])
