@@ -12,6 +12,33 @@ use yii\data\Pagination;
 */
 class UgaQuestionController extends \yii\web\Controller
 {
+
+    /**
+     * 添加一个Uga问题
+     * @return mixed
+     * @throws DataValidationFailedException
+     * @throws ServerErrorHttpException
+     */
+    public function actionCreate()
+    {
+        $request = Yii::$app->getRequest();
+        $response = Yii::$app->getResponse();
+        $response->format = Response::FORMAT_JSON;
+
+        $data = $request->post();
+        $model = new UgaQuestion();
+
+        if ($model->load($data, '') && $model->save()) {
+            // 保存操作记录
+            \someet\common\models\AdminLog::saveLog('添加Uga问题', $model->primaryKey);
+            return UgaQuestion::findOne($model->id);
+        } elseif ($model->hasErrors()) {
+            $errors = $model->getFirstErrors();
+            throw new DataValidationFailedException(array_pop($errors));
+        } else {
+            throw new ServerErrorHttpException();
+        }
+    }
 	/**
      * 首页获取问题的项
      */

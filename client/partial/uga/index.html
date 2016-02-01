@@ -28,9 +28,6 @@
                 <a class="btn btn-info btn-float-right" href='/#/uga-question-list?is_official=10' target="_blank">问题管理</a>
 
                 </div>
-                <div class="panel-body">
-                    <p>...</p>
-                </div>
                 <!-- List group -->
                 <ul class="list-group" >
                     <li class="list-group-item" ng-repeat="entity in officialList">{{entity.content}}</li>
@@ -47,22 +44,11 @@
                 <a class="btn btn-info btn-float-right" href='/#/uga-question-list?is_official=0' target="_blank">问题管理</a>
 
                 </div>
-                <div class="panel-body">
-                    <p>...</p>
-                </div>
                 <!-- List group -->
                 <ul class="list-group">
                     <li class="list-group-item" ng-repeat="entity in folkList">{{entity.content}}</li>
                 </ul>
             </div>
-        </div>
-    </div>
-    <div layout="row" layout-md="column" layout-margin>
-        <div flex>
-            I'm above on mobile, and to the left on larger devices.
-        </div>
-        <div flex>
-            I'm below on mobile, and to the right on larger devices.
         </div>
     </div>
 </div>

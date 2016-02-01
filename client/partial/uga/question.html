@@ -9,7 +9,7 @@
                     <span ng-if="is_official == 10">官方问题</span>
                 </div>
                 <div class="col-md-8 text-right">
-                    <button type="button" class="btn btn-info">新建问题</button>
+                    <button type="button" class="btn btn-info" ng-click="createQuestion()">新建问题</button>
                 </div>
             </div>
             <div class="row">
@@ -27,24 +27,30 @@
                 <div class="row">
                     <del ng-if="entity.status == 0">
                         <del class="col-md-8">
-                            #{{entity.id}}{{entity.content}}
+                            #{{entity.id}} &nbsp; {{entity.content}}
                         </del>
-                        <del class="col-md-2">
+                        <del class="col-md-1">
                             回答：{{entity.answer_num}}
                         </del>
-                        <del class="col-md-2">
+                        <del class="col-md-1">
                             点赞：{{entity.praise_num}}
+                        </del>
+                        <del class="col-md-2">
+                            <button class="btn-success" ng-click="resume(entity)">恢复</button>
                         </del>
                     </del>
                     <div ng-if="entity.status == 1">
                         <div class="col-md-8">
-                            #{{entity.id}}{{entity.content}}
+                            #{{entity.id}} &nbsp; {{entity.content}}
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                             回答：{{entity.answer_num}}
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                             点赞：{{entity.praise_num}}
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn-success" ng-click="delete(entity)">删除</button>
                         </div>
                     </div>
                 </div>

@@ -1,8 +1,65 @@
 angular.module('controllers').controller('UgaQuestionListCtrl', [
-    '$scope', '$ugaManage', '$routeParams',
-    function($scope, $ugaManage, $routeParams) {
+    '$scope', '$ugaManage', '$routeParams', '$location', '$mdToast',
+    function($scope, $ugaManage, $routeParams, $location, $mdToast) {
 
         $scope.is_official = $routeParams.is_official;
+
+        // 删除一个Uga问题
+        $scope.delete = function(entity) {
+            var newEntity = entity;
+            newEntity.status = 0;
+            $ugaManage.update(newEntity.id, newEntity).then(function (data) {
+                $mdToast.show($mdToast.simple()
+                .content('活动Uga问题更新成功')
+                .hideDelay(5000)
+                .position("top right"));
+                $location.path('/uga-question-list');
+            }, function (err) {
+                $mdToast.show($mdToast.simple()
+                .content(err.toString())
+                .hideDelay(5000)
+                .position("top right"));
+            });
+        }
+        // 保存一个Uga问题
+        $scope.save = function() {
+                var newEntity = $scope.entity;
+                if (newEntity.id > 0) { // 更新一个Uga问题
+                    $ugaManage.update(newEntity.id, newEntity).then(function(data) {
+                        $mdToast.show($mdToast.simple()
+                          .content('活动Uga问题更新成功')
+                          .hideDelay(5000)
+                          .position("top right"));
+                         $location.path('/uga-question-list');
+                    }, function(err) {
+                        $mdToast.show($mdToast.simple()
+                          .content(err.toString())
+                          .hideDelay(5000)
+                          .position("top right"));
+                    });
+                } else { // 添加一个Uga问题
+                    newEntity.status = 1;
+                    newEntity.is_official = $scope.is_official;
+                    $ugaManage.create(newEntity).then(function(data) {
+                        console.log('/uga-question-list?is_official='+$scope.is_official);
+                        $location.path('/uga-question-list?is_official='+$scope.is_official);
+                        $mdToast.show($mdToast.simple()
+                          .content('Uga问题添加成功')
+                          .hideDelay(5000)
+                          .position("top right"));
+                    }, function(err) {
+                        $mdToast.show($mdToast.simple()
+                          .content(err.toString())
+                          .hideDelay(5000)
+                          .position("top right"));
+                    });
+                }
+        };
+
+        // 跳转到创建一个问题的页面
+        $scope.createQuestion = function() {
+            $location.path('/uga-question/add');
+        }
 
     	// 初始化活动列表
     	normalPagination($scope.is_official)

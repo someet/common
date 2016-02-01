@@ -1,6 +1,11 @@
 angular.module('backendServices')
     .factory('$ugaManage', ['$http', '$q', '$rootScope', function($http, $q, $rootScope) {
         return {
+            create: function (newEntity) {
+                return $http.post('/uga-question/create', newEntity).then(function (data) {
+                    return data;
+                });
+            },
             fetch: function(is_official, order) {
                 if (order == null) {
                     var orderBy = '&order=id';
@@ -8,7 +13,7 @@ angular.module('backendServices')
                     var orderBy = '&order=' + order;
                 }
                 console.log(orderBy);
-                var url = '/uga-question/list?is_official=' + is_official + orderBy;
+                var url = '/uga-question/list?scenario=page&order=id&page=1&perPage=10&is_official=' + is_official + orderBy;
 
                 return $http.get(url).then(function(data) {
                     console.log(data);

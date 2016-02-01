@@ -16,8 +16,12 @@ function($routeProvider) {
     .when('/uga-question-list',{
       templateUrl: '/partial/uga/question.html',
       controller :'UgaQuestionListCtrl'
-    })    
-
+    })
+    //添加UGA问题
+    .when('/uga-question/add', {
+      templateUrl: '/partial/uga/questionview.html',
+      controller: 'UgaQuestionListCtrl'
+    })
     //uga回答列表
     .when('/uga-answer-list/:id',{
       templateUrl: '/partial/uga/answer.html',
@@ -43,7 +47,6 @@ function($routeProvider) {
       templateUrl: '/partial/activity-tag/index.html',
       controller: 'ActivityTagCtrl'
     })
-
     //添加活动标签
     .when('/activity-tag/add', {
       templateUrl: '/partial/activity-tag/view.html',
