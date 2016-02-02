@@ -12,6 +12,25 @@ use yii\data\Pagination;
 */
 class UgaAnswerController extends \yii\web\Controller
 {
+    public function behaviors()
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'index' => ['get'],
+                    'create' => ['post'],
+                    'update' => ['post'],
+                    'delete' => ['post'],
+                    'view' => ['get'],
+                ],
+            ],
+            'access' => [
+                'class' => '\app\components\AccessControl',
+            ],
+        ];
+    }
+
 	/**
 	* @param $question_id 问题id
 	* @param $scenario 判断是否分页

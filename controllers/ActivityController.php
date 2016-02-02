@@ -50,10 +50,6 @@ class ActivityController extends BackendController
             ],
             'access' => [
                 'class' => '\app\components\AccessControl',
-                'allowActions' => [
-                    'list-by-type-id',
-                    'search',
-                ]
             ],
         ];
     }

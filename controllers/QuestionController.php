@@ -41,9 +41,6 @@ class QuestionController extends BackendController
             ],
             'access' => [
                 'class' => '\app\components\AccessControl',
-                'allowActions' => [
-                    'view-by-activity-id',
-                ]
             ],
         ];
     }

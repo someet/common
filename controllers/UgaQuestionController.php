@@ -13,6 +13,25 @@ use yii\data\Pagination;
 class UgaQuestionController extends \yii\web\Controller
 {
 
+    public function behaviors()
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'index' => ['get'],
+                    'create' => ['post'],
+                    'update' => ['post'],
+                    'delete' => ['post'],
+                    'view' => ['get'],
+                ],
+            ],
+            'access' => [
+                'class' => '\app\components\AccessControl',
+            ],
+        ];
+    }
+
     /**
      * 添加一个Uga问题
      * @return mixed

@@ -43,14 +43,6 @@ class MemberController extends BackendController
             ],
             'access' => [
                 'class' => '\app\components\AccessControl',
-                'allowActions' => [
-                    'index',
-                    'search',
-                    'update',
-                    'search-by-auth',
-                    'update-assignment',
-                    'set-user-in-white-list',
-                ]
             ],
         ];
     }
@@ -234,12 +226,15 @@ class MemberController extends BackendController
     public function actionSearch($username) {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $users = User::find()
-            ->where([
-                'status' => User::STATUS_ACTIVE,
-            ])
-            ->andWhere(
+            ->where(
                 ['like', 'username', $username]
             )
+            ->orWhere(
+                ['like', 'mobile', $username]
+            )
+            ->andWhere([
+                'status' => User::STATUS_ACTIVE,
+            ])
             ->with(['profile'])
             ->limit(50)
             ->orderBy(['id' => SORT_DESC])

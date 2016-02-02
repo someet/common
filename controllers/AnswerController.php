@@ -45,14 +45,6 @@ class AnswerController extends BackendController
             ],
             'access' => [
                 'class' => '\app\components\AccessControl',
-                'allowActions' => [
-                    'create',
-                    'view-by-activity-id',
-                    'send-notification',
-                    'filter',//审核
-                    'arrive',//到场情况
-                    'leave'//请假
-                ]
             ],
         ];
     }
