@@ -59,4 +59,16 @@ class UgaAnswer extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
         ];
     }
+
+    // 用户
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    // 问题
+    public function getQuestion()
+    {
+        return $this->hasMany(UgaQuestion::className(), ['id' => 'question_id']);
+    }
 }
