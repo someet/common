@@ -41,9 +41,6 @@ class ActivityTagController extends BackendController
             ],
             'access' => [
                 'class' => '\app\components\AccessControl',
-                'allowActions' => [
-                    'list',
-                ]
             ],
         ];
 

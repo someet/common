@@ -21,6 +21,16 @@ use yii\data\ActiveDataProvider;
  */
 class AdminLogController extends BackendController
 {
+
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => '\app\components\AccessControl',
+            ],
+        ];
+    }
+
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
