@@ -10,7 +10,7 @@ angular.module('controllers').controller('UgaQuestionListCtrl', [
             newEntity.status = 0;
             $ugaManage.update(newEntity.id, newEntity).then(function (data) {
                 $mdToast.show($mdToast.simple()
-                .content('活动Uga问题更新成功')
+                .content('Uga问题更新成功')
                 .hideDelay(5000)
                 .position("top right"));
                 $location.path('/uga-question-list');
@@ -21,16 +21,33 @@ angular.module('controllers').controller('UgaQuestionListCtrl', [
                 .position("top right"));
             });
         }
+        //恢复一个Uga问题
+        $scope.resume = function(entity) {
+            var newEntity = entity;
+            newEntity.status = 1;
+            $ugaManage.update(newEntity.id,newEntity).then(function(data){
+                $mdToast.show($mdToast.simple()
+                  .content('Uga问题恢复成功')
+                  .hideDelay(5000)
+                  .position("top right"));
+                $location.path('/uga-question-list');
+            }, function(err) {
+                $mdToast.show($mdToast.simple()
+                  .content(err.toString())
+                  .hideDelay(5000)
+                  .position("top right"));
+            });
+        }
         // 保存一个Uga问题
         $scope.save = function() {
                 var newEntity = $scope.entity;
                 if (newEntity.id > 0) { // 更新一个Uga问题
                     $ugaManage.update(newEntity.id, newEntity).then(function(data) {
                         $mdToast.show($mdToast.simple()
-                          .content('活动Uga问题更新成功')
+                          .content('Uga问题更新成功')
                           .hideDelay(5000)
                           .position("top right"));
-                         $location.path('/uga-question-list');
+                         $location.path('/uga-question-list?is_official='+$scope.is_official);
                     }, function(err) {
                         $mdToast.show($mdToast.simple()
                           .content(err.toString())
@@ -41,8 +58,7 @@ angular.module('controllers').controller('UgaQuestionListCtrl', [
                     newEntity.status = 1;
                     newEntity.is_official = $scope.is_official;
                     $ugaManage.create(newEntity).then(function(data) {
-                        console.log('/uga-question-list?is_official='+$scope.is_official);
-                        $location.path('/uga-question-list?is_official='+$scope.is_official);
+                        $location.path('/uga-question-list?is_official=' + $scope.is_official);
                         $mdToast.show($mdToast.simple()
                           .content('Uga问题添加成功')
                           .hideDelay(5000)
@@ -87,7 +103,7 @@ angular.module('controllers').controller('UgaQuestionListCtrl', [
                 totalItems: 0,
                 currentPage: 1,
                 maxSize: 5,
-                itemsPerPage: 4, //每页多少条
+                itemsPerPage: 20, //每页多少条
                 pageChange: function() {
                     fetchPage(type, this.currentPage);
                 }

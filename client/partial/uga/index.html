@@ -1,22 +1,17 @@
 <div layout="column" flex id="content" class="container" style="font-size:18px;">
     <div layout="row" layout-padding layout-wrap layout-fill style="padding-bottom: 32px;" ng-cloak>
-        <md-whiteframe class="md-whiteframe-1dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="33" layout layout-align="center center">
-            <span>总问题</span>
+
+        <md-whiteframe class="md-whiteframe-1dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="50" layout layout-align="center center">
+            <span>总问题 {{data.questions}}</span>
         </md-whiteframe>
-        <md-whiteframe class="md-whiteframe-2dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="33" layout layout-align="center center">
-            <span>官方问题</span>
+        <md-whiteframe class="md-whiteframe-4dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="50" layout layout-align="center center">
+            <span>总回答 {{data.answers}}</span>
         </md-whiteframe>
-        <md-whiteframe class="md-whiteframe-3dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="33" layout layout-align="center center">
-            <span>民间问题</span>
+        <md-whiteframe class="md-whiteframe-2dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="50" layout layout-align="center center">
+            <span>官方问题 {{data.officialQuestions}}</span>
         </md-whiteframe>
-        <md-whiteframe class="md-whiteframe-4dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="33" layout layout-align="center center">
-            <span>总回答</span>
-        </md-whiteframe>
-        <md-whiteframe class="md-whiteframe-5dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="33" layout layout-align="center center">
-            <span>回答</span>
-        </md-whiteframe>
-        <md-whiteframe class="md-whiteframe-6dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="33" layout layout-align="center center">
-            <span>回答</span>
+        <md-whiteframe class="md-whiteframe-3dp" flex-sm="45" flex-gt-sm="35" flex-gt-md="50" layout layout-align="center center">
+            <span>民间问题 {{data.notOfficialQuestions}}</span>
         </md-whiteframe>
     </div>
     <div class="row">
@@ -30,7 +25,12 @@
                 </div>
                 <!-- List group -->
                 <ul class="list-group" >
-                    <li class="list-group-item" ng-repeat="entity in officialList">{{entity.content}}</li>
+                    <li class="list-group-item" ng-repeat="entity in data.officialQuestionTop">
+                        <a href="#/uga-answer-list/{{entity.id}}" class="list-group-item">
+                        {{entity.content}} <span style="color:red; display:inline-block; float:right">
+                        回答:{{entity.answer_num}} | 点赞: {{entity.praise_num}}</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -46,7 +46,11 @@
                 </div>
                 <!-- List group -->
                 <ul class="list-group">
-                    <li class="list-group-item" ng-repeat="entity in folkList">{{entity.content}}</li>
+                    <li class="list-group-item" ng-repeat="entity in data.notOfficialQuestionTop">
+                        <a href="#/uga-answer-list/{{entity.id}}" class="list-group-item">
+                          {{entity.content}}  <span style="color:red; display: inline-block; float:right">回答:{{entity.answer_num}} | 点赞: {{entity.praise_num}}</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

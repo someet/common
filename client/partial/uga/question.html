@@ -9,7 +9,7 @@
                     <span ng-if="is_official == 10">官方问题</span>
                 </div>
                 <div class="col-md-8 text-right">
-                    <button ng-if="is_official == 1" type="button" class="btn btn-info" ng-click="createQuestion()">新建问题</button>
+                    <button ng-if="is_official == 10" type="button" class="btn btn-info" ng-click="createQuestion()">新建问题</button>
                 </div>
             </div>
             <div class="row">
@@ -23,7 +23,7 @@
             </div>
         </div>
         <div ng-repeat="entity in list">
-            <a href="#/uga-answer-list/{{entity.id}}" target="_blank" class="list-group-item">
+            <a href="#/uga-answer-list/{{entity.id}}" class="list-group-item">
                 <div class="row">
                     <del ng-if="entity.status == 0">
                         <del class="col-md-8">

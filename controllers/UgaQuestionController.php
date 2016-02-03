@@ -63,7 +63,7 @@ class UgaQuestionController extends \yii\web\Controller
 	/**
      * 首页获取问题的项
      */
-    public function actionFetch()
+    public function actionData()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
@@ -87,6 +87,15 @@ class UgaQuestionController extends \yii\web\Controller
 
         //查看民间问题回答数量最多的10条
         $notOfficialQuestionTop = UgaQuestion::find()->where(['is_official' => UgaQuestion::OFFICIAL_NO])->orderBy(['answer_num' => SORT_DESC])->limit(10)->all();
+
+        return [
+            'questions' => $questions,
+            'officialQuestions' => $officialQuestions,
+            'notOfficialQuestions' => $notOfficialQuestions,
+            'answers' => $answers,
+            'officialQuestionTop' => $officialQuestionTop,
+            'notOfficialQuestionTop' => $notOfficialQuestionTop
+        ];
 
     }
 
@@ -149,6 +158,47 @@ class UgaQuestionController extends \yii\web\Controller
     }
 
     /**
+     * 更新
+     * @param $id
+     * @return mixed
+     * @throws DataValidationFailedException
+     * @throws ServerErrorHttpException
+     */
+    public function actionUpdate($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $model = $this->findModel($id);
+        $data = Yii::$app->getRequest()->post();
+
+        if (isset($data['content'])) {
+            $model->content = $data['content'];
+            if (!$model->validate('content')) {
+                throw new DataValidationFailedException($model->getFirstError('content'));
+            }
+        }
+
+        if (isset($data['is_official'])) {
+            $model->is_official = $data['is_official'];
+            if (!$model->validate('is_official')) {
+                throw new DataValidationFailedException($model->getFirstError('is_official'));
+            }
+        }
+
+        if (isset($data['status'])) {
+            $model->status = $data['status'];
+            if (!$model->validate('status')) {
+                throw new DataValidationFailedException($model->getFirstError('status'));
+            }
+        }
+
+        if (!$model->save()) {
+            throw new ServerErrorHttpException();
+        }
+
+        return $this->findModel($id);
+    }
+
+    /**
      * 审核问题
      * @param int $delete 1|0 删除|恢复
      */
@@ -200,6 +250,24 @@ class UgaQuestionController extends \yii\web\Controller
         \someet\common\models\AdminLog::saveLog('移除公共库', $model->primaryKey);
 
         return [];
+    }
+
+
+    /**
+     * 查找Uga问题
+     * @param integer $id 问题ID
+     * @return Activity 问题对象
+     * @throws NotFoundHttpException 如果没有查找到则抛出404异常
+     */
+    public function findModel($id)
+    {
+        $model = UgaQuestion::findOne($id);
+
+        if (isset($model)) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException("Uga问题不存在");
+        }
     }
 
 }

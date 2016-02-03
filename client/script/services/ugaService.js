@@ -6,13 +6,24 @@ angular.module('backendServices')
                     return data;
                 });
             },
+            update: function (id, newEntity) {
+                return $http.post('/uga-question/update?id=' + id, newEntity).then(function (data) {
+                    return data;
+                });
+            },
+            data: function() {
+                var url = '/uga-question/data';
+
+                return $http.get(url).then(function(data) {
+                    return data;
+                })
+            },
             fetch: function(is_official, order) {
                 if (order == null) {
                     var orderBy = '&order=id';
                 } else {
                     var orderBy = '&order=' + order;
                 }
-                console.log(orderBy);
                 var url = '/uga-question/list?scenario=page&order=id&page=1&perPage=10&is_official=' + is_official + orderBy;
 
                 return $http.get(url).then(function(data) {
@@ -47,7 +58,7 @@ angular.module('backendServices')
                     'order': order,
                     'is_official': type,
                     'page': page,
-                    'perPage': 3 //每页20条
+                    'perPage': 20 //每页20条
                 };
 
                 return $http.get('/uga-question/list?scenario=page', {
