@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 use someet\common\models\UgaAnswer;
+use yii\filters\VerbFilter;
 use yii\web\Response;
 use Yii;
 use someet\common\models\UgaQuestion;
@@ -86,7 +87,7 @@ class UgaQuestionController extends \yii\web\Controller
 
         //查看民间问题回答数量最多的10条
         $notOfficialQuestionTop = UgaQuestion::find()->where(['is_official' => UgaQuestion::OFFICIAL_NO])->orderBy(['answer_num' => SORT_DESC])->limit(10)->all();
-        
+
     }
 
     /**

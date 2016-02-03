@@ -1,6 +1,7 @@
 <?php
 
 namespace app\controllers;
+use yii\filters\VerbFilter;
 use yii\web\Response;
 use Yii;
 use someet\common\models\UgaQuestion;
