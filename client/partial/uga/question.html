@@ -9,7 +9,7 @@
                     <span ng-if="is_official == 10">官方问题</span>
                 </div>
                 <div class="col-md-8 text-right">
-                    <button type="button" class="btn btn-info" ng-click="createQuestion()">新建问题</button>
+                    <button ng-if="is_official == 1" type="button" class="btn btn-info" ng-click="createQuestion()">新建问题</button>
                 </div>
             </div>
             <div class="row">
