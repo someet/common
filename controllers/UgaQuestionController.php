@@ -1,6 +1,7 @@
 <?php
 
 namespace app\controllers;
+use someet\common\models\UgaAnswer;
 use yii\web\Response;
 use Yii;
 use someet\common\models\UgaQuestion;
@@ -63,16 +64,29 @@ class UgaQuestionController extends \yii\web\Controller
      */
     public function actionFetch()
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
         //问题总数
+        $questions = UgaQuestion::find()->count();
+
         //官方问题
+        $officialQuestions = UgaQuestion::find()->where(['is_official' => UgaQuestion::OFFICIAL_IS])->count();
+
         //民间问题 = 问题总数 - 官方总数
+        $notOfficialQuestions = $questions - $officialQuestions;
 
         //回答总数
+        $answers = UgaAnswer::find()->count();
+
         //官方回答
         //民间回答 = 回答总数 - 官方回答
 
         //查询官方问题回答数量最多的10条
+        $officialQuestionTop = UgaQuestion::find()->where(['is_official' => UgaQuestion::OFFICIAL_IS])->orderBy(['answer_num' => SORT_DESC])->limit(10)->all();
+
         //查看民间问题回答数量最多的10条
+        $notOfficialQuestionTop = UgaQuestion::find()->where(['is_official' => UgaQuestion::OFFICIAL_NO])->orderBy(['answer_num' => SORT_DESC])->limit(10)->all();
+        
     }
 
     /**
