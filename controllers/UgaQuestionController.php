@@ -48,6 +48,8 @@ class UgaQuestionController extends \yii\web\Controller
 
         $data = $request->post();
         $model = new UgaQuestion();
+        $data['user_id'] = Yii::$app->getUser()->getId();
+        $data['created_at'] = time();
 
         if ($model->load($data, '') && $model->save()) {
             // 保存操作记录
