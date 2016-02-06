@@ -24,6 +24,7 @@ use Yii;
  * @property integer $arrive_status
  * @property integer $leave_status
  * @property string $leave_msg
+ * @property string $is_feedback
  */
 class Answer extends \yii\db\ActiveRecord
 {
@@ -66,6 +67,11 @@ class Answer extends \yii\db\ActiveRecord
     const STATUS_LEAVE_YET    = 0;
     /* 已请假 */
     const STATUS_LEAVE_YES  = 1;
+
+    /*  已反馈*/
+    const FEEDBACK_IS    = 1;
+    /* 未反馈 */
+    const FEEDBACK_NO  = 0;
 
     /**
      * @inheritdoc
