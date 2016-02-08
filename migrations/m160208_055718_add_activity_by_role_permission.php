@@ -7,38 +7,6 @@ class m160208_055718_add_activity_by_role_permission extends Migration
 {
     public function up()
     {
-
-    }
-
-    public function down()
-    {
-        echo "m160208_055718_add_activity_by_role_permission cannot be reverted.\n";
-
-        return false;
-    }
-
-    /*
-    // Use safeUp/safeDown to run migration code within a transaction
-    public function safeUp()
-    {
-    }
-
-    public function safeDown()
-    {
-    }
-    */
-}
-
-
-<?php
-
-use yii\db\Schema;
-use yii\db\Migration;
-
-class m160208_055718_add_activity_by_role_permission extends Migration
-{
-    public function up()
-    {
         $items = [
             '/mobile/member/activity-by-role' => ['founder'],
             '/mobile/member/activity-by-role' => ['pma'],
