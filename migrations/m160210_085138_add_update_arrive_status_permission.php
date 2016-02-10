@@ -7,36 +7,6 @@ class m160210_085138_add_update_arrive_status_permission extends Migration
 {
     public function up()
     {
-update-arrive-status
-    }
-
-    public function down()
-    {
-        echo "m160210_085138_add_update_arrive_status_permission cannot be reverted.\n";
-
-        return false;
-    }
-
-    /*
-    // Use safeUp/safeDown to run migration code within a transaction
-    public function safeUp()
-    {
-    }
-
-    public function safeDown()
-    {
-    }
-    */
-}
-<?php
-
-use yii\db\Schema;
-use yii\db\Migration;
-
-class m160210_085138_add_update_arrive_status_permission extends Migration
-{
-    public function up()
-    {
         $items = [
             '/mobile/member/update-arrive-status' => ['user'],
         ];
