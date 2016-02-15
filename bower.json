@@ -16,7 +16,7 @@
     "textAngular": "v1.3.0-pre15",
     "bootstrap": "~3.3.5",
     "jquery": "~2.1.4",
-    "angular": "1.4.8",
+    "angular": "1.4.9",
     "moment": "~2.10.6"
   },
   "resolutions": {
