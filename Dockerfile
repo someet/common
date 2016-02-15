@@ -1,4 +1,4 @@
-FROM daocloud.io/someetinc/backend-base:docker-base.0.0.8
+FROM daocloud.io/someetinc/backend-base:docker-base.0.0.9
 
 # Copy the working dir to the image's web root
 COPY . /var/www/html
