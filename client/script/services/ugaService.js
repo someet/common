@@ -53,7 +53,6 @@ angular.module('backendServices')
             fetchPage: function(type, page, order) {
                 page = page || 1;
                 order = order || 'id';
-                console.log(type);
                 var params = {
                     'order': order,
                     'is_official': type,
