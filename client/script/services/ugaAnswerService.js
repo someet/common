@@ -31,13 +31,14 @@ angular.module('backendServices')
                 });
             },
             fetchPage: function(question_id, page, order) {
+                // console.log(222);
                 page = page || 1;
                 order = order || 'id';
                 var params = {
                     'question_id':question_id,
                     'order':order,
                     'page': page,
-                    'perPage': 3 //每页20条
+                    'perPage': 20 //每页20条
                 };
 
                 return $http.get('/uga-answer/list?scenario=page', {

@@ -7,16 +7,22 @@ angular.module('controllers').controller('UgaAnswerListCtrl', [
         // }, function(err) {
         //     alert(err);
         // });
+
+
+        // 初始化按照id排序
         $scope.orderBy = 'id';
+
         normalPagination($scope.question_id, $scope.orderBy);
+
+
         // 排序
         $scope.order = function(order) {
-                $scope.orderBy = order;
-                fetchPage($scope.question_id, 1, $scope.orderBy);
-            }
-            // 删除问题
+                            $scope.orderBy = order;
+                            fetchPage($scope.question_id, 1, $scope.orderBy);
+                        }
+        
+        // 删除问题
         $scope.questionDelete = function(entity, status) {
-                console.log(111);
 
                 if (0 == status) {
                     var confirm = $mdDialog.confirm()
@@ -35,7 +41,6 @@ angular.module('controllers').controller('UgaAnswerListCtrl', [
 
                 $mdDialog.show(confirm).then(function() {
                     $ugaManage.delete(entity.id, status).then(function(data) {
-                        console.log(status);
                         $scope.list.question.status = status;
                         if (0 == status) {
                             $mdToast.show($mdToast.simple()
@@ -57,9 +62,10 @@ angular.module('controllers').controller('UgaAnswerListCtrl', [
                     });
                 });
             }
-            // 放入公开库 移除公开库
+
+
+        // 放入公开库 移除公开库
         $scope.putOpen = function(entity, open) {
-            // console.log(entity.open);
             if (1 == open) {
                 var confirm = $mdDialog.confirm()
                     .title('确定移入公开库吗？')
@@ -90,7 +96,6 @@ angular.module('controllers').controller('UgaAnswerListCtrl', [
 
         // 删除问题的回答
         $scope.delete = function(entity, status) {
-            console.log(entity.status);
             if (0 == status) {
                 var confirm = $mdDialog.confirm()
                     .title('确定要删除“' + entity.content + '”吗？')
@@ -107,7 +112,6 @@ angular.module('controllers').controller('UgaAnswerListCtrl', [
 
             $mdDialog.show(confirm).then(function() {
                 $ugaAnswerManage.delete(entity.id, status).then(function(data) {
-                    console.log(status);
                     entity.status = status;
                     if (0 == status) {
                         $mdToast.show($mdToast.simple()
@@ -126,15 +130,14 @@ angular.module('controllers').controller('UgaAnswerListCtrl', [
         };
 
 
-        function normalPagination(question_id) {
-            console.log(question_id);
+        function normalPagination(question_id,type) {
             $scope.modelPagination = {
                 totalItems: 0,
                 currentPage: 1,
                 maxSize: 5,
-                itemsPerPage: 4, //每页多少条
+                itemsPerPage: 20, //每页多少条
                 pageChange: function() {
-                    fetchPage(type, this.currentPage);
+                    fetchPage(question_id, this.currentPage);
                 }
             };
 
@@ -145,7 +148,8 @@ angular.module('controllers').controller('UgaAnswerListCtrl', [
             $scope.list = fetchPage(question_id, $scope.modelPagination.currentPage);
         }
 
-        $scope.changePage = function(type, page) {
+        $scope.changePage = function(page) {
+            console.log(222);
             fetchPage($scope.question_id, page, $scope.orderBy);
         }
         $scope.prev = function(type) {
@@ -166,7 +170,6 @@ angular.module('controllers').controller('UgaAnswerListCtrl', [
         // 分页
         function fetchPage(question_id, page, order) {
             $ugaAnswerManage.fetchPage(question_id, page, order).then(function(data) {
-                console.log(1111);
                 $scope.list = data;
                 $scope.modelPagination.currentPage = page;
                 //纯js分页
