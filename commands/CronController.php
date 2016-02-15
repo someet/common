@@ -24,12 +24,13 @@ class CronController  extends \yii\console\Controller
 
         // 给活动开始时间大于当前时间的, 审核的用户发短信, 包括通过的, 等待的, 拒绝的
         $answerList = Answer::find()
-            ->where(['answer.is_send' => Answer::STATUS_SMS_YET])
-            ->innerJoin('activity', "activity.start_time > ".time()." and activity.status = ".Activity::STATUS_RELEASE)
+            ->where(['answer.is_send' => Answer::STATUS_SMS_YET, 'activity.status' => Activity::STATUS_RELEASE ])
+            ->andWhere('activity.start_time >'.time())
+            ->innerJoin('activity', 'answer.activity_id =  activity.id')
             ->with(['user', 'activity', 'activity.pma', 'activity.user'])
             ->asArray()
             ->all();
-
+        
         //遍历列表
         foreach($answerList as $answer) {
             //判断报名的用户是否存在
