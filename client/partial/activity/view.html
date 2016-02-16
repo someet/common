@@ -33,6 +33,7 @@
                     <!-- 活动详情 -->
                     <div class="detail-activity" ng-bind-html="entity.details"></div>
 
+
                     <!-- 发起人 -->
                     <div class="detail-host">
                         <label>发起人</label>
@@ -119,14 +120,14 @@
                 活动流程
               </span>
                         </div>
-                        <div class="detail-flow">
-                            {{entity.review}}
+                        <div ng-bind-html="entity.review" class="detail-flow">
+
                         </div>
                         <!-- tips -->
                         <div class="detail-label" style="margin-top:0.6rem;">
                             <span> <i class="icon"><img src="/static/svg/Tips.svg"></i> Tips       
-            <div class="detail-flow">
-                {{ entity.field2 }}
+            <div ng-bind-html="entity.field2"  class="detail-flow">
+
             </div>
         </span>
                         </div>
