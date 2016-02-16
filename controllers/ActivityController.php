@@ -208,19 +208,14 @@ class ActivityController extends BackendController
                             'answerList',
                             'feedbackList'
                         ])
-                    ->join('LEFT JOIN', 'user', 'user.id = activity.created_by or user.id = activity.principal')
+                    ->join('LEFT JOIN', 'user', 'user.id = activity.created_by')
                     ->where(
                         ['like', 'title', $title]
                     )
                     ->orWhere(['like','desc',$title])
                     ->orWhere(['like','content',$title])
                     ->orWhere(['like','user.username',$title]);
-                    // ->limit(50)
-                    // ->orderBy(['id' => SORT_DESC]);
-                    // ->asArray()
-                    // ->all();
-        $activityExists = $activity->exists();  
-        // print_r($activity);        
+        $activityExists = $activity->exists();      
         $countQuery = clone $activity;
         $pages = new Pagination(['totalCount' => $countQuery->count()]);
         $models = $activity->offset($pages->offset)
