@@ -32,6 +32,7 @@ angular.module('controllers', ['ngTagsInput'])
         };
 
         $activityManage.modelPageMeta(type, $scope.modelPagination.itemsPerPage).then(function(total) {
+          console.log(total);
           $scope.modelPagination.totalItems = total;
         });
 
@@ -322,7 +323,12 @@ angular.module('controllers', ['ngTagsInput'])
         var title = $scope.title;
         console.log(title);
         $activityManage.search(title).then(function (activityList) {
-          $scope.list = activityList;
+          if (activityList.status == 1) {
+              $scope.list = activityList.models;
+          }else{
+              $scope.list = '';
+          }
+          console.log(activityList);
         });
       }
 
