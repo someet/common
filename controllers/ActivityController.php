@@ -208,15 +208,39 @@ class ActivityController extends BackendController
                             'answerList',
                             'feedbackList'
                         ])
+                    ->join('LEFT JOIN', 'user', 'user.id = activity.created_by or user.id = activity.principal')
                     ->where(
                         ['like', 'title', $title]
                     )
-                    ->andWhere('start_time > '.getLastEndTime())
-                    ->limit(50)
-                    ->orderBy(['id' => SORT_DESC])
-                    ->asArray()
-                    ->all();
-        return $activity;
+                    ->orWhere(['like','desc',$title])
+                    ->orWhere(['like','content',$title])
+                    ->orWhere(['like','user.username',$title]);
+                    // ->limit(50)
+                    // ->orderBy(['id' => SORT_DESC]);
+                    // ->asArray()
+                    // ->all();
+        $activityExists = $activity->exists();  
+        // print_r($activity);        
+        $countQuery = clone $activity;
+        $pages = new Pagination(['totalCount' => $countQuery->count()]);
+        $models = $activity->offset($pages->offset)
+            ->limit($pages->limit)
+            ->asArray()
+            ->all();
+
+        if ($activityExists) {
+            return [
+                'status' => 1,
+                'models' => $models,
+                'pages' => $pages,
+            ];
+        }else{
+            return [
+                'status' => 0,
+            ];
+        }
+
+
     }
     /**
      * 根据活动类型查询活动列表
