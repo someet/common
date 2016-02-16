@@ -60,7 +60,7 @@ angular.module('backendServices')
             'type': type,
             'page': page,
             'isWeek': isWeek,
-            'perPage': 3  //每页20条
+            'perPage': 20  //每页20条
           };
 
           return $http.get('/activity?scenario=page', {

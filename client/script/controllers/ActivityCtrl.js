@@ -25,7 +25,7 @@ angular.module('controllers', ['ngTagsInput'])
           currentPage: 1,
           maxSize: 5,
           isWeek: isWeek,
-          itemsPerPage: 3,//每页多少条
+          itemsPerPage: 20,//每页多少条
           pageChange: function() {
             fetchPage(type, this.currentPage, isWeek);
           }
