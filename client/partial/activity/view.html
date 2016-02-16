@@ -32,6 +32,54 @@
                     <div class="divider center"></div>
                     <!-- 活动详情 -->
                     <div class="detail-activity" ng-bind-html="entity.details"></div>
+
+                    <!-- 发起人 -->
+                    <div class="detail-host">
+                        <label>发起人</label>
+                        <div class="hoster">
+                            <div class="name"> <strong>{{entity.user.username}}</strong></div>
+                            <div>
+                                <span>“</span>
+                                <img src="{{entity.user.profile.headimgurl}}" />
+                            </div>
+                        </div>
+                        <div class="description">
+                            {{entity.user.profile.bio}}
+                        </div>
+                    </div>                    
+
+                    <!-- 联合发起人 1-->
+                    <div ng-if="co_founder1" class="detail-host">
+                        <label>联合发起人</label>
+                        <div class="hoster">
+                            <div class="name"> <strong>{{entity.cofounder1.username}}</strong></div>
+                            <div>
+                                <span>“</span>
+                                <img src="{{entity.cofounder1.profile.headimgurl}}" />
+                            </div>
+                        </div>
+                        <div class="description">
+                            {{entity.cofounder1.profile.bio}}
+                        </div>
+                    </div>                   
+
+                     <!-- 联合发起人 2-->
+                    <div ng-if="co_founder2" class="detail-host">
+                        <label>联合发起人</label>
+                        <div class="hoster">
+                            <div class="name"> <strong>{{entity.cofounder2.username}}</strong></div>
+                            <div>
+                                <span>“</span>
+                                <img src="{{entity.cofounder2.profile.headimgurl}}" />
+                            </div>
+                        </div>
+                        <div class="description">
+                            {{entity.cofounder2.profile.bio}}
+                        </div>
+                    </div>
+
+
+
                     <div class="detail-info">
                         <label>活动细节</label>
                         <!-- 时间 -->
@@ -46,7 +94,7 @@
                 {{entity.area}}
               </span>
                         </div>
-                    <!-- 人数限制 -->
+                        <!-- 人数限制 -->
                         <div class="detail-label">
                             <span> <i class="icon"><img src="/static/svg/Participant.svg"></i> 
                 {{entity.field1}}
@@ -63,8 +111,6 @@
                             <span ng-show="entity.cost==0">免费</span>
                             </span>
                         </div>
-
-
                         <!-- 活动流程 -->
                         <div class="detail-label">
                             <span>
