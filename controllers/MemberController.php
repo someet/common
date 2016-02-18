@@ -8,8 +8,6 @@ use someet\common\models\User;
 use Yii;
 use yii\data\Pagination;
 use yii\filters\VerbFilter;
-use yii\web\BadRequestHttpException;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
@@ -23,6 +21,7 @@ use yii\web\ServerErrorHttpException;
  */
 class MemberController extends BackendController
 {
+    //允许CSRF验证关闭
     public $enableCsrfValidation = false;
 
     /**
@@ -49,12 +48,16 @@ class MemberController extends BackendController
 
     /**
      * 更新用户的角色
+     *
      * @param integer $user_id 需要更新的用户ID
      * @param string $role_name 更新的角色名称
      * @param integer $assign_or_not 是赋权还是撤权
+     * @return array
      */
-    public function actionUpdateAssignment($user_id, $role_name, $assign_or_not) {
+    public function actionUpdateAssignment($user_id, $role_name, $assign_or_not)
+    {
         Yii::$app->response->format = Response::FORMAT_JSON;
+
         //参数检查
         if ($user_id<1 || empty($role_name) || !in_array($assign_or_not, [0, 1])) {
             return ['msg' => '参数不正确'];
@@ -75,16 +78,16 @@ class MemberController extends BackendController
         //根据角色名获取对象的角色对象
         $role = $auth->getRole($role_name);
 
-        //判断是否越权操作了
-//        if ($auth->hasChild())
-
         //判断是赋权还是撤权
         if ($assign_or_not) {
+
             //判断当前状态是未赋权的状态再进行赋权, 否则提示已经赋权
             if ($auth->getAssignment($role_name, $user_id)) {
+
                 //提示已经授权, 无需再进行赋权
                 return ['msg' => '该角色已经赋权'];
             }
+
             //如果上面不成立则表示未赋权, 可以尝试进行赋权
             if ($auth->assign($role, $user_id)) {
                 return ['msg' => '更新角色成功'];
@@ -92,16 +95,21 @@ class MemberController extends BackendController
                 return ['msg' => '更新角色失败'];
             }
         } else {
+
             //判断当前状态是否有该权限, 如果没有则不能进行撤权
             if (!$auth->getAssignment($role_name, $user_id)) {
+
                 //提示当前用户没有该角色权限, 无法撤权
                 return ['msg' => '当前用户没有该角色权限, 无法撤权'];
             }
+
             //如果上面的不成立表示有权限，可以尝试进行撤权
             if ($auth->revoke($role, $user_id)) {
+
                 //提示撤权成功
                 return ['msg' => '撤权成功'];
             } else {
+
                 //提示撤权失败
                 return ['msg' => '撤权失败'];
             }
@@ -110,11 +118,13 @@ class MemberController extends BackendController
 
     /**
      * 设置用户为白名单
+     *
      * @param integer $user_id 用户ID
      * @param string $in_white_list 是否是白名单 'true' 和 'false'
      * @return array|bool
      */
-    public function actionSetUserInWhiteList($user_id, $in_white_list='true') {
+    public function actionSetUserInWhiteList($user_id, $in_white_list='true')
+    {
         Yii::$app->response->format = Response::FORMAT_JSON;
         if ( User::updateAll(['in_white_list' => $in_white_list == 'true' ? User::WHITE_LIST_YES : User::WHITE_LIST_NO], ['id' => $user_id]) ) {
             return [];
@@ -125,6 +135,7 @@ class MemberController extends BackendController
 
     /**
      * 联系人列表
+     *
      * @param integer $id
      * @param string $scenario 场景
      * @param string $type 类型,例如黑白名单或所有名单
@@ -215,16 +226,20 @@ class MemberController extends BackendController
                 ->limit($pagination->limit)
                 ->all();
         }
+
         return $users;
     }
 
     /**
      * 搜索用户, 供给活动分配发起人的自动完成功能使用
+     *
      * @param string $username 用户名
      * @return array
      */
-    public function actionSearch($username) {
+    public function actionSearch($username)
+    {
         Yii::$app->response->format = Response::FORMAT_JSON;
+
         $users = User::find()
             ->where(
                 ['like', 'username', $username]
@@ -245,12 +260,15 @@ class MemberController extends BackendController
 
     /**
      * 搜索PMA, 供通知时使用
+     *
      * @param string $username 用户名
      * @param string $auth 权限, 是什么用户
      * @return array
      */
-    public function actionSearchByAuth($username, $auth = "pma") {
+    public function actionSearchByAuth($username, $auth = "pma")
+    {
         Yii::$app->response->format = Response::FORMAT_JSON;
+
         $users = User::find()
             ->joinWith('assignment')
             ->where([
@@ -265,6 +283,7 @@ class MemberController extends BackendController
             ->orderBy(['id' => SORT_DESC])
             ->asArray()
             ->all();
+
         return $users;
     }
 
@@ -277,6 +296,7 @@ class MemberController extends BackendController
     public function actionCreate()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
+
         $post = Yii::$app->request->post();
 
         $user = new User();
@@ -290,7 +310,6 @@ class MemberController extends BackendController
         } else {
             throw new ServerErrorHttpException();
         }
-
     }
 
     /**
@@ -304,14 +323,18 @@ class MemberController extends BackendController
     public function actionUpdate($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $model = $this->findOne($id);
+
         $data = Yii::$app->request->post();
+
+        $model = $this->findOne($id);
+
         if (isset($data['email'])) {
             $model->email = $data['email'];
             if (!$model->validate('email')) {
                 throw new DataValidationFailedException($model->getFirstError('email'));
             }
         }
+
         if (isset($data['username'])) {
             $model->username = $data['username'];
             if (!$model->validate('username')) {
@@ -330,9 +353,11 @@ class MemberController extends BackendController
         if (isset($data['bio'])) {
             $profile = Profile::find()->where(['user_id' => $model->id])->one();
             $profile->bio = $data['bio'];
+
             if (!$profile->validate('bio')) {
                 throw new DataValidationFailedException($profile->getFirstError('bio'));
             }
+
             if (!$profile->save()) {
                 throw new ServerErrorHttpException();
             }
@@ -359,23 +384,26 @@ class MemberController extends BackendController
     }
 
     /**
-    *更新用户profile表
+    *  更新用户profile表
+    *
     * @param integer $id 联系人ID
-    *  暂时没用
+    * @return
     */
 
-    public function updateProfile($id,$profile){
+    public function updateProfile($id,$profile)
+    {
+
         Yii::$app->response->format = Response::FORMAT_JSON;
+
         $data = Yii::$app->request->post();
 
-        $modelProfile = $this->findProfile($id);
+        $model = $this->findProfile($id);
 
         if (isset($data['headimgurl'])) {
             $model->headimgurl = $data['headimgurl'];
         }
 
         return $this->findProfile($id);
-
     }
 
     /**
@@ -410,6 +438,5 @@ class MemberController extends BackendController
         } else {
             throw new NotFoundHttpException('该用户不存在');
         }
-    }
-
-}
+    }// end function
+}// end controller

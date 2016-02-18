@@ -1,6 +1,7 @@
 angular.module('backendServices')
   .factory('$userManage', ['$http', '$q', function($http, $q) {
     return {
+      //联系人列表
       fetch: function(params) {
         return $http.get('/member', {
           params: params
@@ -26,17 +27,19 @@ angular.module('backendServices')
           return data;
         })
       },
+      //添加联系人
       add: function(newEntity) {
         return $http.post('/member/create', newEntity).then(function(data) {
           return data;
         });
       },
+      //更新用户
       update: function(id, entity) {
-
         return $http.post('/member/update?id='+id, entity).then(function(data){
           return data;
         });
       },
+      //删除用户
       delete: function(id) {
         var entity = {
           status: 0
@@ -45,11 +48,11 @@ angular.module('backendServices')
           return data;
         });
       },
+      //搜索用户
       search: function(username) {
         return $http.get('/member/search?username='+username);
       },
       userPageMeta: function(type, pageNum) {
-
         return $http.get('/member?scenario=total&perPage='+pageNum+'&type='+type).then(function(data) {
           return data;
         });
@@ -62,14 +65,11 @@ angular.module('backendServices')
           'page': page,
           'perPage': 20  //每页20条
         };
-
         return $http.get('/member?scenario=page', {
           params: params
         }).then(function(data) {
-
           return data;
         });
-
-      }
+      }//end fetchPage
     };
   }]);
