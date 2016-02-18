@@ -309,8 +309,7 @@ angular.module('controllers', ['ngTagsInput'])
       // tab
       $scope.isActive = function(type_id) {        
         var route = "/activity/list/"+type_id
-        return route === $location.path();
-        // return .indexOf(route) != -1;
+        return route === $location.path() || $location.path() === '/question' || $location.path() === '/answer';
       }
 
       //点击增加类型按钮
