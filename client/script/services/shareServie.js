@@ -1,15 +1,26 @@
 angular.module('backendServices')
 	.factory('$shareManage' ,['$http' ,'$rootScope' ,function($http,$rootScope){
 		return {
-			fetch:function(){
-				return $http.get('/share/index').then(function (data){
+			fetchList:function(){
+				return $http.get('/share/list').then(function (data){
+					return data;
+				})
+			},			
+			fetch:function(id){
+				return $http.get('/share/index?id='+id).then(function (data){
 					return data;
 				})
 			},
 			update:function (entity) {
-				return $http.post('/share/update',entity).then(function (data){
+				console.log(entity);
+				return $http.post('/share/update?id='+entity.id,entity).then(function (data){
 					return data;
 				})
 			},
+			create:function (entity) {
+				return $http.post('/share/create',entity).then(function (data){
+					return data;
+				})
+			}
 		}
 	}])

@@ -22,7 +22,10 @@ use yii\data\Pagination;
 
 class ShareController extends BackendController{
 
-
+    /**
+    *权限控制
+    *
+    */
 	public function behaviors()
     {
         return [
@@ -31,6 +34,7 @@ class ShareController extends BackendController{
                 'actions' => [
                     'index' => ['get'],
                     'update' => ['post'],
+                    'create' => ['post'],
                 ],
             ],
             'access' => [
@@ -38,21 +42,74 @@ class ShareController extends BackendController{
             ],
         ];
     }
-	
-    public function actionIndex($id = 1){
+    
+    /**
+    *获取单页数据
+    *
+    */
+    public function actionIndex($id){
         Yii::$app->response->format = Response::FORMAT_JSON;
 
-        $model = Share::findOne($id);
+        $model = Share::find()
+                ->where(['status' => Share::STATUS_ENABLE])
+                ->where(['id' => $id])
+                ->one();
 
         return $model;
     }
 
-	public function actionUpdate($id = 1)
+    /**
+    *获取列表列表
+    *
+    */
+
+    public function actionList(){
+        //查询出本周的所有列表内容
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $model = Share::find()
+                // ->where(['status' => Share::STATUS_ENABLE])
+                ->andWhere('created_at >' .getLastEndTime())
+                ->all();
+
+        return $model;
+    }
+
+    /**
+    *创建数据
+    *
+    */
+    public function actionCreate(){
+        $request = Yii::$app->getRequest();
+        $response = Yii::$app->getResponse();
+        $response->format = Response::FORMAT_JSON;
+        $user_id = Yii::$app->user->id;
+        $data = $request->post();
+        $model = new Share;
+        $model->created_at = time();
+        $model->user_id = $user_id;
+
+        if ($model->load($data, '') && $model->save()) {
+            \someet\common\models\AdminLog::saveLog('分享内容', $model->primaryKey);
+            return Share::findOne($model->id);
+        } elseif ($model->hasErrors()) {
+            $errors = $model->getFirstErrors();
+            throw new DataValidationFailedException(array_pop($errors));
+        } else {
+            throw new ServerErrorHttpException();
+        }
+
+    }
+
+	public function actionUpdate($id)
 	{
 		Yii::$app->response->format = Response::FORMAT_JSON;
+        $user_id = Yii::$app->user->id;
 
         $model = Share::findOne($id);
         $data = Yii::$app->getRequest()->post();
+        $model->user_id = $user_id;
+        $model->id = $id;
 
 
         if (isset($data['title'])) {
@@ -81,12 +138,19 @@ class ShareController extends BackendController{
             if (!$model->validate('imgurl')) {
                 throw new DataValidationFailedException($model->getFirstError('imgurl'));
             }
+        }        
+
+        if (isset($data['status'])) {
+            $model->status = $data['status'];
+            if (!$model->validate('status')) {
+                throw new DataValidationFailedException($model->getFirstError('status'));
+            }
         }
 
         if (!$model->save()) {
             throw new ServerErrorHttpException();
         }
-        \someet\common\models\AdminLog::saveLog('更新分享', $model->primaryKey);
+        // \someet\common\models\AdminLog::saveLog('更新分享', $model->primaryKey);
 
         return $model;
 		
