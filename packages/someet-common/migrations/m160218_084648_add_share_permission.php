@@ -11,6 +11,8 @@ class m160218_084648_add_share_permission extends Migration
             /* 答案审核 */
             '/backend/share/index' => ['pma'],
             '/backend/share/update' => ['pma'],
+            '/backend/share/create' => ['pma'],
+            '/backend/share/list' => ['pma'],
         ];
 
         $authItemTemplate = <<<SQL
