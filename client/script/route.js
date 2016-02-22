@@ -7,6 +7,15 @@ function($routeProvider) {
       templateUrl: '/partial/dashboard.html',
       controller: 'DashboardCtrl'
     })
+    //分享
+    .when('/share',{
+      templateUrl: '/partial/share/index.html',
+      controller :'ShareCtrl'
+    })     //分享
+    .when('/share/update/:id',{
+      templateUrl: '/partial/share/update.html',
+      controller :'ShareUpdateCtrl'
+    })  
     //uga数据统计
     .when('/uga',{
       templateUrl: '/partial/uga/index.html',
