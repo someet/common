@@ -7,7 +7,9 @@ class m160217_023615_fix_founder_activity_by_role extends Migration
 {
     public function up()
     {
-        $this->update('auth_item_child',['parent' => 'founder'],'child = "/mobile/member/activity-by-role" ')->execute();
+
+        $this->update('auth_item_child',['parent' => 'founder'],'child = "/mobile/member/activity-by-role" ');
+
         return true;
     }
 
