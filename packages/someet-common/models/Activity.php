@@ -49,6 +49,8 @@ use Yii;
  * @property integer $co_founder2
  * @property integer $co_founder3
  * @property integer $co_founder4
+ * @property integer $is_full
+ * @property integer $join_people_count
  */
 class Activity extends \yii\db\ActiveRecord
 {
@@ -59,6 +61,11 @@ class Activity extends \yii\db\ActiveRecord
     const STATUS_DRAFT    = 10;
     /* 发布 */
     const STATUS_RELEASE  = 20;
+
+    /* 报名已满 */
+    const IS_FULL_YES = 1;
+    /* 报名未满 */
+    const IS_FULL_NO = 0;
 
     // 标签名, 用于标签行为使用此属性
     public $tagNames;
@@ -77,7 +84,7 @@ class Activity extends \yii\db\ActiveRecord
     {
         return [
             [['title', 'desc', 'poster', 'area', 'address', 'details' ], 'required'],
-            [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'created_at', 'created_by', 'updated_at', 'updated_by', 'status', 'edit_status', 'display_order', 'co_founder1', 'co_founder2', 'co_founder3', 'co_founder4'], 'integer'],
+            [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'created_at', 'created_by', 'updated_at', 'updated_by', 'status', 'edit_status', 'display_order', 'co_founder1', 'co_founder2', 'co_founder3', 'co_founder4', 'is_full'], 'integer', 'join_people_count'],
             [['details', 'review', 'content', 'field1', 'field2', 'field3', 'field4', 'field5', 'field6', 'field7', 'field8'], 'string'],
             [['longitude', 'latitude'], 'number'],
             [['longitude', 'latitude'], 'default', 'value' => 0],
@@ -137,6 +144,8 @@ class Activity extends \yii\db\ActiveRecord
             'co_founder2' => '联合创始人2',
             'co_founder3' => '联合创始人3',
             'co_founder4' => '联合创始人4',
+            'is_full' => '是否报满',
+            'join_people_count' => '已报名的人数',
         ];
     }
 
