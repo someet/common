@@ -217,7 +217,7 @@ angular.module('controllers')
         };
         startHeader();
       };
-      // qiniu upload 海报 end //
+      // qiniu upload 头像 end //
 
 
     var userId = $routeParams.id;

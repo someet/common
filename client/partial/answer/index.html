@@ -137,7 +137,7 @@
             <div class="col-md-7">
                 <ul class="list-group">
                     <li class="list-group-item list-group-item-success">注册时间： {{ entity.user.created_at * 1000 | date: "yyyy年MM月dd日 HH:mm:ss"}}</li>
-                    <li class="list-group-item list-group-item-info">报名时间：{{ entity.updated_at * 1000 | date: "yyyy年MM月dd日 HH:mm:ss"}}</li>
+                    <li class="list-group-item list-group-item-info">报名时间：{{ entity.created_at * 1000 | date: "yyyy年MM月dd日 HH:mm:ss"}}</li>
                     <li class="list-group-item list-group-item-danger">
                         <div ng-show="entity.user.profile.from>0">
                             来自：

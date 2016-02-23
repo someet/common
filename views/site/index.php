@@ -50,6 +50,9 @@ use yii\helpers\Url;
           </li>          
           <li ng-class="{active:isActive('/uga')}">
             <a href="#/uga">UGA问题系统</a>
+          </li>          
+          <li ng-class="{active:isActive('/share')}">
+            <a href="#/share">分享</a>
           </li>
         </ul>
 
