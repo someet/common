@@ -44,6 +44,12 @@ use dektrium\user\models\Profile as BaseProfile;
  */
 class Profile extends BaseProfile
 {
+    /** * 男 */
+    const SEX_BOY = 1;
+    /** * 女 */
+    const SEX_GIRL = 2;
+
+
     /**
      * @inheritdoc
      */
