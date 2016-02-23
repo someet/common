@@ -433,10 +433,23 @@ class ActivityController extends BackendController
             }
         }
 
+        // 如果改变了报名总数的时候，修改一下活动的是否报满的这个字段
         if (isset($data['peoples'])) {
             $model->peoples = $data['peoples'];
             if (!$model->validate('peoples')) {
                 throw new DataValidationFailedException($model->getFirstError('peoples'));
+            }
+
+            //查询现在的活动人数是否已经报满
+            $activity = Activity::findOne($id);
+            $is_full = $activity->join_people_count < $activity->peoples ? Activity::IS_FULL_NO : Activity::IS_FULL_YES;
+
+            //尝试更新活动是否已报名完成字段
+            //如果活动更新成功，更新活动当更新成功返回0,所以取反表示活动更新成功
+            if (!Activity::updateAll(['is_full' => $is_full], ['id' => $id])) {
+            } else {
+                //更新错误
+                throw new DataValidationFailedException('更新活动数量失败');
             }
         }
 
