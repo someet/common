@@ -84,7 +84,7 @@ class Activity extends \yii\db\ActiveRecord
     {
         return [
             [['title', 'desc', 'poster', 'area', 'address', 'details' ], 'required'],
-            [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'created_at', 'created_by', 'updated_at', 'updated_by', 'status', 'edit_status', 'display_order', 'co_founder1', 'co_founder2', 'co_founder3', 'co_founder4', 'is_full'], 'integer', 'join_people_count'],
+            [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'created_at', 'created_by', 'updated_at', 'updated_by', 'status', 'edit_status', 'display_order', 'co_founder1', 'co_founder2', 'co_founder3', 'co_founder4', 'is_full', 'join_people_count'], 'integer'],
             [['details', 'review', 'content', 'field1', 'field2', 'field3', 'field4', 'field5', 'field6', 'field7', 'field8'], 'string'],
             [['longitude', 'latitude'], 'number'],
             [['longitude', 'latitude'], 'default', 'value' => 0],
