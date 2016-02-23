@@ -272,7 +272,13 @@ class AnswerController extends BackendController
             ->where(['activity_id' => $activity_id])
             ->asArray()
             ->all();
-
+        // 反馈的次数
+        // $feedback_count = ActivityFeedback::find()
+        //                 ->select(['user_id','count(user_id) as feedback_count'])
+        //                 ->groupBy('user_id')
+        //                 ->asArray()
+        //                 ->one();
+        // print_r($feedback_count);
         // 遍历反馈
         foreach($feedbacks as $feedback) {
             // 将同一个用户的反馈放到报名对象上面
@@ -283,7 +289,27 @@ class AnswerController extends BackendController
             }
             //$answer['feedback'] = $feedbacks;
         }
+        // print_r($feedback_count);
+        // die;
+        foreach ($models as $key => $value) {
 
+                $models[$key]['feedback_count'] = ActivityFeedback::find()
+                                ->where('user_id =' .$value['user']['id'] )
+                                ->count();
+
+                // 迟到次数
+                $models[$key]['arrive_late'] = Answer::find()
+                                ->where('user_id = '.$value['user']['id'])
+                                ->andWhere(['arrive_status' => Answer::STATUS_ARRIVE_LATE])
+                                ->count();
+
+                // 爽约次数
+                $models[$key]['arrive_no'] = Answer::find()
+                                ->where('user_id = '.$value['user']['id'])
+                                ->andWhere(['arrive_status' => Answer::STATUS_ARRIVE_YET])
+                                ->count();
+
+        }
         return $models;
     }
 

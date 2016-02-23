@@ -81,7 +81,7 @@
     </div>
     <!-- 用户列表 end -->
     <!-- 用户资料详情 -->
-    <div class="col-md-6" ng-show="entity.user" style="padding:0;border:solid 10px rgba(10,10,10,0.5)">
+    <div class="col-md-6" ng-show="entity.user" style="padding:0;border:solid 10px rgba(10,10,10,0.5); position: fixed;">
         <div class="media">
             <div style="padding:20px;">
                 <div class="pull-left">
@@ -146,6 +146,10 @@
                             <span ng-if="entity.user.profile.from==3">有所耳闻，自己一路找过来的</span>
                         </div>
                     </li>
+                    <li class="list-group-item list-group-item-info">报名次数：{{entity.user.join_count}}</li>
+                    <li class="list-group-item list-group-item-info">通过次数：{{entity.user.attend_count}}</li>
+                    <li class="list-group-item list-group-item-info">反馈次数：{{entity.feedback_count}}</li>
+
                 </ul>
             </div>
             <div class="col-md-5">
@@ -164,6 +168,10 @@
                         <div ng-show="entity.user.profile.occupation">
                             职业：{{entity.user.profile.occupation}}
                         </div>
+                    </li>
+                    <li class="list-group-item list-group-item-info">迟到次数:{{entity.arrive_late}}</li>
+                    <li class="list-group-item list-group-item-info">爽约次数:{{entity.arrive_no}}</li>
+                    <li class="list-group-item list-group-item-info">被拒绝的次数:{{entity.user.reject_count}}</li>
                 </ul>
             </div>
         </div>

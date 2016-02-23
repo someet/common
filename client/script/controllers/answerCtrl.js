@@ -33,6 +33,7 @@ angular.module('controllers')
 
         //查看一个报名信息
         $scope.view = function(entity) {
+          $scope.dbtn = false;
           $scope.answerItemList = entity.answerItemList;
           $scope.entity = entity;
         }
@@ -98,13 +99,14 @@ angular.module('controllers')
         }
         //发送消息
         $scope.feedbackResult = '点击按钮发送通知';
+
         $scope.sendMessage = function(entity,dbtn){
           $scope.dbtn = true;
           var user_id = entity.user.id;
           var activity_id = entity.activity_id;
-          console.log(user_id + '----'+activity_id);
+          // console.log(user_id + '----'+activity_id);
           $answerManage.sendMessage(user_id,activity_id).then(function(data) {
-            console.log(data);
+            // console.log(data);
             // var feedbackResult = '未手动发送过通知';
             if (data.status == 0) {
               $scope.feedbackResult = data.sms +'--'+data.wechatResult;
