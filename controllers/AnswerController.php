@@ -281,9 +281,30 @@ class AnswerController extends BackendController
                     $model['feedback'] = $feedback;
                 }
             }
-            //$answer['feedback'] = $feedbacks;
         }
 
+        foreach ($models as $key => $value) {
+
+            // 反馈的次数
+            $models[$key]['feedback_count'] = ActivityFeedback::find()
+                            ->where('user_id =' .$value['user']['id'] )
+                            ->count();
+
+            // 迟到次数
+            $models[$key]['arrive_late'] = Answer::find()
+                            ->where('user_id = '.$value['user']['id'])
+                            ->andWhere(['arrive_status' => Answer::STATUS_ARRIVE_LATE])
+                            ->count();
+
+            // 爽约次数
+            $models[$key]['arrive_no'] = Answer::find()
+                            ->where('user_id = '.$value['user']['id'])
+                            ->andWhere(['arrive_status' => Answer::STATUS_ARRIVE_YET])
+                            ->andWhere(['status' => Answer::STATUS_REVIEW_PASS])
+                            ->andWhere(['leave_status' => Answer::STATUS_LEAVE_YET])
+                            ->count();
+
+        }
         return $models;
     }
 

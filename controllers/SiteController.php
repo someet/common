@@ -12,6 +12,7 @@ use yii\filters\VerbFilter;
 use e96\sentry\SentryHelper;
 use yii\web\Response;
 use someet\common\models\User;
+use someet\common\models\Profile;
 
 /**
  *
@@ -66,6 +67,20 @@ class SiteController extends BackendController
         // 所有已经完善资料的人数
         $countUserInfo = User::find()
                         ->andwhere(['not', ['wechat_id'=> null]])
+                        ->count('wechat_id');  
+
+        // 所有已经完善资料的人数 男
+        $countUserInfoBoy = User::find()
+                        ->andwhere(['not', ['wechat_id'=> null]])
+                        ->joinWith('profile')
+                        ->andwhere('profile.sex ='.Profile::SEX_BOY )
+                        ->count('wechat_id');  
+
+        // 所有已经完善资料的人数 女
+        $countUserInfoGirl = User::find()
+                        ->andwhere(['not', ['wechat_id'=> null]])
+                        ->joinWith('profile')
+                        ->andwhere('profile.sex ='.Profile::SEX_GIRL)
                         ->count('wechat_id');
 
         // 今日新增授权关注人数
@@ -112,9 +127,9 @@ class SiteController extends BackendController
         $countJoinDesc = [];
               
         $countJoin = Activity::find()
-                    ->select(['activity.id activity_id','count(activity.id) as countJoin','activity.title title','activity.peoples peoples','activity.field1'])
+                    ->select(['activity.id activity_id','count(answer.activity_id) as countJoin','activity.title title','activity.peoples peoples','activity.field1'])
                     ->where('type_id!=' . $activity_test_type_id)
-                    ->andWhere(['activity.status' => Activity::STATUS_RELEASE])
+                    ->andWhere('activity.status = ' . Activity::STATUS_RELEASE)
                     ->andWhere('activity.start_time > ' . getLastEndTime())
                     ->groupBy('activity.id')
                     ->leftJoin('answer', 'answer.activity_id = activity.id')
@@ -182,6 +197,8 @@ class SiteController extends BackendController
            'countAlreadyJoin'=>$countAlreadyJoin,
            'countJoinAsc'=>$countJoinAsc,
            'countJoinDesc'=>$countJoinDesc,
+           'countUserInfoBoy'=>$countUserInfoBoy,
+           'countUserInfoGirl'=>$countUserInfoGirl,
         ];
 
     }
