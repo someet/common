@@ -445,12 +445,15 @@ class ActivityController extends BackendController
             $is_full = $activity->join_people_count < $activity->peoples ? Activity::IS_FULL_NO : Activity::IS_FULL_YES;
 
             //尝试更新活动是否已报名完成字段
-            //如果活动更新成功，更新活动当更新成功返回0,所以取反表示活动更新成功
-            if (!Activity::updateAll(['is_full' => $is_full], ['id' => $id])) {
-            } else {
-                //更新错误
-                throw new DataValidationFailedException('更新活动数量失败');
+            //如果 is_full 和之前的值一样则无需要更新
+            if ($is_full != $activity->is_full) {
+                //如果活动更新成功，更新活动当更新成功返回0,所以取反表示活动更新成功
+                if (0 == Activity::updateAll(['is_full' => $is_full], ['id' => $id])) {
+                    //更新错误
+                    throw new DataValidationFailedException('更新活动数量失败');
+                }
             }
+
         }
 
         if (isset($data['cost'])) {

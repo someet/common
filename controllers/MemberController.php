@@ -126,7 +126,7 @@ class MemberController extends BackendController
     public function actionSetUserInWhiteList($user_id, $in_white_list='true')
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        if ( User::updateAll(['in_white_list' => $in_white_list == 'true' ? User::WHITE_LIST_YES : User::WHITE_LIST_NO], ['id' => $user_id]) ) {
+        if ( 1 == User::updateAll(['in_white_list' => $in_white_list == 'true' ? User::WHITE_LIST_YES : User::WHITE_LIST_NO], ['id' => $user_id]) ) {
             return [];
         } else {
             return false;
@@ -328,7 +328,8 @@ class MemberController extends BackendController
 
         $model = $this->findOne($id);
 
-        if (isset($data['email'])) {
+
+        if (empty($data['email'])) {
             $model->email = $data['email'];
             if (!$model->validate('email')) {
                 throw new DataValidationFailedException($model->getFirstError('email'));
