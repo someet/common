@@ -230,6 +230,7 @@ angular.module('controllers')
       $scope.profile = {};
 
     $userManage.fetch(params).then(function(data) {
+      console.log(data);
       var isFounder = false;
       var isPma = false;
       for(var i= 0, k=data.assignment.length; i<k; i++) {
