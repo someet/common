@@ -278,6 +278,11 @@ class NotificationTemplate extends Component
     public static function fetchSuccessWechatTemplateData($openid, $account, $activity) {
         //获取成功的模板消息id
         $template_id = Yii::$app->params['sms.success_template_id'];
+        if (!empty($activity['group_code'])) {
+            $url = $activity['group_code'];
+        }else{
+            $url = Yii::$app->params['domain'].'activity/'.$activity['id'];            
+        }
         if (empty($template_id)) {
             //记录一个错误, 请设置成功的模板消息id
             Yii::error('请设置成功的模板消息id');
@@ -289,7 +294,8 @@ class NotificationTemplate extends Component
         $data = [
             "touser" => "{$openid}",
             "template_id" => $template_id,
-            "url" => Yii::$app->params['domain'].'activity/'.$activity['id'],
+            "url" => $url,
+            // "url" => Yii::$app->params['domain'].'activity/'.$activity['id'],
             "topcolor" => "#FF0000",
             "data" => [
                 "first" => [
@@ -313,7 +319,7 @@ class NotificationTemplate extends Component
                     "color" => "#173177"
                 ],
                 "remark" => [
-                    "value" => "点击查看详情，并扫码进入活动群。",
+                    "value" => "点击查看群二维码，扫码进入活动群。",
                     "color" => "#173177"
                 ],
             ]
