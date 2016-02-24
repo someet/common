@@ -83,12 +83,14 @@ class Activity extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'desc', 'poster', 'area', 'address', 'details' ], 'required'],
+            [['title'], 'required'],
             [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'created_at', 'created_by', 'updated_at', 'updated_by', 'status', 'edit_status', 'display_order', 'co_founder1', 'co_founder2', 'co_founder3', 'co_founder4', 'is_full', 'join_people_count'], 'integer'],
             [['details', 'review', 'content', 'field1', 'field2', 'field3', 'field4', 'field5', 'field6', 'field7', 'field8'], 'string'],
             [['longitude', 'latitude'], 'number'],
             [['longitude', 'latitude'], 'default', 'value' => 0],
             ['group_code', 'default', 'value' => '0'],
+            [['area','desc','address','details'], 'default', 'value' => '0'],
+            ['poster', 'default', 'value' => 'http://7xn8h3.com1.z0.glb.clouddn.com/FqNwYVjezbfCKyqiVCqRO7PDr2ke'],
             [['title'], 'string', 'max' => 80],
             [['desc', 'poster', 'group_code', 'address', 'cost_list', 'tagNames'], 'string', 'max' => 255],
             [['area'], 'string', 'max' => 10],
