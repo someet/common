@@ -127,9 +127,9 @@ class SiteController extends BackendController
         $countJoinDesc = [];
               
         $countJoin = Activity::find()
-                    ->select(['activity.id activity_id','count(activity.id) as countJoin','activity.title title','activity.peoples peoples','activity.field1'])
+                    ->select(['activity.id activity_id','count(answer.activity_id) as countJoin','activity.title title','activity.peoples peoples','activity.field1'])
                     ->where('type_id!=' . $activity_test_type_id)
-                    ->andWhere(['activity.status' => Activity::STATUS_RELEASE])
+                    ->andWhere('activity.status = ' . Activity::STATUS_RELEASE)
                     ->andWhere('activity.start_time > ' . getLastEndTime())
                     ->groupBy('activity.id')
                     ->leftJoin('answer', 'answer.activity_id = activity.id')
