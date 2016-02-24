@@ -328,7 +328,8 @@ class MemberController extends BackendController
 
         $model = $this->findOne($id);
 
-        if (isset($data['email'])) {
+
+        if (empty($data['email'])) {
             $model->email = $data['email'];
             if (!$model->validate('email')) {
                 throw new DataValidationFailedException($model->getFirstError('email'));
