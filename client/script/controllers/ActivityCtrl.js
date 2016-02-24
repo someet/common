@@ -568,9 +568,13 @@ angular.module('controllers', ['ngTagsInput'])
         }
         if ($scope.co_founder1) {
           newEntity.co_founder1 = $scope.co_founder1.id;
+        }else{
+          newEntity.co_founder1 = 0;
         }
         if ($scope.co_founder2) {
           newEntity.co_founder2 = $scope.co_founder2.id;
+        }else{
+          newEntity.co_founder2 = 0;
         }
 
         var tags = [];
