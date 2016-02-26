@@ -222,7 +222,10 @@ class ActivityController extends BackendController
             ->limit($pages->limit)
             ->asArray()
             ->all();
-
+        foreach($models as $key => $activity) {
+            $models[$key]['answer_count'] = count($activity['answerList']);
+            $models[$key]['feedback_count'] = count($activity['feedbackList']);
+        }
         if ($activityExists) {
             return [
                 'status' => 1,

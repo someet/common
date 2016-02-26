@@ -9,6 +9,19 @@ angular.module('backendServices')
           return userList;
         });
       },
+
+      // 获取用户报名的活动
+      fetchUserJoinActivity: function(userId) {
+        return $http.get('/member/user-join-activities?user_id='+userId).then(function(userJoinActivity) {
+          return userJoinActivity;
+        })
+      },
+      //发起人发起的活动 && PMA参与的活动
+      fetchActivityByRole: function(userId,role) {
+        return $http.get('/member/activity-by-role?user_id='+userId+'&role='+role).then(function(data){
+          return data;
+        })
+      },
       //设置用户为白名单
       setUserInWhiteList: function(user_id, in_white_list){
          return $http.post('/member/set-user-in-white-list?user_id='+user_id+'&in_white_list='+in_white_list).then(function(data) {

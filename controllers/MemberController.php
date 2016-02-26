@@ -5,6 +5,8 @@ namespace app\controllers;
 use app\components\DataValidationFailedException;
 use someet\common\models\Profile;
 use someet\common\models\User;
+use someet\common\models\Activity;
+use someet\common\models\Answer;
 use Yii;
 use yii\data\Pagination;
 use yii\filters\VerbFilter;
@@ -207,6 +209,12 @@ class MemberController extends BackendController
 
         if ($id) {
             $users = User::find()->where(['id' => $id])->with(['profile', 'assignment'])->asArray()->one();
+            // $joinActity = Answer::find()
+            //         ->where(['user_id' => $id ])
+            //         ->with(['user','user.profile','user.assignment'])
+            //         ->asArray()
+            //         ->one();
+
         } elseif ($scenario == "total") {
             $countQuery = clone $query;
             $pagination = new Pagination([
@@ -228,6 +236,93 @@ class MemberController extends BackendController
         }
 
         return $users;
+    }
+
+    /**
+     * 用户参加过的活动
+     * @param $user_id 用户的id
+     */
+    public function actionUserJoinActivities($user_id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $data = Answer::find()->where(['user_id' => $user_id]);
+        $pages = new Pagination(['totalCount' => $data->count()]);
+        $answers = $data->offset($pages->offset)->limit($pages->limit)
+            ->with([
+                'activity',
+                'activity.user',
+                'activity.user.profile',
+                'activity.type'
+            ])
+            ->asArray()
+            ->orderBy([
+                'updated_at' => SORT_DESC,
+                'id' => SORT_DESC,
+            ])
+            ->all();
+
+            // $activities = [];
+            // foreach($answers as $answer) {
+              // $activities[] = $answer['activity'];
+            // }
+
+        if ($answers) {
+            return ['answers' => $answers, 'pages' => $pages];
+        } else {
+            return ['answers' => null, 'pages' => $pages];
+        }
+    }
+
+    /**
+     *pma参与的活动
+     *发起人发起的活动
+     *@param $role string admin | pma 
+     *@param $user_id 用户的id
+     */
+    public function actionActivityByRole($user_id ,$role)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+            if (!in_array($role, ['founder', 'pma'])) {
+                return [
+                'code'=>'0',
+                'msg' => '参数错误',
+                ];
+            }
+
+            $where = 'status>'.Activity::STATUS_DELETE;
+            if ($role == 'pma') {
+                $data = Activity::find()
+                    ->where($where)
+                    ->andWhere(['principal' => $user_id]);
+            } elseif ($role == 'founder') {
+                $data = Activity::find()
+                    ->where($where)
+                    ->andWhere(['created_by' => $user_id]);
+            }
+            
+
+            $pages = new Pagination(['totalCount' => $data->count()]);
+            $activities = $data->offset($pages->offset)->limit($pages->limit)
+                ->with([
+                    'user',
+                    'user.profile',
+                    'type',
+                    'answerList',
+                ])
+                ->asArray()
+                ->orderBy([
+                    'updated_at' => SORT_DESC,
+                    'id' => SORT_DESC,
+                ])
+                ->all();
+
+
+            if ($activities) {
+                return ['answers' => $activities, 'pages' => $pages];
+            } else {
+                return ['answers' => null, 'pages' => $pages];
+            }
     }
 
     /**

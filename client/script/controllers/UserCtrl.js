@@ -51,12 +51,12 @@ angular.module('controllers')
     //});
 
     // tab
+    
     $scope.isActive = function(type_id) {        
       var route = "/member/list/"+type_id;
       if (type_id === "all"){
         route = "/member"
       }
-      console.log("member/list = " + route + "--" + $location.path());
       return route === $location.path();
       // return .indexOf(route) != -1;
     }
@@ -94,7 +94,6 @@ angular.module('controllers')
     }
 
       var listtype = $routeParams.type;
-      console.log(listtype);
       switch (listtype){
         case 'white'://白名单
         case 'black'://黑名单
@@ -192,7 +191,6 @@ angular.module('controllers')
               $scope.profile.headimgurl = url;
             });
           }, function(response) {
-            console.log(response);
           }, function(evt) {
             if ($scope.selectHeader !== null) {
               $scope.selectHeader.progress.p = Math.floor(100 * evt.loaded / evt.totalSize);
@@ -208,7 +206,6 @@ angular.module('controllers')
       };
 
       $scope.onHeaderSelect = function($files) {
-        console.log($files);
         $scope.selectHeader = {
           file: $files[0],
           progress: {
@@ -220,17 +217,40 @@ angular.module('controllers')
       // qiniu upload 头像 end //
 
 
+
     var userId = $routeParams.id;
     if(userId != null){
       var params = {
        id: userId
       }
     }
-      $scope.data = {};
-      $scope.profile = {};
+
+    // 用户报名的活动
+    $userManage.fetchUserJoinActivity(userId).then(function(data) {
+      $scope.joinActivity = data;
+    })  
+
+    // 发起人发起的活动
+    $scope.founderActivity = function(){
+      $userManage.fetchActivityByRole($routeParams.id ,'founder').then(function(data){
+        console.log(data);
+        $scope.founderActivity = data;
+      })
+    }
+
+    // PMA参与的活动
+    $scope.pmaActivity = function(){
+      $userManage.fetchActivityByRole($routeParams.id ,'pma').then(function(data){
+        console.log(data);
+        $scope.pmaActivity = data;
+      })
+    }
+
+    $scope.data = {};
+    $scope.profile = {};
 
     $userManage.fetch(params).then(function(data) {
-      console.log(data);
+      // console.log(data);
       var isFounder = false;
       var isPma = false;
       for(var i= 0, k=data.assignment.length; i<k; i++) {
@@ -250,7 +270,7 @@ angular.module('controllers')
       alert(err);
     });
 
-          // 取消
+      // 取消
       $scope.cancel = function() {
         $location.path('/member');
       }
@@ -284,6 +304,8 @@ angular.module('controllers')
         password: $scope.user.password,
         bio: $scope.user.profile.bio,
         username: $scope.user.username,
+        mobile: $scope.user.mobile,
+        mobile: $scope.user.profile.sex,
       };
 
       var user_id = $scope.user.id;
