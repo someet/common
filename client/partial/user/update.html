@@ -18,30 +18,36 @@
                     <md-button class="md-raised md-info">设置头像</md-button>
                 </div>
             </div>
-            <md-input-container flex="20">
-                <label>用户名</label>
-                <input type="text" ng-model="user.username" required />
-            </md-input-container>
-            <md-input-container flex="20">
-                <label>手机</label>
-                <input type="text" ng-model="user.mobile" required />
-            </md-input-container>
-            <md-input-container flex="20" flex-gt-sm>
-                <label>微信</label>
-                <input type="text" ng-model="user.wechat_id" required />
-            </md-input-container>
-            <md-input-container flex="20" flex-gt-sm>
-                <label>性别</label>
-                <input type="text" ng-model="user.sex" required />
-            </md-input-container>
-            <md-input-container flex="40">
-                <label>是否关注服务号</label>
-                <input type="text" ng-model="user.username" required />
-            </md-input-container>
-            <md-input-container flex="40">
-                <label>邮箱</label>
-                <input type="text" ng-model="user.email" required />
-            </md-input-container>
+            <div layout='row' layout-margin>
+                <md-input-container flex="50">
+                    <label>用户名</label>
+                    <input type="text" ng-model="user.username" required />
+                </md-input-container>
+                <md-input-container flex="40">
+                    <label>手机</label>
+                    <input type="text" ng-model="user.mobile" disabled="true" />
+                </md-input-container>
+            </div>
+            <div layout='row' layout-margin>
+                <md-input-container flex="50">
+                    <label>微信</label>
+                    <input type="text" ng-model="user.wechat_id" disabled="true" />
+                </md-input-container>
+                <md-input-container flex="40">
+                    <label>性别</label>
+                    <input type="text" ng-model="user.profile.sex==1 ? '男' : user.profile.sex==2 ? '女' : '性别不明'" disabled="true" />
+                </md-input-container>
+            </div>
+            <div layout='row' layout-margin>
+                <md-input-container flex="50">
+                    <label>是否关注服务号</label>
+                    <input type="text" ng-model="user.username" disabled="true" />
+                </md-input-container>
+                <md-input-container flex="40">
+                    <label>邮箱</label>
+                    <input type="text" ng-model="user.email" required />
+                </md-input-container>
+            </div>
             <legend>
                 参加过的活动
             </legend>
@@ -50,16 +56,16 @@
                     <md-card-title>
                         <md-card-title-text>
                             <span class="md-subhead">{{answer.activity.title}}</span>
-                            <span class="md-subhead">{{answer.activity.start_time}}</span>
                         </md-card-title-text>
                         <md-card-title-media>
-                            <div class="md-media-sm card-media"></div>
+                            <div class="md-media-sm card-media"><span class="md-subhead">{{ answer.activity.start_time * 1000 | date: "MM月dd日 HH:mm:ss" }}</span></div>
                         </md-card-title-media>
                     </md-card-title>
                     <md-card-actions layout="row" layout-align="end center">
                         <md-button><a href="/#/answer/{{answer.activity.id}}" target="_blank">筛选</a></md-button>
                     </md-card-actions>
                 </md-card>
+                <div class="" ng-if="joinActivity.answers == null"> 没有参加过活动</div>
             </div>
         </div>
         <div flex layout-margin>
@@ -67,9 +73,6 @@
             <div layout="row" layout-wrap>
                 <div flex="50">
                     <md-checkbox ng-model="data.cb2" aria-label="Checkbox 1" class="md-warn md-align-top-left"> <strong>发起人</strong>
-                        <br/>
-                        <span class="ipsum">是我们最关心的一类用户。将能够填写活动内容，设置自己的发起人介绍信息，在后台修改头像。</span>
-                        <br/>
                     </md-checkbox>
                     <md-input-container ng-if="data.cb2">
                         <label>发起人简介</label>
@@ -78,9 +81,6 @@
                 </div>
                 <div flex="50">
                     <md-checkbox ng-model="data.cb" aria-label="Checkbox 2" class="md-warn md-align-top-left"> <strong>PMA</strong>
-                        <br/>
-                        <span class="ipsum">是我们团队中最可爱的群体。将能够提前看到活动内容，协助筛选用户。[确保设置前先让用户设置自己的微信ID]</span>
-                        <br/>
                     </md-checkbox>
                 </div>
                 <div flex="50" style="display: none;">
@@ -92,15 +92,17 @@
                     </md-checkbox>
                 </div>
                 <div class="" flex="50" ng-if="data.cb2">
-                    <md-button class="md-raised md-primary"  ng-click="founderActivity()">发起人</md-button>
+                    <md-button class="md-raised" ng-click="founderActivity()">发起的活动</md-button>
                     <div flex-xs flex-gt-xs="50" flex="40" layout="column">
                         <md-card ng-repeat="answer in founderActivity.answers">
                             <md-card-title>
                                 <md-card-title-text>
                                     <span class="md-subhead">{{answer.title}}</span>
-                                    <span class="md-subhead">{{answer.start_time}}</span>
                                 </md-card-title-text>
                             </md-card-title>
+                            <md-card-title-media>
+                                <div class="md-media-sm card-media"><span class="md-subhead">{{ answer.start_time * 1000 | date: "MM月dd日 HH:mm:ss" }}</span></div>
+                            </md-card-title-media>
                             <md-card-actions layout="row" layout-align="end center">
                                 <md-button><a href="/#/activity/{{answer.id}}" target="_blank">编辑</a></md-button>
                                 <md-button><a href="/#/answer/{{answer.id}}" target="_blank">筛选</a></md-button>
@@ -109,14 +111,16 @@
                     </div>
                 </div>
                 <div class="" flex="50" ng-if="data.cb">
-                    <md-button class="md-raised md-warn"  ng-click="pmaActivity()">PMA</md-button>
+                    <md-button class="md-raised" ng-click="pmaActivity()">PMA管理的活动</md-button>
                     <div flex-xs flex-gt-xs="50" flex="40" layout="column">
                         <md-card ng-repeat="answer in pmaActivity.answers">
                             <md-card-title>
                                 <md-card-title-text>
                                     <span class="md-subhead">{{answer.title}}</span>
-                                    <span class="md-subhead">{{answer.start_time}}</span>
                                 </md-card-title-text>
+                                <md-card-title-media>
+                                    <div class="md-media-sm card-media"><span class="md-subhead">{{ answer.start_time * 1000 | date: "MM月dd日 HH:mm:ss" }}</span></div>
+                                </md-card-title-media>
                                 <md-card-title-media>
                                     <div class="md-media-sm card-media"></div>
                                 </md-card-title-media>
