@@ -184,8 +184,6 @@ angular.module('controllers', ['ngTagsInput'])
             newEntity.status = 20;//活动状态20为发布
             $activityManage.update(newEntity.id, newEntity).then(function(data){
               $location.path('/activity/list/' + entity.type_id);
-              console.log(data);
-              
               $mdToast.show($mdToast.simple()
                 .content('活动 “' + entity.title + '” 已发布')
                 .hideDelay(5000)
