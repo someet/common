@@ -47,7 +47,7 @@ class UpdateController  extends \yii\console\Controller
     }
 
     /**
-    *更新回答问题的总数
+    * 更新回答问题的总数
 	* 执行方式 在命令行 
 	* 如： docker exec -i backend_app_1 ./yii update/answer-num（控制器/方法） 
 	* 可以用 yii help 来提示帮助
@@ -79,17 +79,20 @@ class UpdateController  extends \yii\console\Controller
     }
 
     /**
-    *在answer表里面更新是否反馈  is_feedback
+    * 在answer表里面更新是否反馈  is_feedback
 	* 执行方式 在命令行 
 	* 如： docker exec -i backend_app_1 ./yii update/is-feedback（控制器/方法） 
 	* 可以用 yii help 来提示帮助
     */
 
-	public function actionIsFeedback(){
+	public function actionIsFeedback()
+	{
 		$activity_feedback = ActivityFeedback::find()->asArray()->all();
 		foreach ($activity_feedback as $key => $value) {
 			Answer::updateAll(['is_feedback' => Answer::FEEDBACK_IS ],['user_id' => $value['user_id'],'activity_id' => $value['activity_id']]);
 		}
+		
+		return true;
 	}
 }
 
