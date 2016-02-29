@@ -8,6 +8,7 @@ use dektrium\user\models\Account;
 use someet\common\models\User;
 use someet\common\models\UgaAnswer;
 use someet\common\models\UgaQuestion;
+use someet\common\models\ActivityFeedback;
 /**
 * 用来更新数据 
 * 执行方式 在命令行 
@@ -77,7 +78,19 @@ class UpdateController  extends \yii\console\Controller
 
     }
 
+    /**
+    *在answer表里面更新是否反馈  is_feedback
+	* 执行方式 在命令行 
+	* 如： docker exec -i backend_app_1 ./yii update/is-feedback（控制器/方法） 
+	* 可以用 yii help 来提示帮助
+    */
 
+	public function actionIsFeedback(){
+		$activity_feedback = ActivityFeedback::find()->asArray()->all();
+		foreach ($activity_feedback as $key => $value) {
+			Answer::updateAll(['is_feedback' => Answer::FEEDBACK_IS ],['user_id' => $value['user_id'],'activity_id' => $value['activity_id']]);
+		}
+	}
 }
 
 
