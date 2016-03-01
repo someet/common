@@ -7,6 +7,21 @@ angular.module('controllers')
         var activity_id = $routeParams.activity_id;
         $answerManage.fetchByActivityId(activity_id).then(function (data) {
           $scope.list = data;
+
+          var outInfo = '';
+          angular.forEach(data, function(list,index,array){
+
+            outInfo += list.user.username +'('+list.user.profile.name +') 手机：'+ list.user.mobile +' 微信：'+list.user.wechat_id +' 职业：'+list.user.profile.occupation+' 状态：'+list.status+'\n';
+            outInfo += list.user.profile.headimgurl+'\n';
+              angular.forEach(list.answerItemList, function(item,index,array){
+                outInfo += item.question_value +'\n';
+              })
+
+              outInfo += '\n';
+          });
+          console.log(outInfo);
+
+
           $scope.answerItemList = data[0].answerItemList;
 
           //将所有的反馈给放到一个数组
