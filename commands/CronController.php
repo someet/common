@@ -64,10 +64,10 @@ class CronController  extends \yii\console\Controller
                         Yii::error("活动id为: {$answer['activity']['id']} 的活动没有设置pma, 或者对应pma的微信id为空");
                     }
                     //获取通过的短信内容
-                    $smsData = NotificationTemplate::fetchSuccessSmsData($answer['activity']['title']);
+                    $smsData = NotificationTemplate::fetchSuccessSmsData($answer['activity']['start_time'], $answer['activity']['title']);
                 } elseif (Answer::STATUS_REVIEW_REJECT == $answer['status']) {
                     //获取不通过的短信内容
-                    $smsData = NotificationTemplate::fetchFailSmsData($answer['activity']['title']);
+                    $smsData = NotificationTemplate::fetchFailSmsData($answer['activity']['start_time'], $answer['activity']['title']);
                 }
 
                 $mixedData = [
