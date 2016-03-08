@@ -27,12 +27,14 @@ class NotificationTemplate extends Component
 
     /**
      * 获取成功的短信内容
+     * @param integer $start_time 活动开始时间
      * @param string $activity_name 活动名称
      * @return string 短信内容
      */
-    public static function fetchSuccessSmsData($activity_name) {
+    public static function fetchSuccessSmsData($start_time, $activity_name) {
+        $start_time = $start_time > 0 ? date('m月d日', $start_time) : '';
         //获取通过的短信模板
-        return "恭喜，你报名的“{$activity_name}”活动已通过筛选。活动地点等详细信息将在活动微信群中和大家沟通。请你按以下操作步骤加入活动微信群：进入Someet活动平台（服务号ID：SomeetInc）——点击屏幕下栏“本周活动”——进入相应活动页面——点击微信群组——扫描二维码加入活动群。期待与你共同玩耍，系统短信，请勿回复。";
+        return "恭喜，你报名的{$start_time}“{$activity_name}”活动已通过筛选。详情请到微信公众号(SomeetInc)查看。";
     }
     /**
      * 获取等待的短信内容
@@ -45,12 +47,15 @@ class NotificationTemplate extends Component
     }
     /**
      * 获取失败的短信内容
+     * @param integer $start_time 活动开始时间
      * @param string $activity_name 活动名称
+     * @param string $reason 被拒绝的原因
      * @return string 失败的短信内容
      */
-    public static function fetchFailSmsData($activity_name) {
+    public static function fetchFailSmsData($start_time, $activity_name, $reason = '') {
+        $start_time = $start_time > 0 ? date('m月d日', $start_time) : '';
         //获取拒绝的短信模板
-        return "Shit happens!很抱歉你报名的“{$activity_name}”活动未通过筛选。你可添加官方客服Someet小海豹（微信ID：someetxhb）随时与我们联系。期待下次活动和你相遇。系统短信，请勿回复。";
+        return "Shit happens！{$reason}很抱歉你报名的{$start_time}“{$activity_name}”活动未通过筛选。祝下次好运。详情请到微信公众号(SomeetInc)查看。";
     }
 
     /**
