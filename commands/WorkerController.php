@@ -2,6 +2,7 @@
 namespace app\commands;
 
 use someet\common\models\Answer;
+use someet\common\models\User;
 use udokmeci\yii2beanstalk\BeanstalkController;
 use yii\helpers\Console;
 use Yii;
@@ -95,16 +96,44 @@ class WorkerController extends BeanstalkController
 
             //获取微信组
             $wechat = Yii::$app->wechat;
-
+            $user_id = $answer->user_id;
+            $answerNum = Answer::find()
+            ->where(['user_id' => $user_id, 'status' => Answer::STATUS_REVIEW_PASS])
+            ->count();
+            $user = User::find()->where(['id' => $user_id])->one();
+            $userJoinCount = $user->attend_count;
             //尝试发送模板消息
             if ($msgid = $wechat->sendTemplateMessage($templateData)) { //模板消息发送成功
 
                 //更新报名的模板消息的id, 发送的时间和状态
                 Answer::updateAll(['wechat_template_msg_id' => $msgid, 'wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_SUCC, 'wechat_template_push_at' => time()], ['id' => $answer->id]);
+
+                // 审核成功后 用户通过次数加 1
+                
+                if ($userJoinCount < $answerNum ) {
+                
+                    if($answer->status == Answer::STATUS_REVIEW_PASS){
+                        User::updateAllCounters(['attend_count' => 1],['id' => $user_id ]);
+                        // $transaction->commit();
+                    }else if ($answer->status == Answer::STATUS_REVIEW_REJECT) {
+                        User::updateAllCounters(['reject_count' => 1],['id' => $user_id ]);
+                    }
+                }
             } else {
 
                 //更新报名的模板消息发送的时间和状态, 状态为失败,后面可以单独的重新发送模板消息
                 Answer::updateAll(['wechat_template_is_send' => Answer::STATUS_WECHAT_TEMPLATE_Fail, 'wechat_template_push_at' => time()], ['id' => $answer->id]);
+                // 审核成功后 用户通过次数加 1
+                
+                if ($userJoinCount < $answerNum ) {
+                
+                    if($answer->status == Answer::STATUS_REVIEW_PASS){
+                        User::updateAllCounters(['attend_count' => 1],['id' => $user_id ]);
+                        // $transaction->commit();
+                    }else if ($answer->status == Answer::STATUS_REVIEW_REJECT) {
+                        User::updateAllCounters(['reject_count' => 1],['id' => $user_id ]);
+                    }
+                }
             }
 
             fwrite(STDOUT, Console::ansiFormat("Wechat - Everything is allright"."\n", [Console::FG_GREEN]));
