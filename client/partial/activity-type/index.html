@@ -16,7 +16,10 @@
       <p> {{entity.display_order}} </p>
       <p layout="row">
         <md-button class="md-raised" ng-click="update(entity)">修改</md-button>
-        <md-button class="md-raised md-warn" ng-click="delete(entity)">删除</md-button>
+        <!-- <md-button class="md-raised md-warn" ng-click="delete(entity)">删除</md-button> -->
+            <md-button ng-if="entity.status == 10"> 显示</md-button>
+            <md-button ng-if="entity.status == 20"> 隐藏</md-button>
+            <md-button ng-if="entity.status == 0"> 删除</md-button>
       </p>
     </md-list-item>
   </md-list>

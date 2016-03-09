@@ -60,14 +60,20 @@ angular.module('controllers')
       // 查看单个活动类型
       $activityTypeManage.fetch(id).then(function (data) {
         $scope.entity = data;
+        // $scope.selectedDirection = $scope.entity.status;
+        // console.log(data);
       }, function (err) {
         $location.path('/activity-type');
       });
-
+      // 修改状态
+      $scope.availableDirections = ['0', '10', '20'];
+      // $scope.selectedDirection = $scope.entity.status;
+      // console.log($scope.entity);
+      // $scope.selectedDirection = 10;
       // 保存活动类型
       $scope.save = function () {
         var entity = $scope.entity;
-        var newEntity = {name: entity.name, display_order: entity.display_order};
+        var newEntity = {name: entity.name, display_order: entity.display_order, status:entity.status};
         if (entity.id > 0) { // 更新
           $activityTypeManage.update(entity.id, newEntity).then(function (data) {
             $location.path('/activity-type');
