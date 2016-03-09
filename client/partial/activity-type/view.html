@@ -9,11 +9,15 @@
             <label>标签排序</label>
             <input type="number" ng-model="entity.display_order" />
         </md-input-container>
-        <md-checkbox ng-model="entity.status" aria-label="Checkbox 2" ng-true-value="'1'" ng-false-value="'0'" class="md-warn md-align-top-left" flex>
-            是否启用
-            <span ng-if="share.status == 1"> 已启用</span>
-            <span ng-if="share.status == 0"> 未启用</span>
-        </md-checkbox>
+        <md-radio-group ng-model="entity.status" >
+        当前状态
+          <md-radio-button ng-repeat="mode in availableDirections" ng-value="mode">
+            <span ng-if="mode == 10"> 显示</span>
+            <span ng-if="mode == 20"> 隐藏</span>
+            <span ng-if="mode == 0"> 删除</span>
+          </md-radio-button>
+        </md-radio-group>
+
         <div layout="row">
             <md-button class="md-raised md-primary" ng-disabled="entityForm.$invalid">保存</md-button>
             <md-button class="md-raised md-warn" ng-click="cancel()">取消</md-button>
