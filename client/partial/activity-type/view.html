@@ -1,17 +1,22 @@
 <!-- 暂未使用 活动类型 -->
 <div layout="column" flex id="content">
-  <form name="entityForm" ng-submit="save()" novalidate>
-      <md-input-container>
-        <label>标签名称</label>
-        <input type="text" ng-model="entity.name" required ng-minlength="2" ng-maxlength="10">
-      </md-input-container>
-      <md-input-container>
-        <label>标签排序</label>
-        <input type="number" ng-model="entity.display_order" />
-      </md-input-container>
-      <div layout="row">
-        <md-button class="md-raised md-primary" ng-disabled="entityForm.$invalid">保存</md-button>
-        <md-button class="md-raised md-warn" ng-click="cancel()">取消</md-button>
-      </div>
+    <form name="entityForm" ng-submit="save()" novalidate>
+        <md-input-container>
+            <label>标签名称</label>
+            <input type="text" ng-model="entity.name" required ng-minlength="2" ng-maxlength="10">
+        </md-input-container>
+        <md-input-container>
+            <label>标签排序</label>
+            <input type="number" ng-model="entity.display_order" />
+        </md-input-container>
+        <md-checkbox ng-model="entity.status" aria-label="Checkbox 2" ng-true-value="'1'" ng-false-value="'0'" class="md-warn md-align-top-left" flex>
+            是否启用
+            <span ng-if="share.status == 1"> 已启用</span>
+            <span ng-if="share.status == 0"> 未启用</span>
+        </md-checkbox>
+        <div layout="row">
+            <md-button class="md-raised md-primary" ng-disabled="entityForm.$invalid">保存</md-button>
+            <md-button class="md-raised md-warn" ng-click="cancel()">取消</md-button>
+        </div>
     </form>
 </div>
