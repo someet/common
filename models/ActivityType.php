@@ -14,6 +14,12 @@ use Yii;
  */
 class ActivityType extends \yii\db\ActiveRecord
 {
+    /* 删除 */
+    const STATUS_DELETE     = 0;
+    /* 正常 */
+    const STATUS_NORMAL    = 10;
+    /* 隐藏 */
+    const STATUS_HIDDEN  = 20;
 
     /**
      * @inheritdoc
