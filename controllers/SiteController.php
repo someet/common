@@ -59,7 +59,6 @@ class SiteController extends BackendController
     public function actionFetch()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $activity_test_type_id = Yii::$app->params['activity.test_type_id'];
 
         // 所有授权关注的人数
         $countUser = User::find()->count('id');
@@ -117,7 +116,6 @@ class SiteController extends BackendController
 
         // 本周活动数量（不包括测试）
         $countWeekActivity = Activity::find()
-                            ->where('type_id!=' . $activity_test_type_id)
                             ->andWhere('start_time > ' . getLastEndTime())
                             ->andWhere(['status' => Activity::STATUS_RELEASE])
                             ->count('id');
@@ -128,7 +126,6 @@ class SiteController extends BackendController
               
         $countJoin = Activity::find()
                     ->select(['activity.id activity_id','count(answer.activity_id) as countJoin','activity.title title','activity.peoples peoples','activity.field1'])
-                    ->where('type_id!=' . $activity_test_type_id)
                     ->andWhere('activity.status = ' . Activity::STATUS_RELEASE)
                     ->andWhere('activity.start_time > ' . getLastEndTime())
                     ->groupBy('activity.id')
