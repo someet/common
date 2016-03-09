@@ -59,7 +59,6 @@ class SiteController extends BackendController
     public function actionFetch()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $activity_test_type_id = Yii::$app->params['activity.test_type_id'];
 
         // 所有授权关注的人数
         $countUser = User::find()->count('id');
@@ -117,7 +116,6 @@ class SiteController extends BackendController
 
         // 本周活动数量（不包括测试）
         $countWeekActivity = Activity::find()
-                            ->where('type_id!=' . $activity_test_type_id)
                             ->andWhere('start_time > ' . getLastEndTime())
                             ->andWhere(['status' => Activity::STATUS_RELEASE])
                             ->count('id');
@@ -128,7 +126,6 @@ class SiteController extends BackendController
               
         $countJoin = Activity::find()
                     ->select(['activity.id activity_id','count(answer.activity_id) as countJoin','activity.title title','activity.peoples peoples','activity.field1'])
-                    ->where('type_id!=' . $activity_test_type_id)
                     ->andWhere('activity.status = ' . Activity::STATUS_RELEASE)
                     ->andWhere('activity.start_time > ' . getLastEndTime())
                     ->groupBy('activity.id')
@@ -182,6 +179,38 @@ class SiteController extends BackendController
             array_multisort($arrSort[$sort_desc['field']], constant($sort_desc['direction']), $countJoin);  //降序
             $countJoinDesc = $countJoin;
             // array_slice($countJoin,0,10);
+
+            // 通过的总数
+            $pass_count = Answer::find()
+                            ->where(['status' => Answer::STATUS_REVIEW_PASS ])
+                            ->count();
+
+            // 迟到人数
+            $arrive_late = Answer::find()
+                            ->where(['arrive_status' => Answer::STATUS_ARRIVE_LATE,'status' => Answer::STATUS_REVIEW_PASS])
+                            ->count();            
+            // 请假人数
+            $leave = Answer::find()
+                            ->where(['leave_status' => Answer::STATUS_LEAVE_YES,'status' => Answer::STATUS_REVIEW_PASS])
+                            ->count();            
+            // 爽约人数
+            $arrive_no = Answer::find()
+                            ->where(['arrive_status' => Answer::STATUS_ARRIVE_YET,'status' => Answer::STATUS_REVIEW_PASS])
+                            ->count();
+            // echo $pass_count;
+            // echo $arrive_late;
+            if ($pass_count > 0) {
+                $late_ratio = round($arrive_late / $pass_count,2) *100 ."%";
+                $leave_ratio = round($leave / $pass_count,2) *100 ."%";
+                $arrive_no_ratio = round($arrive_no / $pass_count,2) *100 ."%";
+            }else {
+                $late_ratio = "0%";
+                $leave_ratio = "0%";
+                $arrive_no_ratio = "0%";
+            }
+
+
+            
         }
 
         return [
@@ -199,6 +228,9 @@ class SiteController extends BackendController
            'countJoinDesc'=>$countJoinDesc,
            'countUserInfoBoy'=>$countUserInfoBoy,
            'countUserInfoGirl'=>$countUserInfoGirl,
+           'late_ratio'=>$late_ratio,
+           'leave_ratio'=>$leave_ratio,
+           'arrive_no_ratio'=>$arrive_no_ratio,
         ];
 
     }

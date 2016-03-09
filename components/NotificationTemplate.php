@@ -32,7 +32,7 @@ class NotificationTemplate extends Component
      * @return string 短信内容
      */
     public static function fetchSuccessSmsData($start_time, $activity_name) {
-        $start_time = $start_time > 0 ? date('m月d日', $start_time) : '';
+        $start_time = $start_time > 0 ? date('n月j日', $start_time) : '';
         //获取通过的短信模板
         return "恭喜，你报名的{$start_time}“{$activity_name}”活动已通过筛选。详情请到微信公众号(SomeetInc)查看。";
     }
@@ -53,7 +53,7 @@ class NotificationTemplate extends Component
      * @return string 失败的短信内容
      */
     public static function fetchFailSmsData($start_time, $activity_name, $reason = '') {
-        $start_time = $start_time > 0 ? date('m月d日', $start_time) : '';
+        $start_time = $start_time > 0 ? date('n月j日', $start_time) : '';
         //获取拒绝的短信模板
         return "Shit happens！{$reason}很抱歉你报名的{$start_time}“{$activity_name}”活动未通过筛选。祝下次好运。详情请到微信公众号(SomeetInc)查看。";
     }

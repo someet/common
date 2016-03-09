@@ -283,6 +283,45 @@ class AnswerController extends BackendController
             }
         }
 
+
+        // 通过的总数
+        $pass_count = Answer::find()
+                        ->where(['activity_id' => $activity_id ])
+                        ->andWhere(['status' => Answer::STATUS_REVIEW_PASS ])
+                        ->count();
+
+        // 迟到人数
+        $arrive_late = Answer::find()
+                        ->where(['activity_id' => $activity_id ])
+                        ->andWhere(['arrive_status' => Answer::STATUS_ARRIVE_LATE,'status' => Answer::STATUS_REVIEW_PASS])
+                        ->count();            
+        // 请假人数
+        $leave = Answer::find()
+                        // ->select(['count(activity_id) as leave_count'])
+                        ->where(['activity_id' => $activity_id ])
+                        ->andWhere(['leave_status' => Answer::STATUS_LEAVE_YES,'status' => Answer::STATUS_REVIEW_PASS])
+                        // ->groupBy('activity_id')
+                        // ->asArray()
+                        // ->one();  
+                        ->count();
+        // print_r($leave['leave_count']);
+
+        // 爽约人数
+        $arrive_no = Answer::find()
+                        ->where(['activity_id' => $activity_id ])
+                        ->andWhere(['arrive_status' => Answer::STATUS_ARRIVE_YET,'status' => Answer::STATUS_REVIEW_PASS])
+                        ->count(); 
+        if ($pass_count > 0) {
+            $late_ratio = round($arrive_late / $pass_count,2) *100 ."%";
+            $leave_ratio = round($leave / $pass_count,2) *100 ."%";
+            $arrive_no_ratio = round($arrive_no / $pass_count,2) *100 ."%";
+        }else {
+            $late_ratio = "0%";
+            $leave_ratio = "0%";
+            $arrive_no_ratio = "0%";
+        }
+
+
         foreach ($models as $key => $value) {
 
             // 反馈的次数
@@ -303,6 +342,9 @@ class AnswerController extends BackendController
                             ->andWhere(['status' => Answer::STATUS_REVIEW_PASS])
                             ->andWhere(['leave_status' => Answer::STATUS_LEAVE_YET])
                             ->count();
+            $models[$key]['late_ratio'] = $late_ratio;
+            $models[$key]['leave_ratio'] = $leave_ratio;
+            $models[$key]['arrive_no_ratio'] = $arrive_no_ratio;
 
         }
         return $models;
