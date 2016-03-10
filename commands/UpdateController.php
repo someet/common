@@ -36,6 +36,7 @@ class UpdateController  extends \yii\console\Controller
 	                	'leave_status' => Answer::STATUS_LEAVE_YET,
 	                	'answer.status' => Answer::STATUS_REVIEW_PASS,
 	                	])
+	                //获取上周的数据
 	                ->andWhere('answer.created_at > ' .getWeekBefore().' and '.'answer.created_at < ' .getLastEndTime())
 	                ->andWhere('answer.leave_time > (activity.start_time - 3600)' .' and '.'answer.leave_time < activity.start_time')
 	                ->asArray()
@@ -109,7 +110,7 @@ class UpdateController  extends \yii\console\Controller
 	                ->andWhere('answer.created_at > ' .getWeekBefore().' and '.'answer.created_at < ' .getLastEndTime())            
 					->asArray()
 	                ->all();
-	    if (empty($arrive_yet)) {
+	    if (!empty($arrive_yet)) {
 		    foreach ($arrive_yet as  $arrive_yet_value) {
 		    	$YellowCard_arrive_yet = new YellowCard();
 		    	$arrive_yet_exists = YellowCard::find()
@@ -144,7 +145,7 @@ class UpdateController  extends \yii\console\Controller
 	                ->andWhere('answer.created_at > ' .getWeekBefore().' and '.'answer.created_at < ' .getLastEndTime())            
 					->asArray()
 	                ->all();
-	    if (empty($arrive_no)) {
+	    if (!empty($arrive_no)) {
 		    foreach ($arrive_no as  $arrive_no_value) {
 		    	$YellowCard_arrive_no = new YellowCard();
 		    	$arrive_yet_exists = YellowCard::find()
