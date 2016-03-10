@@ -49,6 +49,26 @@
                 </md-input-container>
             </div>
             <legend>
+                黄牌记录
+            </legend>
+            <div flex-xs flex-gt-xs="50" flex="40" layout="column">
+                <md-card ng-repeat="answer in joinActivity.answers">
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-subhead">{{answer.activity.title}}</span>
+                        </md-card-title-text>
+                        <md-card-title-media>
+                            <div class="md-media-sm card-media"><span class="md-subhead">{{ answer.activity.start_time * 1000 | date: "MM月dd日 HH:mm:ss" }}</span></div>
+                        </md-card-title-media>
+                    </md-card-title>
+                    <md-card-actions layout="row" layout-align="end center">
+                        <md-button><a href="/#/answer/{{answer.activity.id}}" target="_blank">筛选</a></md-button>
+                    </md-card-actions>
+                </md-card>
+                <div class="" ng-if="joinActivity.answers == null"> 没有参加过活动</div>
+            </div> 
+
+            <legend>
                 参加过的活动
             </legend>
             <div flex-xs flex-gt-xs="50" flex="40" layout="column">
