@@ -445,7 +445,7 @@ class ActivityController extends BackendController
 
             //查询现在的活动人数是否已经报满
             $activity = Activity::findOne($id);
-            $is_full = $activity->join_people_count < $activity->peoples ? Activity::IS_FULL_NO : Activity::IS_FULL_YES;
+            $is_full = $activity->join_people_count < $data['peoples'] ? Activity::IS_FULL_NO : Activity::IS_FULL_YES;
 
             //尝试更新活动是否已报名完成字段
             //如果 is_full 和之前的值一样则无需要更新
