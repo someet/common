@@ -33,17 +33,17 @@ class MemberController extends BackendController
     public function behaviors()
     {
         return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'index' => ['get'],
-                    'create' => ['post'],
-                    'update' => ['post'],
-                    'delete' => ['post'],
-                    'view' => ['get'],
-                    'yellow-card' => ['get'],
-                ],
-            ],
+            // 'verbs' => [
+            //     'class' => VerbFilter::className(),
+            //     'actions' => [
+            //         'index' => ['get'],
+            //         'create' => ['post'],
+            //         'update' => ['post'],
+            //         'delete' => ['post'],
+            //         'view' => ['get'],
+            //         'yellow-card' => ['get'],
+            //     ],
+            // ],
             'access' => [
                 'class' => '\app\components\AccessControl',
             ],
@@ -290,7 +290,7 @@ class MemberController extends BackendController
 
 
     /**
-     * 黄牌弃用
+     * 黄牌弃用 取消
      * @param  [type] $id     [description]
      * @param  [type] $status [description]
      * @return [type]         [description]
@@ -298,17 +298,53 @@ class MemberController extends BackendController
     public function actionAbandonYellowCard($id, $status){
         Yii::$app->response->format = Response::FORMAT_JSON;
         $user_id = Yii::$app->user->id;
-        $status = $status ? YellowCard::STATUS_ABANDON : YellowCard::STATUS_NORMAL;
-        YellowCard::updateAll([
-            'status' => $status, 
-            'handle_user_id' => $user_id, 
-            'user_id' => $user_id, 
-            'handle_result' => YellowCard::HANDLE_RESULT_COMPLETE, 
-            ],['id' => $id]);
-
+        $yellow_card = YellowCard::findOne($id);
+        $yellow_card->status = YellowCard::STATUS_ABANDON;
+        $yellow_card->handle_user_id = $user_id;
+        $yellow_card->appeal_status = YellowCard::APPEAL_STATUS_COMPLETE;
+        $yellow_card->save();
+        return $yellow_card;
+        // return YellowCard::updateAll([
+        //     'status' => YellowCard::STATUS_ABANDON, 
+        //     'handle_user_id' => $user_id, 
+        //     'appeal_status' => YellowCard::APPEAL_STATUS_COMPLETE, 
+        //     ],['id' => $id]);
 
     }
     
+    /**
+     * 黄牌驳回
+     * @param  [type] $id            [description]
+     * @param  [type] $appeal_status [description]
+     * @return [type]                [description]
+     */
+    public function actionRejectYellowCard($id, $handle_reply= null){
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $user_id = Yii::$app->user->id;
+        $yellow_card = YellowCard::findOne($id);
+        $yellow_card->handle_user_id = $user_id;
+        $yellow_card->appeal_status = YellowCard::APPEAL_STATUS_REJECT;
+        $yellow_card->handle_reply = $handle_reply;
+        $yellow_card->save();
+          
+        return $yellow_card;
+    }
+
+    /**
+     * 黄牌申诉列表
+     * @return [type] [description]
+     */
+    public function actionAppealList($user_id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $yellow_card = YellowCard::find()
+                        ->where(['appeal_status' => YellowCard::APPEAL_STATUS_YES])
+                        ->andWhere('answer.created_at > ' .getWeekBefore().' and '.'answer.created_at < ' .getLastEndTime())
+                        ->all();
+        return $yellow_card;
+
+    }
+
 
     /**
      *pma参与的活动

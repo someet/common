@@ -1,5 +1,5 @@
 angular.module('controllers')
-.controller('UserAddCtrl', ['$scope', '$location', '$userManage', function($scope, $location, $userManage){
+.controller('UserAddCtrl', ['$scope', '$location', '$userManage','$mdDialog', function($scope, $location, $userManage, $mdDialog){
     $scope.$parent.pageName = '添加用户';
 
     $scope.user = {
@@ -173,7 +173,7 @@ angular.module('controllers')
 
 
   }])
-  .controller('UserUpdateCtrl', ['$scope', '$location', '$routeParams','$qiniuManage',  '$qupload', '$userManage','$mdToast', function($scope, $location, $routeParams, $qiniuManage, $qupload, $userManage, $mdToast){
+  .controller('UserUpdateCtrl', ['$scope', '$location', '$routeParams','$qiniuManage',  '$qupload', '$userManage','$mdToast', '$mdDialog',function($scope, $location, $routeParams, $qiniuManage, $qupload, $userManage, $mdToast, $mdDialog){
     $scope.$parent.pageName = '用户详情';
 
     // qiniu upload 头像 start //
@@ -234,26 +234,26 @@ angular.module('controllers')
     // 用户获得的黄牌
     $userManage.fetchUserYellowCard(userId).then(function(data) {
       $scope.yellowCardList = data;
-      console.log(data);
+      // console.log(data);
     })  
 
     // 取消黄牌 
-    $scope.abandonYellowCard = function(id){
+    $scope.abandonYellowCard = function(id,status){
         var confirm = $mdDialog.confirm()
           .title('确定取消吗')
-          .ariaLabel('delete activity item')
-          .ok('确定删除')
-          .cancel('手滑点错了，不删');
+          .ariaLabel('delete yellow card item')
+          .ok('确定取消')
+          .cancel('手滑点错了，不取消');
 
         $mdDialog.show(confirm).then(function() {
-          $activityManage.delete(entity).then(function(data) {
-
-            lodash.remove($scope.list, function(tmpRow) {
-              return tmpRow == entity;
-            });
+          $userManage.fetchUserAbandonYellowCard(id,status).then(function(data) {
+            console.log(data);
+            // if (data == 1) {
+              // $scope.yellowCardList.status = data.status;
+            // }
 
             $mdToast.show($mdToast.simple()
-              .content('删除活动“' + entity.title + '”成功')
+              .content('取消成功')
               .hideDelay(5000)
               .position("top right"));
 
@@ -265,6 +265,33 @@ angular.module('controllers')
           });
         });
     }
+
+    // 驳回申请 
+    $scope.rejectYellowCard = function(id, handle_reply){
+        var confirm = $mdDialog.confirm()
+          .title('确定驳回吗')
+          .ariaLabel('delete yellow card item')
+          .ok('确定驳回')
+          .cancel('手滑点错了，不驳回');
+
+        $mdDialog.show(confirm).then(function() {
+          $userManage.fetchUserRejectYellowCard(id, handle_reply).then(function(data) {
+            console.log(data);
+            // $scope.yellowCardList.appeal_status = data.appeal_status;
+            $mdToast.show($mdToast.simple()
+              .content('驳回成功')
+              .hideDelay(5000)
+              .position("top right"));
+
+          }, function(err) {
+            $mdToast.show($mdToast.simple()
+              .content(err.toString())
+              .hideDelay(5000)
+              .position("top right"));
+          });
+        });
+    }
+
 
 
     // 发起人发起的活动

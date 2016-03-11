@@ -55,23 +55,36 @@
                 <md-card ng-repeat="yellowCardList in yellowCardList">
                     <md-card-title>
                         <md-card-title-text>
-                            <span class="md-subhead">{{yellowCardList.activity_title}}</span>
-                            原因：
+                            <span class="md-subhead">{{yellowCardList.activity_title}}</span> 原因:
                             <span class="md-subhead" ng-if="yellowCardList.card_category == 1">迟到</span>
                             <span class="md-subhead" ng-if="yellowCardList.card_category == 2">请假</span>
                             <span class="md-subhead" ng-if="yellowCardList.card_category == 3">爽约</span>
+                            <span class="md-subhead">黄牌数量：{{yellowCardList.card_num}}</span>
                         </md-card-title-text>
                         <md-card-title-media>
                             <div class="md-media-sm card-media"><span class="md-subhead">{{ yellowCardList.created_at * 1000 | date: "MM月dd日 HH:mm:ss" }}</span></div>
+                            <span class="md-subhead" ng-if="yellowCardList.status == 0">黄牌状态：正常使用</span>
+                            <span class="md-subhead" ng-if="yellowCardList.status == 1">黄牌状态：弃用</span>
+                            <span class="md-subhead" ng-if="yellowCardList.appeal_status == 0">申诉状态：未申诉</span>
+                            <span class="md-subhead" style="color: red;" ng-if="yellowCardList.appeal_status == 1">申诉状态：已申诉（等待处理）</span>
+                            <span class="md-subhead" ng-if="yellowCardList.appeal_status == 2">申诉状态：同意取消</span>
+                            <span class="md-subhead" ng-if="yellowCardList.appeal_status == 3">申诉状态：驳回</span>
                         </md-card-title-media>
                     </md-card-title>
-                    <md-card-actions layout="row" layout-align="end center">
-                        <md-button><a href="" target="_blank">取消黄牌</a></md-button>
+                    <div layout='row' layout-margin ng-if="yellowCardList.appeal_status == 1">
+                        <md-input-container flex="100">
+                            <label>驳回理由</label>
+                            <input type="text" ng-model="yellowCardList.handle_reply" />
+                        </md-input-container>
+                    </div>
+                    <md-card-actions ng-if="yellowCardList.appeal_status == 1" layout="row" layout-align="end center">
+                        <md-button class="md-raised md-warn" ng-click="rejectYellowCard(yellowCardList.id,yellowCardList.handle_reply)">驳回理由</md-button>
+                        <md-button class="md-raised md-warn" ng-click="abandonYellowCard(yellowCardList.id,1)">取消黄牌</md-button>
                     </md-card-actions>
+ 
                 </md-card>
                 <div class="" ng-if="yellowCardList == null"> 没有参加过活动</div>
-            </div> 
-
+            </div>
             <legend>
                 参加过的活动
             </legend>
@@ -86,7 +99,7 @@
                         </md-card-title-media>
                     </md-card-title>
                     <md-card-actions layout="row" layout-align="end center">
-                        <md-button><a href="/#/answer/{{answer.activity.id}}" target="_blank">筛选</a></md-button>
+                        <md-button><a class="md-primary" href="/#/answer/{{answer.activity.id}}" target="_blank">筛选</a></md-button>
                     </md-card-actions>
                 </md-card>
                 <div class="" ng-if="joinActivity.answers == null"> 没有参加过活动</div>
@@ -150,7 +163,7 @@
                                 </md-card-title-media>
                             </md-card-title>
                             <md-card-actions layout="row" layout-align="end center">
-                                <md-button><a href="/#/answer/{{answer.id}}" target="_blank">筛选</a></md-button>
+                                <md-button class="md-primary"><a href="/#/answer/{{answer.id}}" target="_blank">筛选</a></md-button>
                             </md-card-actions>
                         </md-card>
                     </div>
