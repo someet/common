@@ -228,7 +228,44 @@ angular.module('controllers')
     // 用户报名的活动
     $userManage.fetchUserJoinActivity(userId).then(function(data) {
       $scope.joinActivity = data;
+    })      
+
+
+    // 用户获得的黄牌
+    $userManage.fetchUserYellowCard(userId).then(function(data) {
+      $scope.yellowCardList = data;
+      console.log(data);
     })  
+
+    // 取消黄牌 
+    $scope.abandonYellowCard = function(id){
+        var confirm = $mdDialog.confirm()
+          .title('确定取消吗')
+          .ariaLabel('delete activity item')
+          .ok('确定删除')
+          .cancel('手滑点错了，不删');
+
+        $mdDialog.show(confirm).then(function() {
+          $activityManage.delete(entity).then(function(data) {
+
+            lodash.remove($scope.list, function(tmpRow) {
+              return tmpRow == entity;
+            });
+
+            $mdToast.show($mdToast.simple()
+              .content('删除活动“' + entity.title + '”成功')
+              .hideDelay(5000)
+              .position("top right"));
+
+          }, function(err) {
+            $mdToast.show($mdToast.simple()
+              .content(err.toString())
+              .hideDelay(5000)
+              .position("top right"));
+          });
+        });
+    }
+
 
     // 发起人发起的活动
     $scope.founderActivity = function(){

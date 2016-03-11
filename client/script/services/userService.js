@@ -15,6 +15,13 @@ angular.module('backendServices')
         return $http.get('/member/user-join-activities?user_id='+userId).then(function(userJoinActivity) {
           return userJoinActivity;
         })
+      },    
+
+      // 获取用户获得的黄牌
+      fetchUserYellowCard: function(userId) {
+        return $http.get('/member/yellow-card?user_id='+userId).then(function(data) {
+          return data;
+        })
       },
       //发起人发起的活动 && PMA参与的活动
       fetchActivityByRole: function(userId,role) {

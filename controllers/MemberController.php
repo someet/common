@@ -7,6 +7,7 @@ use someet\common\models\Profile;
 use someet\common\models\User;
 use someet\common\models\Activity;
 use someet\common\models\Answer;
+use someet\common\models\YellowCard;
 use Yii;
 use yii\data\Pagination;
 use yii\filters\VerbFilter;
@@ -40,6 +41,7 @@ class MemberController extends BackendController
                     'update' => ['post'],
                     'delete' => ['post'],
                     'view' => ['get'],
+                    'yellow-card' => ['get'],
                 ],
             ],
             'access' => [
@@ -273,6 +275,40 @@ class MemberController extends BackendController
             return ['answers' => null, 'pages' => $pages];
         }
     }
+
+    /**
+     *用户获得的黄牌
+     * 
+     */
+    public function actionYellowCard($user_id){
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $yellow_card = YellowCard::find()
+                        ->where(['user_id' => $user_id])
+                        ->all();
+        return $yellow_card;
+    }
+
+
+    /**
+     * 黄牌弃用
+     * @param  [type] $id     [description]
+     * @param  [type] $status [description]
+     * @return [type]         [description]
+     */
+    public function actionAbandonYellowCard($id, $status){
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $user_id = Yii::$app->user->id;
+        $status = $status ? YellowCard::STATUS_ABANDON : YellowCard::STATUS_NORMAL;
+        YellowCard::updateAll([
+            'status' => $status, 
+            'handle_user_id' => $user_id, 
+            'user_id' => $user_id, 
+            'handle_result' => YellowCard::HANDLE_RESULT_COMPLETE, 
+            ],['id' => $id]);
+
+
+    }
+    
 
     /**
      *pma参与的活动
