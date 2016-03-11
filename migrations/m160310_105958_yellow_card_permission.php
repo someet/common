@@ -8,9 +8,10 @@ class m160310_105958_yellow_card_permission extends Migration
     public function up()
     {
         $items = [
-            /* 答案审核 */
+            /* 黄牌系统 */
             '/backend/member/yellow-card' => ['pma'],
             '/backend/member/abandon-yellow-card' => ['pma'],
+            '/backend/member/reject-yellow-card' => ['pma'],
         ];
 
         $authItemTemplate = <<<SQL

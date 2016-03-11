@@ -17,6 +17,7 @@ use Yii;
  * @property string $created_at
  * @property integer $invalid_time
  * @property string $appeal_reason
+ * @property integer $appeal_status
  * @property integer $appeal_time
  * @property string $status
  * @property integer $handle_time
@@ -26,7 +27,8 @@ use Yii;
  * @property string $handle_result
  */
 class YellowCard extends \yii\db\ActiveRecord
-{   
+{
+
     // 迟到
     const CARD_CATEGOTY_LATE  = 1;
     // 请假
@@ -49,8 +51,16 @@ class YellowCard extends \yii\db\ActiveRecord
     const CARD_NUM_NO = 3;
 
     const HANDLE_RESULT_NOW = 0;                  
-    const HANDLE_RESULT_COMPLETE = 1;                  
+    const HANDLE_RESULT_COMPLETE = 1; 
 
+    // 申诉状态 未申诉
+    const APPEAL_STATUS_NO = 0;                  
+    // 申诉状态 申诉中
+    const APPEAL_STATUS_YES = 1;                  
+    // 申诉状态 处理完成
+    const APPEAL_STATUS_COMPLETE = 2;                  
+    // 申诉状态 驳回
+    const APPEAL_STATUS_REJECT = 3;  
 
 
     /**
@@ -67,9 +77,8 @@ class YellowCard extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'activity_id', 'card_num', 'invalid_time', 'appeal_time', 'handle_time', 'handle_user_id'], 'integer'],
-            [['username', 'created_at'], 'required'],
-            [[  'appeal_reason','handle_username', 'handle_reply', 'handle_result'], 'string', 'max' => 255]
+            [['user_id', 'activity_id', 'card_num', 'invalid_time', 'appeal_status', 'appeal_time', 'handle_time', 'handle_user_id'], 'integer'],
+            [['username', 'activity_title', 'card_category', 'created_at', 'appeal_reason', 'handle_username', 'handle_reply', 'handle_result'], 'string', 'max' => 255]
         ];
     }
 
@@ -89,6 +98,7 @@ class YellowCard extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'invalid_time' => 'Invalid Time',
             'appeal_reason' => 'Appeal Reason',
+            'appeal_status' => 'Appeal Status',
             'appeal_time' => 'Appeal Time',
             'status' => 'Status',
             'handle_time' => 'Handle Time',
