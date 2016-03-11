@@ -48,6 +48,8 @@ class YellowCard extends \yii\db\ActiveRecord
     // 黄牌数量 爽约 
     const CARD_NUM_NO = 3;
 
+    const HANDLE_RESULT_NOW = 0;                  
+    const HANDLE_RESULT_COMPLETE = 1;                  
 
 
 
