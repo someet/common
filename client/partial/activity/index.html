@@ -103,7 +103,6 @@
                         <a class="btn btn-primary" target="_blank" href="http://bshare.optimix.asia/barCode?site=weixin&url=https://m.someet.cc/activity/{{entity.id}}">生成活动二维码</a>
                         <button ng-if="!entity.question" class="btn" ng-click="viewQuestion(entity)">设置表单</button>
                         <button ng-if="entity.question" class="btn" ng-click="viewQuestion(entity)">修改表单</button>
-                        <button ng-if="entity.question" class="btn" ng-click="previewQuestion(entity)">预览表单</button>
                         <a class="btn btn-success" href="#/activity/{{entity.id}}" target="_blank">编辑</a>
                         <!-- 下拉功能 -->
                         <div class="btn-group btn-float-right">
