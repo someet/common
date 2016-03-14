@@ -59,7 +59,7 @@
 
               <!-- 活动标题 -->
               {{entity.id}}#
-              <span ng-if="entity.status==10" >[草稿] {{entity.title}}</span>
+              <span ng-if="entity.status==10" >[草稿] {{entity.user.username}}：{{entity.title}} - {{entity.desc}}</span>
               <span ng-if="entity.status==20" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}</span>
               
 
