@@ -94,6 +94,29 @@ class UpdateController  extends \yii\console\Controller
 		
 		return true;
 	}
+
+	/**
+	 *更新活动的星期字段值
+	 */
+	public function actionActivityWeek()
+	{
+		$activities = Activity::find()
+				->asArray()
+				->all();
+
+		foreach ($activities as $activity) {
+			if (0 == $activity['start_time']) {
+				continue;
+			}
+
+			Activity::updateAll(
+					['week' => date('w', $activity['start_time'])],
+					['id' => $activity['id']]
+			);
+		}
+
+		return true;
+	}
 }
 
 

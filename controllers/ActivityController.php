@@ -359,6 +359,10 @@ class ActivityController extends BackendController
         $response->format = Response::FORMAT_JSON;
 
         $data = $request->post();
+
+        $start_time = isset($data['start_time']) ? $data['start_time'] : 0;
+        $data['week'] = $start_time > 0 ? date('w', $start_time) : 0;
+
         $model = new Activity;
 
         if ($model->load($data, '') && $model->save()) {
@@ -478,6 +482,9 @@ class ActivityController extends BackendController
             if (!$model->validate('start_time')) {
                 throw new DataValidationFailedException($model->getFirstError('start_time'));
             }
+
+            $start_time = $model->start_time;
+            $model->week = $start_time > 0 ? date('w', $start_time) : 0;
         }
 
         if (isset($data['end_time'])) {
