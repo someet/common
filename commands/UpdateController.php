@@ -113,8 +113,8 @@ class UpdateController  extends \yii\console\Controller
 			}
 
 			Activity::updateAll(
-					['week' => date('w', $activity['start_time'])],
-					['id' => $activity['id']]
+				['week' => date('w', $activity['start_time'])],
+				['id' => $activity['id']]
 			);
 		}
 
