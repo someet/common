@@ -96,8 +96,11 @@ class UpdateController  extends \yii\console\Controller
 	}
 
 	/**
-	 *更新活动的星期字段值
-	 */
+	*更新活动的星期字段值
+	* 执行方式 在命令行 
+	* 如： docker exec -i backend_app_1 ./yii update/activity-week（控制器/方法） 
+	* 可以用 yii help 来提示帮助
+	*/
 	public function actionActivityWeek()
 	{
 		$activities = Activity::find()
