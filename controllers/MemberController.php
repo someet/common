@@ -272,8 +272,9 @@ class MemberController extends BackendController
     }
 
     /**
-     *用户获得的黄牌
-     * 
+     * 用户获得的黄牌
+     * @param  [int] $user_id [用户id]
+     * @return [type]          [黄牌列表]
      */
     public function actionYellowCard($user_id){
         Yii::$app->response->format = Response::FORMAT_JSON;
