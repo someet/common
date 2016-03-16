@@ -264,11 +264,6 @@ class MemberController extends BackendController
             ])
             ->all();
 
-            // $activities = [];
-            // foreach($answers as $answer) {
-              // $activities[] = $answer['activity'];
-            // }
-
         if ($answers) {
             return ['answers' => $answers, 'pages' => $pages];
         } else {
@@ -291,12 +286,13 @@ class MemberController extends BackendController
 
     /**
      * 黄牌弃用 取消
-     * @param  [type] $id     [description]
-     * @param  [type] $status [description]
+     * @param  [int] $id     [description]
+     * @param  [int] $status [黄牌状态]
      * @return [type]         [description]
      */
     public function actionAbandonYellowCard($id, $status){
         Yii::$app->response->format = Response::FORMAT_JSON;
+        // 用户的id
         $user_id = Yii::$app->user->id;
         $yellow_card = YellowCard::findOne($id);
         $yellow_card->status = YellowCard::STATUS_ABANDON;
@@ -304,29 +300,24 @@ class MemberController extends BackendController
         $yellow_card->appeal_status = YellowCard::APPEAL_STATUS_COMPLETE;
         $yellow_card->save();
         return $yellow_card;
-        // return YellowCard::updateAll([
-        //     'status' => YellowCard::STATUS_ABANDON, 
-        //     'handle_user_id' => $user_id, 
-        //     'appeal_status' => YellowCard::APPEAL_STATUS_COMPLETE, 
-        //     ],['id' => $id]);
 
     }
     
     /**
      * 黄牌驳回
-     * @param  [type] $id            [description]
-     * @param  [type] $appeal_status [description]
-     * @return [type]                [description]
+     * @param  [type] $id            [黄牌id]
+     * @param  [type] $handle_reply [黄牌驳回填写的理由]
+     * @return [type]                [黄牌的返回列表]
      */
     public function actionRejectYellowCard($id, $handle_reply= null){
         Yii::$app->response->format = Response::FORMAT_JSON;
+        // 用户的id
         $user_id = Yii::$app->user->id;
         $yellow_card = YellowCard::findOne($id);
         $yellow_card->handle_user_id = $user_id;
         $yellow_card->appeal_status = YellowCard::APPEAL_STATUS_REJECT;
         $yellow_card->handle_reply = $handle_reply;
         $yellow_card->save();
-          
         return $yellow_card;
     }
 

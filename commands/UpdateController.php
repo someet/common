@@ -41,9 +41,12 @@ class UpdateController  extends \yii\console\Controller
 	                ->andWhere('answer.leave_time > (activity.start_time - 3600)' .' and '.'answer.leave_time < activity.start_time')
 	                ->asArray()
 	                ->all();
+	    // 检测数据是否为空
 	    if (!empty($leave_yet_in_one_day)) { 
 		    foreach ($leave_yet_in_one_day as  $leave_yet_in_one_day_value) {
 		    	$YellowCard_leave_yet_in_one_day = new YellowCard();
+
+		    	// 判断数据之前是否更新过，如果更新过则不再更新，防止重复更新
 		    	$leave_yet_in_one_day_exists = YellowCard::find()
 							    	->where(['user_id' => $leave_yet_in_one_day_value['user_id'],'activity_id' => $leave_yet_in_one_day_value['activity']['id']])
 							    	->exists();
@@ -56,10 +59,7 @@ class UpdateController  extends \yii\console\Controller
 			    	$YellowCard_leave_yet_in_one_day->created_at = time();
 			    	$YellowCard_leave_yet_in_one_day->status = YellowCard::STATUS_NORMAL;
 			    	$YellowCard_leave_yet_in_one_day->user_id = $leave_yet_in_one_day_value['user_id'];
-		    	//开启事务
-	        	// $transaction = $YellowCard_leave_yet_in_one_day->getDb()->beginTransaction();
-		    	$YellowCard_leave_yet_in_one_day->save();
-	        	// $transaction->commit();
+					$YellowCard_leave_yet_in_one_day->save();
 	        	}
 		    }
 	    }
@@ -73,7 +73,7 @@ class UpdateController  extends \yii\console\Controller
 	                	'answer.status' => Answer::STATUS_REVIEW_PASS,
 	                	])
 	                ->andWhere('answer.created_at > ' .getWeekBefore().' and '.'answer.created_at < ' .getLastEndTime())
-					->andWhere('answer.leave_time < (activity.start_time - 3600)')	                
+					->andWhere('answer.leave_time < (activity.start_time - 3600)')         
 					->asArray()
 	                ->all();
 
@@ -92,10 +92,7 @@ class UpdateController  extends \yii\console\Controller
 			    	$YellowCard_leave_yet_no_one_day->created_at = time();
 			    	$YellowCard_leave_yet_no_one_day->status = YellowCard::STATUS_NORMAL;
 			    	$YellowCard_leave_yet_no_one_day->user_id = $leave_yet_no_one_day_value['user_id'];
-		    	//开启事务
-	        	// $transaction = $YellowCard_leave_yet_in_one_day->getDb()->beginTransaction();
-		    	$YellowCard_leave_yet_no_one_day->save();
-	        	// $transaction->commit();
+					$YellowCard_leave_yet_no_one_day->save();
 	        	}
 		    }
 		}  
@@ -125,10 +122,7 @@ class UpdateController  extends \yii\console\Controller
 			    	$YellowCard_arrive_yet->created_at = time();
 			    	$YellowCard_arrive_yet->status = YellowCard::STATUS_NORMAL;
 			    	$YellowCard_arrive_yet->user_id = $arrive_yet_value['user_id'];
-		    	//开启事务
-	        	// $transaction = $YellowCard_leave_yet_in_one_day->getDb()->beginTransaction();
-		    	$YellowCard_arrive_yet->save();
-	        	// $transaction->commit();
+		    		$YellowCard_arrive_yet->save();
 	        	}
 		    }
 	    }        
@@ -160,10 +154,7 @@ class UpdateController  extends \yii\console\Controller
 			    	$YellowCard_arrive_no->created_at = time();
 			    	$YellowCard_arrive_no->status = YellowCard::STATUS_NORMAL;
 			    	$YellowCard_arrive_no->user_id = $arrive_no_value['user_id'];
-		    	//开启事务
-	        	// $transaction = $YellowCard_leave_yet_in_one_day->getDb()->beginTransaction();
-		    	$YellowCard_arrive_no->save();
-	        	// $transaction->commit();
+					$YellowCard_arrive_no->save();
 	        	}
 		    }
 	    }            
