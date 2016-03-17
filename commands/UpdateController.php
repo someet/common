@@ -20,6 +20,39 @@ class UpdateController  extends \yii\console\Controller
 {	
 
 	/**
+    * 每周一凌晨更新 黑牌
+	* 执行方式 在命令行 
+	* 如： docker exec -i backend_app_1 ./yii update/update-black-label（控制器/方法） 
+	* 可以用 yii help 来提示帮助
+	*/
+	public function actionUpdateBlackLabel()
+	{
+		// 每周一 1点执行更新 黑牌 主要更新上周一凌晨到本周一凌晨的数据
+		// 根据用户id 查询出每周黄牌的数量，超过三个，则更新 user表里面的是否被拉黑字段
+		$yellowCard = YellowCard::find()
+					->select('id,user_id , sum(card_num) card_count')
+					->where(['status' => YellowCard::STATUS_NORMAL])
+					// 上周一凌晨到本周一凌晨
+	                ->andWhere('created_at > ' .getWeekBefore().' and '.'created_at < ' .getLastEndTime()) 
+	                ->asArray()           
+	                ->groupBy('user_id')
+	                ->all();
+	     if (!empty($yellowCard)) {
+		     foreach ($yellowCard as  $value) {
+				if ($value['card_count'] >= 3) {
+					User::updateAll([
+						'black_label' => User::BLACK_LIST_YES,
+						'black_time' => time(),
+						],['id' => $value['user_id']]);
+					
+					}	     	
+		     }
+	     }
+
+ 		return true;
+	}
+
+	/**
     * 每周一凌晨更新 黄牌数量
 	* 执行方式 在命令行 
 	* 如： docker exec -i backend_app_1 ./yii update/yellow-card（控制器/方法） 
