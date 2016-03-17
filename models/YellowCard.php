@@ -77,8 +77,13 @@ class YellowCard extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+<<<<<<< HEAD
             [['user_id', 'activity_id', 'card_num', 'invalid_time', 'appeal_status', 'appeal_time', 'handle_time', 'handle_user_id'], 'integer'],
             [['username', 'activity_title', 'card_category', 'created_at', 'appeal_reason', 'handle_username', 'handle_reply', 'handle_result'], 'string', 'max' => 255]
+=======
+            [['card_category', 'created_at','user_id', 'activity_id', 'card_num', 'invalid_time', 'appeal_status', 'appeal_time', 'handle_time', 'handle_user_id'], 'integer'],
+            [['username', 'activity_title', 'appeal_reason', 'handle_username', 'handle_reply', 'handle_result'], 'string', 'max' => 255]
+>>>>>>> 7b256a8ecd676ef7180e6e9fe75bc4a776bd04a0
         ];
     }
 
@@ -107,5 +112,10 @@ class YellowCard extends \yii\db\ActiveRecord
             'handle_reply' => 'Handle Reply',
             'handle_result' => 'Handle Result',
         ];
+    }
+
+    public function getActivity()
+    {
+        return $this->hasOne(Activity::className(), ['id' => 'activity_id']);
     }
 }
