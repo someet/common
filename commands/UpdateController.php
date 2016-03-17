@@ -27,13 +27,13 @@ class UpdateController  extends \yii\console\Controller
 	*/
 	public function actionUpdateBlackLabel()
 	{
-		// 每周一 1点执行更新 黑牌 主要更新上周一凌晨到本周一凌晨的数据
+		// 每周一 2点执行更新 黑牌 主要更新本周一凌晨往前28天的数据
 		// 根据用户id 查询出每周黄牌的数量，超过三个，则更新 user表里面的是否被拉黑字段
 		$yellowCard = YellowCard::find()
 					->select('id,user_id , sum(card_num) card_count')
 					->where(['status' => YellowCard::STATUS_NORMAL])
 					// 上周一凌晨到本周一凌晨
-	                ->andWhere('created_at > ' .getWeekBefore().' and '.'created_at < ' .getLastEndTime()) 
+	                ->andWhere('created_at > (' .getLastEndTime().' - 2419200) and '.'created_at < ' .getLastEndTime()) 
 	                ->asArray()           
 	                ->groupBy('user_id')
 	                ->all();
@@ -49,6 +49,23 @@ class UpdateController  extends \yii\console\Controller
 		     }
 	     }
 
+	     // 解禁黑牌
+	     
+	     // 如黑牌创建时间超过了28天则解禁
+	     $userBlack = User::find()
+	     				->where(['black_label' => User::BLACK_LIST_YES])
+	     				->andWhere('('.getLastEndTime() .' - 2419200 ) > black_time')
+	     				->all();
+
+	    if (!empty($userBlack)) {
+			foreach ($userBlack as  $userBlackValue) {
+				User::updateAll([
+					'black_label' => User::BLACK_LIST_NO,
+					],['id' => $userBlackValue['id']]);
+					
+		     }
+	     }
+	     			
  		return true;
 	}
 
