@@ -197,7 +197,26 @@ class MemberController extends BackendController
                     ->where($where)
                     ->orderBy(['id' => SORT_DESC]);
                 break;
-
+            //已删除的用户
+            case 'appeal':
+                // $where = ['appeal_status' => YellowCard::APPEAL_STATUS_YES];
+                $userAppeal = YellowCard::find()
+                ->select('user_id')
+                ->where(['appeal_status' => YellowCard::APPEAL_STATUS_YES])
+                ->groupBy('user_id')
+                ->asArray()
+                ->all();
+                $userArr = [];
+                foreach ($userAppeal as $key => $value) {
+                  $userArr[$key] = $value['user_id'];
+                }
+                // print_r($userArr);
+                $query = User::find()
+                    ->with(['profile'])
+                    ->asArray()
+                    ->where(['id' => $userArr])
+                    ->orderBy(['id' => SORT_DESC]);
+                break;
             //全部用户列表
             default:
                 $where = ['status' => User::STATUS_ACTIVE];
@@ -303,7 +322,7 @@ class MemberController extends BackendController
         return $yellow_card;
 
     }
-    
+
     /**
      * 黄牌驳回
      * @param  [type] $id            [黄牌id]
@@ -326,13 +345,13 @@ class MemberController extends BackendController
      * 黄牌申诉列表
      * @return [type] [description]
      */
-    public function actionAppealList($user_id)
+    public function actionAppealList()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $yellow_card = YellowCard::find()
                         ->where(['appeal_status' => YellowCard::APPEAL_STATUS_YES])
-                        ->andWhere('answer.created_at > ' .getWeekBefore().' and '.'answer.created_at < ' .getLastEndTime())
-                        ->all();
+                        // ->andWhere('created_at > ' .getWeekBefore().' and '.'created_at < ' .getLastEndTime())
+                        ->count();
         return $yellow_card;
 
     }
@@ -341,7 +360,7 @@ class MemberController extends BackendController
     /**
      *pma参与的活动
      *发起人发起的活动
-     *@param $role string admin | pma 
+     *@param $role string admin | pma
      *@param $user_id 用户的id
      */
     public function actionActivityByRole($user_id ,$role)
@@ -364,7 +383,7 @@ class MemberController extends BackendController
                     ->where($where)
                     ->andWhere(['created_by' => $user_id]);
             }
-            
+
 
             $pages = new Pagination(['totalCount' => $data->count()]);
             $activities = $data->offset($pages->offset)->limit($pages->limit)
@@ -580,7 +599,7 @@ class MemberController extends BackendController
         } else {
             throw new NotFoundHttpException('该用户不存在');
         }
-    }    
+    }
 
     /**
      * 查找一个联系人profile表

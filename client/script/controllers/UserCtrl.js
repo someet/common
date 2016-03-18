@@ -10,6 +10,8 @@ angular.module('controllers')
   };
   $scope.checkUserResult = '';
 
+
+
   $scope.createUser = function() {
 
     var newUser = {
@@ -51,8 +53,13 @@ angular.module('controllers')
     //});
 
     // tab
-    
-    $scope.isActive = function(type_id) {        
+
+    $userManage.fetchUserAppealList().then(function(data){
+      console.log(data);
+        $scope.countAppealnum =  data;
+      });
+
+    $scope.isActive = function(type_id) {
       var route = "/member/list/"+type_id;
       if (type_id === "all"){
         route = "/member"
@@ -101,6 +108,7 @@ angular.module('controllers')
         case 'founder'://发起人
         case 'admin'://管理员
         case 'delete'://已删除
+        case 'appeal'://黄牌申诉用户
           normalPagination(listtype);
           break;
         default:
@@ -228,16 +236,16 @@ angular.module('controllers')
     // 用户报名的活动
     $userManage.fetchUserJoinActivity(userId).then(function(data) {
       $scope.joinActivity = data;
-    })      
+    })
 
 
     // 用户获得的黄牌
     $userManage.fetchUserYellowCard(userId).then(function(data) {
       $scope.yellowCardList = data;
       // console.log(data);
-    })  
+    })
 
-    // 取消黄牌 
+    // 取消黄牌
     $scope.abandonYellowCard = function(id,status){
         var confirm = $mdDialog.confirm()
           .title('确定取消吗')
@@ -266,7 +274,7 @@ angular.module('controllers')
         });
     }
 
-    // 驳回申请 
+    // 驳回申请
     $scope.rejectYellowCard = function(id, handle_reply){
         var confirm = $mdDialog.confirm()
           .title('确定驳回吗')
@@ -360,7 +368,7 @@ angular.module('controllers')
 
 
       }
-   
+
     $scope.updateUser = function() {
       var userData = {
         headimgurl: $scope.profile.headimgurl,

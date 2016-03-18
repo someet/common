@@ -1,9 +1,6 @@
 <!-- 用户列表 -->
 <div layout="column" flex id="content">
     <div class="container">
-        <div class="">
-            共有 个黄牌申诉 查看列表
-        </div>
         <div>
             <ul class="nav nav-tabs">
                 <li ng-class="{active:isActive('all')}">
@@ -26,6 +23,9 @@
                 </li>
                 <li ng-class="{active:isActive('delete')}">
                     <a href="/#/member/list/delete">已删除</a>
+                </li>
+                <li ng-class="{active:isActive('appeal')}">
+                    <a href="/#/member/list/appeal">申诉用户 <span style="color:red;font-size:20px;margin-top:1px;">{{countAppealnum}}</span></a>
                 </li>
                 <form class="navbar-form navbar-right" role="search">
                     <div class="form-group">
