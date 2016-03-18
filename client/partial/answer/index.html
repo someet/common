@@ -27,7 +27,7 @@
             </div>
         </div>
         <ul class="list-group">
-            <li class="list-group-item" ng-repeat="entity in list | filter: {is_send: 0}" ng-click="view(entity)">
+            <li class="list-group-item" ng-repeat="entity in list | filter: {is_send: 0,apply_status:0,leave_status:0}" ng-click="view(entity)">
                 <div class="media">
                     <a class="pull-left" href="">
                         <img width="50" height="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像">
@@ -49,7 +49,7 @@
             </div>
         </div>
         <ul class="list-group">
-            <li class="list-group-item" ng-repeat="entity in list | filter: {status:20, is_send: 1}" ng-click="view(entity)">
+            <li class="list-group-item" ng-repeat="entity in list | filter: {status:20, is_send:1}" ng-click="view(entity)">
                 <div class="media">
                     <a class="pull-left" href="">
                         <img width="50" height="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像" />
@@ -59,9 +59,11 @@
           </span>
                     <span ng-if="entity.leave_status == 1" class="btn-float-right">请假</span>
                     <span ng-if="entity.leave_status == 0">
-                <span ng-if="entity.arrive_status == 1" class="btn-float-right">迟到</span>
+                    <span ng-if="entity.arrive_status == 1" class="btn-float-right">迟到</span>
                     <span ng-if="entity.arrive_status == 0" class="btn-float-right">未到</span>
                     <span ng-if="entity.arrive_status == 2" class="btn-float-right">准时</span>
+                    <span ng-if="entity.leave_status == 1" class="btn-float-right">请假</span>
+                    <span ng-if="entity.apply_status == 1" class="btn-float-right">取消报名</span>
                     </span>
                     <span class="btn-float-right" style="color:#3E3;">已通过</span>
                     <span ng-if="entity.feedback" class="btn-float-right">已反馈</span>
