@@ -61,7 +61,7 @@
               {{entity.id}}#
               <span ng-if="entity.status==10" >[草稿] {{entity.user.username}}：{{entity.title}} - {{entity.desc}}</span>
               <span ng-if="entity.status==20" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}</span>
-              
+
 
               <!-- 内部使用的状态标签 -->
               <div class="btn-group btn-group-xs">
@@ -125,14 +125,14 @@
         </ul>
     </div>
     <div ng-show="modelPagination" class="someet-pagination user-pagination">
-        <pagination 
-        total-items="modelPagination.totalItems" 
-        ng-model="modelPagination.currentPage" 
-        ng-change="modelPagination.pageChange()" 
-        items-per-page="modelPagination.itemsPerPage" 
-        max-size="modelPagination.maxSize" 
-        class="pagination-sm" 
-        boundary-links="false" 
+        <pagination
+        total-items="modelPagination.totalItems"
+        ng-model="modelPagination.currentPage"
+        ng-change="modelPagination.pageChange()"
+        items-per-page="modelPagination.itemsPerPage"
+        max-size="modelPagination.maxSize"
+        class="pagination-sm"
+        boundary-links="false"
         previous-text="上一页"
         next-text="下一页"
         rotate="false">

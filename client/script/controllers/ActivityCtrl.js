@@ -4,7 +4,7 @@ angular.module('controllers', ['ngTagsInput'])
 
       /*
       var type_id = $routeParams.type_id;
-      $activityManage.listByType(type_id).then(function(data) {        
+      $activityManage.listByType(type_id).then(function(data) {
         $scope.list = data;
       }, function(err) {
         alert(err);
@@ -31,7 +31,7 @@ angular.module('controllers', ['ngTagsInput'])
           }
         };
 
-        $activityManage.modelPageMeta(type, $scope.modelPagination.itemsPerPage).then(function(total) {
+        $activityManage.modelPageMeta(type, $scope.modelPagination.itemsPerPage,isWeek).then(function(total) {
           console.log(total);
           $scope.modelPagination.totalItems = total;
         });
@@ -93,7 +93,7 @@ angular.module('controllers', ['ngTagsInput'])
         alert(err);
       });
 
-      // 本周活动 
+      // 本周活动
       $scope.weekActivity = function(){
         if (listtype>0) {
           normalPagination(listtype,0);
@@ -113,7 +113,7 @@ angular.module('controllers', ['ngTagsInput'])
 
       // 调整顺序
       $scope.adjust_order = function(entity){
-        // entity.display_order 
+        // entity.display_order
         $activityManage.update(entity.id, entity).then(function(data) {
           // $location.path('/activity/list/' + type_id);
         }, function(err) {
@@ -194,12 +194,12 @@ angular.module('controllers', ['ngTagsInput'])
                 .content(err.toString())
                 .hideDelay(5000)
                 .position("top right"));
-            });          
-          });   
+            });
+          });
         }else{
 
           var noquestion = $mdDialog.alert()
-            .title('请先设置问题表单然后再发布活动！')            
+            .title('请先设置问题表单然后再发布活动！')
             .clickOutsideToClose(true)
             .ariaLabel('delete activity item')
             .ok('知道了');
@@ -280,7 +280,7 @@ angular.module('controllers', ['ngTagsInput'])
       }
 
       // 复制活动链接
-      $scope.copyActivityUrl = function(activity) {        
+      $scope.copyActivityUrl = function(activity) {
         copyTextToClipboard('https://m.someet.cc/activity/' + activity.id);
       }
 
@@ -305,13 +305,13 @@ angular.module('controllers', ['ngTagsInput'])
       }
 
       // tab
-      $scope.isActive = function(type_id) {        
+      $scope.isActive = function(type_id) {
         var route = "/activity/list/"+type_id
         return route === $location.path() || $location.path() === '/question' || $location.path() === '/answer';
       }
 
       //点击增加类型按钮
-      $scope.onTypeAddClicked = function() {        
+      $scope.onTypeAddClicked = function() {
         $scope.showAddForm = true;
       };
 
@@ -386,7 +386,7 @@ angular.module('controllers', ['ngTagsInput'])
         }else{
           addTypeName(typeName);
         }
-        
+
       };
 
       // 增加新活动
