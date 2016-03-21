@@ -27,7 +27,7 @@
             </div>
         </div>
         <ul class="list-group">
-            <li class="list-group-item" ng-repeat="entity in list | filter: {is_send: 0,apply_status:0,leave_status:0}" ng-click="view(entity)">
+            <li class="list-group-item" ng-repeat="entity in list | filter: {is_send: 0}" ng-click="view(entity)">
                 <div class="media">
                     <a class="pull-left" href="">
                         <img width="50" height="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像">
