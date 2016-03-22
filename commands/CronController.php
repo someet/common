@@ -17,14 +17,10 @@ class CronController  extends \yii\console\Controller
      */
     public function actionSendReviewNoti()
     {
-        //默认的PMA的微信id
-        $default_pma_wechat_id = \DockerEnv::get('DEFAULT_PRINCIPAL');
-        //获取微信组件
-        $wechat = Yii::$app->wechat;
-
-        // 给活动开始时间大于当前时间的, 审核的用户发短信, 包括通过的, 等待的, 拒绝的
+        // 给活动开始时间大于当前时间的, 审核的用户发短信, 包括通过的, 拒绝的
         $answerList = Answer::find()
             ->where(['answer.is_send' => Answer::STATUS_SMS_YET, 'activity.status' => Activity::STATUS_RELEASE ])
+            ->andWhere(['in', 'answer.status', [Answer::STATUS_REVIEW_PASS, Answer::STATUS_REVIEW_REJECT]])
             ->andWhere('activity.start_time >'.time())
             ->innerJoin('activity', 'answer.activity_id =  activity.id')
             ->with(['user', 'activity', 'activity.pma', 'activity.user'])
@@ -47,27 +43,14 @@ class CronController  extends \yii\console\Controller
                 //手机号
                 $mobile = $answer['user']['mobile'];
 
-                //设置默认的短信为等待的短信内容
-                $smsData = NotificationTemplate::fetchWaitSmsData($answer['activity']['title']);
+                //默认获取不通过的短信内容
+                $smsData = NotificationTemplate::fetchFailSmsData($answer['activity']['start_time'], $answer['activity']['title']);
+
                 //判断状态是通过
                 if (Answer::STATUS_REVIEW_PASS == $answer['status']) {
 
-                    // 给一个默认的pma的微信id[此id可能是我们工作人员的微信id]
-                    $pma_wechat_id = $default_pma_wechat_id;
-
-                    //获取pma的微信id
-                    if ($answer['activity']['pma'] && !empty($answer['activity']['pma']['wechat_id'])) {
-                        //设置pma的微信号为当前活动的pma
-                        $pma_wechat_id = $answer['activity']['pma']['wechat_id'];
-                    } else {
-                        //记录一个错误, 提示活动id为多少的活动没有设置pma, 或者对应pma的微信id为空
-                        Yii::error("活动id为: {$answer['activity']['id']} 的活动没有设置pma, 或者对应pma的微信id为空");
-                    }
                     //获取通过的短信内容
                     $smsData = NotificationTemplate::fetchSuccessSmsData($answer['activity']['start_time'], $answer['activity']['title']);
-                } elseif (Answer::STATUS_REVIEW_REJECT == $answer['status']) {
-                    //获取不通过的短信内容
-                    $smsData = NotificationTemplate::fetchFailSmsData($answer['activity']['start_time'], $answer['activity']['title']);
                 }
 
                 $mixedData = [
@@ -96,15 +79,13 @@ class CronController  extends \yii\console\Controller
                     //获取微信的openid
                     $openid = $account->client_id;
 
-                    //设置模板消息默认为等待的模板消息内容
-                    $templateData = NotificationTemplate::fetchWaitWechatTemplateData($openid, $answer['activity']);
+                    //默认获取不通过的模板消息内容
+                    $templateData = NotificationTemplate::fetchFailedWechatTemplateData($openid, $answer['user'], $answer['activity']);
+
                     //如果通过
                     if (Answer::STATUS_REVIEW_PASS == $answer['status']) {
                         //获取通过的模板消息内容
                         $templateData = NotificationTemplate::fetchSuccessWechatTemplateData($openid, $answer['user'], $answer['activity']);
-                    } elseif (Answer::STATUS_REVIEW_REJECT == $answer['status']) {
-                        //获取不通过的模板消息内容
-                        $templateData = NotificationTemplate::fetchFailedWechatTemplateData($openid, $answer['user'], $answer['activity']);
                     }
 
                     $wechat_template = Yii::$app->beanstalk->putInTube('wechat', ['templateData' => $templateData, 'answer' => $answer]);
