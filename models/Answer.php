@@ -94,7 +94,7 @@ class Answer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['question_id'], 'required'],
+            [['question_id', 'apply_status'], 'required'],
             [['leave_time', 'question_id', 'activity_id', 'user_id', 'is_finish', 'is_send', 'send_at', 'created_at', 'updated_at', 'status', 'wechat_template_push_at', 'wechat_template_is_send', 'wechat_template_msg_id', 'join_noti_is_send', 'join_noti_send_at', 'join_noti_wechat_template_push_at', 'join_noti_wechat_template_is_send', 'join_noti_wechat_template_msg_id', 'arrive_status', 'leave_status', 'apply_status'], 'integer'],
             [['leave_time'], 'default', 'value' => time()],
             [['apply_status'], 'default', 'value' => 0],
