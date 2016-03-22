@@ -1,5 +1,5 @@
 angular.module('controllers')
-.controller('UserAddCtrl', ['$scope', '$location', '$userManage', function($scope, $location, $userManage){
+.controller('UserAddCtrl', ['$scope', '$location', '$userManage','$mdDialog', function($scope, $location, $userManage, $mdDialog){
     $scope.$parent.pageName = '添加用户';
 
     $scope.user = {
@@ -9,6 +9,8 @@ angular.module('controllers')
     password1: ""
   };
   $scope.checkUserResult = '';
+
+
 
   $scope.createUser = function() {
 
@@ -51,8 +53,13 @@ angular.module('controllers')
     //});
 
     // tab
-    
-    $scope.isActive = function(type_id) {        
+
+    $userManage.fetchUserAppealList().then(function(data){
+      console.log(data);
+        $scope.countAppealnum =  data;
+      });
+
+    $scope.isActive = function(type_id) {
       var route = "/member/list/"+type_id;
       if (type_id === "all"){
         route = "/member"
@@ -101,6 +108,7 @@ angular.module('controllers')
         case 'founder'://发起人
         case 'admin'://管理员
         case 'delete'://已删除
+        case 'appeal'://黄牌申诉用户
           normalPagination(listtype);
           break;
         default:
@@ -173,7 +181,7 @@ angular.module('controllers')
 
 
   }])
-  .controller('UserUpdateCtrl', ['$scope', '$location', '$routeParams','$qiniuManage',  '$qupload', '$userManage','$mdToast', function($scope, $location, $routeParams, $qiniuManage, $qupload, $userManage, $mdToast){
+  .controller('UserUpdateCtrl', ['$scope', '$location', '$routeParams','$qiniuManage',  '$qupload', '$userManage','$mdToast', '$mdDialog',function($scope, $location, $routeParams, $qiniuManage, $qupload, $userManage, $mdToast, $mdDialog){
     $scope.$parent.pageName = '用户详情';
 
     // qiniu upload 头像 start //
@@ -228,7 +236,71 @@ angular.module('controllers')
     // 用户报名的活动
     $userManage.fetchUserJoinActivity(userId).then(function(data) {
       $scope.joinActivity = data;
-    })  
+    })
+
+
+    // 用户获得的黄牌
+    $userManage.fetchUserYellowCard(userId).then(function(data) {
+      $scope.yellowCardList = data;
+      // console.log(data);
+    })
+
+    // 取消黄牌
+    $scope.abandonYellowCard = function(id,status){
+        var confirm = $mdDialog.confirm()
+          .title('确定取消吗')
+          .ariaLabel('delete yellow card item')
+          .ok('确定取消')
+          .cancel('手滑点错了，不取消');
+
+        $mdDialog.show(confirm).then(function() {
+          $userManage.fetchUserAbandonYellowCard(id,status).then(function(data) {
+            console.log(data);
+            // if (data == 1) {
+              // $scope.yellowCardList.status = data.status;
+            // }
+
+            $mdToast.show($mdToast.simple()
+              .content('取消成功')
+              .hideDelay(5000)
+              .position("top right"));
+
+          }, function(err) {
+            $mdToast.show($mdToast.simple()
+              .content(err.toString())
+              .hideDelay(5000)
+              .position("top right"));
+          });
+        });
+    }
+
+    // 驳回申请
+    $scope.rejectYellowCard = function(id, handle_reply){
+        var confirm = $mdDialog.confirm()
+          .title('确定驳回吗')
+          .ariaLabel('delete yellow card item')
+          .ok('确定驳回')
+          .cancel('手滑点错了，不驳回');
+
+        $mdDialog.show(confirm).then(function() {
+          $userManage.fetchUserRejectYellowCard(id, handle_reply).then(function(data) {
+            console.log(data);
+            // $scope.yellowCardList.appeal_status = data.appeal_status;
+            $mdToast.show($mdToast.simple()
+              .content('驳回成功')
+              .hideDelay(5000)
+              .position("top right"));
+
+          }, function(err) {
+            $mdToast.show($mdToast.simple()
+              .content(err.toString())
+              .hideDelay(5000)
+              .position("top right"));
+          });
+        });
+    }
+
+
 
     // 发起人发起的活动
     $scope.founderActivity = function(){
@@ -296,7 +368,7 @@ angular.module('controllers')
 
 
       }
-   
+
     $scope.updateUser = function() {
       var userData = {
         headimgurl: $scope.profile.headimgurl,

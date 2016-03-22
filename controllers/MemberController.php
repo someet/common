@@ -7,6 +7,7 @@ use someet\common\models\Profile;
 use someet\common\models\User;
 use someet\common\models\Activity;
 use someet\common\models\Answer;
+use someet\common\models\YellowCard;
 use Yii;
 use yii\data\Pagination;
 use yii\filters\VerbFilter;
@@ -32,16 +33,17 @@ class MemberController extends BackendController
     public function behaviors()
     {
         return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'index' => ['get'],
-                    'create' => ['post'],
-                    'update' => ['post'],
-                    'delete' => ['post'],
-                    'view' => ['get'],
-                ],
-            ],
+            // 'verbs' => [
+            //     'class' => VerbFilter::className(),
+            //     'actions' => [
+            //         'index' => ['get'],
+            //         'create' => ['post'],
+            //         'update' => ['post'],
+            //         'delete' => ['post'],
+            //         'view' => ['get'],
+            //         'yellow-card' => ['get'],
+            //     ],
+            // ],
             'access' => [
                 'class' => '\app\components\AccessControl',
             ],
@@ -195,7 +197,26 @@ class MemberController extends BackendController
                     ->where($where)
                     ->orderBy(['id' => SORT_DESC]);
                 break;
-
+            //已删除的用户
+            case 'appeal':
+                // $where = ['appeal_status' => YellowCard::APPEAL_STATUS_YES];
+                $userAppeal = YellowCard::find()
+                ->select('user_id')
+                ->where(['appeal_status' => YellowCard::APPEAL_STATUS_YES])
+                ->groupBy('user_id')
+                ->asArray()
+                ->all();
+                $userArr = [];
+                foreach ($userAppeal as $key => $value) {
+                  $userArr[$key] = $value['user_id'];
+                }
+                // print_r($userArr);
+                $query = User::find()
+                    ->with(['profile'])
+                    ->asArray()
+                    ->where(['id' => $userArr])
+                    ->orderBy(['id' => SORT_DESC]);
+                break;
             //全部用户列表
             default:
                 $where = ['status' => User::STATUS_ACTIVE];
@@ -262,11 +283,6 @@ class MemberController extends BackendController
             ])
             ->all();
 
-            // $activities = [];
-            // foreach($answers as $answer) {
-              // $activities[] = $answer['activity'];
-            // }
-
         if ($answers) {
             return ['answers' => $answers, 'pages' => $pages];
         } else {
@@ -275,9 +291,76 @@ class MemberController extends BackendController
     }
 
     /**
+     * 用户获得的黄牌
+     * @param  [int] $user_id [用户id]
+     * @return [type]          [黄牌列表]
+     */
+    public function actionYellowCard($user_id){
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $yellow_card = YellowCard::find()
+                        ->where(['user_id' => $user_id])
+                        ->all();
+        return $yellow_card;
+    }
+
+
+    /**
+     * 黄牌弃用 取消
+     * @param  [int] $id     [description]
+     * @param  [int] $status [黄牌状态]
+     * @return [type]         [description]
+     */
+    public function actionAbandonYellowCard($id, $status){
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        // 用户的id
+        $user_id = Yii::$app->user->id;
+        $yellow_card = YellowCard::findOne($id);
+        $yellow_card->status = YellowCard::STATUS_ABANDON;
+        $yellow_card->handle_user_id = $user_id;
+        $yellow_card->appeal_status = YellowCard::APPEAL_STATUS_COMPLETE;
+        $yellow_card->save();
+        return $yellow_card;
+
+    }
+
+    /**
+     * 黄牌驳回
+     * @param  [type] $id            [黄牌id]
+     * @param  [type] $handle_reply [黄牌驳回填写的理由]
+     * @return [type]                [黄牌的返回列表]
+     */
+    public function actionRejectYellowCard($id, $handle_reply= null){
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        // 用户的id
+        $user_id = Yii::$app->user->id;
+        $yellow_card = YellowCard::findOne($id);
+        $yellow_card->handle_user_id = $user_id;
+        $yellow_card->appeal_status = YellowCard::APPEAL_STATUS_REJECT;
+        $yellow_card->handle_reply = $handle_reply;
+        $yellow_card->save();
+        return $yellow_card;
+    }
+
+    /**
+     * 黄牌申诉列表
+     * @return [type] [description]
+     */
+    public function actionAppealList()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $yellow_card = YellowCard::find()
+                        ->where(['appeal_status' => YellowCard::APPEAL_STATUS_YES])
+                        // ->andWhere('created_at > ' .getWeekBefore().' and '.'created_at < ' .getLastEndTime())
+                        ->count();
+        return $yellow_card;
+
+    }
+
+
+    /**
      *pma参与的活动
      *发起人发起的活动
-     *@param $role string admin | pma 
+     *@param $role string admin | pma
      *@param $user_id 用户的id
      */
     public function actionActivityByRole($user_id ,$role)
@@ -300,7 +383,7 @@ class MemberController extends BackendController
                     ->where($where)
                     ->andWhere(['created_by' => $user_id]);
             }
-            
+
 
             $pages = new Pagination(['totalCount' => $data->count()]);
             $activities = $data->offset($pages->offset)->limit($pages->limit)
@@ -516,7 +599,7 @@ class MemberController extends BackendController
         } else {
             throw new NotFoundHttpException('该用户不存在');
         }
-    }    
+    }
 
     /**
      * 查找一个联系人profile表

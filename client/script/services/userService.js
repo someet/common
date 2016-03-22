@@ -10,12 +10,40 @@ angular.module('backendServices')
         });
       },
 
+      // 黄牌申诉列表
+      fetchUserAppealList: function() {
+        return $http.get('/member/appeal-list').then(function(AppealList) {
+          return AppealList;
+        })
+      },
       // 获取用户报名的活动
       fetchUserJoinActivity: function(userId) {
         return $http.get('/member/user-join-activities?user_id='+userId).then(function(userJoinActivity) {
           return userJoinActivity;
         })
       },
+
+      // 获取用户获得的黄牌
+      fetchUserYellowCard: function(userId) {
+        return $http.get('/member/yellow-card?user_id='+userId).then(function(data) {
+          return data;
+        })
+      },
+
+      // 取消用户的黄牌
+      fetchUserAbandonYellowCard: function(id,status) {
+        return $http.get('/member/abandon-yellow-card?id='+id +'&status='+status).then(function(data) {
+          return data;
+        })
+      },
+
+      // 驳回用户的申请
+      fetchUserRejectYellowCard: function(id, handle_reply) {
+        return $http.get('/member/reject-yellow-card?id='+id + '&handle_reply='+handle_reply).then(function(data) {
+          return data;
+        })
+      },
+
       //发起人发起的活动 && PMA参与的活动
       fetchActivityByRole: function(userId,role) {
         return $http.get('/member/activity-by-role?user_id='+userId+'&role='+role).then(function(data){
