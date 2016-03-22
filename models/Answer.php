@@ -99,7 +99,8 @@ class Answer extends \yii\db\ActiveRecord
             [['leave_time'], 'default', 'value' => time()],
             [['apply_status'], 'default', 'value' => 0],
             [['question_id', 'user_id'], 'unique', 'targetAttribute' => ['question_id', 'user_id'], 'message' => 'The combination of 问题ID and 用户ID has already been taken.'],
-            [['status'], 'default', 'value' => static::STATUS_REVIEW_YET]
+            [['status'], 'default', 'value' => static::STATUS_REVIEW_YET],
+            [['leave_time', 'apply_status'], 'safe']
         ];
     }
 
