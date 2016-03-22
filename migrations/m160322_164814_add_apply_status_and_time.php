@@ -9,7 +9,7 @@ class m160322_164814_add_apply_status_and_time extends Migration
     {
         $sql = <<<SQL
 ALTER TABLE `answer`
-ADD COLUMN `apply_status` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '请假状态 0 正常使用 1 取消报名' AFTER `founder_noti_msg_send_at`,
+ADD COLUMN `apply_status` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '请假状态 0 正常使用 1 取消报名' AFTER `leave_msg`,
 ADD COLUMN `cancel_apply_time` INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '请假时间' AFTER `apply_status`;
 SQL;
         $this->execute($sql);
