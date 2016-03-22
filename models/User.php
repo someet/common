@@ -45,6 +45,7 @@ class User extends BaseUser
     /** * 用户不在黑名单 */
     const BLACK_LIST_NO = 0;
 
+
     /**
      * @var string|null the current password value from form input
      */
@@ -96,12 +97,13 @@ class User extends BaseUser
 
             [['email','password'], 'required', 'on'=>'signup'],
 
+            ['black_label', 'default', 'value' => self::BLACK_LIST_NO],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
 
             ['mobile', 'unique'],
             [['wechat_id'], 'unique'],
-            [['last_login_at'], 'integer'],
+            [['last_login_at','black_time'], 'integer'],
             ['password_reset_token', 'string', 'max' => 60],
             ['email_confirmation_token', 'string', 'max' => 60],
             [['last_login_at', 'password_reset_token', 'email_confirmation_token'], 'safe'],
