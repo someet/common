@@ -68,7 +68,7 @@ class User extends BaseUser
     {
         return array_merge(parent::scenarios(), [
             'register' => ['username', 'password', 'unionid'],
-            'update'   => ['id', 'mobile', 'wechat_id', 'last_login_at', 'password', 'email'],
+            'update'   => ['id', 'mobile', 'wechat_id', 'last_login_at', 'password'],
             'default'   => ['mobile', 'wechat_id', 'last_login_at'],
         ]);
     }
