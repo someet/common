@@ -37,15 +37,6 @@ class NotificationTemplate extends Component
         return "恭喜，你报名的{$start_time}“{$activity_name}”活动已通过筛选。详情请到微信公众号(SomeetInc)查看。";
     }
     /**
-     * 获取等待的短信内容
-     * @param string $activity_name 活动名称
-     * @return string 等待的短信内容
-     */
-    public static function fetchWaitSmsData($activity_name) {
-        //获取拒绝的短信模板
-        return "你好，你报名的“{$activity_name}”活动，发起人正在筛选中，我们将会在24小时内短信给你最终筛选结果，请耐心等待。谢谢你的支持，系统短信，请勿回复。";
-    }
-    /**
      * 获取失败的短信内容
      * @param integer $start_time 活动开始时间
      * @param string $activity_name 活动名称
@@ -78,55 +69,6 @@ class NotificationTemplate extends Component
         return " 你好，你已成功参加“{$activity_name}”活动，请及时对活动进行反馈，之后会提高下次通过筛选概率哦。";
     }
 
-
-
-    /*
-     * 获取等待的微信模板消息
-     * @param $openid openid
-     * @param $activity 活动对象
-     * @return array
-     */
-    public static function fetchWaitWechatTemplateData($openid, $activity) {
-        //获取等待的模板消息id
-        $template_id = Yii::$app->params['sms.wait_template_id'];
-        if (empty($template_id)) {
-            //记录一个错误, 请设置等待的模板消息id
-            Yii::error('请设置等待的模板消息id');
-        }
-        $start_time = date('m月d日', $activity['start_time'])
-            . self::$week[date('w', $activity['start_time'])]
-            . date('H:i', $activity['start_time'])
-            . '开始';
-        $data = [
-            "touser" => "{$openid}",
-            "template_id" => $template_id,
-            "url" => Yii::$app->params['domain'],
-            "topcolor" => "#FF0000",
-            "data" => [
-                "first" => [
-                    "value" => "你报名的活动正在筛选，请耐心等待",
-                    "color" => "#173177"
-                ],
-                "keyword1" => [
-                    "value" => "{$activity['title']}",
-                    "color" =>"#173177"
-                ],
-                "keyword2" => [
-                    "value" => "{$start_time}",
-                    "color" => "#173177"
-                ],
-                "keyword3" => [
-                    "value" => "{$activity['area']}",
-                    "color" => "#173177"
-                ],
-                "remark" => [
-                    "value" => "请随时关注Someet服务号的通知，及时收到筛选结果信息。",
-                    "color" => "#173177"
-                ],
-            ]
-        ];
-        return $data;
-    }
     /*
      * 获取失败的微信模板消息
      * @param $openid openid
