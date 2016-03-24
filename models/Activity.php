@@ -2,6 +2,7 @@
 
 namespace someet\common\models;
 
+use common\models\ActivityCheckIn;
 use Yii;
 
 /**
