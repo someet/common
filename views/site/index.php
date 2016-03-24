@@ -26,17 +26,25 @@ use yii\helpers\Url;
   <?= Html::csrfMetaTags() ?></head>
 <body class="main_css layout-column flex"  flex="" layout="column" ng-controller="MainCtrl">
 
-
   <md-toolbar class="site-content-toolbar" aria-hidden="false" style="background-color:#FFF;">
-    <nav class="navbar navbar-default container" role="navigation">
+    <nav class="navbar navbar-default">
       <!-- Brand and toggle get grouped for better mobile display -->
 
-      <div class="navbar-header">        
-        <a class="navbar-brand" href="#/dashboard">Someet</a>
-      </div>
+<nav class="navbar navbar-default">
+  <div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#/dashboard">Someet</a>
+    </div>
 
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse " >
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav h4">
           <?php echo Yii::$app->request->getQueryString(); ?>
           <li ng-class="{active:isActive('/special')}">
@@ -55,7 +63,6 @@ use yii\helpers\Url;
             <a href="#/share">分享</a>
           </li>
         </ul>
-
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown">
@@ -78,14 +85,16 @@ use yii\helpers\Url;
             </ul>
           </li>
         </ul>
-      </div>
+
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
       <!-- /.navbar-collapse --> </nav>
     </md-toolbar>
   <!-- /container -->
 <md-content ng-view >
   </md-content>
   <!-- /container -->
-
   <script src="/static/js/bundle.js"></script>
   <script src="/static/js/all.js"></script>
 </body>
