@@ -91,6 +91,8 @@ class Activity extends \yii\db\ActiveRecord
             ['group_code', 'default', 'value' => '0'],
             [['area','desc','address','details'], 'default', 'value' => '0'],
             ['poster', 'default', 'value' => 'http://7xn8h3.com1.z0.glb.clouddn.com/FqNwYVjezbfCKyqiVCqRO7PDr2ke'],
+            ['start_time', 'default', 'value' => time()],
+            ['end_time', 'default', 'value' => time()+7200],
             [['title'], 'string', 'max' => 80],
             [['desc', 'poster', 'group_code', 'address', 'cost_list', 'tagNames'], 'string', 'max' => 255],
             [['area'], 'string', 'max' => 10],

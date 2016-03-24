@@ -77,6 +77,7 @@ class YellowCard extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+
             [['card_category', 'created_at','user_id', 'activity_id', 'card_num', 'invalid_time', 'appeal_status', 'appeal_time', 'handle_time', 'handle_user_id'], 'integer'],
             [['username', 'activity_title', 'appeal_reason', 'handle_username', 'handle_reply', 'handle_result'], 'string', 'max' => 255]
         ];
