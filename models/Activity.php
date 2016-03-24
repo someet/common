@@ -90,7 +90,7 @@ class Activity extends \yii\db\ActiveRecord
             [['longitude', 'latitude'], 'default', 'value' => 0],
             ['group_code', 'default', 'value' => '0'],
             [['area','desc','address','details'], 'default', 'value' => '0'],
-            ['poster', 'default', 'value' => 'http://7xn8h3.com1.z0.glb.clouddn.com/FqNwYVjezbfCKyqiVCqRO7PDr2ke'],
+            ['poster', 'default', 'value' => 'http://7xn8h3.com2.z0.glb.qiniucdn.com/FtlMz_y5Pk8xMEPQCw5MGKCRuGxe'],
             ['start_time', 'default', 'value' => time()],
             ['end_time', 'default', 'value' => time()+7200],
             [['title'], 'string', 'max' => 80],
