@@ -29,17 +29,32 @@ use Yii;
 class YellowCard extends \yii\db\ActiveRecord
 {
 
+    // 类别
+
+    // 取消
+    const CARD_CATEGOTY_CANCEL  = 0;
     // 迟到
     const CARD_CATEGOTY_LATE  = 1;
-    // 请假
-    const CARD_CATEGOTY_LEAVE  = 2;
+    // 请假1
+    const CARD_CATEGOTY_LEAVE_1  = 2;
+    // 请假2
+    const CARD_CATEGOTY_LEAVE_2  = 3;
     // 爽约
-    const CARD_CATEGOTY_NO  = 3;
+    const CARD_CATEGOTY_NO  = 4;
+    // 带人
+    const CARD_CATEGOTY_BRING  = 5;
+    // 骚扰
+    const CARD_CATEGOTY_ANNOY  = 6;
 
     // 正常
     const STATUS_NORMAL = 0;
     // 弃用
     const STATUS_ABANDON = 1;
+
+    // 数量
+
+    // 黄牌数量 迟到
+    const CARD_NUM_CANCEL = 0;
 
     // 黄牌数量 迟到
     const CARD_NUM_LATE = 1;
@@ -47,20 +62,25 @@ class YellowCard extends \yii\db\ActiveRecord
     const CARD_NUM_LEAVE_IN_24_MIN = 1;
     // 黄牌数量 请假 不在24小时之内
     const CARD_NUM_LEAVE_NO_24_MIN = 2;
-    // 黄牌数量 爽约 
+    // 黄牌数量 爽约
     const CARD_NUM_NO = 3;
+    // 黄牌数量 带人
+    const CARD_NUM_BRING = 2;
+    // 黄牌数量 骚扰
+    const CARD_NUM_ANNOY = 1;
 
-    const HANDLE_RESULT_NOW = 0;                  
-    const HANDLE_RESULT_COMPLETE = 1; 
+    const HANDLE_RESULT_NOW = 0;
+    const HANDLE_RESULT_COMPLETE = 1;
+
 
     // 申诉状态 未申诉
-    const APPEAL_STATUS_NO = 0;                  
+    const APPEAL_STATUS_NO = 0;
     // 申诉状态 申诉中
-    const APPEAL_STATUS_YES = 1;                  
+    const APPEAL_STATUS_YES = 1;
     // 申诉状态 处理完成
-    const APPEAL_STATUS_COMPLETE = 2;                  
+    const APPEAL_STATUS_COMPLETE = 2;
     // 申诉状态 驳回
-    const APPEAL_STATUS_REJECT = 3;  
+    const APPEAL_STATUS_REJECT = 3;
 
 
     /**
