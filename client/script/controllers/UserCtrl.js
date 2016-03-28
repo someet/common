@@ -183,8 +183,8 @@ angular.module('controllers')
   }])
   .controller('UserUpdateCtrl', ['$scope', '$location', '$routeParams','$qiniuManage',  '$qupload', '$userManage','$mdToast', '$mdDialog',function($scope, $location, $routeParams, $qiniuManage, $qupload, $userManage, $mdToast, $mdDialog){
     $scope.$parent.pageName = '用户详情';
-
-    // qiniu upload 头像 start //
+    // 选择类别（黄牌原因理由）1 迟到 2请假 3爽约 4带人
+    $scope.card_category_status = ['1','2','3','4','5','6'];
       $scope.selectHeader = null;
 
       var startHeader = function() {
@@ -244,6 +244,40 @@ angular.module('controllers')
       $scope.yellowCardList = data;
       // console.log(data);
     })
+
+    // 更新黄牌
+    $scope.updateCategory = function(id,status){
+        var confirm = $mdDialog.confirm()
+          .title('确定更新吗')
+          .ariaLabel('update yellow card item')
+          .ok('确定更新')
+          .cancel('手滑点错了，不更新');
+
+        $mdDialog.show(confirm).then(function() {
+          $userManage.fetchUseraUpdateCategory(id,status).then(function(data) {
+            console.log(data);
+            // $scope.yellowCardList = data;
+            // if (data == 1) {
+              // $scope.yellowCardList.status = data.status;
+            // }
+            angular.forEach($scope.yellowCardList, function(list,index,array){
+                if (list.id == id) {
+                    list.card_num = data.card_num;
+                }
+            })
+            $mdToast.show($mdToast.simple()
+              .content('更新成功')
+              .hideDelay(5000)
+              .position("top right"));
+
+          }, function(err) {
+            $mdToast.show($mdToast.simple()
+              .content(err.toString())
+              .hideDelay(5000)
+              .position("top right"));
+          });
+        });
+    }
 
     // 取消黄牌
     $scope.abandonYellowCard = function(id,status){

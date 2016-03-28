@@ -30,6 +30,12 @@ angular.module('backendServices')
         })
       },
 
+      // 更改用户黄牌的种类
+      fetchUseraUpdateCategory: function(id,status) {
+        return $http.get('/member/update-category?id='+id +'&status='+status).then(function(data) {
+          return data;
+        })
+      },
       // 取消用户的黄牌
       fetchUserAbandonYellowCard: function(id,status) {
         return $http.get('/member/abandon-yellow-card?id='+id +'&status='+status).then(function(data) {

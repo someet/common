@@ -16,11 +16,9 @@ use yii\web\Response;
 use yii\web\ServerErrorHttpException;
 
 /**
- *
- * 联系人控制器
+ * 联系人控制器.
  *
  * @author Maxwell Du <maxwelldu@someet.so>
- * @package app\controllers
  */
 class MemberController extends BackendController
 {
@@ -28,34 +26,41 @@ class MemberController extends BackendController
     public $enableCsrfValidation = false;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function behaviors()
     {
         return [
-            // 'verbs' => [
-            //     'class' => VerbFilter::className(),
-            //     'actions' => [
-            //         'index' => ['get'],
-            //         'create' => ['post'],
-            //         'update' => ['post'],
-            //         'delete' => ['post'],
-            //         'view' => ['get'],
-            //         'yellow-card' => ['get'],
-            //     ],
-            // ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'index' => ['get'],
+                    'create' => ['post'],
+                    'update' => ['post'],
+                    'delete' => ['post'],
+                    'view' => ['get'],
+                    'yellow-card' => ['get'],
+                    'update-category' => ['get'],
+                ],
+            ],
             'access' => [
                 'class' => '\app\components\AccessControl',
+                'allowActions' => [
+                   'index',
+                   'page',
+                   'update-category'
+                ]
             ],
         ];
     }
 
     /**
-     * 更新用户的角色
+     * 更新用户的角色.
      *
-     * @param integer $user_id 需要更新的用户ID
-     * @param string $role_name 更新的角色名称
-     * @param integer $assign_or_not 是赋权还是撤权
+     * @param int    $user_id       需要更新的用户ID
+     * @param string $role_name     更新的角色名称
+     * @param int    $assign_or_not 是赋权还是撤权
+     *
      * @return array
      */
     public function actionUpdateAssignment($user_id, $role_name, $assign_or_not)
@@ -63,7 +68,7 @@ class MemberController extends BackendController
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         //参数检查
-        if ($user_id<1 || empty($role_name) || !in_array($assign_or_not, [0, 1])) {
+        if ($user_id < 1 || empty($role_name) || !in_array($assign_or_not, [0, 1])) {
             return ['msg' => '参数不正确'];
         }
 
@@ -121,16 +126,17 @@ class MemberController extends BackendController
     }
 
     /**
-     * 设置用户为白名单
+     * 设置用户为白名单.
      *
-     * @param integer $user_id 用户ID
+     * @param int    $user_id       用户ID
      * @param string $in_white_list 是否是白名单 'true' 和 'false'
+     *
      * @return array|bool
      */
-    public function actionSetUserInWhiteList($user_id, $in_white_list='true')
+    public function actionSetUserInWhiteList($user_id, $in_white_list = 'true')
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        if ( 1 == User::updateAll(['in_white_list' => $in_white_list == 'true' ? User::WHITE_LIST_YES : User::WHITE_LIST_NO], ['id' => $user_id]) ) {
+        if (1 == User::updateAll(['in_white_list' => $in_white_list == 'true' ? User::WHITE_LIST_YES : User::WHITE_LIST_NO], ['id' => $user_id])) {
             return [];
         } else {
             return false;
@@ -138,19 +144,20 @@ class MemberController extends BackendController
     }
 
     /**
-     * 联系人列表
+     * 联系人列表.
      *
-     * @param integer $id
+     * @param int    $id
      * @param string $scenario 场景
-     * @param string $type 类型,例如黑白名单或所有名单
-     * @param int $perPage 每页多少条
+     * @param string $type     类型,例如黑白名单或所有名单
+     * @param int    $perPage  每页多少条
+     *
      * @return array|int|null|\yii\db\ActiveRecord|\yii\db\ActiveRecord[]
      */
     public function actionIndex($id = null, $scenario = null, $perPage = 20, $type = null)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
-        switch($type) {
+        switch ($type) {
 
             //黑名单用户列表
             case 'black':
@@ -208,7 +215,7 @@ class MemberController extends BackendController
                 ->all();
                 $userArr = [];
                 foreach ($userAppeal as $key => $value) {
-                  $userArr[$key] = $value['user_id'];
+                    $userArr[$key] = $value['user_id'];
                 }
                 // print_r($userArr);
                 $query = User::find()
@@ -235,20 +242,19 @@ class MemberController extends BackendController
             //         ->with(['user','user.profile','user.assignment'])
             //         ->asArray()
             //         ->one();
-
-        } elseif ($scenario == "total") {
+        } elseif ($scenario == 'total') {
             $countQuery = clone $query;
             $pagination = new Pagination([
                 'totalCount' => $countQuery->count(),
-                'pageSize' => $perPage
+                'pageSize' => $perPage,
             ]);
 
             return $pagination->totalCount;
-        } elseif ($scenario == "page") {
+        } elseif ($scenario == 'page') {
             $countQuery = clone $query;
             $pagination = new Pagination([
                 'totalCount' => $countQuery->count(),
-                'pageSize' => $perPage
+                'pageSize' => $perPage,
             ]);
 
             $users = $query->offset($pagination->offset)
@@ -260,7 +266,8 @@ class MemberController extends BackendController
     }
 
     /**
-     * 用户参加过的活动
+     * 用户参加过的活动.
+     *
      * @param $user_id 用户的id
      */
     public function actionUserJoinActivities($user_id)
@@ -274,7 +281,7 @@ class MemberController extends BackendController
                 'activity',
                 'activity.user',
                 'activity.user.profile',
-                'activity.type'
+                'activity.type',
             ])
             ->asArray()
             ->orderBy([
@@ -291,26 +298,117 @@ class MemberController extends BackendController
     }
 
     /**
-     * 用户获得的黄牌
-     * @param  [int] $user_id [用户id]
-     * @return [type]          [黄牌列表]
+     * 用户获得的黄牌.
+     *
+     * @param [int] $user_id [用户id]
+     *
+     * @return [type] [黄牌列表]
      */
-    public function actionYellowCard($user_id){
+    public function actionYellowCard($user_id)
+    {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $yellow_card = YellowCard::find()
                         ->where(['user_id' => $user_id])
                         ->all();
+
         return $yellow_card;
     }
 
+    /**
+     *更新黄牌种类.
+     */
+    public function actionUpdateCategory($id, $status)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        // 选择类别（黄牌原因理由）1 迟到 2请假1  3请假2 4爽约 5带人 6骚扰
+        switch ($status) {
+            case '0':
+                // 迟到
+                $card_num = YellowCard::CARD_NUM_LATE;
+                break;
+
+            case '1':
+                // 迟到
+                $card_num = YellowCard::CARD_NUM_LATE;
+                break;
+
+            case '2':
+                // 请假1
+                $card_num = YellowCard::CARD_NUM_LEAVE_IN_24_MIN;
+                break;
+
+            case '3':
+                // 请假2
+                $card_num = YellowCard::CARD_NUM_LEAVE_NO_24_MIN;
+                break;
+
+            case '4':
+                // 爽约
+                $card_num = YellowCard::CARD_NUM_NO;
+                break;
+
+            case '5':
+                // 带人
+                $card_num = YellowCard::CARD_NUM_BRING;
+                break;
+
+            case '6':
+                // 骚扰
+                $card_num = YellowCard::CARD_NUM_ANNOY;
+                break;
+
+            default:
+                $card_num = 0;
+                break;
+
+        }
+        // 用户的id
+        $user_id = Yii::$app->user->id;
+        $yellow_card = YellowCard::findOne($id);
+        $yellow_card->handle_user_id = $user_id;
+        $yellow_card->card_category = $status;
+        $yellow_card->card_num = $card_num;
+        $yellow_card->appeal_status = YellowCard::APPEAL_STATUS_COMPLETE;
+        if ($yellow_card->save()) {
+            $userInfo = User::findOne($yellow_card->user_id);
+
+            // 如果用户处于黑牌状态情况下 当黄牌数量少于3个则改变黑牌状态
+            if ($userInfo->black_label == User::BLACK_LIST_YES) {
+                $count_yellow = YellowCard::find()
+                                ->select('id,user_id , sum(card_num) card_count')
+                                ->where(['user_id' => $yellow_card->user_id])
+                                ->andWhere(['status' => YellowCard::STATUS_NORMAL])
+                                // 上周一凌晨到本周一凌晨
+                                ->andWhere('created_at > (' .getLastEndTime().' - 2419200) and '.'created_at < ' .getLastEndTime())
+                                ->asArray()
+                                ->groupBy('user_id')
+                                ->one();
+                if (!empty($count_yellow)) {
+                   if ($count_yellow['card_count'] < 3) {
+                       User::updateAll([
+                           'black_label' => User::BLACK_LIST_NO,
+                           'black_time' => time(),
+                           ],['id' => $count_yellow['user_id']
+                       ]);
+                   }
+                }
+            }
+        }
+
+        return $yellow_card;
+    }
 
     /**
-     * 黄牌弃用 取消
-     * @param  [int] $id     [description]
-     * @param  [int] $status [黄牌状态]
-     * @return [type]         [description]
+     * 黄牌弃用 取消.
+     *
+     * @param [int] $id     [description]
+     * @param [int] $status [黄牌状态]
+     *
+     * @return [type] [description]
      */
-    public function actionAbandonYellowCard($id, $status){
+    public function actionAbandonYellowCard($id, $status)
+    {
         Yii::$app->response->format = Response::FORMAT_JSON;
         // 用户的id
         $user_id = Yii::$app->user->id;
@@ -319,17 +417,20 @@ class MemberController extends BackendController
         $yellow_card->handle_user_id = $user_id;
         $yellow_card->appeal_status = YellowCard::APPEAL_STATUS_COMPLETE;
         $yellow_card->save();
-        return $yellow_card;
 
+        return $yellow_card;
     }
 
     /**
-     * 黄牌驳回
-     * @param  [type] $id            [黄牌id]
-     * @param  [type] $handle_reply [黄牌驳回填写的理由]
-     * @return [type]                [黄牌的返回列表]
+     * 黄牌驳回.
+     *
+     * @param [type] $id           [黄牌id]
+     * @param [type] $handle_reply [黄牌驳回填写的理由]
+     *
+     * @return [type] [黄牌的返回列表]
      */
-    public function actionRejectYellowCard($id, $handle_reply= null){
+    public function actionRejectYellowCard($id, $handle_reply = null)
+    {
         Yii::$app->response->format = Response::FORMAT_JSON;
         // 用户的id
         $user_id = Yii::$app->user->id;
@@ -338,11 +439,13 @@ class MemberController extends BackendController
         $yellow_card->appeal_status = YellowCard::APPEAL_STATUS_REJECT;
         $yellow_card->handle_reply = $handle_reply;
         $yellow_card->save();
+
         return $yellow_card;
     }
 
     /**
-     * 黄牌申诉列表
+     * 黄牌申诉列表.
+     *
      * @return [type] [description]
      */
     public function actionAppealList()
@@ -352,41 +455,40 @@ class MemberController extends BackendController
                         ->where(['appeal_status' => YellowCard::APPEAL_STATUS_YES])
                         // ->andWhere('created_at > ' .getWeekBefore().' and '.'created_at < ' .getLastEndTime())
                         ->count();
+
         return $yellow_card;
-
     }
-
 
     /**
      *pma参与的活动
-     *发起人发起的活动
+     *发起人发起的活动.
+     *
      *@param $role string admin | pma
      *@param $user_id 用户的id
      */
-    public function actionActivityByRole($user_id ,$role)
+    public function actionActivityByRole($user_id, $role)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-            if (!in_array($role, ['founder', 'pma'])) {
-                return [
-                'code'=>'0',
+        if (!in_array($role, ['founder', 'pma'])) {
+            return [
+                'code' => '0',
                 'msg' => '参数错误',
                 ];
-            }
+        }
 
-            $where = 'status>'.Activity::STATUS_DELETE;
-            if ($role == 'pma') {
-                $data = Activity::find()
+        $where = 'status>'.Activity::STATUS_DELETE;
+        if ($role == 'pma') {
+            $data = Activity::find()
                     ->where($where)
                     ->andWhere(['principal' => $user_id]);
-            } elseif ($role == 'founder') {
-                $data = Activity::find()
+        } elseif ($role == 'founder') {
+            $data = Activity::find()
                     ->where($where)
                     ->andWhere(['created_by' => $user_id]);
-            }
+        }
 
-
-            $pages = new Pagination(['totalCount' => $data->count()]);
-            $activities = $data->offset($pages->offset)->limit($pages->limit)
+        $pages = new Pagination(['totalCount' => $data->count()]);
+        $activities = $data->offset($pages->offset)->limit($pages->limit)
                 ->with([
                     'user',
                     'user.profile',
@@ -400,18 +502,18 @@ class MemberController extends BackendController
                 ])
                 ->all();
 
-
-            if ($activities) {
-                return ['answers' => $activities, 'pages' => $pages];
-            } else {
-                return ['answers' => null, 'pages' => $pages];
-            }
+        if ($activities) {
+            return ['answers' => $activities, 'pages' => $pages];
+        } else {
+            return ['answers' => null, 'pages' => $pages];
+        }
     }
 
     /**
-     * 搜索用户, 供给活动分配发起人的自动完成功能使用
+     * 搜索用户, 供给活动分配发起人的自动完成功能使用.
      *
      * @param string $username 用户名
+     *
      * @return array
      */
     public function actionSearch($username)
@@ -433,17 +535,19 @@ class MemberController extends BackendController
             ->orderBy(['id' => SORT_DESC])
             ->asArray()
             ->all();
+
         return $users;
     }
 
     /**
-     * 搜索PMA, 供通知时使用
+     * 搜索PMA, 供通知时使用.
      *
      * @param string $username 用户名
-     * @param string $auth 权限, 是什么用户
+     * @param string $auth     权限, 是什么用户
+     *
      * @return array
      */
-    public function actionSearchByAuth($username, $auth = "pma")
+    public function actionSearchByAuth($username, $auth = 'pma')
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
@@ -466,8 +570,10 @@ class MemberController extends BackendController
     }
 
     /**
-     * 创建一个联系人
+     * 创建一个联系人.
+     *
      * @return null|static
+     *
      * @throws DataValidationFailedException
      * @throws ServerErrorHttpException
      */
@@ -491,9 +597,12 @@ class MemberController extends BackendController
     }
 
     /**
-     * 更新一个联系人
-     * @param integer $id 联系人ID
+     * 更新一个联系人.
+     *
+     * @param int $id 联系人ID
+     *
      * @return null|static
+     *
      * @throws DataValidationFailedException
      * @throws NotFoundHttpException
      * @throws ServerErrorHttpException
@@ -505,7 +614,6 @@ class MemberController extends BackendController
         $data = Yii::$app->request->post();
 
         $model = $this->findOne($id);
-
 
         if (!empty($data['email'])) {
             $model->email = $data['email'];
@@ -521,7 +629,7 @@ class MemberController extends BackendController
             }
         }
 
-        if (isset($data['password']) && $data['password']!='') {
+        if (isset($data['password']) && $data['password'] != '') {
             $model->password = $data['password'];
         }
 
@@ -555,23 +663,20 @@ class MemberController extends BackendController
             }
         }
 
-
-
         \someet\common\models\AdminLog::saveLog('更新联系人', $model->primaryKey);
 
         return $this->findOne($id);
     }
 
     /**
-    *  更新用户profile表
-    *
-    * @param integer $id 联系人ID
-    * @return
-    */
-
-    public function updateProfile($id,$profile)
+     *  更新用户profile表.
+     *
+     * @param int $id 联系人ID
+     *
+     * @return
+     */
+    public function updateProfile($id, $profile)
     {
-
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         $data = Yii::$app->request->post();
@@ -586,9 +691,12 @@ class MemberController extends BackendController
     }
 
     /**
-     * 查找一个联系人
-     * @param integer $id 联系人ID
+     * 查找一个联系人.
+     *
+     * @param int $id 联系人ID
+     *
      * @return null|static
+     *
      * @throws NotFoundHttpException 查找不到联系人则抛出404异常
      */
     public function findOne($id)
@@ -602,9 +710,12 @@ class MemberController extends BackendController
     }
 
     /**
-     * 查找一个联系人profile表
-     * @param integer $id 联系人ID
+     * 查找一个联系人profile表.
+     *
+     * @param int $id 联系人ID
+     *
      * @return null|static
+     *
      * @throws NotFoundHttpException 查找不到联系人则抛出404异常
      */
     public function findProfile($id)

@@ -11,18 +11,18 @@ use someet\common\models\UgaQuestion;
 use someet\common\models\YellowCard;
 use someet\common\models\ActivityFeedback;
 /**
-* 用来更新数据 
-* 执行方式 在命令行 
-* 如： docker exec -i backend_app_1 ./yii update/user-join-count（控制器/方法） 
+* 用来更新数据
+* 执行方式 在命令行
+* 如： docker exec -i backend_app_1 ./yii update/user-join-count（控制器/方法）
 * 可以用 yii help 来提示帮助
 */
 class UpdateController  extends \yii\console\Controller
-{	
+{
 
 	/**
     * 每周一凌晨更新 黑牌
-	* 执行方式 在命令行 
-	* 如： docker exec -i backend_app_1 ./yii update/update-black-label（控制器/方法） 
+	* 执行方式 在命令行
+	* 如： docker exec -i backend_app_1 ./yii update/update-black-label（控制器/方法）
 	* 可以用 yii help 来提示帮助
 	*/
 	public function actionUpdateBlackLabel()
@@ -31,10 +31,11 @@ class UpdateController  extends \yii\console\Controller
 		// 根据用户id 查询出每周黄牌的数量，超过三个，则更新 user表里面的是否被拉黑字段
 		$yellowCard = YellowCard::find()
 					->select('id,user_id , sum(card_num) card_count')
-					->where(['status' => YellowCard::STATUS_NORMAL])
+					// ->where(['status' => YellowCard::STATUS_NORMAL])
+					->where('card_category > 0')
 					// 上周一凌晨到本周一凌晨
-	                ->andWhere('created_at > (' .getLastEndTime().' - 2419200) and '.'created_at < ' .getLastEndTime()) 
-	                ->asArray()           
+	                ->andWhere('created_at > (' .getLastEndTime().' - 2419200) and '.'created_at < ' .getLastEndTime())
+	                ->asArray()
 	                ->groupBy('user_id')
 	                ->all();
 	     if (!empty($yellowCard)) {
@@ -44,13 +45,13 @@ class UpdateController  extends \yii\console\Controller
 						'black_label' => User::BLACK_LIST_YES,
 						'black_time' => time(),
 						],['id' => $value['user_id']]);
-					
-					}	     	
+
+					}
 		     }
 	     }
 
 	     // 解禁黑牌
-	     
+
 	     // 如黑牌创建时间超过了28天则解禁
 	     $userBlack = User::find()
 	     				->where(['black_label' => User::BLACK_LIST_YES])
@@ -62,24 +63,24 @@ class UpdateController  extends \yii\console\Controller
 				User::updateAll([
 					'black_label' => User::BLACK_LIST_NO,
 					],['id' => $userBlackValue['id']]);
-					
+
 		     }
 	     }
-	     			
+
  		return true;
 	}
 
 	/**
     * 每周一凌晨更新 黄牌数量
-	* 执行方式 在命令行 
-	* 如： docker exec -i backend_app_1 ./yii update/yellow-card（控制器/方法） 
+	* 执行方式 在命令行
+	* 如： docker exec -i backend_app_1 ./yii update/yellow-card（控制器/方法）
 	* 可以用 yii help 来提示帮助
 	*/
     public function actionYellowCard(){
     	// 查出answer表里面满足黄牌的数量
 
 	    // 请假的黄牌统计 小于24 小时
-	    $leave_yet_in_one_day = Answer::find() 
+	    $leave_yet_in_one_day = Answer::find()
 	    			->with(['user','user.profile','activity'])
 	    			->joinWith('activity')
 	                ->where([
@@ -92,7 +93,7 @@ class UpdateController  extends \yii\console\Controller
 	                ->asArray()
 	                ->all();
 	    // 检测数据是否为空
-	    if (!empty($leave_yet_in_one_day)) { 
+	    if (!empty($leave_yet_in_one_day)) {
 		    foreach ($leave_yet_in_one_day as  $leave_yet_in_one_day_value) {
 		    	$YellowCard_leave_yet_in_one_day = new YellowCard();
 
@@ -115,7 +116,7 @@ class UpdateController  extends \yii\console\Controller
 	    }
 
 	    // 请假的黄牌统计 大于24 小时
-	    $leave_yet_no_one_day = Answer::find() 
+	    $leave_yet_no_one_day = Answer::find()
 	    			->with(['user','user.profile','activity'])
 	    			->joinWith('activity')
 	                ->where([
@@ -123,7 +124,7 @@ class UpdateController  extends \yii\console\Controller
 	                	'answer.status' => Answer::STATUS_REVIEW_PASS,
 	                	])
 	                ->andWhere('answer.created_at > ' .getWeekBefore().' and '.'answer.created_at < ' .getLastEndTime())
-					->andWhere('answer.leave_time < (activity.start_time - 3600)')         
+					->andWhere('answer.leave_time < (activity.start_time - 3600)')
 					->asArray()
 	                ->all();
 
@@ -145,16 +146,16 @@ class UpdateController  extends \yii\console\Controller
 					$YellowCard_leave_yet_no_one_day->save();
 	        	}
 		    }
-		}  
+		}
 	   	// 迟到的黄牌统计
-	    $arrive_yet = Answer::find() 
+	    $arrive_yet = Answer::find()
 	    			->with(['user','user.profile','activity'])
 	    			->joinWith('activity')
 	                ->where([
 	                	'arrive_status' => Answer::STATUS_ARRIVE_LATE,
 	                	'answer.status' => Answer::STATUS_REVIEW_PASS,
 	                	])
-	                ->andWhere('answer.created_at > ' .getWeekBefore().' and '.'answer.created_at < ' .getLastEndTime())            
+	                ->andWhere('answer.created_at > ' .getWeekBefore().' and '.'answer.created_at < ' .getLastEndTime())
 					->asArray()
 	                ->all();
 	    if (!empty($arrive_yet)) {
@@ -175,18 +176,18 @@ class UpdateController  extends \yii\console\Controller
 		    		$YellowCard_arrive_yet->save();
 	        	}
 		    }
-	    }        
+	    }
 
 
 	   	// 爽约的黄牌统计
-	    $arrive_no = Answer::find() 
+	    $arrive_no = Answer::find()
 	    			->with(['user','user.profile','activity'])
 	    			->joinWith('activity')
 	                ->where([
 	                	'arrive_status' => Answer::STATUS_ARRIVE_YET,
 	                	'answer.status' => Answer::STATUS_REVIEW_PASS,
 	                	])
-	                ->andWhere('answer.created_at > ' .getWeekBefore().' and '.'answer.created_at < ' .getLastEndTime())            
+	                ->andWhere('answer.created_at > ' .getWeekBefore().' and '.'answer.created_at < ' .getLastEndTime())
 					->asArray()
 	                ->all();
 	    if (!empty($arrive_no)) {
@@ -207,7 +208,7 @@ class UpdateController  extends \yii\console\Controller
 					$YellowCard_arrive_no->save();
 	        	}
 		    }
-	    }            
+	    }
 
     }
 
@@ -242,8 +243,8 @@ class UpdateController  extends \yii\console\Controller
 
     /**
     * 更新回答问题的总数
-	* 执行方式 在命令行 
-	* 如： docker exec -i backend_app_1 ./yii update/answer-num（控制器/方法） 
+	* 执行方式 在命令行
+	* 如： docker exec -i backend_app_1 ./yii update/answer-num（控制器/方法）
 	* 可以用 yii help 来提示帮助
 	*/
 	public function actionAnswerNum()
@@ -274,8 +275,8 @@ class UpdateController  extends \yii\console\Controller
 
     /**
     * 在answer表里面更新是否反馈  is_feedback
-	* 执行方式 在命令行 
-	* 如： docker exec -i backend_app_1 ./yii update/is-feedback（控制器/方法） 
+	* 执行方式 在命令行
+	* 如： docker exec -i backend_app_1 ./yii update/is-feedback（控制器/方法）
 	* 可以用 yii help 来提示帮助
     */
 
@@ -285,14 +286,14 @@ class UpdateController  extends \yii\console\Controller
 		foreach ($activity_feedback as $key => $value) {
 			Answer::updateAll(['is_feedback' => Answer::FEEDBACK_IS ],['user_id' => $value['user_id'],'activity_id' => $value['activity_id']]);
 		}
-		
+
 		return true;
 	}
 
 	/**
 	*更新活动的星期字段值
-	* 执行方式 在命令行 
-	* 如： docker exec -i backend_app_1 ./yii update/activity-week（控制器/方法） 
+	* 执行方式 在命令行
+	* 如： docker exec -i backend_app_1 ./yii update/activity-week（控制器/方法）
 	* 可以用 yii help 来提示帮助
 	*/
 	public function actionActivityWeek()
@@ -315,6 +316,3 @@ class UpdateController  extends \yii\console\Controller
 		return true;
 	}
 }
-
-
-
