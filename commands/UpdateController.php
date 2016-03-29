@@ -33,7 +33,7 @@ class UpdateController  extends \yii\console\Controller
 					->select('id,user_id , sum(card_num) card_count')
 					// ->where(['status' => YellowCard::STATUS_NORMAL])
 					->where('card_category > 0')
-					// 上周一凌晨到本周一凌晨
+					// 上周一凌晨前28天到上周一凌晨
 	                ->andWhere('created_at > (' .getLastEndTime().' - 2419200) and '.'created_at < ' .getLastEndTime())
 	                ->asArray()
 	                ->groupBy('user_id')
@@ -76,10 +76,11 @@ class UpdateController  extends \yii\console\Controller
 	* 如： docker exec -i backend_app_1 ./yii update/yellow-card（控制器/方法）
 	* 可以用 yii help 来提示帮助
 	*/
-    public function actionYellowCard(){
+    public function actionYellowCard()
+    {
     	// 查出answer表里面满足黄牌的数量
 
-	    // 请假的黄牌统计 小于24 小时
+	    // 请假的黄牌统计 小于24 小时 记录两张黄牌
 	    $leave_yet_in_one_day = Answer::find()
 	    			->with(['user','user.profile','activity'])
 	    			->joinWith('activity')
@@ -88,10 +89,13 @@ class UpdateController  extends \yii\console\Controller
 	                	'answer.status' => Answer::STATUS_REVIEW_PASS,
 	                	])
 	                //获取上周的数据
-	                ->andWhere('answer.created_at > ' .getWeekBefore().' and '.'answer.created_at < ' .getLastEndTime())
-	                ->andWhere('answer.leave_time > (activity.start_time - 3600)' .' and '.'answer.leave_time < activity.start_time')
+	                ->andWhere('answer.created_at > (' .getLastEndTime().' - 2419200) and '.'answer.created_at < ' .getLastEndTime())
+	                
+	                // 活动请假时间在活动开始时间减去24小时和活动开始之间
+	                ->andWhere('answer.leave_time > (activity.start_time - 86400)' .' and '.'answer.leave_time < activity.start_time')
 	                ->asArray()
 	                ->all();
+
 	    // 检测数据是否为空
 	    if (!empty($leave_yet_in_one_day)) {
 		    foreach ($leave_yet_in_one_day as  $leave_yet_in_one_day_value) {
@@ -105,8 +109,8 @@ class UpdateController  extends \yii\console\Controller
 			    	$YellowCard_leave_yet_in_one_day->activity_id = $leave_yet_in_one_day_value['activity_id'];
 			    	$YellowCard_leave_yet_in_one_day->activity_title = $leave_yet_in_one_day_value['activity']['title'];
 			    	$YellowCard_leave_yet_in_one_day->username = $leave_yet_in_one_day_value['user']['username'];
-			    	$YellowCard_leave_yet_in_one_day->card_category = YellowCard::CARD_CATEGOTY_LEAVE;
-			    	$YellowCard_leave_yet_in_one_day->card_num = YellowCard::CARD_NUM_LEAVE_IN_24_MIN;
+			    	$YellowCard_leave_yet_in_one_day->card_category = YellowCard::CARD_CATEGOTY_LEAVE_2;
+			    	$YellowCard_leave_yet_in_one_day->card_num = YellowCard::CARD_NUM_LEAVE_2;
 			    	$YellowCard_leave_yet_in_one_day->created_at = time();
 			    	$YellowCard_leave_yet_in_one_day->status = YellowCard::STATUS_NORMAL;
 			    	$YellowCard_leave_yet_in_one_day->user_id = $leave_yet_in_one_day_value['user_id'];
@@ -123,8 +127,9 @@ class UpdateController  extends \yii\console\Controller
 	                	'leave_status' => Answer::STATUS_LEAVE_YET,
 	                	'answer.status' => Answer::STATUS_REVIEW_PASS,
 	                	])
-	                ->andWhere('answer.created_at > ' .getWeekBefore().' and '.'answer.created_at < ' .getLastEndTime())
-					->andWhere('answer.leave_time < (activity.start_time - 3600)')
+	                ->andWhere('answer.created_at > (' .getLastEndTime().' - 2419200) and '.'answer.created_at < ' .getLastEndTime())
+	                // 活动请假时间大于 在活动开始时间减去24小时
+					->andWhere('answer.leave_time < (activity.start_time - 86400)')
 					->asArray()
 	                ->all();
 
@@ -138,8 +143,8 @@ class UpdateController  extends \yii\console\Controller
 			    	$YellowCard_leave_yet_no_one_day->activity_id = $leave_yet_no_one_day_value['activity_id'];
 			    	$YellowCard_leave_yet_no_one_day->activity_title = $leave_yet_no_one_day_value['activity']['title'];
 			    	$YellowCard_leave_yet_no_one_day->username = $leave_yet_no_one_day_value['user']['username'];
-			    	$YellowCard_leave_yet_no_one_day->card_category = YellowCard::CARD_CATEGOTY_LEAVE;
-			    	$YellowCard_leave_yet_no_one_day->card_num = YellowCard::CARD_NUM_LEAVE_NO_24_MIN;
+			    	$YellowCard_leave_yet_no_one_day->card_category = YellowCard::CARD_CATEGOTY_LEAVE_1;
+			    	$YellowCard_leave_yet_no_one_day->card_num = YellowCard::CARD_NUM_LEAVE_1;
 			    	$YellowCard_leave_yet_no_one_day->created_at = time();
 			    	$YellowCard_leave_yet_no_one_day->status = YellowCard::STATUS_NORMAL;
 			    	$YellowCard_leave_yet_no_one_day->user_id = $leave_yet_no_one_day_value['user_id'];
@@ -147,6 +152,8 @@ class UpdateController  extends \yii\console\Controller
 	        	}
 		    }
 		}
+
+
 	   	// 迟到的黄牌统计
 	    $arrive_yet = Answer::find()
 	    			->with(['user','user.profile','activity'])
@@ -155,7 +162,7 @@ class UpdateController  extends \yii\console\Controller
 	                	'arrive_status' => Answer::STATUS_ARRIVE_LATE,
 	                	'answer.status' => Answer::STATUS_REVIEW_PASS,
 	                	])
-	                ->andWhere('answer.created_at > ' .getWeekBefore().' and '.'answer.created_at < ' .getLastEndTime())
+	                ->andWhere('answer.created_at > (' .getLastEndTime().' - 2419200) and '.'answer.created_at < ' .getLastEndTime())
 					->asArray()
 	                ->all();
 	    if (!empty($arrive_yet)) {
@@ -168,7 +175,7 @@ class UpdateController  extends \yii\console\Controller
 			    	$YellowCard_arrive_yet->activity_id = $arrive_yet_value['activity_id'];
 			    	$YellowCard_arrive_yet->activity_title = $arrive_yet_value['activity']['title'];
 			    	$YellowCard_arrive_yet->username = $arrive_yet_value['user']['username'];
-			    	$YellowCard_arrive_yet->card_category = YellowCard::CARD_CATEGOTY_LEAVE;
+			    	$YellowCard_arrive_yet->card_category = YellowCard::CARD_CATEGOTY_LATE;
 			    	$YellowCard_arrive_yet->card_num = YellowCard::CARD_NUM_LATE;
 			    	$YellowCard_arrive_yet->created_at = time();
 			    	$YellowCard_arrive_yet->status = YellowCard::STATUS_NORMAL;
@@ -187,7 +194,7 @@ class UpdateController  extends \yii\console\Controller
 	                	'arrive_status' => Answer::STATUS_ARRIVE_YET,
 	                	'answer.status' => Answer::STATUS_REVIEW_PASS,
 	                	])
-	                ->andWhere('answer.created_at > ' .getWeekBefore().' and '.'answer.created_at < ' .getLastEndTime())
+	                ->andWhere('answer.created_at > (' .getLastEndTime().' - 2419200) and '.'answer.created_at < ' .getLastEndTime())
 					->asArray()
 	                ->all();
 	    if (!empty($arrive_no)) {
@@ -200,7 +207,7 @@ class UpdateController  extends \yii\console\Controller
 			    	$YellowCard_arrive_no->activity_id = $arrive_no_value['activity_id'];
 			    	$YellowCard_arrive_no->activity_title = $arrive_no_value['activity']['title'];
 			    	$YellowCard_arrive_no->username = $arrive_no_value['user']['username'];
-			    	$YellowCard_arrive_no->card_category = YellowCard::CARD_CATEGOTY_LEAVE;
+			    	$YellowCard_arrive_no->card_category = YellowCard::CARD_CATEGOTY_NO;
 			    	$YellowCard_arrive_no->card_num = YellowCard::CARD_NUM_NO;
 			    	$YellowCard_arrive_no->created_at = time();
 			    	$YellowCard_arrive_no->status = YellowCard::STATUS_NORMAL;

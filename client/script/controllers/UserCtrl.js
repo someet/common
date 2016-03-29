@@ -184,7 +184,14 @@ angular.module('controllers')
   .controller('UserUpdateCtrl', ['$scope', '$location', '$routeParams','$qiniuManage',  '$qupload', '$userManage','$mdToast', '$mdDialog',function($scope, $location, $routeParams, $qiniuManage, $qupload, $userManage, $mdToast, $mdDialog){
     $scope.$parent.pageName = '用户详情';
     // 选择类别（黄牌原因理由）1 迟到 2请假 3爽约 4带人
-    $scope.card_category_status = ['1','2','3','4','5','6'];
+    $scope.card_category_status = ['0','1','2','3','4','5','6'];
+
+    var userId = $routeParams.id;
+    if(userId != null){
+        var params = {
+            id: userId
+        }
+    }
       $scope.selectHeader = null;
 
       var startHeader = function() {
@@ -226,13 +233,6 @@ angular.module('controllers')
 
 
 
-    var userId = $routeParams.id;
-    if(userId != null){
-      var params = {
-       id: userId
-      }
-    }
-
     // 用户报名的活动
     $userManage.fetchUserJoinActivity(userId).then(function(data) {
       $scope.joinActivity = data;
@@ -265,6 +265,8 @@ angular.module('controllers')
                     list.card_num = data.card_num;
                 }
             })
+
+
             $mdToast.show($mdToast.simple()
               .content('更新成功')
               .hideDelay(5000)

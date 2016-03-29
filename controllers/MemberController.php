@@ -325,7 +325,7 @@ class MemberController extends BackendController
         switch ($status) {
             case '0':
                 // 迟到
-                $card_num = YellowCard::CARD_NUM_LATE;
+                $card_num = YellowCard::CARD_CATEGOTY_CANCEL;
                 break;
 
             case '1':
@@ -335,12 +335,12 @@ class MemberController extends BackendController
 
             case '2':
                 // 请假1
-                $card_num = YellowCard::CARD_NUM_LEAVE_IN_24_MIN;
+                $card_num = YellowCard::CARD_NUM_LEAVE_1;
                 break;
 
             case '3':
                 // 请假2
-                $card_num = YellowCard::CARD_NUM_LEAVE_NO_24_MIN;
+                $card_num = YellowCard::CARD_NUM_LEAVE_2;
                 break;
 
             case '4':
@@ -374,11 +374,12 @@ class MemberController extends BackendController
             $userInfo = User::findOne($yellow_card->user_id);
 
             // 如果用户处于黑牌状态情况下 当黄牌数量少于3个则改变黑牌状态
-            if ($userInfo->black_label == User::BLACK_LIST_YES) {
+            // if ($userInfo->black_label == User::BLACK_LIST_YES) {
                 $count_yellow = YellowCard::find()
                                 ->select('id,user_id , sum(card_num) card_count')
                                 ->where(['user_id' => $yellow_card->user_id])
-                                ->andWhere(['status' => YellowCard::STATUS_NORMAL])
+                                // ->andWhere(['status' => YellowCard::STATUS_NORMAL])
+                                ->andwhere('card_category > 0')
                                 // 上周一凌晨到本周一凌晨
                                 ->andWhere('created_at > (' .getLastEndTime().' - 2419200) and '.'created_at < ' .getLastEndTime())
                                 ->asArray()
@@ -393,7 +394,7 @@ class MemberController extends BackendController
                        ]);
                    }
                 }
-            }
+            // }
         }
 
         return $yellow_card;
