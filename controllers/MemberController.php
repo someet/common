@@ -369,7 +369,9 @@ class MemberController extends BackendController
         $yellow_card->handle_user_id = $user_id;
         $yellow_card->card_category = $status;
         $yellow_card->card_num = $card_num;
-        $yellow_card->appeal_status = YellowCard::APPEAL_STATUS_COMPLETE;
+        if ($yellow_card->appeal_status == YellowCard::APPEAL_STATUS_YES ) {
+            $yellow_card->appeal_status = YellowCard::APPEAL_STATUS_COMPLETE;
+        }
         if ($yellow_card->save()) {
             $userInfo = User::findOne($yellow_card->user_id);
 
