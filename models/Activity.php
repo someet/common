@@ -103,6 +103,21 @@ class Activity extends \yii\db\ActiveRecord
         ];
     }
 
+    public function fields()
+    {
+        $fields = parent::fields();
+
+        // remove fields that contain sensitive information
+        unset($fields['edit_status'], $fields['is_top'], $fields['is_digest'], $fields['is_volume'], $fields['week']);
+
+        return $fields;
+    }
+
+    public function extraFields()
+    {
+        return ['type', 'user','pma'];
+    }
+
     /**
      * @inheritdoc
      */
