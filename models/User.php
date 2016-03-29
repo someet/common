@@ -27,7 +27,6 @@ use dektrium\user\models\User as BaseUser;
  * @property string $password write-only password
  * @property string $wechat_id
  * @property integer $last_login_at
- * @property string $access_token
  */
 class User extends BaseUser
 {
@@ -99,45 +98,16 @@ class User extends BaseUser
             [['email','password'], 'required', 'on'=>'signup'],
 
             ['black_label', 'default', 'value' => self::BLACK_LIST_NO],
-
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
 
             ['mobile', 'unique'],
             [['wechat_id'], 'unique'],
-            [['last_login_at','black_time', 'black_label'], 'integer'],
+            [['last_login_at','black_time'], 'integer'],
             ['password_reset_token', 'string', 'max' => 60],
             ['email_confirmation_token', 'string', 'max' => 60],
-            ['string', 'max' => 32],
-            [['last_login_at', 'password_reset_token', 'black_label', 'email_confirmation_token'], 'safe'],
-            ['default', 'value' => Yii::$app->security->generateRandomString()],
+            [['last_login_at', 'password_reset_token', 'email_confirmation_token'], 'safe'],
         ];
-    }
-
-    public function fields()
-    {
-        $fields = parent::fields();
-
-        unset(
-            $fields['password_hash'],
-            $fields['auth_key'],
-            $fields['email_confirmation_token'],
-            $fields['password_reset_token'],
-            $fields['email'],
-            $fields['confirmed_at'],
-            $fields['blacked_at'],
-            $fields['registration_ip'],
-            $fields['in_white_list'],
-            $fields['is_email_verified'],
-            $fields['unionid']
-        );
-
-        return $fields;
-    }
-
-    public function extraFields()
-    {
-        return ['profile'];
     }
 
     /**
@@ -186,7 +156,7 @@ class User extends BaseUser
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        return static::findOne(['access_token' => $token]);
+        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
     }
 
     /**
@@ -300,12 +270,6 @@ class User extends BaseUser
         $this->email_confirmation_token = null;
         $this->is_email_verified = 1;
         return $this->save();
-    }
-
-    // Profile
-    public function getProfile()
-    {
-        return $this->hasOne(Profile::className(), ['user_id' => 'id']);
     }
 
     // 活动列表
