@@ -35,9 +35,9 @@ class YellowCard extends \yii\db\ActiveRecord
     const CARD_CATEGOTY_CANCEL  = 0;
     // 迟到
     const CARD_CATEGOTY_LATE  = 1;
-    // 请假1
+    // 请假1 不在24小时之内一张黄牌
     const CARD_CATEGOTY_LEAVE_1  = 2;
-    // 请假2
+    // 请假2 在24小时之内两张黄牌
     const CARD_CATEGOTY_LEAVE_2  = 3;
     // 爽约
     const CARD_CATEGOTY_NO  = 4;
@@ -59,9 +59,11 @@ class YellowCard extends \yii\db\ActiveRecord
     // 黄牌数量 迟到
     const CARD_NUM_LATE = 1;
     // 黄牌数量 请假 在24小时之内
-    const CARD_NUM_LEAVE_IN_24_MIN = 1;
+    // const CARD_NUM_LEAVE_IN_24_MIN = 2;
+    const CARD_NUM_LEAVE_2 = 2;
     // 黄牌数量 请假 不在24小时之内
-    const CARD_NUM_LEAVE_NO_24_MIN = 2;
+    const CARD_NUM_LEAVE_1 = 1;
+    // const CARD_NUM_LEAVE_NO_24_MIN = 1;
     // 黄牌数量 爽约
     const CARD_NUM_NO = 3;
     // 黄牌数量 带人
