@@ -15,6 +15,8 @@ use Yii;
  * @property integer $created_at
  * @property integer $updated_at
  * @property integer $status
+ * @property integer $sponsor_id
+ * @property integer $sponsor_stars
  */
 class ActivityFeedback extends \yii\db\ActiveRecord
 {
@@ -34,8 +36,8 @@ class ActivityFeedback extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['activity_id', 'stars', 'feedback'], 'required'],
-            [['activity_id', 'user_id', 'stars', 'created_at', 'updated_at', 'status'], 'integer'],
+            [['activity_id', 'stars', 'sponsor_id', 'sponsor_stars', 'feedback'], 'required'],
+            [['activity_id', 'user_id', 'stars', 'created_at', 'updated_at', 'status', 'sponsor_stars', 'sponsor_id'], 'integer'],
             ['status', 'default', 'value' => '10'],
             [['feedback'], 'string', 'max' => 255]
         ];
@@ -55,6 +57,8 @@ class ActivityFeedback extends \yii\db\ActiveRecord
             'created_at' => '反馈时间',
             'updated_at' => '处理时间',
             'status' => '冗余扩展',
+            'sponsor_id' => '发起人id',
+            'sponsor_stars' => '发起人评分',
         ];
     }
 
@@ -90,5 +94,11 @@ class ActivityFeedback extends \yii\db\ActiveRecord
     public function getActivity()
     {
         return $this->hasOne(Activity::className(), ['id' => 'activity_id']);
+    }
+
+    //活动报名的对象
+    public function getAnswer()
+    {
+        return $this->hasOne(Answer::className(), ['user_id' => 'user_id', 'activity_id' => 'activity_id']);
     }
 }

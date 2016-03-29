@@ -44,14 +44,20 @@ use dektrium\user\models\Profile as BaseProfile;
  */
 class Profile extends BaseProfile
 {
+    /** * 男 */
+    const SEX_BOY = 1;
+    /** * 女 */
+    const SEX_GIRL = 2;
+
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return array_merge(parent::rules(), [
-            [['sex', 'birth_year', 'birth_month', 'birth_day', 'from', 'want'], 'integer'],
-            [['country', 'province', 'city', 'headimgurl', 'constellation', 'zodiac', 'company', 'education', 'occupation', 'position', 'affective_status', 'lookingfor', 'blood_type', 'height', 'weight', 'interest', 'recommand'], 'string', 'max' => 255],
+            [['sex', 'birth_year', 'birth_month', 'birth_day', 'from'], 'integer'],
+            [['want', 'country', 'province', 'city', 'headimgurl', 'constellation', 'zodiac', 'company', 'education', 'occupation', 'position', 'affective_status', 'lookingfor', 'blood_type', 'height', 'weight', 'interest', 'recommand'], 'string', 'max' => 255],
             [['from', 'want', 'recommand'], 'safe'],
         ]);
     }

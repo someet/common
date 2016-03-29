@@ -20,6 +20,12 @@ use Yii;
  * @property integer $wechat_template_push_at
  * @property integer $wechat_template_is_send
  * @property integer $wechat_template_msg_id
+ * @property integer $leave_time
+ *
+ * @property integer $arrive_status
+ * @property integer $leave_status
+ * @property string $leave_msg
+ * @property string $is_feedback
  */
 class Answer extends \yii\db\ActiveRecord
 {
@@ -51,6 +57,28 @@ class Answer extends \yii\db\ActiveRecord
     /* 参加活动的短信发送失败 */
     const JOIN_NOTI_IS_SEND_FAIL = 2;
 
+    /* 未到达 */
+    const STATUS_ARRIVE_YET     = 0;
+    /* 迟到 */
+    const STATUS_ARRIVE_LATE    = 1;
+    /* 准时 */
+    const STATUS_ARRIVE_ON_TIME  = 2;
+
+    /* 未请假 */
+    const STATUS_LEAVE_YET    = 0;
+    /* 已请假 */
+    const STATUS_LEAVE_YES  = 1;
+
+    /*  已反馈*/
+    const FEEDBACK_IS    = 1;
+    /* 未反馈 */
+    const FEEDBACK_NO  = 0;
+
+    /* 正常使用 */
+    const APPLY_STATUS_YES = 0;
+    /* 取消报名 */
+    const APPLY_STATUS_YET = 1;
+
     /**
      * @inheritdoc
      */
@@ -66,7 +94,7 @@ class Answer extends \yii\db\ActiveRecord
     {
         return [
             [['question_id'], 'required'],
-            [['question_id', 'activity_id', 'user_id', 'is_finish', 'is_send', 'send_at', 'created_at', 'updated_at', 'status', 'wechat_template_push_at', 'wechat_template_is_send', 'wechat_template_msg_id', 'join_noti_is_send', 'join_noti_send_at', 'join_noti_wechat_template_push_at', 'join_noti_wechat_template_is_send', 'join_noti_wechat_template_msg_id'], 'integer'],
+            [['leave_time', 'question_id', 'activity_id', 'user_id', 'is_finish', 'is_send', 'send_at', 'created_at', 'updated_at', 'status', 'wechat_template_push_at', 'wechat_template_is_send', 'wechat_template_msg_id', 'join_noti_is_send', 'join_noti_send_at', 'join_noti_wechat_template_push_at', 'join_noti_wechat_template_is_send', 'join_noti_wechat_template_msg_id', 'arrive_status', 'leave_status'], 'integer'],
             [['question_id', 'user_id'], 'unique', 'targetAttribute' => ['question_id', 'user_id'], 'message' => 'The combination of 问题ID and 用户ID has already been taken.'],
             [['status'], 'default', 'value' => static::STATUS_REVIEW_YET]
         ];
@@ -93,6 +121,10 @@ class Answer extends \yii\db\ActiveRecord
             'join_noti_wechat_template_push_at' => '参加提醒的微信模板消息发送时间',
             'join_noti_wechat_template_is_send' => '参加提醒的微信模板消息是否发送',
             'join_noti_wechat_template_msg_id' => '参加提醒的模板消息id',
+            'arrive_status' => '到达的情况',
+            'leave_status' => '请假状态',
+            'leave_time' => '请假时间',
+            'leave_msg' => '请假内容',
         ];
     }
 

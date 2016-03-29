@@ -2,6 +2,7 @@
 
 namespace someet\common\models;
 
+use common\models\ActivityCheckIn;
 use Yii;
 
 /**
@@ -36,6 +37,21 @@ use Yii;
  * @property integer $status
  * @property integer $edit_status
  * @property integer $content
+ * @property integer $display_order
+ * @property string $field1
+ * @property string $field2
+ * @property string $field3
+ * @property string $field4
+ * @property string $field5
+ * @property string $field6
+ * @property string $field7
+ * @property string $field8
+ * @property integer $co_founder1
+ * @property integer $co_founder2
+ * @property integer $co_founder3
+ * @property integer $co_founder4
+ * @property integer $is_full
+ * @property integer $join_people_count
  */
 class Activity extends \yii\db\ActiveRecord
 {
@@ -46,6 +62,11 @@ class Activity extends \yii\db\ActiveRecord
     const STATUS_DRAFT    = 10;
     /* 发布 */
     const STATUS_RELEASE  = 20;
+
+    /* 报名已满 */
+    const IS_FULL_YES = 1;
+    /* 报名未满 */
+    const IS_FULL_NO = 0;
 
     // 标签名, 用于标签行为使用此属性
     public $tagNames;
@@ -63,17 +84,22 @@ class Activity extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'desc', 'poster', 'area', 'address', 'details' ], 'required'],
-            [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'created_at', 'created_by', 'updated_at', 'updated_by', 'status', 'edit_status'], 'integer'],
-            [['details', 'review', 'content'], 'string'],
+            [['title'], 'required'],
+            [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'created_at', 'created_by', 'updated_at', 'updated_by', 'status', 'edit_status', 'display_order', 'co_founder1', 'co_founder2', 'co_founder3', 'co_founder4', 'is_full', 'join_people_count'], 'integer'],
+            [['details', 'review', 'content', 'field1', 'field2', 'field3', 'field4', 'field5', 'field6', 'field7', 'field8'], 'string'],
             [['longitude', 'latitude'], 'number'],
             [['longitude', 'latitude'], 'default', 'value' => 0],
             ['group_code', 'default', 'value' => '0'],
+            [['area','desc','address','details'], 'default', 'value' => '0'],
+            ['poster', 'default', 'value' => 'http://7xn8h3.com2.z0.glb.qiniucdn.com/FtlMz_y5Pk8xMEPQCw5MGKCRuGxe'],
+            ['start_time', 'default', 'value' => time()],
+            ['end_time', 'default', 'value' => time()+7200],
             [['title'], 'string', 'max' => 80],
             [['desc', 'poster', 'group_code', 'address', 'cost_list', 'tagNames'], 'string', 'max' => 255],
             [['area'], 'string', 'max' => 10],
             [['tagNames'], 'safe'],
-            [['status'], 'default', 'value' => 10]
+            [['status'], 'default', 'value' => 10],
+            [['display_order'], 'default', 'value' => 99]
         ];
     }
 
@@ -125,6 +151,21 @@ class Activity extends \yii\db\ActiveRecord
             'status' => '0 删除 10 草稿 20 发布',
             'edit_status' => '扩展字段, 前端自定义状态',
             'content' => '文案',
+            'display_order' => '显示排序',
+            'field1' => '扩展字段1',
+            'field2' => '扩展字段2',
+            'field3' => '扩展字段3',
+            'field4' => '扩展字段4',
+            'field5' => '扩展字段5',
+            'field6' => '扩展字段6',
+            'field7' => '扩展字段7',
+            'field8' => '扩展字段8',
+            'co_founder1' => '联合创始人1',
+            'co_founder2' => '联合创始人2',
+            'co_founder3' => '联合创始人3',
+            'co_founder4' => '联合创始人4',
+            'is_full' => '是否报满',
+            'join_people_count' => '已报名的人数',
         ];
     }
 
@@ -174,6 +215,28 @@ class Activity extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'created_by']);
+    }
+
+    // 联合发起人1
+    public function getCofounder1()
+    {
+        return $this->hasOne(User::className(), ['id' => 'co_founder1']);
+    }
+
+    // 联合发起人2
+    public function getCofounder2()
+    {
+        return $this->hasOne(User::className(), ['id' => 'co_founder2']);
+    }
+    // 联合发起人3
+    public function getCofounder3()
+    {
+        return $this->hasOne(User::className(), ['id' => 'co_founder3']);
+    }
+    // 联合发起人4
+    public function getCofounder4()
+    {
+        return $this->hasOne(User::className(), ['id' => 'co_founder4']);
     }
 
     // 活动的类型
