@@ -27,6 +27,7 @@ use dektrium\user\models\User as BaseUser;
  * @property string $password write-only password
  * @property string $wechat_id
  * @property integer $last_login_at
+ * @property string $access_token
  */
 class User extends BaseUser
 {
@@ -106,6 +107,8 @@ class User extends BaseUser
             [['last_login_at','black_time'], 'integer'],
             ['password_reset_token', 'string', 'max' => 60],
             ['email_confirmation_token', 'string', 'max' => 60],
+
+            ['access_token', 'default', 'value' => Yii::$app->security->generateRandomString()],
             [['last_login_at', 'password_reset_token', 'email_confirmation_token'], 'safe'],
         ];
     }
@@ -182,7 +185,7 @@ class User extends BaseUser
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        return static::findOne(['access_token' => $token]);
     }
 
     /**
