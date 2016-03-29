@@ -85,7 +85,7 @@ class UpdateController  extends \yii\console\Controller
 	    			->with(['user','user.profile','activity'])
 	    			->joinWith('activity')
 	                ->where([
-	                	'leave_status' => Answer::STATUS_LEAVE_YET,
+	                	'leave_status' => Answer::STATUS_LEAVE_YES,
 	                	'answer.status' => Answer::STATUS_REVIEW_PASS,
 	                	])
 	                //获取上周的数据
@@ -124,7 +124,7 @@ class UpdateController  extends \yii\console\Controller
 	    			->with(['user','user.profile','activity'])
 	    			->joinWith('activity')
 	                ->where([
-	                	'leave_status' => Answer::STATUS_LEAVE_YET,
+	                	'leave_status' => Answer::STATUS_LEAVE_YES,
 	                	'answer.status' => Answer::STATUS_REVIEW_PASS,
 	                	])
 	                ->andWhere('answer.created_at > (' .getLastEndTime().' - 2419200) and '.'answer.created_at < ' .getLastEndTime())
@@ -191,8 +191,9 @@ class UpdateController  extends \yii\console\Controller
 	    			->with(['user','user.profile','activity'])
 	    			->joinWith('activity')
 	                ->where([
-	                	'arrive_status' => Answer::STATUS_ARRIVE_YET,
+	                	'answer.arrive_status' => Answer::STATUS_ARRIVE_YET,
 	                	'answer.status' => Answer::STATUS_REVIEW_PASS,
+	                	'answer.apply_status' => Answer::APPLY_STATUS_YES,
 	                	])
 	                ->andWhere('answer.created_at > (' .getLastEndTime().' - 2419200) and '.'answer.created_at < ' .getLastEndTime())
 					->asArray()
