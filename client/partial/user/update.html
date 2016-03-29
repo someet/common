@@ -51,6 +51,7 @@
             <legend>
                 黄牌记录
             </legend>
+            <md-button ng-if="user.black_label == 1" class="md-raised md-warn">处于黑名单</md-button>
             <div flex-xs flex-gt-xs="50" flex="40" layout="column">
                 <md-card ng-repeat="yellowCardList in yellowCardList">
                     <md-card-title>
@@ -71,7 +72,6 @@
                                         </md-option>
                                     </md-select>
                                 </md-input-container>
-                                <md-button ng-if="user.black_label == 1" class="md-raised md-warn">处于黑名单</md-button>
                             </div>
                         </md-card-title-text>
                         <md-card-title-media>
