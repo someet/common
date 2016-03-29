@@ -61,6 +61,7 @@
               {{entity.id}}#
               <span ng-if="entity.status==10" >[草稿] {{entity.user.username}}：{{entity.title}} - {{entity.desc}}</span>
               <span ng-if="entity.status==20" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}</span>
+              <span ng-if="entity.status==15" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}</span>
 
 
               <!-- 内部使用的状态标签 -->
@@ -79,8 +80,22 @@
                   <span class="badge">{{entity.feedback_count}}</span>
                 </a>
               </span>
-
               <button ng-if="entity.status==10" class="btn btn-primary btn-float-right" ng-click="release(entity)" type="button">发布</button>
+            <!-- 下拉功能 -->
+            <div ng-if="entity.status != 20" class="btn-group btn-float-right">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    切换状态
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a ng-click="draft(entity)">草稿</a>
+                    </li>
+                    <li>
+                        <a ng-click="prevent(entity)">预发布</a>
+                    </li>
+                </ul>
+            </div>
             </h3>
                     </div>
                     <div class="panel-body">

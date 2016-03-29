@@ -1,6 +1,9 @@
 angular.module('backendServices')
     .factory('$activityManage', ['$http', '$q', '$rootScope', function ($http, $q, $rootScope) {
       return {
+        FilterPrevent: function (newEntity){
+          
+        },
         create: function (newEntity) {
           return $http.post('/activity/create', newEntity).then(function (data) {
             return data;

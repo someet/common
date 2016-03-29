@@ -50,6 +50,11 @@ class ActivityController extends BackendController
             ],
             'access' => [
                 'class' => '\app\components\AccessControl',
+                'allowActions' => [
+                'update-all-prevent',
+                'update-status',
+                'filter-prevent',
+                ]
             ],
         ];
     }
@@ -59,6 +64,88 @@ class ActivityController extends BackendController
                         'display_order' => SORT_ASC,
                         'id' => SORT_DESC,
                     ];
+
+    /**
+     * 一键发布 所有预发布的活动  
+     * @return   
+     */
+    public function actionUpdateAllPrevent()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        // 查出所有预发布的活动
+        
+        $activities = Activity::find()
+                    ->with('question')
+                    ->where([
+                        'activity.status' => Activity::STATUS_PREVENT,
+                        ])
+                    //->andWhere(['question.activity_id' => $activity])
+                    ->asArray()
+                    ->all();
+
+
+
+        if (!empty($activities)) {
+            foreach ($activities as $activity) {
+                //$question = Question::find()->where(['activity_id' => $value[]])->exists();
+                // if ($activity['question']) {
+                //     # code...
+                // }
+                //var_dump($activity);
+                // $a =  isset($activity['question']);
+                // var_dump($a);
+
+               if ($activity['question']) {
+                    $activity->status = Activity::STATUS_RELEASE;
+                    $activity->save();
+               }
+            }
+        }
+
+        return $activities;
+
+    }    
+
+    /**
+     * 活动状态更新 更新预发布，与草稿之间切换
+     * @param  integer $id     
+     * @param  int $status 
+     * @return          
+     */
+    public function actionUpdateStatus($id, $status)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $activity = Activity::findOne($id);
+        $activity->status = $status;
+        $activity->save();
+        return $activity;
+
+    }
+
+    /**
+     * 查询过滤预发布活动
+     * @param  integer $id     
+     * @param  int $status 
+     * @return          
+     */
+    public function actionFilterPrevent()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $activity = Activity::find()
+                    ->with([
+                        'type',
+                        'tags',
+                        'question',
+                        'user',
+                        'answerList',
+                        'feedbackList'
+                    ])
+                    ->where(['status' => Activity::STATUS_PREVENT])
+                    ->asArray()
+                    ->all();
+        return $activity;
+    }
 
     /**
      * 活动列表
@@ -75,7 +162,7 @@ class ActivityController extends BackendController
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         // only show draft and release activities
-        $andwhere = ['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE]];
+        $andwhere = ['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE, Activity::STATUS_PREVENT]];
 
         if ($type>0) {
             //判断周末非周末
