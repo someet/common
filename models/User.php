@@ -68,8 +68,8 @@ class User extends BaseUser
     public function scenarios()
     {
         return array_merge(parent::scenarios(), [
-            'register' => ['username', 'password', 'unionid'],
-            'update'   => ['id', 'mobile', 'wechat_id', 'last_login_at', 'password'],
+            'register' => ['username', 'password', 'unionid', 'access_token'],
+            'update'   => ['id', 'mobile', 'wechat_id', 'last_login_at', 'access_token', 'password'],
             'default'   => ['mobile', 'wechat_id', 'last_login_at'],
         ]);
     }
@@ -108,7 +108,8 @@ class User extends BaseUser
             [['last_login_at','black_time', 'black_label'], 'integer'],
             ['password_reset_token', 'string', 'max' => 60],
             ['email_confirmation_token', 'string', 'max' => 60],
-            [['last_login_at', 'password_reset_token', 'black_label', 'email_confirmation_token'], 'safe'],
+            ['access_token', 'string', 'max' => 32],
+            [['last_login_at', 'password_reset_token', 'black_label', 'email_confirmation_token', 'access_token'], 'safe'],
             ['access_token', 'default', 'value' => Yii::$app->security->generateRandomString()],
         ];
     }
