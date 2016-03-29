@@ -71,7 +71,7 @@ class UpdateController  extends \yii\console\Controller
 	}
 
 	/**
-    * 每周一凌晨更新 黄牌数量
+    * 黄牌数量
 	* 执行方式 在命令行
 	* 如： docker exec -i backend_app_1 ./yii update/yellow-card（控制器/方法）
 	* 可以用 yii help 来提示帮助
@@ -85,10 +85,10 @@ class UpdateController  extends \yii\console\Controller
 	    			->with(['user','user.profile','activity'])
 	    			->joinWith('activity')
 	                ->where([
-	                	'leave_status' => Answer::STATUS_LEAVE_YES,
+	                	'answer.leave_status' => Answer::STATUS_LEAVE_YES,
 	                	'answer.status' => Answer::STATUS_REVIEW_PASS,
 	                	])
-	                //获取上周的数据
+	                //获取上周一的凌晨到上周一凌晨前28天的数据
 	                ->andWhere('answer.created_at > (' .getLastEndTime().' - 2419200) and '.'answer.created_at < ' .getLastEndTime())
 	                
 	                // 活动请假时间在活动开始时间减去24小时和活动开始之间
@@ -99,13 +99,13 @@ class UpdateController  extends \yii\console\Controller
 	    // 检测数据是否为空
 	    if (!empty($leave_yet_in_one_day)) {
 		    foreach ($leave_yet_in_one_day as  $leave_yet_in_one_day_value) {
-		    	$YellowCard_leave_yet_in_one_day = new YellowCard();
 
 		    	// 判断数据之前是否更新过，如果更新过则不再更新，防止重复更新
 		    	$leave_yet_in_one_day_exists = YellowCard::find()
 							    	->where(['user_id' => $leave_yet_in_one_day_value['user_id'],'activity_id' => $leave_yet_in_one_day_value['activity']['id']])
 							    	->exists();
 				if (!$leave_yet_in_one_day_exists) {
+			    	$YellowCard_leave_yet_in_one_day = new YellowCard();
 			    	$YellowCard_leave_yet_in_one_day->activity_id = $leave_yet_in_one_day_value['activity_id'];
 			    	$YellowCard_leave_yet_in_one_day->activity_title = $leave_yet_in_one_day_value['activity']['title'];
 			    	$YellowCard_leave_yet_in_one_day->username = $leave_yet_in_one_day_value['user']['username'];
@@ -127,6 +127,7 @@ class UpdateController  extends \yii\console\Controller
 	                	'leave_status' => Answer::STATUS_LEAVE_YES,
 	                	'answer.status' => Answer::STATUS_REVIEW_PASS,
 	                	])
+	                //获取上周一的凌晨到上周一凌晨前28天的数据
 	                ->andWhere('answer.created_at > (' .getLastEndTime().' - 2419200) and '.'answer.created_at < ' .getLastEndTime())
 	                // 活动请假时间大于 在活动开始时间减去24小时
 					->andWhere('answer.leave_time < (activity.start_time - 86400)')
@@ -135,11 +136,11 @@ class UpdateController  extends \yii\console\Controller
 
 	    if (!empty($leave_yet_no_one_day)) {
 		    foreach ($leave_yet_no_one_day as  $leave_yet_no_one_day_value) {
-		    	$YellowCard_leave_yet_no_one_day = new YellowCard();
 		    	$leave_yet_no_one_day_exists = YellowCard::find()
 							    	->where(['user_id' => $leave_yet_no_one_day_value['user_id'],'activity_id' => $leave_yet_no_one_day_value['activity']['id']])
 							    	->exists();
 				if (!$leave_yet_no_one_day_exists) {
+			    	$YellowCard_leave_yet_no_one_day = new YellowCard();
 			    	$YellowCard_leave_yet_no_one_day->activity_id = $leave_yet_no_one_day_value['activity_id'];
 			    	$YellowCard_leave_yet_no_one_day->activity_title = $leave_yet_no_one_day_value['activity']['title'];
 			    	$YellowCard_leave_yet_no_one_day->username = $leave_yet_no_one_day_value['user']['username'];
@@ -162,16 +163,17 @@ class UpdateController  extends \yii\console\Controller
 	                	'arrive_status' => Answer::STATUS_ARRIVE_LATE,
 	                	'answer.status' => Answer::STATUS_REVIEW_PASS,
 	                	])
+	                //获取上周一的凌晨到上周一凌晨前28天的数据
 	                ->andWhere('answer.created_at > (' .getLastEndTime().' - 2419200) and '.'answer.created_at < ' .getLastEndTime())
 					->asArray()
 	                ->all();
 	    if (!empty($arrive_yet)) {
 		    foreach ($arrive_yet as  $arrive_yet_value) {
-		    	$YellowCard_arrive_yet = new YellowCard();
 		    	$arrive_yet_exists = YellowCard::find()
 							    	->where(['user_id' => $arrive_yet_value['user_id'],'activity_id' => $arrive_yet_value['activity']['id']])
 							    	->exists();
 				if (!$arrive_yet_exists) {
+		    		$YellowCard_arrive_yet = new YellowCard();
 			    	$YellowCard_arrive_yet->activity_id = $arrive_yet_value['activity_id'];
 			    	$YellowCard_arrive_yet->activity_title = $arrive_yet_value['activity']['title'];
 			    	$YellowCard_arrive_yet->username = $arrive_yet_value['user']['username'];
@@ -200,11 +202,11 @@ class UpdateController  extends \yii\console\Controller
 	                ->all();
 	    if (!empty($arrive_no)) {
 		    foreach ($arrive_no as  $arrive_no_value) {
-		    	$YellowCard_arrive_no = new YellowCard();
 		    	$arrive_yet_exists = YellowCard::find()
 							    	->where(['user_id' => $arrive_no_value['user_id'],'activity_id' => $arrive_no_value['activity']['id']])
 							    	->exists();
 				if (!$arrive_yet_exists) {
+		    		$YellowCard_arrive_no = new YellowCard();
 			    	$YellowCard_arrive_no->activity_id = $arrive_no_value['activity_id'];
 			    	$YellowCard_arrive_no->activity_title = $arrive_no_value['activity']['title'];
 			    	$YellowCard_arrive_no->username = $arrive_no_value['user']['username'];
