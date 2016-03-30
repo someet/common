@@ -386,17 +386,28 @@ class MemberController extends BackendController
                                 ->andWhere('created_at > (' .getLastEndTime().' - 2419200) and '.'created_at < ' .getLastEndTime())
                                 ->asArray()
                                 ->groupBy('user_id')
-                                ->one();
+                                ->all();
                 if (!empty($count_yellow)) {
-                   if ($count_yellow['card_count'] < 3) {
-                       User::updateAll([
-                           'black_label' => User::BLACK_LIST_NO,
-                           'black_time' => time(),
-                           ],['id' => $count_yellow['user_id']
-                       ]);
-                   }
-                }
-            // }
+                     foreach ($count_yellow as  $value) {
+                        if ($value['card_count'] < 3) {
+                            User::updateAll([
+                                'black_label' => User::BLACK_LIST_NO,
+                                'black_time' => time(),
+                                ],['id' => $value['user_id']]);
+
+                            }
+                     }
+                 }
+                // if (!empty($count_yellow)) {
+                //    if ($count_yellow['card_count'] < 3) {
+                //        User::updateAll([
+                //            'black_label' => User::BLACK_LIST_NO,
+                //            'black_time' => time(),
+                //            ],['id' => $count_yellow['user_id']
+                //        ]);
+                //    }
+                // }
+            
         }
 
         return $yellow_card;
