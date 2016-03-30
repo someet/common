@@ -93,6 +93,19 @@ angular.module('controllers', ['ngTagsInput'])
         alert(err);
       });
 
+      // 一键发布预发布活动
+      $scope.prevenIssuetActivity = function(){
+        $activityManage.updateAllPrevent().then(function(data) {
+          $scope.list = data;
+        })
+      }
+      // 预发布活动
+      $scope.preventActivity = function(){
+        $activityManage.filterPrevent().then(function(data) {
+          $scope.list = data;
+        })
+      }      
+
       // 本周活动
       $scope.weekActivity = function(){
         if (listtype>0) {

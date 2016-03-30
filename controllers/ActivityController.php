@@ -87,22 +87,13 @@ class ActivityController extends BackendController
 
         if (!empty($activities)) {
             foreach ($activities as $activity) {
-                //$question = Question::find()->where(['activity_id' => $value[]])->exists();
-                // if ($activity['question']) {
-                //     # code...
-                // }
-                //var_dump($activity);
-                // $a =  isset($activity['question']);
-                // var_dump($a);
-
                if ($activity['question']) {
-                    $activity->status = Activity::STATUS_RELEASE;
-                    $activity->save();
+                    Activity::updateAll(['status' => Activity::STATUS_RELEASE],['id' => $activity['id']]);
                }
             }
         }
 
-        return $activities;
+        return Activity::find()->all();
 
     }    
 
@@ -156,13 +147,17 @@ class ActivityController extends BackendController
      * @param int $isWeek  是否是本周活动  0 本周 1 非本周
      * @return array|int|null|\yii\db\ActiveRecord|\yii\db\ActiveRecord[]
      */
-    public function actionIndex($id = null, $scenario = null, $perPage = 20, $type = null, $isWeek = 0)
+    public function actionIndex($id = null, $scenario = null, $perPage = 20, $type = null, $isWeek = 0, $status = null)
     {
 
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         // only show draft and release activities
-        $andwhere = ['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE, Activity::STATUS_PREVENT]];
+        if ($status == 15) {
+            $andwhere = ['status' =>  [Activity::STATUS_PREVENT]];
+        } else {
+            $andwhere = ['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE, Activity::STATUS_PREVENT]];
+        }
 
         if ($type>0) {
             //判断周末非周末

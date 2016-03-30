@@ -1,8 +1,15 @@
 angular.module('backendServices')
     .factory('$activityManage', ['$http', '$q', '$rootScope', function ($http, $q, $rootScope) {
       return {
-        FilterPrevent: function (newEntity){
-          
+        updateAllPrevent: function (newEntity){
+          return $http.get('/activity/update-all-prevent').then(function (data) {
+            return data;
+          })
+        },        
+        filterPrevent: function (newEntity){
+          return $http.get('/activity/filter-prevent').then(function (data) {
+            return data;
+          })
         },
         create: function (newEntity) {
           return $http.post('/activity/create', newEntity).then(function (data) {
