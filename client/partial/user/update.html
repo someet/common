@@ -1,6 +1,6 @@
 <!-- 更新用户资料 -->
 <div layout="column" layout-align-md id="content" class="container">
-    <input type="hidden" ng-model="user.id"/>
+    <input type="hidden" ng-model="user.id" />
     <div class="" layout="column">
         <md-input-container layout="row" class="pull-right">
             <md-button class="md-raised md-primary" ng-click="updateUser()">确认修改</md-button>
@@ -25,23 +25,23 @@
                 </md-input-container>
                 <md-input-container flex="40">
                     <label>手机</label>
-                    <input type="text" ng-model="user.mobile" disabled="true"/>
+                    <input type="text" ng-model="user.mobile" disabled="true" />
                 </md-input-container>
             </div>
             <div layout='row' layout-margin>
                 <md-input-container flex="50">
                     <label>微信</label>
-                    <input type="text" ng-model="user.wechat_id" disabled="true"/>
+                    <input type="text" ng-model="user.wechat_id" disabled="true" />
                 </md-input-container>
                 <md-input-container flex="40">
                     <label>性别</label>
-                    <input type="text" ng-model="user.profile.sex==1 ? '男' : user.profile.sex==2 ? '女' : '性别不明'" disabled="true"/>
+                    <input type="text" ng-model="user.profile.sex==1 ? '男' : user.profile.sex==2 ? '女' : '性别不明'" disabled="true" />
                 </md-input-container>
             </div>
             <div layout='row' layout-margin>
                 <md-input-container flex="50">
                     <label>是否关注服务号</label>
-                    <input type="text" ng-model="user.username" disabled="true"/>
+                    <input type="text" ng-model="user.username" disabled="true" />
                 </md-input-container>
                 <md-input-container flex="40">
                     <label>邮箱</label>
@@ -83,6 +83,11 @@
                             <span class="md-subhead" ng-if="yellowCardList.status == 1">黄牌状态：弃用</span> -->
                             <span class="md-subhead" ng-if="yellowCardList.appeal_status == 0">申诉状态：未申诉</span>
                             <span class="md-subhead" style="color: red;" ng-if="yellowCardList.appeal_status == 1">申诉状态：已申诉（等待处理）</span>
+                            <div layout='row' layout-margin ng-if="yellowCardList.appeal_status != 0">
+                                <md-card-content>
+                                    <span class="md-subhead">{{yellowCardList.appeal_reason}}</span>
+                                </md-card-content>
+                            </div>
                             <span class="md-subhead" ng-if="yellowCardList.appeal_status == 2">申诉状态：处理完成</span>
                             <span class="md-subhead" ng-if="yellowCardList.appeal_status == 3">申诉状态：驳回</span>
                         </md-card-title-media>
@@ -90,12 +95,12 @@
                     <div layout='row' layout-margin ng-if="yellowCardList.appeal_status == 1">
                         <md-input-container flex="100">
                             <label>驳回理由</label>
-                            <input type="text" ng-model="yellowCardList.handle_reply"/>
+                            <input type="text" ng-model="yellowCardList.handle_reply" />
                         </md-input-container>
                     </div>
-                    <md-card-actions  layout="row" layout-align="end center">
+                    <md-card-actions layout="row" layout-align="end center">
                         <!-- <md-button class="md-raised md-warn" ng-click="abandonYellowCard(yellowCardList.id,1)">取消黄牌</md-button> -->
-                        <md-button  ng-if="yellowCardList.appeal_status == 1" class="md-raised md-warn" ng-click="rejectYellowCard(yellowCardList.id,yellowCardList.handle_reply)">驳回理由</md-button>
+                        <md-button ng-if="yellowCardList.appeal_status == 1" class="md-raised md-warn" ng-click="rejectYellowCard(yellowCardList.id,yellowCardList.handle_reply)">驳回理由</md-button>
                     </md-card-actions>
                 </md-card>
                 <div class="" ng-if="yellowCardList == null">
