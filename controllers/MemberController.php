@@ -382,7 +382,7 @@ class MemberController extends BackendController
                                 ->where(['user_id' => $yellow_card->user_id])
                                 // ->andWhere(['status' => YellowCard::STATUS_NORMAL])
                                 ->andwhere('card_category > 0')
-                                // 上周一凌晨到本周一凌晨
+                                // 前一个月 到现在的数据
                                 ->andWhere('created_at > (' .time().' - 2419200) and '.'created_at < ' .time())
                                 ->asArray()
                                 ->groupBy('user_id')
@@ -398,15 +398,6 @@ class MemberController extends BackendController
                             }
                      }
                  }
-                // if (!empty($count_yellow)) {
-                //    if ($count_yellow['card_count'] < 3) {
-                //        User::updateAll([
-                //            'black_label' => User::BLACK_LIST_NO,
-                //            'black_time' => time(),
-                //            ],['id' => $count_yellow['user_id']
-                //        ]);
-                //    }
-                // }
             
         }
 
