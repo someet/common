@@ -12,6 +12,7 @@
                     <br> 迟到人数比率：{{ list[0].late_ratio }}&nbsp;&nbsp;
                     <br> 请假人数比率：{{ list[0].leave_ratio }}&nbsp;&nbsp;
                     <br> 爽约人数比率：{{ list[0].arrive_no_ratio }}&nbsp;&nbsp;
+                    <br> 报名总人数：{{ list.length }}&nbsp;&nbsp;
                 </div>
             </div>
         </div>
@@ -23,11 +24,12 @@
     <div ng-cloak>
         <md-content>
             <md-tabs md-dynamic-height md-border-bottom>
-                <md-tab label="待筛选">
+                <md-tab label="待筛选{{answerFilter.length}}">
                     <md-content class="md-padding">
                         <h1 class="md-display-2">待筛选</h1>
                             <ul class="list-group">
-                                <li class="list-group-item" ng-repeat="entity in list | filter: {status: 10, apply_status:0}" ng-click="view(entity)">
+                                <li class="list-group-item" ng-repeat="entity in list | filter: {status: 10, apply_status:0} as answerFilter" ng-click="view(entity)">
+                                        
                                     <div class="media">
                                         <a class="pull-left" href="">
                                             <img width="50" height="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像">
@@ -40,11 +42,11 @@
                             </ul>
                     </md-content>
                 </md-tab>
-                <md-tab label="通过">
+                <md-tab label="通过{{answerPass.length}}">
                     <md-content class="md-padding">
                         <h1 class="md-display-2">通过</h1>
                             <ul class="list-group">
-                                <li class="list-group-item" ng-repeat="entity in list | filter: {status:20, leave_status:0}" ng-click="view(entity)">
+                                <li class="list-group-item" ng-repeat="entity in list | filter: {status:20, leave_status:0} as answerPass" ng-click="view(entity)">
                                     <div class="media">
                                         <a class="pull-left" href="">
                                             <img width="50" height="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像" />
@@ -74,11 +76,11 @@
                             </ul>
                     </md-content>
                 </md-tab>
-                <md-tab label="请假">
+                <md-tab label="请假{{answerLeave.length}}">
                     <md-content class="md-padding">
                         <h1 class="md-display-2">请假</h1>
                             <ul class="list-group">
-                                <li class="list-group-item" ng-repeat="entity in list | filter: {status:20, leave_status:1}" ng-click="view(entity)">
+                                <li class="list-group-item" ng-repeat="entity in list | filter: {status:20, leave_status:1} as answerLeave" ng-click="view(entity)">
                                     <div class="media">
                                         <a class="pull-left" href="">
                                             <img width="50" height="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像" />
@@ -91,12 +93,12 @@
                             </ul>
                     </md-content>
                 </md-tab>
-                <md-tab label="取消报名">
+                <md-tab label="取消报名{{answerCancel.length}}">
                     <md-content class="md-padding">
                         <h1 class="md-display-2">取消报名</h1>
                     </md-content>
                         <ul class="list-group">
-                            <li class="list-group-item" ng-repeat="entity in list | filter: {status:10, apply_status:1}" ng-click="view(entity)">
+                            <li class="list-group-item" ng-repeat="entity in list | filter: {status:10, apply_status:1} as answerCancel" ng-click="view(entity)">
                                 <div class="media">
                                     <a class="pull-left" href="">
                                         <img width="50" height="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像" />
@@ -108,12 +110,12 @@
                             </li>
                         </ul>
                 </md-tab>                
-                <md-tab label="未通过">
+                <md-tab label="未通过{{answerReject.length}}">
                     <md-content class="md-padding">
                         <h1 class="md-display-2">未通过</h1>
                     </md-content>
                         <ul class="list-group">
-                            <li class="list-group-item" ng-repeat="entity in list | filter: {status:30, is_send: 1}" ng-click="view(entity)">
+                            <li class="list-group-item" ng-repeat="entity in list | filter: {status:30, is_send: 1} as answerReject" ng-click="view(entity)">
                                 <div class="media">
                                     <a class="pull-left" href="">
                                         <img width="50" height="50" style="border-radius: 25px" class="media-object avatarSize" ng-src="{{entity.user.profile.headimgurl}}" alt="头像">
@@ -148,8 +150,8 @@
               </font>
             </span>
                             <div class="pull-right">
-                                <button ng-if="entity.is_send==0||entity.status==10" class="btn btn-success" ng-click="pass(entity)">通过</button>
-                                <button ng-if="entity.is_send==0||entity.status==10" class="btn btn-danger" ng-click="reject(entity)">不通过</button>
+                                <button class="btn btn-success" ng-click="pass(entity)">通过</button>
+                                <button class="btn btn-danger" ng-click="reject(entity)">不通过</button>
                                 <button class="btn btn-default" ng-click="apply(entity, 1)">取消报名</button>
                                 <button class="btn btn-default" ng-click="apply(entity, 0)">不取消报名</button>
                                 <button class="btn btn-default" ng-click="leave(entity, 1)">请假</button>

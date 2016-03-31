@@ -8,6 +8,10 @@ angular.module('controllers')
         $answerManage.fetchByActivityId(activity_id).then(function (data) {
           $scope.list = data;
 
+          $scope.countData = {
+            apply:$scope.status
+          }
+
           var outInfo = '';
           angular.forEach(data, function(list,index,array){
 
