@@ -158,17 +158,15 @@ class ActivityController extends BackendController
      * @param int $isWeek  是否是本周活动  0 本周 1 非本周
      * @return array|int|null|\yii\db\ActiveRecord|\yii\db\ActiveRecord[]
      */
-    public function actionIndex($id = null, $scenario = null, $perPage = 20, $type = null, $isWeek = 0, $status = null)
+    public function actionIndex($id = null, $scenario = null, $perPage = 20, $type = null, $isWeek = 0)
     {
 
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         // only show draft and release activities
-        if ($status == 15) {
-            $andwhere = ['status' =>  [Activity::STATUS_PREVENT]];
-        } else {
+
             $andwhere = ['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE, Activity::STATUS_PREVENT]];
-        }
+    
 
         if ($type>0) {
             //判断周末非周末
