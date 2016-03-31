@@ -96,13 +96,23 @@ angular.module('controllers', ['ngTagsInput'])
       // 一键发布预发布活动
       $scope.prevenIssuetActivity = function(){
         $activityManage.updateAllPrevent().then(function(data) {
-          $scope.list = data;
-        })
+          $mdToast.show($mdToast.simple()
+            .content('一键发布预发布活动成功')
+            .hideDelay(5000)
+            .position("top right"));
+            $scope.list = data;
+        },function(err){
+          $mdToast.show($mdToast.simple()
+            .content(err.toString())
+            .hideDelay(5000)
+            .position("top right"));
+        });
       }
       // 预发布活动
       $scope.preventActivity = function(){
         $activityManage.filterPrevent().then(function(data) {
           $scope.list = data;
+          console.log($scope.list);
         })
       }      
 

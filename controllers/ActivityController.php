@@ -75,7 +75,14 @@ class ActivityController extends BackendController
         // 查出所有预发布的活动
         
         $activities = Activity::find()
-                    ->with('question')
+                    ->with([
+                        'type',
+                        'tags',
+                        'question',
+                        'user',
+                        'answerList',
+                        'feedbackList'
+                    ])
                     ->where([
                         'activity.status' => Activity::STATUS_PREVENT,
                         ])
@@ -89,7 +96,10 @@ class ActivityController extends BackendController
             foreach ($activities as $activity) {
                if ($activity['question']) {
                     Activity::updateAll(['status' => Activity::STATUS_RELEASE],['id' => $activity['id']]);
+                   // $activity->save();
+                   $activity['status'] = Activity::STATUS_RELEASE;
                }
+
             }
         }
 
