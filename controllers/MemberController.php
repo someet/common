@@ -383,7 +383,7 @@ class MemberController extends BackendController
                                 // ->andWhere(['status' => YellowCard::STATUS_NORMAL])
                                 ->andwhere('card_category > 0')
                                 // 上周一凌晨到本周一凌晨
-                                ->andWhere('created_at > (' .getLastEndTime().' - 2419200) and '.'created_at < ' .getLastEndTime())
+                                ->andWhere('created_at > (' .time().' - 2419200) and '.'created_at < ' .time())
                                 ->asArray()
                                 ->groupBy('user_id')
                                 ->all();
