@@ -23,6 +23,12 @@ angular.module('backendServices')
             return data;
           });
         },
+        //取消报名情况
+        apply: function (id, status) {
+          return $http.post('/answer/apply?id=' + id + '&status=' + status).then(function (data) {
+            return data;
+          });
+        },        
         //请假情况
         leave: function (id, leave_status) {
           return $http.post('/answer/leave?id=' + id + '&leave_status=' + leave_status).then(function (data) {

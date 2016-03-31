@@ -45,6 +45,7 @@ class AnswerController extends BackendController
             ],
             'access' => [
                 'class' => '\app\components\AccessControl',
+                'allowActions' => ['apply',]
             ],
         ];
     }
@@ -108,6 +109,47 @@ class AnswerController extends BackendController
     {
 
     }
+
+    /**
+     * 更新用户取消报名情况
+     * @param $id 更新的对象id
+     * @param $leave_status 请假状态 0未取消报名  1 取消报名
+     * @return array|null|\yii\db\ActiveRecord
+     * @throws DataValidationFailedException
+     * @throws NotFoundHttpException
+     * @throws ServerErrorHttpException
+     */
+    public function actionApply($id, $status)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        // 参数验证
+        if ($id < 1 || !in_array($status, [0,1])) {
+            return ['msg' => '参数不正确'];
+        }
+
+        //后台操作日志记录
+        AdminLog::saveLog('更新用户报名状态', $id);
+
+        //获取报名信息
+        $model = Answer::find()->where(['id' => $id])->with(['user', 'activity'])->one();
+        //修改当前报名的状态为通过或者不通过
+
+        //设置答案的状态为通过或不通过
+        $model->apply_status = $status;
+        if (!$model->save()) {
+            //返回错误信息
+            return ['msg' => '操作失败'];
+        } else {
+            //返回正确的消息
+            return Answer::find()
+                ->where(['id' => $model->id])
+                ->asArray()
+                ->with('answerItemList')
+                ->one();
+        }
+    }    
+
     /**
      * 更新用户请假
      * @param $id 更新的对象id
