@@ -93,6 +93,29 @@ angular.module('controllers', ['ngTagsInput'])
         alert(err);
       });
 
+      // 一键发布预发布活动
+      $scope.prevenIssuetActivity = function(){
+        $activityManage.updateAllPrevent().then(function(data) {
+          $mdToast.show($mdToast.simple()
+            .content('一键发布预发布活动成功')
+            .hideDelay(5000)
+            .position("top right"));
+            $scope.list = data;
+        },function(err){
+          $mdToast.show($mdToast.simple()
+            .content(err.toString())
+            .hideDelay(5000)
+            .position("top right"));
+        });
+      }
+      // 预发布活动
+      $scope.preventActivity = function(){
+        $activityManage.filterPrevent().then(function(data) {
+          $scope.list = data;
+          console.log($scope.list);
+        })
+      }      
+
       // 本周活动
       $scope.weekActivity = function(){
         if (listtype>0) {
@@ -168,6 +191,70 @@ angular.module('controllers', ['ngTagsInput'])
           alert(err);
         });
       };
+
+      // 草稿
+      $scope.draft = function(entity) {
+
+          // var confirm = $mdDialog.confirm()
+          //   .title('确定要更改为草稿吗')
+          //   .ariaLabel('delete activity item')
+          //   .ok('确定发布')
+          //   .cancel('点错了，再看看');
+
+          // $mdDialog.show(confirm).then(function() {
+
+            console.log(entity);
+
+            var newEntity = entity;
+            newEntity.status = 10;//活动状态20为发布
+            $activityManage.update(newEntity.id, newEntity).then(function(data){
+              // $location.path('/activity/list/' + entity.type_id);
+              $mdToast.show($mdToast.simple()
+                .content('切换为草稿成功')
+                .hideDelay(5000)
+                .position("top right"));
+
+            },function(err){
+              $mdToast.show($mdToast.simple()
+                .content(err.toString())
+                .hideDelay(5000)
+                .position("top right"));
+            });
+          // });
+
+      }      
+
+      // 预发布
+      $scope.prevent = function(entity) {
+
+          // var confirm = $mdDialog.confirm()
+          //   .title('确定要预发布活动“' + entity.title + '”吗？')
+          //   .ariaLabel('delete activity item')
+          //   .ok('确定发布')
+          //   .cancel('点错了，再看看');
+
+          // $mdDialog.show(confirm).then(function() {
+
+            console.log(entity);
+
+            var newEntity = entity;
+            newEntity.status = 15;//活动状态20为发布
+            $activityManage.update(newEntity.id, newEntity).then(function(data){
+              // $location.path('/activity/list/' + entity.type_id);
+              $mdToast.show($mdToast.simple()
+                .content('切换为预发布成功')
+                .hideDelay(5000)
+                .position("top right"));
+
+            },function(err){
+              $mdToast.show($mdToast.simple()
+                .content(err.toString())
+                .hideDelay(5000)
+                .position("top right"));
+            });
+          // });
+
+      }      
 
       // 发布活动
       $scope.release = function(entity) {
