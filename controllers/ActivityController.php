@@ -93,7 +93,8 @@ class ActivityController extends BackendController
             }
         }
 
-        return Activity::find()->all();
+        // return Activity::find()->where(['status' => Activity::STATUS_PREVENT])->all();
+        return $activities;
 
     }    
 
