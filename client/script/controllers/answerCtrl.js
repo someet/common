@@ -8,6 +8,10 @@ angular.module('controllers')
         $answerManage.fetchByActivityId(activity_id).then(function (data) {
           $scope.list = data;
 
+          $scope.countData = {
+            apply:$scope.status
+          }
+
           var outInfo = '';
           angular.forEach(data, function(list,index,array){
 
@@ -52,6 +56,21 @@ angular.module('controllers')
           $scope.answerItemList = entity.answerItemList;
           $scope.entity = entity;
         }
+
+        //取消报名，未取消报名
+        $scope.apply = function(entity, status) {
+          $answerManage.apply(entity.id, status).then(function(data) {
+            $mdToast.show($mdToast.simple()
+              .content('已操作成功')
+              .hideDelay(5000)
+              .position("top right"));
+          }, function(err){
+            $mdToast.show($mdToast.simple()
+              .content(err.toString())
+              .hideDelay(5000)
+              .position("top right"));
+          });
+        }        
 
         //未到,迟到，准时功能, 0未到 1 迟到 2准时
         $scope.arrive = function(entity, status) {
