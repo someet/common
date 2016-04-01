@@ -215,6 +215,7 @@ class NotificationTemplate extends Component
         ];
         return $data;
     }
+
     /**
      * 获取成功的微信模板消息
      * @param $openid openid
@@ -273,4 +274,59 @@ class NotificationTemplate extends Component
         ];
         return $data;
     }
+
+    /**
+     * 获取活动签到成功的微信模板消息
+     * @param $openid openid
+     * @param $account Account对象
+     * @param $activity 活动对象
+     * @return array
+     */
+    public static function fetchSuccessCheckInWechatTemplateData($openid, $account, $activity) {
+        //获取模板消息id
+        $template_id = Yii::$app->params['sms.success_check_in_template_id'];
+        $url = Yii::$app->params['domain'].'activity/'.$activity['id'];
+        if (empty($template_id)) {
+            //记录一个错误, 请设置成功的模板消息id
+            Yii::error('请设置签到成功的模板消息id');
+        }
+
+        //签到时间
+        $check_in_time = date('Y年m月d日 H点i分', time());
+        $data = [
+            "touser" => "{$openid}",
+            "template_id" => $template_id,
+            "url" => $url,
+            "topcolor" => "#FF0000",
+            "data" => [
+                "first" => [
+                    "value" => "你好，你已签到成功。",
+                    "color" => "#173177"
+                ],
+                "keyword1" => [
+                    "value" => "{$account['username']}",
+                    "color" => "#173177"
+                ],
+                "keyword2" => [
+                    "value" => "{$activity['title']}",
+                    "color" =>"#173177"
+                ],
+                "keyword3" => [
+                    "value" => "{$check_in_time}",
+                    "color" => "#173177"
+                ],
+                "keyword4" => [
+                    "value" => "{$activity['address']}",
+                    "color" => "#173177"
+                ],
+                "remark" => [
+                    "value" => "感谢你的参加!",
+                    "color" => "#173177"
+                ],
+            ]
+        ];
+        return $data;
+    }
+
+
 }

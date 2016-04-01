@@ -1,6 +1,7 @@
 <?php
 namespace app\commands;
 use app\components\NotificationTemplate;
+use common\models\Noti;
 use someet\common\components\SomeetValidator;
 use someet\common\models\Activity;
 use Yii;
@@ -10,6 +11,66 @@ use someet\common\models\User;
 
 class CronController  extends \yii\console\Controller
 {
+
+    /**
+     * 发送通知,包括各渠道，各类型的通知
+     */
+    public function actionSendNoti()
+    {
+        //查询所有的未发送的通知
+        $noties = Noti::find()
+                ->where(["sended_at" => 0])
+                ->with(['user'])
+                ->asArray()
+                ->all();
+
+        foreach ($noties as $noti) {
+
+            //判断渠道为微信
+            if ( Noti::TUNNEL_WECHAT == $noti['tunnel_id']) {
+                $from_id = $noti['from_id'];
+                $account = Account::find()->where([
+                    'provider' => 'wechat',
+                    'user_id' => $noti['user']['id'],
+                ])->with('user')->one();
+                if (!$account) {
+                    Yii::error('报名签到id: ' . $noti['user']['id'] . ' 的用户短信发送失败或者没有绑定微信');
+                    continue;
+                }
+                $openid = $account->client_id;
+
+                //判断来源类型为活动
+                if ( Noti::FROM_ACTIVITY == $noti['from_id_type']) {
+                    $activity = Activity::findOne($from_id);
+                    $templateData = NotificationTemplate::fetchSuccessCheckInWechatTemplateData($openid, $noti['user'], $activity);
+                } else if (Noti::FROM_USER == $noti['from_id_type']) {
+                    //$user = User::findOne($from_id);
+                    //$templateData = NotificationTemplate::fetchUser($openid, $noti['user'], $user);
+                }
+
+                if (empty($templateData)) {
+                    continue;
+                }
+
+                $wechat_template = Yii::$app->beanstalk->putInTube('wechatofficial', ['templateData' => $templateData, 'noti' => $noti]);
+                if (!$wechat_template) {
+                    Yii::error('活动签到成功微信消息加到队列失败，请检查');
+                } else {
+                    Yii::info('添加活动签到成功微信模板消息到消息队列成功');
+                }
+
+            // 判断渠道为短信
+            } else if ( Noti::TUNNEL_SMS == $noti['tunnel_id']) {
+
+            // 判断渠道为app
+            } else if ( Noti::TUNNEL_APP == $noti['tunnel_id']) {
+
+            // 判断渠道为站内信
+            } else if ( Noti::TUNNEL_MSG == $noti['tunnel_id']) {
+
+            }
+        }
+    }
 
     /**
      * 发送审核通知
