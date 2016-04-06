@@ -5,7 +5,7 @@ COPY . /var/www/html
 # Copy the opcache configfile
 COPY opcache.ini /usr/local/etc/php/conf.d/
 
-RUN composer self-update
+RUN composer selfupdate
 RUN composer install --no-progress
 # 优化自动加载
 RUN composer dump-autoload --optimize
