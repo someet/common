@@ -65,7 +65,6 @@ angular.module('controllers')
         route = "/member"
       }
       return route === $location.path();
-      // return .indexOf(route) != -1;
     }
 
 

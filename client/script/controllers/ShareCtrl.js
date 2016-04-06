@@ -14,8 +14,11 @@ angular.module('controllers').controller('ShareCtrl', [
             // };
         })
 
-
-
+        // tab
+        $scope.isActive = function() {
+            var route = "/share"
+            return route === $location.path();
+        }
 
         // qiniu upload image start //
         $scope.selectHeader = null;
