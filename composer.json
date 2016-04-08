@@ -34,7 +34,8 @@
 	"config": {
 		"process-timeout": 1800,
         "allow_superuser": 1,
-		"vendor-dir": "/var/www/vendor"
+		"vendor-dir": "/var/www/vendor",
+		"secure-http": false
 	},
 	"extra": {
 		"asset-installer-paths": {

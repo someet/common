@@ -15,7 +15,7 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 # use China proxy
-RUN composer config -g repo.packagist composer https://packagist.phpcomposer.com
+# RUN composer config -g repo.packagist composer https://packagist.phpcomposer.com
 
 # Install Redis
 # Copy the redis Extension file
