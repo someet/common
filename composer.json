@@ -19,6 +19,7 @@
 		"dektrium/yii2-rbac": "*@dev",
         "yiisoft/yii2-redis": "*@dev",
         "e96/yii2-sentry": "dev-master",
+        "yiisoft/yii2-authclient": "*@dev",
         "callmez/yii2-wechat-sdk": "dev-master",
         "maxwelldu/yii2-sms": "^1.0",
         "bazilio/yii2-newrelic": "~0.0.1",
