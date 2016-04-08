@@ -4,7 +4,7 @@ FROM daocloud.io/someetinc/backend-base:latest
 COPY . /var/www/html
 # Copy the opcache configfile
 COPY opcache.ini /usr/local/etc/php/conf.d/
-
+RUN composer config -g repo.packagist composer https://packagist.phpcomposer.com
 RUN composer self-update
 RUN composer global require fxp/composer-asset-plugin:dev-master --no-plugins
 RUN composer install --no-progress
