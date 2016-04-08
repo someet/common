@@ -21,6 +21,10 @@ RUN apt-get update \
 # Copy the redis Extension file
 COPY php/redis.tgz /home/redis.tgz
 
+
+RUN npm install
+RUN bower install --allow-root --config.interactive=false
+
 RUN pecl install /home/redis.tgz \
   && echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini
 
