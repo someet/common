@@ -5,7 +5,7 @@ COPY . /var/www/html
 # Copy the opcache configfile
 COPY opcache.ini /usr/local/etc/php/conf.d/
 
-RUN composer selfupdate
+RUN composer self-update
 RUN composer global require fxp/composer-asset-plugin:dev-master --no-plugins
 RUN composer install --no-progress
 # 优化自动加载
