@@ -15,7 +15,8 @@ RUN mkdir -p runtime web/assets \
 
 # install bower
 #RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
-
+RUN npm install
+RUN bower install --allow-root --config.interactive=false
 RUN gulp dist
 
 
