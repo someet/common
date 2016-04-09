@@ -25,7 +25,7 @@ RUN apt-get update \
 # Copy the redis Extension file
 COPY php/redis.tgz /home/redis.tgz
 
-
+RUN npm install gulp
 RUN npm install
 RUN bower install --allow-root --config.interactive=false
 
