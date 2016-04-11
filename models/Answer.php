@@ -26,6 +26,7 @@ use Yii;
  * @property integer $leave_status
  * @property string $leave_msg
  * @property string $is_feedback
+ * @property integer $apply_status
  */
 class Answer extends \yii\db\ActiveRecord
 {
@@ -94,7 +95,7 @@ class Answer extends \yii\db\ActiveRecord
     {
         return [
             [['question_id'], 'required'],
-            [['leave_time', 'question_id', 'activity_id', 'user_id', 'is_finish', 'is_send', 'send_at', 'created_at', 'updated_at', 'status', 'wechat_template_push_at', 'wechat_template_is_send', 'wechat_template_msg_id', 'join_noti_is_send', 'join_noti_send_at', 'join_noti_wechat_template_push_at', 'join_noti_wechat_template_is_send', 'join_noti_wechat_template_msg_id', 'arrive_status', 'leave_status'], 'integer'],
+            [['leave_time', 'question_id', 'activity_id', 'user_id', 'is_finish', 'is_send', 'send_at', 'created_at', 'updated_at', 'status', 'wechat_template_push_at', 'wechat_template_is_send', 'wechat_template_msg_id', 'join_noti_is_send', 'join_noti_send_at', 'join_noti_wechat_template_push_at', 'join_noti_wechat_template_is_send', 'join_noti_wechat_template_msg_id', 'arrive_status', 'leave_status', 'apply_status'], 'integer'],
             [['question_id', 'user_id'], 'unique', 'targetAttribute' => ['question_id', 'user_id'], 'message' => 'The combination of 问题ID and 用户ID has already been taken.'],
             [['status'], 'default', 'value' => static::STATUS_REVIEW_YET]
         ];
