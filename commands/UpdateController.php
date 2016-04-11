@@ -20,6 +20,35 @@ class UpdateController  extends \yii\console\Controller
 {
 
 	/**
+	 * 更新用户的报名状态（当活动已经开始）
+	 * 执行方式 在命令行
+	 * 如： docker exec -i backend_app_1 ./yii update/update-user-answer-status（控制器/方法）
+	 * 可以用 yii help 来提示帮助
+	 */
+	public function actionUpdateUserAnswerStatus()
+	{
+
+		//select * from answer left join activity on answer.activity_id = activity.id where answer.status = 10 and activity.`start_time` < 1460356310
+
+		//找出本周之前的活动中报名状态为未报名的信息
+		$answers = Answer::find()
+				->join('LEFT JOIN', 'activity', 'activity.id = answer.activity_id')
+				->where('activity.start_time < ' . getLastEndTime())
+				->andWhere(['answer.status' => Answer::STATUS_REVIEW_YET])
+                ->asArray()
+				->all();
+
+		//获取报名的id列表
+		$answer_ids = array_column($answers, 'id');
+
+		if (is_array($answer_ids) && count($answer_ids)>0) {
+            //统一更新是否已发送和发送时间，以及状态为拒绝
+            Answer::updateAll(['is_send' => 1, 'send_at' => 1, 'status' => Answer::STATUS_REVIEW_REJECT], ['in', 'id', $answer_ids]);
+		}
+
+	}
+
+	/**
     * 每周一凌晨更新 黑牌
 	* 执行方式 在命令行
 	* 如： docker exec -i backend_app_1 ./yii update/update-black-label（控制器/方法）
