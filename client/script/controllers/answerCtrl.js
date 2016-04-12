@@ -143,14 +143,24 @@ angular.module('controllers')
             // console.log(data);
             // var feedbackResult = '未手动发送过通知';
             if (data.status == 0) {
+                  $mdToast.show($mdToast.simple()
+                  .content('发送成功！')
+                  .hideDelay(5000)
+                  .position("top right"));
               $scope.feedbackResult = data.sms +'--'+data.wechatResult;
+            }else if (data.status == 2) {
+              $mdToast.show($mdToast.simple()
+                  .content('还没有筛选不需要发通知;-)')
+                  .hideDelay(5000)
+                  .position("top right"));
+              
             }else{
+                  $mdToast.show($mdToast.simple()
+                  .content('消息发送失败')
+                  .hideDelay(5000)
+                  .position("top right"));
               $scope.feedbackResult = '消息发送失败';
             }
-            $mdToast.show($mdToast.simple()
-                .content('已发送成功')
-                .hideDelay(5000)
-                .position("top right"));
           }, function(err){
             $mdToast.show($mdToast.simple()
                 .content(err.toString())
