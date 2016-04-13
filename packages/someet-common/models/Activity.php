@@ -64,6 +64,8 @@ class Activity extends \yii\db\ActiveRecord
     const STATUS_PREVENT  = 15;
     /* 发布 */
     const STATUS_RELEASE  = 20;
+    /* 关闭 */
+    const STATUS_SHUT  = 30;
 
     /* 报名已满 */
     const IS_FULL_YES = 1;
@@ -103,6 +105,21 @@ class Activity extends \yii\db\ActiveRecord
             [['status'], 'default', 'value' => 10],
             [['display_order'], 'default', 'value' => 99]
         ];
+    }
+
+    public function fields()
+    {
+        $fields = parent::fields();
+
+        // remove fields that contain sensitive information
+        unset($fields['edit_status'], $fields['is_top'], $fields['is_digest'], $fields['is_volume'], $fields['week']);
+
+        return $fields;
+    }
+
+    public function extraFields()
+    {
+        return ['type', 'user','pma'];
     }
 
     /**

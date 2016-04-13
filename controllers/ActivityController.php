@@ -165,7 +165,7 @@ class ActivityController extends BackendController
 
         // only show draft and release activities
 
-            $andwhere = ['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE, Activity::STATUS_PREVENT]];
+            $andwhere = ['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE, Activity::STATUS_PREVENT ,Activity::STATUS_SHUT]];
     
 
         if ($type>0) {
