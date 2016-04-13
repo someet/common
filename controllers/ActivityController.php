@@ -50,11 +50,11 @@ class ActivityController extends BackendController
             ],
             'access' => [
                 'class' => '\app\components\AccessControl',
-                'allowActions' => [
-                'update-all-prevent',
-                'update-status',
-                'filter-prevent',
-                ]
+                // 'allowActions' => [
+                // 'update-all-prevent',
+                // 'update-status',
+                // 'filter-prevent',
+                // ]
             ],
         ];
     }
@@ -165,7 +165,7 @@ class ActivityController extends BackendController
 
         // only show draft and release activities
 
-            $andwhere = ['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE, Activity::STATUS_PREVENT]];
+            $andwhere = ['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE, Activity::STATUS_PREVENT ,Activity::STATUS_SHUT]];
     
 
         if ($type>0) {
@@ -341,7 +341,7 @@ class ActivityController extends BackendController
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         // only show draft and release activities
-        $andwhere = ['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE]];
+        $andwhere = ['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE, Activity::STATUS_PREVENT ,Activity::STATUS_SHUT]];
 
         if ($type_id > 0) {
             $activities = Activity::find()
