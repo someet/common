@@ -50,11 +50,11 @@ class ActivityController extends BackendController
             ],
             'access' => [
                 'class' => '\app\components\AccessControl',
-                'allowActions' => [
-                'update-all-prevent',
-                'update-status',
-                'filter-prevent',
-                ]
+                // 'allowActions' => [
+                // 'update-all-prevent',
+                // 'update-status',
+                // 'filter-prevent',
+                // ]
             ],
         ];
     }
