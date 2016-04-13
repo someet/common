@@ -115,7 +115,9 @@ class Activity extends \yii\db\ActiveRecord
 
     public function extraFields()
     {
-        return ['type', 'user','pma'];
+        return ['type', 'user','pma', 'profile' => function() {
+            return $this->user->profile;
+        }];
     }
 
     /**
