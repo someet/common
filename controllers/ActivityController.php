@@ -341,7 +341,7 @@ class ActivityController extends BackendController
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         // only show draft and release activities
-        $andwhere = ['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE]];
+        $andwhere = ['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE, Activity::STATUS_PREVENT ,Activity::STATUS_SHUT]];
 
         if ($type_id > 0) {
             $activities = Activity::find()
