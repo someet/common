@@ -62,6 +62,8 @@ class Activity extends \yii\db\ActiveRecord
     const STATUS_DRAFT    = 10;
     /* 发布 */
     const STATUS_RELEASE  = 20;
+    /* 关闭 */
+    const STATUS_SHUT  = 30;
 
     /* 报名已满 */
     const IS_FULL_YES = 1;
@@ -91,7 +93,7 @@ class Activity extends \yii\db\ActiveRecord
             [['longitude', 'latitude'], 'default', 'value' => 0],
             ['group_code', 'default', 'value' => '0'],
             [['area','desc','address','details'], 'default', 'value' => '0'],
-            ['poster', 'default', 'value' => 'http://7xn8h3.com1.z0.glb.clouddn.com/FqNwYVjezbfCKyqiVCqRO7PDr2ke'],
+            ['poster', 'default', 'value' => 'http://7xn8h3.com2.z0.glb.qiniucdn.com/FtlMz_y5Pk8xMEPQCw5MGKCRuGxe'],
             ['start_time', 'default', 'value' => time()],
             ['end_time', 'default', 'value' => time()+7200],
             [['title'], 'string', 'max' => 80],
@@ -101,6 +103,21 @@ class Activity extends \yii\db\ActiveRecord
             [['status'], 'default', 'value' => 10],
             [['display_order'], 'default', 'value' => 99]
         ];
+    }
+
+    public function fields()
+    {
+        $fields = parent::fields();
+
+        // remove fields that contain sensitive information
+        unset($fields['edit_status'], $fields['is_top'], $fields['is_digest'], $fields['is_volume'], $fields['week']);
+
+        return $fields;
+    }
+
+    public function extraFields()
+    {
+        return ['type', 'user','pma'];
     }
 
     /**
