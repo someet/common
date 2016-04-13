@@ -64,6 +64,7 @@
               <span ng-if="entity.status==10" >[草稿] {{entity.user.username}}：{{entity.title}} - {{entity.desc}}</span>
               <span ng-if="entity.status==20" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}</span>
               <span ng-if="entity.status==15" >[预发布]{{entity.user.username}}：{{entity.title}} - {{entity.desc}}</span>
+              <span ng-if="entity.status==30" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[活动关闭]</span>
 
 
               <!-- 内部使用的状态标签 -->
@@ -73,9 +74,17 @@
                 <button ng-class="{true: 'label-success', false: 'label'}[entity.edit_status==30]" type="button" class="btn label" ng-click="onEditStatusChangeClick(entity, 30)">done</button>
               </div>
 
+            <span >
+                <md-switch  style="display:inline-block;margin:2px;" ng-model="entity.status" aria-label="Switch 2" ng-true-value="'20'" ng-false-value="'30'" class="md-warn" ng-change="updateStatus(entity.id,entity.status)">
+                <span ng-if="entity.status == 20">启用</span>
+                <span ng-if="entity.status == 30">关闭</span>
+                </md-switch>
+            </span>
+
               <span ng-if="entity.status == 20">
                 <!-- 查看反馈信息 -->
                 <!-- 查看报名情况 -->
+
                 <a href="#/answer/{{entity.id}}" target="_blank" ng-class="{true: 'btn-danger', false: 'btn-default'}[entity.question.status==10]" ng-if="entity.question" class="btn  btn-float-right" type="button">
                   <span>管理</span>
                   （{{entity.answer_count}}/{{entity.peoples}}）
@@ -121,6 +130,8 @@
                         <button ng-if="!entity.question" class="btn" ng-click="viewQuestion(entity)">设置表单</button>
                         <button ng-if="entity.question" class="btn" ng-click="viewQuestion(entity)">修改表单</button>
                         <a class="btn btn-success" href="#/activity/{{entity.id}}" target="_blank">编辑</a>
+
+
                         <!-- 下拉功能 -->
                         <div class="btn-group btn-float-right">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
