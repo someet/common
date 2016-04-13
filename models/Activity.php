@@ -62,6 +62,8 @@ class Activity extends \yii\db\ActiveRecord
     const STATUS_DRAFT    = 10;
     /* 发布 */
     const STATUS_RELEASE  = 20;
+    /* 关闭 */
+    const STATUS_SHUT  = 30;
 
     /* 报名已满 */
     const IS_FULL_YES = 1;
