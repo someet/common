@@ -13,6 +13,7 @@ use Yii;
  * @property integer $user_id
  * @property integer $is_finish
  * @property integer $is_send
+ * @property integer $is_feedback
  * @property integer $send_at
  * @property integer $created_at
  * @property integer $updated_at
@@ -20,16 +21,22 @@ use Yii;
  * @property integer $wechat_template_push_at
  * @property integer $wechat_template_is_send
  * @property integer $wechat_template_msg_id
- * @property integer $leave_time
- *
+ * @property integer $join_noti_is_send
+ * @property integer $join_noti_send_at
+ * @property integer $join_noti_wechat_template_push_at
+ * @property integer $join_noti_wechat_template_is_send
+ * @property integer $join_noti_wechat_template_msg_id
  * @property integer $arrive_status
  * @property integer $leave_status
  * @property string $leave_msg
- * @property string $is_feedback
  * @property integer $apply_status
+ * @property integer $cancel_apply_time
+ * @property integer $leave_time
  */
 class Answer extends \yii\db\ActiveRecord
 {
+
+
     /* 未审核 */
     const STATUS_REVIEW_YET     = 10;
     /* 审核通过 */
@@ -87,6 +94,17 @@ class Answer extends \yii\db\ActiveRecord
     {
         return 'answer';
     }
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => behaviors\TimestampBehavior::className(),
+            ],
+        ];
+    }
 
     /**
      * @inheritdoc
@@ -95,9 +113,10 @@ class Answer extends \yii\db\ActiveRecord
     {
         return [
             [['question_id'], 'required'],
-            [['leave_time', 'question_id', 'activity_id', 'user_id', 'is_finish', 'is_send', 'send_at', 'created_at', 'updated_at', 'status', 'wechat_template_push_at', 'wechat_template_is_send', 'wechat_template_msg_id', 'join_noti_is_send', 'join_noti_send_at', 'join_noti_wechat_template_push_at', 'join_noti_wechat_template_is_send', 'join_noti_wechat_template_msg_id', 'arrive_status', 'leave_status', 'apply_status'], 'integer'],
-            [['question_id', 'user_id'], 'unique', 'targetAttribute' => ['question_id', 'user_id'], 'message' => 'The combination of 问题ID and 用户ID has already been taken.'],
-            [['status'], 'default', 'value' => static::STATUS_REVIEW_YET]
+            [['question_id', 'activity_id', 'user_id', 'is_finish', 'is_send', 'is_feedback', 'send_at', 'created_at', 'updated_at', 'status', 'wechat_template_push_at', 'wechat_template_is_send', 'wechat_template_msg_id', 'join_noti_is_send', 'join_noti_send_at', 'join_noti_wechat_template_push_at', 'join_noti_wechat_template_is_send', 'join_noti_wechat_template_msg_id', 'arrive_status', 'leave_status', 'apply_status', 'cancel_apply_time', 'leave_time'], 'integer'],
+            [['leave_msg'], 'string', 'max' => 180],
+            [['status'], 'default', 'value' => 10],
+            [['question_id', 'user_id'], 'unique', 'targetAttribute' => ['question_id', 'user_id'], 'message' => 'The combination of Question ID and User ID has already been taken.']
         ];
     }
 
@@ -108,36 +127,30 @@ class Answer extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'question_id' => '问题ID',
-            'activity_id' => '活动ID',
-            'user_id' => '用户ID',
-            'is_finish' => '0 进行中 1 已完成',
-            'is_send' => '是否已经发送',
-            'send_at' => '发送通知的时间',
+            'question_id' => 'Question ID',
+            'activity_id' => 'Activity ID',
+            'user_id' => 'User ID',
+            'is_finish' => 'Is Finish',
+            'is_send' => 'Is Send',
+            'is_feedback' => 'Is Feedback',
+            'send_at' => 'Send At',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-            'status' => '0 删除 10 正常',
-            'join_noti_is_send' => '参加提醒短信是否已发送',
-            'join_noti_send_at' => '参加提醒短信的发送时间',
-            'join_noti_wechat_template_push_at' => '参加提醒的微信模板消息发送时间',
-            'join_noti_wechat_template_is_send' => '参加提醒的微信模板消息是否发送',
-            'join_noti_wechat_template_msg_id' => '参加提醒的模板消息id',
-            'arrive_status' => '到达的情况',
-            'leave_status' => '请假状态',
-            'leave_time' => '请假时间',
-            'leave_msg' => '请假内容',
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'timestamp' => [
-                'class' => behaviors\TimestampBehavior::className(),
-            ],
+            'status' => 'Status',
+            'wechat_template_push_at' => 'Wechat Template Push At',
+            'wechat_template_is_send' => 'Wechat Template Is Send',
+            'wechat_template_msg_id' => 'Wechat Template Msg ID',
+            'join_noti_is_send' => 'Join Noti Is Send',
+            'join_noti_send_at' => 'Join Noti Send At',
+            'join_noti_wechat_template_push_at' => 'Join Noti Wechat Template Push At',
+            'join_noti_wechat_template_is_send' => 'Join Noti Wechat Template Is Send',
+            'join_noti_wechat_template_msg_id' => 'Join Noti Wechat Template Msg ID',
+            'arrive_status' => 'Arrive Status',
+            'leave_status' => 'Leave Status',
+            'leave_msg' => 'Leave Msg',
+            'apply_status' => 'Apply Status',
+            'cancel_apply_time' => 'Cancel Apply Time',
+            'leave_time' => 'Leave Time',
         ];
     }
 
