@@ -3,19 +3,15 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m160317_071556_yellow_card_front_permission extends Migration
+class m160325_141641_add_user_check_in_permission extends Migration
 {
     public function up()
     {
         $items = [
-            /* 黄牌系统 */
-            '/mobile/member/cancel-apply' => ['user'],
-            '/mobile/member/update-leave' => ['user'],
-            '/mobile/member/credit-record' => ['user'],
-            '/mobile/member/yellow-card-appeal' => ['user'],
-            '/mobile/member/yellow-appeal-reason' => ['user'],
+            /* 发起人统计 */
+            '/mobile/check-in/index' =>['user'],
+            '/mobile/check-in/verify-check-in' =>['founder'],
         ];
-
         $authItemTemplate = <<<SQL
 INSERT INTO auth_item (name, type, description, rule_name, data, created_at, updated_at) VALUES ('%s', '2', '', null, null, null, null);
 SQL;
@@ -35,7 +31,7 @@ SQL;
 
     public function down()
     {
-        echo "m160317_071556_yellow_card_front_permission cannot be reverted.\n";
+        echo "m160325_141641_add_user_check_in_permission cannot be reverted.\n";
 
         return false;
     }
