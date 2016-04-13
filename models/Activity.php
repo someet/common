@@ -57,9 +57,11 @@ class Activity extends \yii\db\ActiveRecord
 {
 
     /* 删除 */
-    const STATUS_DELETE     = 0;
+    const STATUS_DELETE   = 0;
     /* 草稿 */
     const STATUS_DRAFT    = 10;
+    /* 预发布 */
+    const STATUS_PREVENT  = 15;
     /* 发布 */
     const STATUS_RELEASE  = 20;
     /* 关闭 */
