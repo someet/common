@@ -65,7 +65,9 @@ class Answer extends \yii\db\ActiveRecord
     /* 参加活动的短信发送失败 */
     const JOIN_NOTI_IS_SEND_FAIL = 2;
 
-    /* 未到达 */
+    /* 未设置 */
+    const STATUS_ARRIVE_NOT_SET = 10;
+    /* 爽约 */
     const STATUS_ARRIVE_YET     = 0;
     /* 迟到 */
     const STATUS_ARRIVE_LATE    = 1;
