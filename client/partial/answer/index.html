@@ -151,6 +151,11 @@
             </span>
                             <span style="color:#777;" ng-show="!entity.user.profile.birth_year">年纪不知</span>
                             <div class="pull-right">
+                                到达状态:
+                                <span ng-if="entity.arrive_status==10" style="color:#33E;">未设置</span>
+                                <span ng-if="entity.arrive_status==0" style="color:#33E;">爽约</span>
+                                <span ng-if="entity.arrive_status==1" style="color:#33E;">迟到</span>
+                                <span ng-if="entity.arrive_status==2" style="color:#33E;">准时</span>
                                 当前状态：
                                 <span ng-if="entity.status==10" style="color:#33E;">待筛选</span>
                                 <span ng-if="entity.status==20" style="color:#3E3;">已通过</span>
