@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models;
+namespace someet\common\models;
 
 use someet\common\models\Activity;
 use someet\common\models\User;
@@ -41,9 +41,13 @@ class ActivityCheckIn extends \yii\db\ActiveRecord
     {
         return [
             [['activity_id', 'user_id', 'created_at', 'status'], 'integer'],
-            [['username', 'mark'], 'required'],
+            [['username'], 'required'],
             [['longitude', 'latitude'], 'number'],
-            [['username', 'mark'], 'string', 'max' => 60]
+            [['username', 'mark'], 'string', 'max' => 60],
+            ['longitude', 'default', 'value' => 0],
+            ['latitude', 'default', 'value' => 0],
+            ['mark', 'default', 'value' => ''],
+            ['created_at', 'default', 'value' => time()],
         ];
     }
 
