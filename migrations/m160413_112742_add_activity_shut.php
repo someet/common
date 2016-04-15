@@ -3,17 +3,14 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m160317_071556_yellow_card_front_permission extends Migration
+class m160413_112742_add_activity_shut extends Migration
 {
     public function up()
     {
         $items = [
-            /* 黄牌系统 */
-            '/mobile/member/cancel-apply' => ['user'],
-            '/mobile/member/update-leave' => ['user'],
-            '/mobile/member/credit-record' => ['user'],
-            '/mobile/member/yellow-card-appeal' => ['user'],
-            '/mobile/member/yellow-appeal-reason' => ['user'],
+
+            '/backend/activity/update-status' => ['founder'],
+            '/mobile/activity/update-status' => ['founder'],
         ];
 
         $authItemTemplate = <<<SQL
@@ -35,7 +32,7 @@ SQL;
 
     public function down()
     {
-        echo "m160317_071556_yellow_card_front_permission cannot be reverted.\n";
+        echo "m160413_112742_add_activity_shut cannot be reverted.\n";
 
         return false;
     }

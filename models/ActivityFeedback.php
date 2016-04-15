@@ -17,6 +17,10 @@ use Yii;
  * @property integer $status
  * @property integer $sponsor_id
  * @property integer $sponsor_stars
+ * @property integer $sponsor_stars1
+ * @property integer $sponsor_stars2
+ * @property integer $sponsor_stars3
+ * @property integer $grade
  */
 class ActivityFeedback extends \yii\db\ActiveRecord
 {
@@ -37,7 +41,7 @@ class ActivityFeedback extends \yii\db\ActiveRecord
     {
         return [
             [['activity_id', 'stars', 'sponsor_id', 'sponsor_stars', 'feedback'], 'required'],
-            [['activity_id', 'user_id', 'stars', 'created_at', 'updated_at', 'status', 'sponsor_stars', 'sponsor_id'], 'integer'],
+            [['activity_id', 'user_id', 'stars', 'created_at', 'updated_at', 'status', 'sponsor_stars', 'sponsor_id', 'sponsor_start1', 'sponsor_start2', 'sponsor_start3', 'grade'], 'integer'],
             ['status', 'default', 'value' => '10'],
             [['feedback'], 'string', 'max' => 255]
         ];
@@ -59,6 +63,10 @@ class ActivityFeedback extends \yii\db\ActiveRecord
             'status' => '冗余扩展',
             'sponsor_id' => '发起人id',
             'sponsor_stars' => '发起人评分',
+            'sponsor_start1' => '发起人的态度友好',
+            'sponsor_start2' => '发起人的准备充分',
+            'sponsor_start3' => '发起人的现场控制',
+            'grade' => '活动内容的评价，好中差评',
         ];
     }
 
