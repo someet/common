@@ -9,6 +9,7 @@
 namespace app\components;
 
 use yii\base\Component;
+use someet\common\models\Yellowcard;
 use Yii;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
@@ -285,7 +286,7 @@ class NotificationTemplate extends Component
     public static function fetchSuccessCheckInWechatTemplateData($openid, $account, $activity) {
         //获取模板消息id
         $template_id = Yii::$app->params['sms.success_check_in_template_id'];
-        $url = Yii::$app->params['domain'].'activity/'.$activity['id'];
+        $url = Yii::$app->params['domain'].'feedback/'.$activity['id'];
         if (empty($template_id)) {
             //记录一个错误, 请设置成功的模板消息id
             Yii::error('请设置签到成功的模板消息id');
@@ -321,6 +322,59 @@ class NotificationTemplate extends Component
                 ],
                 "remark" => [
                     "value" => "感谢你的参加!",
+                    "color" => "#173177"
+                ],
+            ]
+        ];
+        return $data;
+    }    
+
+    /**
+     * 获取活动信用变更的微信模板消息
+     * @param $openid openid
+     * @param $account Account对象
+     * @param $activity 活动对象
+     * @return array
+     */
+    public static function fetchUpdateCreditWechatTemplateData($openid, $account, $yellowcard) {
+        //获取模板消息id
+        $template_id = Yii::$app->params['sms.update_credit_template_id'];
+        $url = Yii::$app->params['domain'].'member/credit-record/'.$activity['id'];
+        if (empty($template_id)) {
+            //记录一个错误, 请设置成功的模板消息id
+            Yii::error('请设置签到成功的模板消息id');
+        }
+
+        //签到时间
+        $check_in_time = date('Y年m月d日 H点i分', time());
+        $data = [
+            "touser" => "{$openid}",
+            "template_id" => $template_id,
+            "url" => $url,
+            "topcolor" => "#FF0000",
+            "data" => [
+                "first" => [
+                    "value" => "您好，因为参加活动时迟到，影响发起人和其他参与者体验，受到黄牌警告一次",
+                    "color" => "#173177"
+                ],
+                "keyword1" => [
+                    "value" => "{$activity['title']}",
+                    "color" => "#173177"
+                ],
+                "keyword2" => [
+                    "value" => "{$activity['time_start']}",
+                    "color" =>"#173177"
+                ],
+                "keyword3" => [
+                    "value" => "{$activity['address']}",
+                    "color" => "#173177"
+                ],
+                "keyword4" => [
+                    "value" => "累计1张黄牌，不影响报名 {$activity['address']}",
+                    "color" => "#173177"
+                ],
+                "remark" => [
+                    "value" => "30天内累计3张黄牌将无法报名，黄牌信息不会展示给他人，黄牌记录将在30天内自动过期。异议请在产品中申诉。",
                     "color" => "#173177"
                 ],
             ]

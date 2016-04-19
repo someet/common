@@ -23,6 +23,7 @@ return [
     'sms.noti_template_id' => \DockerEnv::get('WEIXIN_TEMPLATE_NOTI_ID'),
     'sms.feedback_template_id' => \DockerEnv::get('WEIXIN_TEMPLATE_FEEDBACK_ID'),
     'sms.success_check_in_template_id' => \DockerEnv::get('WEIXIN_TEMPLATE_CHECK_IN_ID'),
+    'sms.update_credit_template_id' => \DockerEnv::get('WEIXIN_TEMPLATE_UPDATE_CREDIT_ID'),
 
 
     'domain' => \DockerEnv::get('WECHAT_DOMAIN'),

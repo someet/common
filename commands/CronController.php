@@ -28,13 +28,17 @@ class CronController  extends \yii\console\Controller
 
             //判断渠道为微信
             if ( Noti::TUNNEL_WECHAT == $noti['tunnel_id']) {
+                // 查询出openid
+                
+
                 $from_id = $noti['from_id'];
                 $account = Account::find()->where([
                     'provider' => 'wechat',
                     'user_id' => $noti['user']['id'],
                 ])->with('user')->one();
+
                 if (!$account) {
-                    Yii::error('报名签到id: ' . $noti['user']['id'] . ' 的用户短信发送失败或者没有绑定微信');
+                    Yii::error('报名id: ' . $noti['user']['id'] . ' 的用户短信发送失败或者没有绑定微信');
                     continue;
                 }
                 $openid = $account->client_id;
@@ -42,7 +46,9 @@ class CronController  extends \yii\console\Controller
                 //判断来源类型为活动
                 if ( Noti::FROM_ACTIVITY == $noti['from_id_type']) {
                     $activity = Activity::findOne($from_id);
-                    $templateData = NotificationTemplate::fetchSuccessCheckInWechatTemplateData($openid, $noti['user'], $activity);
+                    // $templateData = NotificationTemplate::fetchSuccessCheckInWechatTemplateData($openid, $noti['user'], $activity);
+                    $templateData = $noti['note'];
+
                 } else if (Noti::FROM_USER == $noti['from_id_type']) {
                     //$user = User::findOne($from_id);
                     //$templateData = NotificationTemplate::fetchUser($openid, $noti['user'], $user);
@@ -51,12 +57,16 @@ class CronController  extends \yii\console\Controller
                 if (empty($templateData)) {
                     continue;
                 }
+                            // var_dump(json_decode($templateData,true)); 
+                            // var_dump($templateData); 
+            // die;
 
+                // 放入队列
                 $wechat_template = Yii::$app->beanstalk->putInTube('wechatofficial', ['templateData' => $templateData, 'noti' => $noti]);
                 if (!$wechat_template) {
-                    Yii::error('活动签到成功微信消息加到队列失败，请检查');
+                    Yii::error('微信消息加到队列失败，请检查');
                 } else {
-                    Yii::info('添加活动签到成功微信模板消息到消息队列成功');
+                    Yii::info('微信模板消息到消息队列成功');
                 }
 
             // 判断渠道为短信
