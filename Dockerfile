@@ -4,9 +4,7 @@ FROM daocloud.io/someetinc/backend-base:latest
 # that are not already in the yii2-base image.
 # Copy the working dir to the image's web root
 COPY . /var/www/html
-RUN composer config -g repo.packagist composer https://packagist.phpcomposer.com && \
-    #composer global require "fxp/composer-asset-plugin:~1.1.1" --no-plugins && \
-    composer global require fxp/composer-asset-plugin:dev-master --no-plugins  && \
+RUN composer global require fxp/composer-asset-plugin:~1.1.3 --no-plugins  && \
     composer self-update --no-progress && \
     composer install --no-progress
 
@@ -14,7 +12,6 @@ RUN mkdir -p runtime web/assets \
     && chown www-data:www-data runtime web/assets
 
 # install bower
-#RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
 RUN npm install
 RUN bower install --allow-root --config.interactive=false
 RUN gulp dist
