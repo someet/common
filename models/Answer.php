@@ -32,6 +32,7 @@ use Yii;
  * @property integer $apply_status
  * @property integer $cancel_apply_time
  * @property integer $leave_time
+ * @property string $reject_reason
  */
 class Answer extends \yii\db\ActiveRecord
 {
@@ -115,6 +116,7 @@ class Answer extends \yii\db\ActiveRecord
             [['question_id'], 'required'],
             [['question_id', 'activity_id', 'user_id', 'is_finish', 'is_send', 'is_feedback', 'send_at', 'created_at', 'updated_at', 'status', 'wechat_template_push_at', 'wechat_template_is_send', 'wechat_template_msg_id', 'join_noti_is_send', 'join_noti_send_at', 'join_noti_wechat_template_push_at', 'join_noti_wechat_template_is_send', 'join_noti_wechat_template_msg_id', 'arrive_status', 'leave_status', 'apply_status', 'cancel_apply_time', 'leave_time'], 'integer'],
             [['leave_msg'], 'string', 'max' => 180],
+            [['reject_reason'], 'string', 'max' => 255],
             [['status'], 'default', 'value' => 10],
             [['question_id', 'user_id'], 'unique', 'targetAttribute' => ['question_id', 'user_id'], 'message' => 'The combination of Question ID and User ID has already been taken.']
         ];
@@ -151,6 +153,8 @@ class Answer extends \yii\db\ActiveRecord
             'apply_status' => 'Apply Status',
             'cancel_apply_time' => 'Cancel Apply Time',
             'leave_time' => 'Leave Time',
+            'reject_reason' => 'Reject Reason', 
+
         ];
     }
 
