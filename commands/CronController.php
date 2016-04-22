@@ -66,7 +66,7 @@ class CronController  extends \yii\console\Controller
                 if (!$wechat_template) {
                     Yii::error('微信消息加到队列失败，请检查');
                 } else {
-                    Yii::info('微信模板消息到消息队列成功');
+                    Yii::info($noti['user_id'].'微信模板消息到消息队列成功');
                 }
 
             // 判断渠道为短信
