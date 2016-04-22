@@ -7,24 +7,9 @@ class m160422_082612_update_activity_by_role_permission extends Migration
 {
     public function up()
     {
-        $items = [
-            '/mobile/member/activity-by-role' => ['user'],
-        ];
 
-        $authItemTemplate = <<<SQL
-INSERT INTO auth_item (name, type, description, rule_name, data, created_at, updated_at) VALUES ('%s', '2', '', null, null, null, null);
-SQL;
-        $itemChildTemplate = <<<SQL
-        INSERT INTO auth_item_child (parent, child) VALUES ('%s', '%s');
-SQL;
-        $sql = '';
-        foreach ($items as $item => $roles) {
-            $sql .= sprintf($authItemTemplate, $item);
-            foreach ($roles as $role) {
-                $sql .= sprintf($itemChildTemplate, $role, $item);
-            }
-        }
-        $this->execute($sql);
+        $this->update('auth_item_child',['parent' => 'user'],'child = "/mobile/member/activity-by-role" ');
+
         return true;
     }
 
