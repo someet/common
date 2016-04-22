@@ -585,13 +585,21 @@ angular.module('controllers', ['ngTagsInput'])
                 };
                 startCode();
             };
+            $scope.pma_type_count = [
+                { pma_type: 0, name: '线上' },
+                { pma_type: 1, name: '线下' },
+            ];
+            // $scope.pma_type = { pma_type: 0, name: '线上' };
+
             // qiniu upload 群二维码 end //
 
             var id = $routeParams.id;
             if (id > 0) {
                 $activityManage.fetch(id).then(function(data) {
-                    $scope.user = {};
+
                     $scope.entity = data;
+                                        // $scope.pma_type = { pma_type: $scope.entry.pma_type, name: '线上' };
+                    $scope.user = {};
 
                     $scope.start_time_str = getTimeByTimestamp(data.start_time);
                     // $scope.start_time_str = getTimeByTimestamp(data.start_time);
@@ -632,6 +640,9 @@ angular.module('controllers', ['ngTagsInput'])
                 newEntity.end_time = $scope.entity.end_time;
                 newEntity.poster = $scope.poster;
                 newEntity.group_code = $scope.group_code;
+                newEntity.pma_type = $scope.entity.pma_type;
+                console.log(newEntity.pma_type);
+
                 if ($scope.user) {
                     newEntity.created_by = $scope.user.id;
                 }
@@ -662,6 +673,8 @@ angular.module('controllers', ['ngTagsInput'])
                             .content('活动保存成功')
                             .hideDelay(5000)
                             .position("top right"));
+
+                        console.log(data.pma_type);
                         // $location.path('/activity/list/0');
                     }, function(err) {
                         $mdToast.show($mdToast.simple()

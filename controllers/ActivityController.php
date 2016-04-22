@@ -699,6 +699,14 @@ class ActivityController extends BackendController
             if (!$model->validate('principal')) {
                 throw new DataValidationFailedException($model->getFirstError('principal'));
             }
+        }        
+
+        //负责人(PMA) 类型
+        if (isset($data['pma_type'])) {
+            $model->pma_type = $data['pma_type'];
+            if (!$model->validate('pma_type')) {
+                throw new DataValidationFailedException($model->getFirstError('pma_type'));
+            }
         }
 
         //排序更新
