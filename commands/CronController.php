@@ -151,7 +151,7 @@ class CronController  extends \yii\console\Controller
                     $openid = $account->client_id;
 
                     //默认获取不通过的模板消息内容
-                    $templateData = NotificationTemplate::fetchFailedWechatTemplateData($openid, $answer['user'], $answer['activity']);
+                    // $templateData = NotificationTemplate::fetchFailedWechatTemplateData($openid, $answer['user'], $answer['activity']);
 
                     //如果通过
                     if (Answer::STATUS_REVIEW_PASS == $answer['status']) {

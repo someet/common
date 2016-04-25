@@ -226,16 +226,14 @@ class WorkerController extends BeanstalkController
         $sentData = $job->getData();
         try {
             $templateData =  $sentData->templateData ;
-            // var_dump(json_decode($templateData)); 
-            // die;
             $noti = $sentData->noti;
-
             $wechat = Yii::$app->wechat;
+
             if ($msgid = $wechat->sendTemplateMessage(json_decode($templateData,true))) {
-                Noti::updateAll(['callback_id' => $msgid, 'callback_status' => Noti::CALLBACK_STATUS_SUCCESS, 'sended_at' => 0], ['id' => $noti->id]);
+                Noti::updateAll(['callback_id' => $msgid, 'callback_status' => Noti::CALLBACK_STATUS_SUCCESS, 'sended_at' => time()], ['id' => $noti->id]);
             } else {
 
-                Noti::updateAll(['callback_msg' => $msgid, 'callback_status' => Noti::CALLBACK_STATUS_FAILURE, 'sended_at' => 0], ['id' => $noti->id]);
+                Noti::updateAll(['callback_msg' => $msgid, 'callback_status' => Noti::CALLBACK_STATUS_FAILURE, 'sended_at' => time()], ['id' => $noti->id]);
             }
 
             fwrite(STDOUT, Console::ansiFormat("Wechatofficial - Everything is allright"."\n", [Console::FG_GREEN]));
