@@ -9,6 +9,8 @@
                     <br> 活动时间：{{list[0].activity.start_time * 1000 | date: "MM月dd日 HH:mm"}} - {{list[0].activity.end_time * 1000 | date:"MM月dd日 HH:mm"}}&nbsp;&nbsp;
                     <br> 活动地址：{{list[0].activity.address}}&nbsp;&nbsp;
                     <br> 整体评分：{{ countScore }}&nbsp;&nbsp;
+                    <br> 好评数：{{ goodScore}}&nbsp;&nbsp;中评数：{{ middleScore }}&nbsp;&nbsp;差评数：{{ badScore }}&nbsp;&nbsp;
+                    <br> 发起人最后评分：{{ sponsorScore }}&nbsp;&nbsp;
                     <br> 迟到人数比率：{{ list[0].late_ratio }}&nbsp;&nbsp;
                     <br> 请假人数比率：{{ list[0].leave_ratio }}&nbsp;&nbsp;
                     <br> 爽约人数比率：{{ list[0].arrive_no_ratio }}&nbsp;&nbsp;

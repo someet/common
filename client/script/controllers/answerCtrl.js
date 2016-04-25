@@ -6,7 +6,12 @@ angular.module('controllers')
 
         var activity_id = $routeParams.activity_id;
         $answerManage.fetchByActivityId(activity_id).then(function (data) {
-          $scope.list = data;
+          $scope.list = data.model;
+          $scope.goodScore = data.good_score;
+          $scope.middleScore = data.middle_score;
+          $scope.badScore = data.bad_score;
+          $scope.sponsorScore = data.sponsor_score;
+          console.log(data);
 
           $scope.countData = {
             apply:$scope.status
@@ -35,7 +40,6 @@ angular.module('controllers')
               feedbacks.push(list.feedback);
             }
           });
-
           if (feedbacks.length > 0) {
             var countScore = 0;
             angular.forEach(feedbacks, function(list,index,array){
@@ -87,7 +91,7 @@ angular.module('controllers')
           });
         }
 
-        //请假状态
+        //请假状态 查从                                                                                          
         $scope.leave = function(entity, status) {
           $answerManage.leave(entity.id, status).then(function(data) {
             $mdToast.show($mdToast.simple()
