@@ -57,9 +57,6 @@ class CronController  extends \yii\console\Controller
                 if (empty($templateData)) {
                     continue;
                 }
-                            // var_dump(json_decode($templateData,true)); 
-                            // var_dump($templateData); 
-            // die;
 
                 // 放入队列
                 $wechat_template = Yii::$app->beanstalk->putInTube('wechatofficial', ['templateData' => $templateData, 'noti' => $noti]);
