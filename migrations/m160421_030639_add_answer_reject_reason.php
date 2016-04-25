@@ -16,7 +16,7 @@ SQL;
 
     public function down()
     {
-        $this->dropTable('activity_check_in');
+        $this->dropColumn('reject_reason');
         return true;
     }
 
