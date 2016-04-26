@@ -48,19 +48,19 @@ use yii\helpers\Url;
         <ul class="nav navbar-nav h4">
           <?php echo Yii::$app->request->getQueryString(); ?>
           <li ng-class="{active:isActive('/special')}">
-            <a href="#/special">专题</a>
+            <a target="_parent" href="#/special">专题</a>
           </li>
           <li ng-class="{active:isActive('/activity')||isActive('/answer')||isActive('/question')}">
-            <a href="#/activity/list/0">活动</a>
+            <a target="_parent" href="#/activity/list/0">活动</a>
           </li>
           <li ng-class="{active:isActive('/member')}">
-            <a href="#/member">联系人</a>
+            <a target="_parent" href="#/member">联系人</a>
           </li>          
           <li ng-class="{active:isActive('/uga')}">
-            <a href="#/uga">UGA问题系统</a>
+            <a target="_parent" href="#/uga">UGA问题系统</a>
           </li>          
           <li ng-class="{active:isActive('/share')}">
-            <a href="#/share">分享</a>
+            <a target="_parent" href="#/share">分享</a>
           </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">

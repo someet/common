@@ -121,6 +121,8 @@ $config = [
             'class' => 'maxwelldu\\sdk\\Chuanglan',
             'apiAccount' => \DockerEnv::get('CHUANGLAN_API_ACCOUNT'),
             'apiPassword' => \DockerEnv::get('CHUANGLAN_API_PASSWORD'),
+            'apiSendUrl' => \DockerEnv::get('CHUANGLAN_API_SEND_URL'),
+            'apiBalanceQueryUrl' => \DockerEnv::get('CHUANGLAN_API_BALANCE_QUERY_URL'),
         ],
         'authClientCollection' => [
             'class'   => \yii\authclient\Collection::className(),

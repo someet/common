@@ -310,6 +310,28 @@ class CronController  extends \yii\console\Controller
     }
 
     /**
+     * 设置用户的报名状态为审核被拒绝
+     */
+    public function actionSetUserAnswerAsReviewReject()
+    {
+        //查找报名的活动现在已经开始,并且用户状态为未审核
+        $answers = Answer::find()
+            ->join('LEFT JOIN', 'activity', 'activity.id = answer.activity_id')
+            ->where('activity.start_time < ' . time())
+            ->andWhere(['answer.status' => Answer::STATUS_REVIEW_YET])
+            ->asArray()
+            ->all();
+
+        //获取报名的id列表
+        $answer_ids = array_column($answers, 'id');
+
+        if (is_array($answer_ids) && count($answer_ids)>0) {
+            //统一更新是否已发送和发送时间，以及状态为拒绝
+            Answer::updateAll(['status' => Answer::STATUS_REVIEW_REJECT], ['in', 'id', $answer_ids]);
+        }
+    }
+
+    /**
      * 测试发短信
      */
     public function actionTest()

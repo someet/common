@@ -234,7 +234,7 @@ class NotificationTemplate extends Component
         //获取成功的模板消息id
         $template_id = Yii::$app->params['sms.success_template_id'];
         if (!empty($activity['group_code'])) {
-            $url = $activity['group_code'];
+            $url = Yii::$app->params['domain'].'join/'.$activity['id'];
         }else{
             $url = Yii::$app->params['domain'].'activity/'.$activity['id'];            
         }

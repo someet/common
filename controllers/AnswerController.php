@@ -435,6 +435,11 @@ class AnswerController extends BackendController
             ->asArray()
             ->one();
 
+        if (Answer::STATUS_REVIEW_YET == $answer['status']) {
+            return $result = ['status' => '2','sms' => '还没有筛选不需要发通知!','wechatResult' =>';-)'];
+        }
+        
+
         $wechatResult = '';
         $result = '';
         // 用户的手机号码不为空, 并且手机号码是合法的手机号
@@ -444,7 +449,8 @@ class AnswerController extends BackendController
             $mobile = $answer['user']['mobile'];
 
             //设置默认的短信为等待的短信内容
-            $smsData = NotificationTemplate::fetchWaitSmsData($answer['activity']['title']);
+            // $smsData = NotificationTemplate::fetchWaitSmsData($answer['activity']['title']);
+
             //判断状态是通过
             if (Answer::STATUS_REVIEW_PASS == $answer['status']) {
 
@@ -455,73 +461,72 @@ class AnswerController extends BackendController
                         //获取需要反馈的短信内容
                         $smsData = NotificationTemplate::fetchNeedFeedbackSmsData($answer['activity']['title']);  
                     }
-                } elseif (Answer::STATUS_REVIEW_REJECT == $answer['status']) {
+            } elseif (Answer::STATUS_REVIEW_REJECT == $answer['status']) {
                     //获取不通过的短信内容
                     $smsData = NotificationTemplate::fetchFailSmsData($answer['activity']['start_time'], $answer['activity']['title']);
-                }
+            }
 
-                $mixedData = [
-                    'mobile' => $mobile,
-                    'smsData' => $smsData,
-                    'answer' => $answer
-                ];
+            $mixedData = [
+                'mobile' => $mobile,
+                'smsData' => $smsData,
+                'answer' => $answer
+            ];
 
-                $sms = Yii::$app->beanstalk->putInTube('sms', $mixedData);
+            $sms = Yii::$app->beanstalk->putInTube('sms', $mixedData);
 
-                if (!$sms) {
-                    Yii::error('短信添加到消息队列失败, 请检查');
-                }
+            if (!$sms) {
+                Yii::error('短信添加到消息队列失败, 请检查');
+            }
 
                 //尝试发送微信模板消息
 
-                //获取绑定的微信对象
-                /* @var $account Account */
-                $account = Account::find()->where([
-                    'provider' => 'wechat',
-                    'user_id' => $answer['user']['id'],
-                ])->with('user')->one();
+            //获取绑定的微信对象
+            /* @var $account Account */
+            $account = Account::find()->where([
+                'provider' => 'wechat',
+                'user_id' => $answer['user']['id'],
+            ])->with('user')->one();
 
-                //如果短信发送成功绑定了微信对象
-                if ($account) {
+            //如果短信发送成功绑定了微信对象
+            if ($account) {
 
-                    //获取微信的openid
-                    $openid = $account->client_id;
+                //获取微信的openid
+                $openid = $account->client_id;
 
-                    //设置模板消息默认为等待的模板消息内容
-                    $templateData = NotificationTemplate::fetchWaitWechatTemplateData($openid, $answer['activity']);
-                    //如果通过
-                    if (Answer::STATUS_REVIEW_PASS == $answer['status']) {
-                        //获取通过的模板消息内容
-                        $templateData = NotificationTemplate::fetchSuccessWechatTemplateData($openid, $answer['user'], $answer['activity']);
-                        if ( Answer::STATUS_ARRIVE_YET != $answer['arrive_status'] && $answer['is_feedback'] == Answer::FEEDBACK_NO ) {
-                            //获取需要反馈的短信内容
-                            $templateData = NotificationTemplate::fetchNeedFeedbackWechatTemplateData($openid, $answer['user'], $answer['activity']);  
-                            $wechatResult = $templateData['data']['first']['value'];
-                            // print_r($templateData);
-                            }
-                    } elseif (Answer::STATUS_REVIEW_REJECT == $answer['status']) {
-                        //获取不通过的模板消息内容
-                        $templateData = NotificationTemplate::fetchFailedWechatTemplateData($openid, $answer['user'], $answer['activity']);
+                //设置模板消息默认为等待的模板消息内容
+                // $templateData = NotificationTemplate::fetchWaitWechatTemplateData($openid, $answer['activity']);
+                //如果通过
+                if (Answer::STATUS_REVIEW_PASS == $answer['status']) {
+                    //获取通过的模板消息内容
+                    $templateData = NotificationTemplate::fetchSuccessWechatTemplateData($openid, $answer['user'], $answer['activity']);
+                    if ( Answer::STATUS_ARRIVE_YET != $answer['arrive_status'] && $answer['is_feedback'] == Answer::FEEDBACK_NO ) {
+                        //获取需要反馈的短信内容
+                        $templateData = NotificationTemplate::fetchNeedFeedbackWechatTemplateData($openid, $answer['user'], $answer['activity']);  
                         $wechatResult = $templateData['data']['first']['value'];
-                    }
-
-                    $wechat_template = Yii::$app->beanstalk->putInTube('wechat', ['templateData' => $templateData, 'answer' => $answer]);
-                    if (!$wechat_template) {
-                        Yii::error('参加活动提醒微信消息模板加到队列失败，请检查');
-                    } else {
-                        Yii::info('添加微信模板消息到消息队列成功');
-                    }
+                        // print_r($templateData);
+                        }
+                } elseif (Answer::STATUS_REVIEW_REJECT == $answer['status']) {
+                    //获取不通过的模板消息内容
+                    $templateData = NotificationTemplate::fetchFailedWechatTemplateData($openid, $answer['user'], $answer['activity']);
                     $wechatResult = $templateData['data']['first']['value'];
-                } else {
-                    //记录一个错误, 当前报名用户短信发送失败或者没有绑定微信
-                    Yii::error('报名用户id: '.$answer['user']['id'].' 的用户短信发送失败或者没有绑定微信');
-                    $wechat_template = '报名用户id: '.$answer['user']['id'].' 的用户短信发送失败或者没有绑定微信';
                 }
+                $wechat_template = Yii::$app->beanstalk->putInTube('wechat', ['templateData' => $templateData, 'answer' => $answer]);
+                if (!$wechat_template) {
+                    Yii::error('参加活动提醒微信消息模板加到队列失败，请检查');
+                } else {
+                    Yii::info('添加微信模板消息到消息队列成功');
+                }
+                $wechatResult = $templateData['data']['first']['value'];
             } else {
-                //报一个错误, 用户手机号码有误, 无法发送短信
-                Yii::error('报名用户id: '.$answer['user']['id'].' 的用户手机号码未设置, 或者设置的不正确');
-                $smsData = '报名用户id: '.$answer['user']['id'].' 的用户手机号码未设置, 或者设置的不正确';
+                //记录一个错误, 当前报名用户短信发送失败或者没有绑定微信
+                Yii::error('报名用户id: '.$answer['user']['id'].' 的用户短信发送失败或者没有绑定微信');
+                $wechat_template = '报名用户id: '.$answer['user']['id'].' 的用户短信发送失败或者没有绑定微信';
             }
+        } else {
+            //报一个错误, 用户手机号码有误, 无法发送短信
+            Yii::error('报名用户id: '.$answer['user']['id'].' 的用户手机号码未设置, 或者设置的不正确');
+            $smsData = '报名用户id: '.$answer['user']['id'].' 的用户手机号码未设置, 或者设置的不正确';
+        }
         
         return $result = ['status' => '0','sms' => $smsData,'wechatResult' => $wechatResult];
 

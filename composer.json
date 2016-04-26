@@ -7,7 +7,7 @@
 	"minimum-stability": "stable",
 	"require": {
 		"php": ">=5.4.0",
-		"yiisoft/yii2": "2.0.6",
+		"yiisoft/yii2": "2.0.7",
 		"yiisoft/yii2-bootstrap": "~2.0.0",
 		"yiisoft/yii2-jui": "~2.0.0",
 		"yiisoft/yii2-swiftmailer": "~2.0.0",
@@ -19,8 +19,9 @@
 		"dektrium/yii2-rbac": "*@dev",
         "yiisoft/yii2-redis": "*@dev",
         "e96/yii2-sentry": "dev-master",
+        "yiisoft/yii2-authclient": "*@dev",
         "callmez/yii2-wechat-sdk": "dev-master",
-        "maxwelldu/yii2-sms": "^1.0",
+        "maxwelldu/yii2-sms": "1.1",
         "bazilio/yii2-newrelic": "~0.0.1",
 		"udokmeci/yii2-beanstalk" : "dev-master"
 	},
@@ -32,7 +33,9 @@
 	},
 	"config": {
 		"process-timeout": 1800,
-		"vendor-dir": "/var/www/vendor"
+        "allow_superuser": 1,
+		"vendor-dir": "/var/www/vendor",
+		"secure-http": false
 	},
 	"extra": {
 		"asset-installer-paths": {
@@ -62,13 +65,6 @@
         {
           "type": "path",
           "url": "./packages/yii2-redis"
-		},
-		{
-          "type": "composer",
-          "url": "http://packagist.phpcomposer.com"
-		},
-        {
-          "packagist": false
-        }
+		}
 	]
 }

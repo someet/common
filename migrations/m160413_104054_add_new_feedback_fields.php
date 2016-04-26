@@ -13,6 +13,10 @@ ADD COLUMN `sponsor_start1` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '态�
 ADD COLUMN `sponsor_start2` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '准备充分 0 1 2 3 4 5' AFTER `sponsor_start1`,
 ADD COLUMN `sponsor_start3` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '现场控制 0 1 2 3 4 5 ' AFTER `sponsor_start2`,
 ADD COLUMN `grade` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '活动评价等级 0 1 差评 2 中评 3 好评' AFTER `sponsor_start3`;
+CHANGE COLUMN `status` `status` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '冗余扩展' AFTER `grade`,
+CHANGE COLUMN `stars` `stars` TINYINT(3) UNSIGNED NOT NULL COMMENT '旧活动评分， 0 1 2 3 4 5 ' ,
+CHANGE COLUMN `sponsor_id` `sponsor_id` INT(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '发起人id' ,
+CHANGE COLUMN `sponsor_stars` `sponsor_stars` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '发起人评分 0 1 2 3 4 5 ' ,
 SQL;
         $this->execute($sql);
         return true;

@@ -1,6 +1,12 @@
 angular.module('backendServices')
     .factory('$activityManage', ['$http', '$q', '$rootScope', function ($http, $q, $rootScope) {
       return {
+        // 更新状态
+        updateStatus: function (id,status){
+          return $http.get('/activity/update-status?id='+id+'&status='+status).then(function (data) {
+            return data;
+          })
+        },  
         updateAllPrevent: function (newEntity){
           return $http.get('/activity/update-all-prevent').then(function (data) {
             return data;
@@ -58,7 +64,6 @@ angular.module('backendServices')
           return $http.get('/member/search-by-auth?username=' + query + '&auth=pma');
         },
         modelPageMeta: function(type, pageNum, isWeek) {
-          console.log(isWeek);
           return $http.get('/activity?scenario=total&perPage='+pageNum+'&type='+type+'isWeek='+isWeek).then(function(data) {
             return data;
           });

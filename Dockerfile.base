@@ -1,4 +1,4 @@
-FROM codemix/yii2-base:2.0.6-php-fpm
+FROM codemix/yii2-base:2.0.7-php-fpm
 #FROM daocloud.io/someetinc/yii2-base:master-init
 
 ADD http://npmjs.org/install.sh /npmjs.install.sh
@@ -15,7 +15,7 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 # use China proxy
-RUN composer config -g repositories.packagist composer http://packagist.phpcomposer.com
+# RUN composer config -g repo.packagist composer https://packagist.phpcomposer.com
 
 # Install Redis
 # Copy the redis Extension file
