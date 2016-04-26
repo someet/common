@@ -365,14 +365,18 @@ class AnswerController extends BackendController
                         ->where(['activity_id'=>$activity_id])
                         ->select('sponsor_start1')
                         ->count();
-         //发起人评分展示            
-         $sponsor_sum = ActivityFeedback::find()
+         if($sponsor_count != 0){               
+            $sponsor_sum = ActivityFeedback::find()
                         ->where(['activity_id'=>$activity_id])
                         ->select('sum(sponsor_start1) sponsor_start1,sum(sponsor_start2) sponsor_start2,sum(sponsor_start3) sponsor_start3')
                         ->asArray()
                         ->one();
+                      
+            $sponsor_score = (($sponsor_sum['sponsor_start1'])*0.4+($sponsor_sum['sponsor_start2'])*0.3+($sponsor_sum['sponsor_start3'])*0.3)/$sponsor_count;
 
-        $sponsor_score= (($sponsor_sum['sponsor_start1'])*0.4+($sponsor_sum['sponsor_start2'])*0.3+($sponsor_sum['sponsor_start3'])*0.3)/$sponsor_count;
+        }else{
+            $sponsor_score = 0;
+        }
         // 爽约人数
         $arrive_no = Answer::find()
                         ->where(['activity_id' => $activity_id ])
