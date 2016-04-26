@@ -351,11 +351,11 @@ class AnswerController extends BackendController
         //好评，差评，中评数统计
         $good_score = ActivityFeedback::find()
                         ->where(['activity_id'=>$activity_id])
-                        ->andWhere('grade = 3')         
+                        ->andWhere('grade = 3')
                         ->count();
         $middle_score = ActivityFeedback::find()
                         ->where(['activity_id'=>$activity_id])
-                        ->andWhere('grade = 2')         
+                        ->andWhere('grade = 2')
                         ->count();
         $bad_score = ActivityFeedback::find()
                         ->where(['activity_id'=>$activity_id])
@@ -413,7 +413,13 @@ class AnswerController extends BackendController
             $models[$key]['leave_ratio'] = $leave_ratio;
             $models[$key]['arrive_no_ratio'] = $arrive_no_ratio;
         }
-        return ['model' => $models, 'good_score' => $good_score, 'middle_score'=>$middle_score, 'bad_score' => $bad_score ,'sponsor_score' => $sponsor_score ]; 
+        return [
+                'model' => $models, 
+                'good_score' => $good_score,
+                'middle_score'=>$middle_score,
+                'bad_score' => $bad_score,
+                'sponsor_score' => $sponsor_score 
+                ]; 
     }
 
     /**
