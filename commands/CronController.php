@@ -46,21 +46,14 @@ class CronController  extends \yii\console\Controller
                 //判断来源类型为活动
                 if ( Noti::FROM_ACTIVITY == $noti['from_id_type']) {
                     $activity = Activity::findOne($from_id);
-                    // $templateData = NotificationTemplate::fetchSuccessCheckInWechatTemplateData($openid, $noti['user'], $activity);
                     $templateData = $noti['note'];
-
                 } else if (Noti::FROM_USER == $noti['from_id_type']) {
-                    //$user = User::findOne($from_id);
-                    //$templateData = NotificationTemplate::fetchUser($openid, $noti['user'], $user);
+
                 }
 
                 if (empty($templateData)) {
                     continue;
                 }
-                            // var_dump(json_decode($templateData,true)); 
-                            // var_dump($templateData); 
-            // die;
-
                 // 放入队列
                 $wechat_template = Yii::$app->beanstalk->putInTube('wechatofficial', ['templateData' => $templateData, 'noti' => $noti]);
                 if (!$wechat_template) {
