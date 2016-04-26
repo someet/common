@@ -1,6 +1,7 @@
 <?php
 namespace app\commands;
 
+use common\models\Noti;
 use someet\common\models\Answer;
 use someet\common\models\User;
 use udokmeci\yii2beanstalk\BeanstalkController;
@@ -17,12 +18,13 @@ class WorkerController extends BeanstalkController
     // Used for Decaying. When DELAY_MAX reached job is deleted or delayed with
     const DELAY_MAX = 3;
 
+    // sms 发送审核结果  wechat 发送审核结果 noti 发送活动前开始提醒 notiwechat 发送活动前开始提醒 checkinwechat 签到成功的微信通知
     public function listenTubes(){
-        return ["sms", "wechat", "noti", "notiwechat"];
+        return ["sms", "wechat", "noti", "notiwechat", "wechatofficial"];
     }
 
     /**
-     * 发送活动是否通完， 或者等待的短信
+     * 发送活动是否通完
      * @param Pheanstalk\Job $job
      * @return string  self::BURY
      *                 self::RELEASE
@@ -50,7 +52,6 @@ class WorkerController extends BeanstalkController
             } elseif ($sms->hasError()) {
 
                 $error = $sms->getError();
-                $msg = is_array($error) && isset($error) ? $error : '发送短信失败';
 
                 Yii::error('短信发送失败, 请检查'. is_array($error) ? json_encode($error) : $error);
 
@@ -60,12 +61,9 @@ class WorkerController extends BeanstalkController
             }
 
             fwrite(STDOUT, Console::ansiFormat("Sms - Everything is allright"."\n", [Console::FG_GREEN]));
-            //Delete the job from beanstalkd
             return self::DELETE;
         } catch (\Exception $e) {
-            //If there is anything to do.
             fwrite(STDERR, Console::ansiFormat($e."\n", [Console::FG_RED]));
-            // you can also bury jobs to examine later
             return self::BURY;
         }
     }
@@ -105,7 +103,6 @@ class WorkerController extends BeanstalkController
                 
                     if($answer->status == Answer::STATUS_REVIEW_PASS){
                         User::updateAllCounters(['attend_count' => 1],['id' => $user_id ]);
-                        // $transaction->commit();
                     }else if ($answer->status == Answer::STATUS_REVIEW_REJECT) {
                         User::updateAllCounters(['reject_count' => 1],['id' => $user_id ]);
                     }
@@ -120,7 +117,6 @@ class WorkerController extends BeanstalkController
                 
                     if($answer->status == Answer::STATUS_REVIEW_PASS){
                         User::updateAllCounters(['attend_count' => 1],['id' => $user_id ]);
-                        // $transaction->commit();
                     }else if ($answer->status == Answer::STATUS_REVIEW_REJECT) {
                         User::updateAllCounters(['reject_count' => 1],['id' => $user_id ]);
                     }
@@ -128,12 +124,9 @@ class WorkerController extends BeanstalkController
             }
 
             fwrite(STDOUT, Console::ansiFormat("Wechat - Everything is allright"."\n", [Console::FG_GREEN]));
-            //Delete the job from beanstalkd
             return self::DELETE;
         } catch (\Exception $e) {
-            //If there is anything to do.
             fwrite(STDERR, Console::ansiFormat($e."\n", [Console::FG_RED]));
-            // you can also bury jobs to examine later
             return self::BURY;
         }
     }
@@ -165,7 +158,6 @@ class WorkerController extends BeanstalkController
             } elseif ($sms->hasError()) {
 
                 $error = $sms->getError();
-                $msg = is_array($error) && isset($error) ? $error : '发送短信失败';
                 Yii::error('短信发送失败, 请检查'. is_array($error) ? json_encode($error) : $error);
 
                 //修改短信发送状态为失败, 以及修改发送时间[方便以后单独发送短信]
@@ -174,13 +166,10 @@ class WorkerController extends BeanstalkController
             }
 
             fwrite(STDOUT, Console::ansiFormat("Noti - Everything is allright"."\n", [Console::FG_GREEN]));
-            //Delete the job from beanstalkd
             return self::DELETE;
 
         } catch (\Exception $e) {
-            //If there is anything to do.
             fwrite(STDERR, Console::ansiFormat($e."\n", [Console::FG_RED]));
-            // you can also bury jobs to examine later
             return self::BURY;
         }
     }
@@ -215,15 +204,46 @@ class WorkerController extends BeanstalkController
             }
 
             fwrite(STDOUT, Console::ansiFormat("NotiWechat - Everything is allright"."\n", [Console::FG_GREEN]));
-            //Delete the job from beanstalkd
             return self::DELETE;
         } catch (\Exception $e) {
-            //If there is anything to do.
             fwrite(STDERR, Console::ansiFormat($e."\n", [Console::FG_RED]));
-            // you can also bury jobs to examine later
             return self::BURY;
         }
     }
+
+    /**
+     * 微信服务号通知
+     * @param Pheanstalk\Job $job
+     * @return string  self::BURY
+     *                 self::RELEASE
+     *                 self::DELAY
+     *                 self::DELETE
+     *                 self::NO_ACTION
+     *                 self::DECAY
+     *
+     */
+    public function actionWechatofficial($job) {
+        $sentData = $job->getData();
+        try {
+            $templateData =  $sentData->templateData ;
+            $noti = $sentData->noti;
+            $wechat = Yii::$app->wechat;
+
+            if ($msgid = $wechat->sendTemplateMessage(json_decode($templateData,true))) {
+                Noti::updateAll(['callback_id' => $msgid, 'callback_status' => Noti::CALLBACK_STATUS_SUCCESS, 'sended_at' => time()], ['id' => $noti->id]);
+            } else {
+
+                Noti::updateAll(['callback_msg' => $msgid, 'callback_status' => Noti::CALLBACK_STATUS_FAILURE, 'sended_at' => time()], ['id' => $noti->id]);
+            }
+
+            fwrite(STDOUT, Console::ansiFormat("Wechatofficial - Everything is allright"."\n", [Console::FG_GREEN]));
+            return self::DELETE;
+        } catch (\Exception $e) {
+            fwrite(STDERR, Console::ansiFormat($e."\n", [Console::FG_RED]));
+            return self::BURY;
+        }
+    }
+
     /**
      * 需要用户反馈的微信消息模板
      * @param Pheanstalk\Job $job
@@ -255,12 +275,9 @@ class WorkerController extends BeanstalkController
             }
 
             fwrite(STDOUT, Console::ansiFormat("Feedbackchat - Everything is allright"."\n", [Console::FG_GREEN]));
-            //Delete the job from beanstalkd
             return self::DELETE;
         } catch (\Exception $e) {
-            //If there is anything to do.
             fwrite(STDERR, Console::ansiFormat($e."\n", [Console::FG_RED]));
-            // you can also bury jobs to examine later
             return self::BURY;
         }
     }*/
