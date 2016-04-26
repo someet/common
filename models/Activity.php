@@ -267,3 +267,4 @@ class Activity extends \yii\db\ActiveRecord
         return $this->hasMany(ActivityFeedback::className(), ['activity_id' => 'id']);
     }
 }
+
