@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use someet\common\models\User;
 use Yii;
 
 /**
@@ -29,6 +30,30 @@ use Yii;
  */
 class Noti extends \yii\db\ActiveRecord
 {
+
+    /* 微信渠道 */
+    const TUNNEL_WECHAT   = 1;
+    /* 短信渠道 */
+    const TUNNEL_SMS    = 2;
+    /* app渠道 */
+    const TUNNEL_APP    = 3;
+    /* 站内信渠道 */
+    const TUNNEL_MSG    = 4;
+
+    /* 活动类型 */
+    const FROM_ACTIVITY    = 1;
+    /* 用户类型 */
+    const FROM_USER    = 2;
+    /* 系统类型 */
+    const FROM_SYSTEM    = 3;
+    /* 场地类型 */
+    const FROM_SPACE    = 4;
+
+    /* 通知发送状态成功 */
+    const CALLBACK_STATUS_SUCCESS    = 10;
+    /* 通知发送状态失败 */
+    const CALLBACK_STATUS_FAILURE    = 20;
+
     /**
      * @inheritdoc
      */
@@ -44,9 +69,10 @@ class Noti extends \yii\db\ActiveRecord
     {
         return [
             [['tunnel_id', 'type_id', 'user_id', 'new', 'author_id', 'from_id', 'from_id_type', 'from_num', 'sended_at', 'callback_id', 'callback_status', 'created_at', 'timing', 'work_on', 'work_off'], 'integer'],
+            ['author', 'default', 'value' => 0],
             [['author', 'note'], 'required'],
-            [['author'], 'string', 'max' => 60],
-            [['note', 'callback_msg'], 'string', 'max' => 180]
+            // [['author'], 'string', 'max' => 60],
+            // [['note', 'callback_msg'], 'string', 'max' => 250]
         ];
     }
 
@@ -76,5 +102,11 @@ class Noti extends \yii\db\ActiveRecord
             'work_on' => 'Work On',
             'work_off' => 'Work Off',
         ];
+    }
+
+    // 被通知的用户
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 }

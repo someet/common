@@ -3,17 +3,12 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m160317_071556_yellow_card_front_permission extends Migration
+class m160414_062050_add_push_page_permission extends Migration
 {
     public function up()
     {
         $items = [
-            /* 黄牌系统 */
-            '/mobile/member/cancel-apply' => ['user'],
-            '/mobile/member/update-leave' => ['user'],
-            '/mobile/member/credit-record' => ['user'],
-            '/mobile/member/yellow-card-appeal' => ['user'],
-            '/mobile/member/yellow-appeal-reason' => ['user'],
+            '/mobile/activity/join' => ['user'],
         ];
 
         $authItemTemplate = <<<SQL
@@ -35,7 +30,7 @@ SQL;
 
     public function down()
     {
-        echo "m160317_071556_yellow_card_front_permission cannot be reverted.\n";
+        echo "m160414_062050_add_push_page_permission cannot be reverted.\n";
 
         return false;
     }

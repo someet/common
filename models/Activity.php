@@ -57,11 +57,15 @@ class Activity extends \yii\db\ActiveRecord
 {
 
     /* 删除 */
-    const STATUS_DELETE     = 0;
+    const STATUS_DELETE   = 0;
     /* 草稿 */
     const STATUS_DRAFT    = 10;
+    /* 预发布 */
+    const STATUS_PREVENT  = 15;
     /* 发布 */
     const STATUS_RELEASE  = 20;
+    /* 关闭 */
+    const STATUS_SHUT  = 30;
 
     /* 报名已满 */
     const IS_FULL_YES = 1;
@@ -265,3 +269,4 @@ class Activity extends \yii\db\ActiveRecord
         return $this->hasMany(ActivityFeedback::className(), ['activity_id' => 'id']);
     }
 }
+
