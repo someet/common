@@ -124,10 +124,11 @@ class User extends BaseUser
             $fields['password_reset_token'],
             $fields['email'],
             $fields['confirmed_at'],
-            $fields['blacked_at'],
+            $fields['blocked_at'],
             $fields['registration_ip'],
             $fields['in_white_list'],
             $fields['is_email_verified'],
+            $fields['unconfirmed_email'],
             $fields['unionid']
         );
 
