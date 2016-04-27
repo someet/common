@@ -27,6 +27,7 @@ use dektrium\user\models\User as BaseUser;
  * @property string $password write-only password
  * @property string $wechat_id
  * @property integer $last_login_at
+ * @property string $access_token
  */
 class User extends BaseUser
 {
@@ -107,8 +108,37 @@ class User extends BaseUser
             [['last_login_at','black_time', 'black_label'], 'integer'],
             ['password_reset_token', 'string', 'max' => 60],
             ['email_confirmation_token', 'string', 'max' => 60],
+
+            ['access_token', 'default', 'value' => Yii::$app->security->generateRandomString()],
             [['last_login_at', 'password_reset_token', 'email_confirmation_token'], 'safe'],
         ];
+    }
+
+    public function fields()
+    {
+        $fields = parent::fields();
+
+        unset(
+            $fields['password_hash'],
+            $fields['auth_key'],
+            $fields['email_confirmation_token'],
+            $fields['password_reset_token'],
+            $fields['email'],
+            $fields['confirmed_at'],
+            $fields['blocked_at'],
+            $fields['registration_ip'],
+            $fields['in_white_list'],
+            $fields['is_email_verified'],
+            $fields['unconfirmed_email'],
+            $fields['unionid']
+        );
+
+        return $fields;
+    }
+
+    public function extraFields()
+    {
+        return ['profile'];
     }
 
     /**
@@ -157,7 +187,7 @@ class User extends BaseUser
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        return static::findOne(['access_token' => $token]);
     }
 
     /**
@@ -271,6 +301,12 @@ class User extends BaseUser
         $this->email_confirmation_token = null;
         $this->is_email_verified = 1;
         return $this->save();
+    }
+
+    // Profile
+    public function getProfile()
+    {
+        return $this->hasOne(Profile::className(), ['user_id' => 'id']);
     }
 
     // 活动列表
