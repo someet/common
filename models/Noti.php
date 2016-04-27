@@ -69,9 +69,10 @@ class Noti extends \yii\db\ActiveRecord
     {
         return [
             [['tunnel_id', 'type_id', 'user_id', 'new', 'author_id', 'from_id', 'from_id_type', 'from_num', 'sended_at', 'callback_id', 'callback_status', 'created_at', 'timing', 'work_on', 'work_off'], 'integer'],
+            ['author', 'default', 'value' => 0],
             [['author', 'note'], 'required'],
-            [['author'], 'string', 'max' => 60],
-            [['note', 'callback_msg'], 'string', 'max' => 180]
+            // [['author'], 'string', 'max' => 60],
+            // [['note', 'callback_msg'], 'string', 'max' => 250]
         ];
     }
 
