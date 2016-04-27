@@ -38,14 +38,12 @@ class CronController  extends \yii\console\Controller
                 ])->with('user')->one();
 
                 if (!$account) {
-                    Yii::error('报名id: ' . $noti['user']['id'] . ' 的用户短信发送失败或者没有绑定微信');
+                    Yii::error('报名id: ' . $noti['user']['id'] . ' 的用户没有绑定微信');
                     continue;
                 }
-                $openid = $account->client_id;
 
                 //判断来源类型为活动
                 if ( Noti::FROM_ACTIVITY == $noti['from_id_type']) {
-                    $activity = Activity::findOne($from_id);
                     $templateData = $noti['note'];
                 } else if (Noti::FROM_USER == $noti['from_id_type']) {
 
@@ -59,7 +57,7 @@ class CronController  extends \yii\console\Controller
                 if (!$wechat_template) {
                     Yii::error('微信消息加到队列失败，请检查');
                 } else {
-                    Yii::info($noti['user_id'].'微信模板消息到消息队列成功');
+                    Yii::info($noti['user_id'].' 微信模板消息到消息队列成功');
                 }
 
             // 判断渠道为短信
