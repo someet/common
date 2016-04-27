@@ -65,7 +65,9 @@ class Answer extends \yii\db\ActiveRecord
     /* 参加活动的短信发送失败 */
     const JOIN_NOTI_IS_SEND_FAIL = 2;
 
-    /* 未到达 */
+    /* 未设置 */
+    const STATUS_ARRIVE_NOT_SET = 10;
+    /* 爽约 */
     const STATUS_ARRIVE_YET     = 0;
     /* 迟到 */
     const STATUS_ARRIVE_LATE    = 1;
@@ -164,6 +166,24 @@ class Answer extends \yii\db\ActiveRecord
         } else {
             return false;
         }
+    }
+
+    public function fields()
+    {
+        $fields = parent::fields();
+
+        unset(
+            $fields['wechat_template_push_at'],
+            $fields['wechat_template_is_send'],
+            $fields['wechat_template_msg_id'],
+            $fields['join_noti_is_send'],
+            $fields['join_noti_send_at'],
+            $fields['join_noti_wechat_template_push_at'],
+            $fields['join_noti_wechat_template_is_send'],
+            $fields['join_noti_wechat_template_msg_id']
+        );
+
+        return $fields;
     }
 
     public function getAnswerItemList()
