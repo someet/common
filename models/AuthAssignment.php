@@ -15,6 +15,13 @@ use Yii;
  */
 class AuthAssignment extends \yii\db\ActiveRecord
 {
+    /* 管理员 */
+    const ROLE_ADMIN    = 'admin';
+    /* 联合发起人 */
+    const ROLE_FOUNDER  = 'founder';
+    /* PMA */
+    const ROLE_PMA      = 'pma';
+
     /**
      * @inheritdoc
      */

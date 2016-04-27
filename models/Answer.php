@@ -168,6 +168,24 @@ class Answer extends \yii\db\ActiveRecord
         }
     }
 
+    public function fields()
+    {
+        $fields = parent::fields();
+
+        unset(
+            $fields['wechat_template_push_at'],
+            $fields['wechat_template_is_send'],
+            $fields['wechat_template_msg_id'],
+            $fields['join_noti_is_send'],
+            $fields['join_noti_send_at'],
+            $fields['join_noti_wechat_template_push_at'],
+            $fields['join_noti_wechat_template_is_send'],
+            $fields['join_noti_wechat_template_msg_id']
+        );
+
+        return $fields;
+    }
+
     public function getAnswerItemList()
     {
         return $this->hasMany(AnswerItem::className(), ['question_id' => 'question_id', 'user_id' => 'user_id']);
