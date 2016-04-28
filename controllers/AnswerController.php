@@ -375,7 +375,7 @@ class AnswerController extends BackendController
             $sponsor_score = (($sponsor_sum['sponsor_start1'])*0.4+($sponsor_sum['sponsor_start2'])*0.3+($sponsor_sum['sponsor_start3'])*0.3)/$sponsor_count;
 
         }else{
-            $sponsor_score = 0;
+            $sponsor_score = Answer::DEFAULT_SCORE;
         }
         // 爽约人数
         $arrive_no = Answer::find()
