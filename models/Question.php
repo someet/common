@@ -75,6 +75,12 @@ class Question extends \yii\db\ActiveRecord
         return $this->hasMany(QuestionItem::className(), ['question_id' => 'id']);
     }
 
+      // 活动报名列表
+    public function getAnswerList()
+    {
+        return $this->hasMany(Answer::className(), ['activity_id' => 'activity_id']);
+    }
+
     public function getActivity()
     {
         return $this->hasOne(Activity::className(), ['id' => 'activity_id']);
