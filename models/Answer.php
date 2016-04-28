@@ -56,6 +56,8 @@ class Answer extends \yii\db\ActiveRecord
     const MIDDLE_SCORE = 2;
     /*差评*/
     const BAD_SCORE = 3;
+    /*默认分数*/
+    const DEFAULT_SCORE = 0;
     /* 微信模板消息未发送 */
     const STATUS_WECHAT_TEMPLATE_YET = 0;
     /* 微信模板消息发送成功 */
