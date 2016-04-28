@@ -350,20 +350,20 @@ class AnswerController extends BackendController
 
         //好评，差评，中评数统计
         $good_score = ActivityFeedback::find()
-                        ->where(['activity_id'=>$activity_id])
-                        ->andWhere('grade = 1')
-                        ->count();
+                        ->where(['activity_id' => $activity_id])
+                          ->andWhere(['grade' => Answer::GOOD_SCORE])
+                          ->count();
         $middle_score = ActivityFeedback::find()
                         ->where(['activity_id'=>$activity_id])
-                        ->andWhere('grade = 2')
-                        ->count();
+                        ->andWhere(['grade' => Answer::MIDDLE_SCORE])
+                          ->count();
         $bad_score = ActivityFeedback::find()
-                        ->where(['activity_id'=>$activity_id])
-                        ->andWhere('grade=3')         
-                        ->count();
+                        ->where(['activity_id' => $activity_id])
+                          ->andWhere(['grade' => Answer::BAD_SCORE])         
+                          ->count();
         $sponsor_count = ActivityFeedback::find()
-                        ->where(['activity_id'=>$activity_id])
-                        ->select('grade')
+                        ->where(['activity_id' => $activity_id])
+                          ->select('grade')
                         ->count();
          if($sponsor_count != 0){               
             $sponsor_sum = ActivityFeedback::find()
