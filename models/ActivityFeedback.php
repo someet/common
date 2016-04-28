@@ -111,3 +111,4 @@ class ActivityFeedback extends \yii\db\ActiveRecord
         return $this->hasOne(Answer::className(), ['user_id' => 'user_id', 'activity_id' => 'activity_id']);
     }
 }
+
