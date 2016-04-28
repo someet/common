@@ -454,16 +454,12 @@ class AnswerController extends BackendController
             //判断状态是通过
             if (Answer::STATUS_REVIEW_PASS == $answer['status']) {
 
-                    //获取通过的短信内容
-                    $smsData = NotificationTemplate::fetchSuccessSmsData($answer['activity']['start_time'], $answer['activity']['title']);
+                //获取通过的短信内容
+                $smsData = NotificationTemplate::fetchSuccessSmsData($answer['activity']['start_time'], $answer['activity']['title']);
 
-                    if ( Answer::STATUS_ARRIVE_YET != $answer['arrive_status'] && $answer['is_feedback'] == Answer::FEEDBACK_NO ) {
-                        //获取需要反馈的短信内容
-                        $smsData = NotificationTemplate::fetchNeedFeedbackSmsData($answer['activity']['title']);  
-                    }
             } elseif (Answer::STATUS_REVIEW_REJECT == $answer['status']) {
-                    //获取不通过的短信内容
-                    $smsData = NotificationTemplate::fetchFailSmsData($answer['activity']['start_time'], $answer['activity']['title']);
+                //获取不通过的短信内容
+                $smsData = NotificationTemplate::fetchFailSmsData($answer['activity']['start_time'], $answer['activity']['title']);
             }
 
             $mixedData = [

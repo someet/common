@@ -1,6 +1,7 @@
 <?php
 namespace app\commands;
 use app\components\NotificationTemplate;
+use common\models\Noti;
 use someet\common\components\SomeetValidator;
 use someet\common\models\Activity;
 use Yii;
@@ -10,6 +11,67 @@ use someet\common\models\User;
 
 class CronController  extends \yii\console\Controller
 {
+
+    /**
+     * 发送通知,包括各渠道，各类型的通知
+     */
+    public function actionSendNoti()
+    {
+        //查询所有的未发送的通知
+        $noties = Noti::find()
+                ->where(["sended_at" => 0])
+                ->with(['user'])
+                ->asArray()
+                ->all();
+
+        foreach ($noties as $noti) {
+
+            //判断渠道为微信
+            if ( Noti::TUNNEL_WECHAT == $noti['tunnel_id']) {
+                // 查询出openid
+                
+
+                $from_id = $noti['from_id'];
+                $account = Account::find()->where([
+                    'provider' => 'wechat',
+                    'user_id' => $noti['user']['id'],
+                ])->with('user')->one();
+
+                if (!$account) {
+                    Yii::error('报名id: ' . $noti['user']['id'] . ' 的用户没有绑定微信');
+                    continue;
+                }
+
+                //判断来源类型为活动
+                if ( Noti::FROM_ACTIVITY == $noti['from_id_type']) {
+                    $templateData = $noti['note'];
+                } else if (Noti::FROM_USER == $noti['from_id_type']) {
+
+                }
+
+                if (empty($templateData)) {
+                    continue;
+                }
+                // 放入队列
+                $wechat_template = Yii::$app->beanstalk->putInTube('wechatofficial', ['templateData' => $templateData, 'noti' => $noti]);
+                if (!$wechat_template) {
+                    Yii::error('微信消息加到队列失败，请检查');
+                } else {
+                    Yii::info($noti['user_id'].' 微信模板消息到消息队列成功');
+                }
+
+            // 判断渠道为短信
+            } else if ( Noti::TUNNEL_SMS == $noti['tunnel_id']) {
+
+            // 判断渠道为app
+            } else if ( Noti::TUNNEL_APP == $noti['tunnel_id']) {
+
+            // 判断渠道为站内信
+            } else if ( Noti::TUNNEL_MSG == $noti['tunnel_id']) {
+
+            }
+        }
+    }
 
     /**
      * 发送审核通知
@@ -68,37 +130,37 @@ class CronController  extends \yii\console\Controller
                 //尝试发送微信模板消息
                 //获取绑定的微信对象
                 /* @var $account Account */
-                $account = Account::find()->where([
-                    'provider' => 'wechat',
-                    'user_id' => $answer['user']['id'],
-                ])->with('user')->one();
+                // $account = Account::find()->where([
+                //     'provider' => 'wechat',
+                //     'user_id' => $answer['user']['id'],
+                // ])->with('user')->one();
 
-                //如果短信发送成功绑定了微信对象
-                if ($account) {
+                // //如果短信发送成功绑定了微信对象
+                // if ($account) {
 
-                    //获取微信的openid
-                    $openid = $account->client_id;
+                //     //获取微信的openid
+                //     $openid = $account->client_id;
 
-                    //默认获取不通过的模板消息内容
-                    $templateData = NotificationTemplate::fetchFailedWechatTemplateData($openid, $answer['user'], $answer['activity']);
+                //     //默认获取不通过的模板消息内容
+                //     // $templateData = NotificationTemplate::fetchFailedWechatTemplateData($openid, $answer['user'], $answer['activity']);
 
-                    //如果通过
-                    if (Answer::STATUS_REVIEW_PASS == $answer['status']) {
-                        //获取通过的模板消息内容
-                        $templateData = NotificationTemplate::fetchSuccessWechatTemplateData($openid, $answer['user'], $answer['activity']);
-                    }
+                //     //如果通过
+                //     if (Answer::STATUS_REVIEW_PASS == $answer['status']) {
+                //         //获取通过的模板消息内容
+                //         $templateData = NotificationTemplate::fetchSuccessWechatTemplateData($openid, $answer['user'], $answer['activity']);
+                //         $wechat_template = Yii::$app->beanstalk->putInTube('wechat', ['templateData' => $templateData, 'answer' => $answer]);
+                //     }
 
-                    $wechat_template = Yii::$app->beanstalk->putInTube('wechat', ['templateData' => $templateData, 'answer' => $answer]);
-                    if (!$wechat_template) {
-                        Yii::error('参加活动提醒微信消息模板加到队列失败，请检查');
-                    } else {
-                        Yii::info('添加微信模板消息到消息队列成功');
-                    }
+                //     if (!$wechat_template) {
+                //         Yii::error('参加活动提醒微信消息模板加到队列失败，请检查');
+                //     } else {
+                //         Yii::info('添加微信模板消息到消息队列成功');
+                //     }
 
-                } else {
-                    //记录一个错误, 当前报名用户短信发送失败或者没有绑定微信
-                    Yii::error('报名用户id: '.$answer['user']['id'].' 的用户短信发送失败或者没有绑定微信');
-                }
+                // } else {
+                //     //记录一个错误, 当前报名用户短信发送失败或者没有绑定微信
+                //     Yii::error('报名用户id: '.$answer['user']['id'].' 的用户短信发送失败或者没有绑定微信');
+                // }
             } else {
                 //报一个错误, 用户手机号码有误, 无法发送短信
                 Yii::error('报名用户id: '.$answer['user']['id'].' 的用户手机号码未设置, 或者设置的不正确');

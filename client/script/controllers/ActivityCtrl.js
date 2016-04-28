@@ -490,6 +490,11 @@ angular.module('controllers', ['ngTagsInput'])
                 return $activityManage.searchPrincipal(query);
             }
 
+            // 搜索管理员功能
+            $scope.getDts = function(query) {
+                return $activityManage.searchDts(query);
+            }
+
             // 开始时间
             $scope.onStartTimeSet = function(newDate, oldDate) {
                 $scope.start_time_str = getTimeByTimestamp(getTimestamp(newDate));
@@ -596,17 +601,16 @@ angular.module('controllers', ['ngTagsInput'])
             var id = $routeParams.id;
             if (id > 0) {
                 $activityManage.fetch(id).then(function(data) {
-
-                    $scope.entity = data;
-                                        // $scope.pma_type = { pma_type: $scope.entry.pma_type, name: '线上' };
                     $scope.user = {};
-
+                    $scope.dts = {};
+                    $scope.entity = data;
                     $scope.start_time_str = getTimeByTimestamp(data.start_time);
                     // $scope.start_time_str = getTimeByTimestamp(data.start_time);
                     $scope.end_time_str = getTimeByTimestamp(data.end_time);
                     $scope.poster = data.poster;
                     $scope.group_code = data.group_code;
                     $scope.user = data.user;
+                    $scope.dts = data.dts;
                     $scope.pma = data.pma;
                     $scope.co_founder1 = data.cofounder1;
                     $scope.co_founder2 = data.cofounder2;
@@ -645,6 +649,9 @@ angular.module('controllers', ['ngTagsInput'])
 
                 if ($scope.user) {
                     newEntity.created_by = $scope.user.id;
+                }
+                if ($scope.dts) {
+                    newEntity.updated_by = $scope.dts.id;
                 }
                 if ($scope.pma) {
                     newEntity.principal = $scope.pma.id;

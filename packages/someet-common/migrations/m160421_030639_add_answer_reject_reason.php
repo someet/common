@@ -3,22 +3,20 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m160222_074108_add_is_full_on_activity extends Migration
+class m160421_030639_add_answer_reject_reason extends Migration
 {
     public function up()
     {
         $sql = <<<SQL
-ALTER TABLE `activity`
-ADD COLUMN `is_full` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否已报满 0 未报满 1 已报满' AFTER `co_founder4`;
+ALTER TABLE `answer` ADD COLUMN `reject_reason` varchar(255) NOT NULL DEFAULT 0 COMMENT '拒绝原因';
 SQL;
         $this->execute($sql);
         return true;
-
     }
 
     public function down()
     {
-        $this->dropColumn('activity', 'is_full');
+        $this->dropColumn('reject_reason');
         return true;
     }
 

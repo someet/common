@@ -9,6 +9,7 @@
 namespace app\components;
 
 use yii\base\Component;
+use someet\common\models\YellowCard;
 use Yii;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
@@ -75,14 +76,20 @@ class NotificationTemplate extends Component
      * @param $account Account对象
      * @param $activity 活动对象
      * @return array
+     * 活动报名失败通知
      */
-    public static function fetchFailedWechatTemplateData($openid, $account, $activity) {
+    public static function fetchFailedWechatTemplateData($openid, $account, $activity, $reject_reason) {
         //获取失败的模板消息id
         $template_id = Yii::$app->params['sms.failed_template_id'];
         if (empty($template_id)) {
             //记录一个错误, 请设置失败的模板消息id
             Yii::error('请设置失败的模板消息id');
         }
+
+        // 活动开始时间
+        $activity_start_time = date('m月d号 H:i',$activity['start_time'])
+                                . self::$week[date('w', $activity['start_time'])]
+                                . date('H:i', $activity['start_time']);
         $data = [
             "touser" => "{$openid}",
             "template_id" => $template_id,
@@ -102,19 +109,19 @@ class NotificationTemplate extends Component
                     "color" =>"#173177"
                 ],
                 "keyword3" => [
-                    "value" => "",
+                    "value" => "{$activity_start_time}",
                     "color" => "#173177"
                 ],
                 "keyword4" => [
-                    "value" => "",
+                    "value" => "{$activity['address']}",
                     "color" => "#173177"
                 ],
                 "keyword5" => [
-                    "value" => "发起人未通过你的报名申请。",
+                    "value" => "{$reject_reason}",
                     "color" => "#173177"
                 ],
                 "remark" => [
-                    "value" => "每个人都有被拒绝的时候，点击详情，试试更多其他活动吧！",
+                    "value" => "关于如何提高报名的成功率，这里有几个小tips，1.认真回答筛选问题； 2.尽早报名，每周二周三是活动推送时间",
                     "color" => "#173177"
                 ],
             ]
@@ -178,7 +185,7 @@ class NotificationTemplate extends Component
         $template_id = Yii::$app->params['sms.feedback_template_id'];
         if (empty($template_id)) {
             //记录一个错误, 请设置失败的模板消息id
-            Yii::error('请设置失败的模板消息id111');
+            Yii::error('请设置失败的模板消息id');
         }
         $start_time = date('Y年m月d日', $activity['start_time']);
         $data = [
@@ -215,6 +222,7 @@ class NotificationTemplate extends Component
         ];
         return $data;
     }
+
     /**
      * 获取成功的微信模板消息
      * @param $openid openid
@@ -273,4 +281,204 @@ class NotificationTemplate extends Component
         ];
         return $data;
     }
+
+    /**
+     * 获取活动签到成功的微信模板消息
+     * @param $openid openid
+     * @param $account Account对象
+     * @param $activity 活动对象
+     * @return array
+     */
+    public static function fetchSuccessCheckInWechatTemplateData($openid, $account, $activity) {
+        //获取模板消息id
+        $template_id = Yii::$app->params['sms.success_check_in_template_id'];
+        $url = Yii::$app->params['domain'].'feedback/'.$activity['id'];
+        if (empty($template_id)) {
+            //记录一个错误, 请设置成功的模板消息id
+            Yii::error('请设置签到成功的模板消息id');
+        }
+
+        //签到时间
+        $check_in_time = date('m月d日', time())
+            . self::$week[date('w', time())]
+            . date('H:i', time());
+        $data = [
+            "touser" => "{$openid}",
+            "template_id" => $template_id,
+            "url" => $url,
+            "topcolor" => "#FF0000",
+            "data" => [
+                "first" => [
+                    "value" => "你好，你已签到成功。",
+                    "color" => "#173177"
+                ],
+                "keyword1" => [
+                    "value" => "{$account['username']}",
+                    "color" => "#173177"
+                ],
+                "keyword2" => [
+                    "value" => "{$activity['title']}",
+                    "color" =>"#173177"
+                ],
+                "keyword3" => [
+                    "value" => "{$check_in_time}",
+                    "color" => "#173177"
+                ],
+                "keyword4" => [
+                    "value" => "{$activity['address']}",
+                    "color" => "#173177"
+                ],
+                "remark" => [
+                    "value" => "感谢你的参加!结束后请及时反馈",
+                    "color" => "#173177"
+                ],
+            ]
+        ];
+        return $data;
+    }    
+
+    /**
+     * 获取活动信用变更的微信模板消息
+     * @param $openid openid
+     * @param $account Account对象
+     * @param $activity 活动对象
+     * @return array
+     */
+    public static function fetchUpdateCreditWechatTemplateData($openid, $activity,$yellowcard) {
+        //获取模板消息id
+        $template_id = Yii::$app->params['sms.update_credit_template_id'];
+        $url = Yii::$app->params['domain'].'member/credit-record/'.$activity['id'];
+        if (empty($template_id)) {
+            //记录一个错误, 请设置成功的模板消息id
+            Yii::error('请设置签到成功的模板消息id');
+        }
+
+       // 黄牌数量
+        $card_count = YellowCard::find()
+                        ->select('id , sum(card_num) card_count')
+                        ->where(['user_id' => $yellowcard->user_id])
+                        ->asArray()
+                        ->one();
+
+        $card_category = [
+                    '0' => '取消',
+                    '1' => '迟到',
+                    '2' => '请假',
+                    '3' => '请假',
+                    '4' => '爽约',
+                    '5' => '带人',
+                    '6' => '骚扰',
+                    ];
+        // 活动开始时间
+        $activity_start_time = date('m月d号 H:i',$activity['start_time'])
+                                . self::$week[date('w', $activity['start_time'])]
+                                . date('H:i', $activity['start_time']);
+        $data = [
+            "touser" => "{$openid}",
+            "template_id" => $template_id,
+            "url" => $url,
+            "topcolor" => "#FF0000",
+            "data" => [
+                "first" => [
+                    "value" => "您好，因为参加活动时{$card_category[$yellowcard->card_category]}，影响发起人和其他参与者体验，受到黄牌警告{$yellowcard->card_num}张",
+                    "color" => "#173177"
+                ],
+                "keyword1" => [
+                    "value" => "{$activity['title']}",
+                    "color" => "#173177"
+                ],
+                "keyword2" => [
+                    "value" => "{$activity_start_time}",
+                    "color" =>"#173177"
+                ],
+                "keyword3" => [
+                    "value" => "{$activity['address']}",
+                    "color" => "#173177"
+                ],
+                "keyword4" => [
+                    "value" => "累计{$card_count['card_count']}张黄牌",
+                    "color" => "#173177"
+                ],
+                "remark" => [
+                    "value" => "30天内累计3张黄牌将无法报名，黄牌信息不会展示给他人，黄牌记录将在30天内自动过期。如有异议请在产品中申诉。",
+                    "color" => "#173177"
+                ],
+            ]
+        ];
+        return $data;
+    }
+
+
+    /**
+     * 获取活动取消 信用变更的微信模板消息
+     * @param $openid openid
+     * @param $account Account对象
+     * @param $activity 活动对象
+     * @return array
+     */
+    public static function fetchUpdateCancelActivityWechatTemplateData($openid, $answer) 
+    {
+        //获取模板消息id
+        $template_id = Yii::$app->params['sms.update_credit_template_id'];
+        $url = Yii::$app->params['domain'].'member/credit-record/'.$activity['id'];
+        if (empty($template_id)) {
+            //记录一个错误, 请设置成功的模板消息id
+            Yii::error('请设置取消报名的模板消息id');
+        }
+
+       // 黄牌数量
+        $card_count = YellowCard::find()
+                        ->select('id , sum(card_num) card_count')
+                        ->where(['user_id' => $answer->user_id])
+                        ->asArray()
+                        ->one();
+
+        $card_category = [
+                    '0' => '取消',
+                    '1' => '迟到',
+                    '2' => '请假',
+                    '3' => '请假',
+                    '4' => '爽约',
+                    '5' => '带人',
+                    '6' => '骚扰',
+                    ];
+        // 活动开始时间
+        $activity_start_time = date('m月d号 H:i',$activity['start_time'])
+                                . self::$week[date('w', $activity['start_time'])]
+                                . date('H:i', $activity['start_time']);
+        $data = [
+            "touser" => "{$openid}",
+            "template_id" => $template_id,
+            "url" => $url,
+            "topcolor" => "#FF0000",
+            "data" => [
+                "first" => [
+                    "value" => "你好，取消报名成功！",
+                    "color" => "#173177"
+                ],
+                "keyword1" => [
+                    "value" => "{$answer->activity['title']}",
+                    "color" => "#173177"
+                ],
+                "keyword2" => [
+                    "value" => "{$activity_start_time}",
+                    "color" =>"#173177"
+                ],
+                "keyword3" => [
+                    "value" => "{$answer->activity['area']}",
+                    "color" => "#173177"
+                ],
+                "keyword4" => [
+                    "value" => "累计{$card_count['card_count']}张黄牌",
+                    "color" => "#173177"
+                ],
+                "remark" => [
+                    "value" => "30天内累计3张黄牌将无法报名，黄牌信息不会展示给他人，黄牌记录将在30天内自动过期。如有异议请在产品中申诉。",
+                    "color" => "#173177"
+                ],
+            ]
+        ];
+        return $data;
+    }
+
 }

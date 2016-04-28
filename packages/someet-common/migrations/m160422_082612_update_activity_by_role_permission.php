@@ -3,19 +3,19 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m160217_023615_fix_founder_activity_by_role extends Migration
+class m160422_082612_update_activity_by_role_permission extends Migration
 {
     public function up()
     {
 
-        $this->update('auth_item_child',['parent' => 'founder'],'child = "/mobile/member/activity-by-role" ');
+        $this->update('auth_item_child',['parent' => 'user'],'child = "/mobile/member/activity-by-role" ');
 
         return true;
     }
 
     public function down()
     {
-        echo "m160217_023615_fix_founder_activity_by_role cannot be reverted.\n";
+        echo "m160422_082612_update_activity_by_role_permission cannot be reverted.\n";
 
         return false;
     }
@@ -31,3 +31,4 @@ class m160217_023615_fix_founder_activity_by_role extends Migration
     }
     */
 }
+
