@@ -191,13 +191,7 @@ class Activity extends \yii\db\ActiveRecord
     {
         if (parent::beforeSave($insert)) {
             if ($insert) {
-                if ($this->created_by < 1) {
-                    $this->updated_by = $this->created_by = Yii::$app->user && Yii::$app->user->id > 0 ? Yii::$app->user->id : 0;
-                } else {
-                    $this->updated_by = $this->created_by;
-                }
-            } else {
-                $this->updated_by = Yii::$app->user && Yii::$app->user->id > 0 ? Yii::$app->user->id : 0;
+                $this->updated_by = Yii::$app->user->id;
             }
             return true;
         } else {
@@ -217,11 +211,18 @@ class Activity extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'principal']);
     }
 
+    // DTS
+    public function getDts()
+    {
+        return $this->hasOne(User::className(), ['id' => 'updated_by']);
+    }
+
     // 发起人
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'created_by']);
     }
+
 
     // 联合发起人1
     public function getCofounder1()
