@@ -161,6 +161,14 @@
                 <input type="hidden" ng-model="entity.id" />
                 <div layout="row">
                     <div flex="">
+                        <label>DTS</label>
+                        <md-autocomplete md-selected-item="dts" placeholder="请选择DTS" md-search-text="dtsname" md-items="dts in getDts(dtsname)" md-item-text="dts.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
+                            <md-item-template>
+                                <span md-highlight-text="dts">{{dts.username}}</span>
+                                <img ng-if="dts" width="50" style="border-radius:25px" ng-src="{{dts.profile.headimgurl}}" />
+                            </md-item-template>
+                            <md-not-found>No matches found.</md-not-found>
+                        </md-autocomplete>
                         <label>发起人</label>
                         <md-autocomplete md-selected-item="user" placeholder="请选择发起人" md-search-text="username" md-items="user in getUsers(username)" md-item-text="user.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
                             <md-item-template>

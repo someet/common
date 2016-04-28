@@ -63,6 +63,10 @@ angular.module('backendServices')
         searchPrincipal: function(query) {
           return $http.get('/member/search-by-auth?username=' + query + '&auth=pma');
         },
+        //搜索管理员
+        searchDts: function(query) {
+          return $http.get('/member/search-by-auth?username=' + query + '&auth=admin');
+        },
         modelPageMeta: function(type, pageNum, isWeek) {
           return $http.get('/activity?scenario=total&perPage='+pageNum+'&type='+type+'isWeek='+isWeek).then(function(data) {
             return data;

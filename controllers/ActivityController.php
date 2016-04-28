@@ -685,6 +685,14 @@ class ActivityController extends BackendController
             }
         }
 
+        //DTS
+        if (isset($data['updated_by'])) {
+            $model->updated_by = $data['updated_by'];
+            if (!$model->validate('updated_by')) {
+                throw new DataValidationFailedException($model->getFirstError('updated_by'));
+            }
+        }
+
         //发起人
         if (isset($data['created_by'])) {
             $model->created_by = $data['created_by'];
@@ -852,6 +860,8 @@ class ActivityController extends BackendController
                 'type',
                 'user',
                 'user.profile',
+                'dts',
+                'dts.profile',
                 'pma',
                 'pma.profile',
                 'cofounder1',
