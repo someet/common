@@ -32,8 +32,6 @@
                     <div class="divider center"></div>
                     <!-- 活动详情 -->
                     <div class="detail-activity" ng-bind-html="entity.details"></div>
-
-
                     <!-- 发起人 -->
                     <div class="detail-host">
                         <label>发起人</label>
@@ -47,8 +45,7 @@
                         <div class="description">
                             {{entity.user.profile.bio}}
                         </div>
-                    </div>                    
-
+                    </div>
                     <!-- 联合发起人 1-->
                     <div ng-if="co_founder1" class="detail-host">
                         <label>联合发起人</label>
@@ -62,9 +59,8 @@
                         <div class="description">
                             {{entity.cofounder1.profile.bio}}
                         </div>
-                    </div>                   
-
-                     <!-- 联合发起人 2-->
+                    </div>
+                    <!-- 联合发起人 2-->
                     <div ng-if="co_founder2" class="detail-host">
                         <label>联合发起人</label>
                         <div class="hoster">
@@ -78,9 +74,6 @@
                             {{entity.cofounder2.profile.bio}}
                         </div>
                     </div>
-
-
-
                     <div class="detail-info">
                         <label>活动细节</label>
                         <!-- 时间 -->
@@ -121,7 +114,6 @@
               </span>
                         </div>
                         <div ng-bind-html="entity.review" class="detail-flow">
-
                         </div>
                         <!-- tips -->
                         <div class="detail-label" style="margin-top:0.6rem;">
@@ -188,7 +180,24 @@
                             <md-not-found>No matches found.</md-not-found>
                         </md-autocomplete>
                     </div>
+                    <div flex="">
+                        <label>PMA类型</label>
+
+                                          <md-input-container>
+                    <md-select name="group"  ng-model="entity.pma_type" placeholder="选择分类">
+                        <md-option ng-value="opt.pma_type" ng-repeat="opt in pma_type_count">
+                            {{opt.name}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="entityForm.group.$error">
+                        <div ng-message="required">必填项目</div>
+                    </div>
+                </md-input-container>
+                    </div>
+
+
                 </div>
+
                 <div layout="row">
                     <div flex="">
                         <label>联合发起人1</label>
