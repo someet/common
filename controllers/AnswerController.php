@@ -348,6 +348,35 @@ class AnswerController extends BackendController
                         ->count();
         // print_r($leave['leave_count']);
 
+        //好评，差评，中评数统计
+        $good_score = ActivityFeedback::find()
+                        ->where(['activity_id' => $activity_id])
+                          ->andWhere(['grade' => Answer::GOOD_SCORE])
+                          ->count();
+        $middle_score = ActivityFeedback::find()
+                        ->where(['activity_id'=>$activity_id])
+                        ->andWhere(['grade' => Answer::MIDDLE_SCORE])
+                          ->count();
+        $bad_score = ActivityFeedback::find()
+                        ->where(['activity_id' => $activity_id])
+                          ->andWhere(['grade' => Answer::BAD_SCORE])         
+                          ->count();
+        $sponsor_count = ActivityFeedback::find()
+                        ->where(['activity_id' => $activity_id])
+                          ->select('grade')
+                        ->count();
+         if($sponsor_count != 0){               
+            $sponsor_sum = ActivityFeedback::find()
+                        ->where(['activity_id'=>$activity_id])
+                        ->select('sum(sponsor_start1) sponsor_start1,sum(sponsor_start2) sponsor_start2,sum(sponsor_start3) sponsor_start3')
+                        ->asArray()
+                        ->one();
+                      
+            $sponsor_score = (($sponsor_sum['sponsor_start1'])*0.4+($sponsor_sum['sponsor_start2'])*0.3+($sponsor_sum['sponsor_start3'])*0.3)/$sponsor_count;
+
+        }else{
+            $sponsor_score = Answer::DEFAULT_SCORE;
+        }
         // 爽约人数
         $arrive_no = Answer::find()
                         ->where(['activity_id' => $activity_id ])
@@ -387,9 +416,14 @@ class AnswerController extends BackendController
             $models[$key]['late_ratio'] = $late_ratio;
             $models[$key]['leave_ratio'] = $leave_ratio;
             $models[$key]['arrive_no_ratio'] = $arrive_no_ratio;
-
         }
-        return $models;
+        return [
+                'model' => $models, 
+                'good_score' => $good_score,
+                'middle_score'=>$middle_score,
+                'bad_score' => $bad_score,
+                'sponsor_score' => $sponsor_score 
+                ]; 
     }
 
     /**
@@ -527,5 +561,6 @@ class AnswerController extends BackendController
         return $result = ['status' => '0','sms' => $smsData,'wechatResult' => $wechatResult];
 
     }
+
 
 }
