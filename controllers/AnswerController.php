@@ -529,24 +529,27 @@ class AnswerController extends BackendController
                 if (Answer::STATUS_REVIEW_PASS == $answer['status']) {
                     //获取通过的模板消息内容
                     $templateData = NotificationTemplate::fetchSuccessWechatTemplateData($openid, $answer['user'], $answer['activity']);
-                    if ( Answer::STATUS_ARRIVE_YET != $answer['arrive_status'] && $answer['is_feedback'] == Answer::FEEDBACK_NO ) {
-                        //获取需要反馈的短信内容
-                        $templateData = NotificationTemplate::fetchNeedFeedbackWechatTemplateData($openid, $answer['user'], $answer['activity']);  
-                        $wechatResult = $templateData['data']['first']['value'];
-                        // print_r($templateData);
-                        }
+                    $wechatResult = $templateData['data']['first']['value'];
                 } elseif (Answer::STATUS_REVIEW_REJECT == $answer['status']) {
                     //获取不通过的模板消息内容
-                    $templateData = NotificationTemplate::fetchFailedWechatTemplateData($openid, $answer['user'], $answer['activity']);
-                    $wechatResult = $templateData['data']['first']['value'];
+                    $reject_reason_content = [
+                                    '1' => '这次的活动太抢手啦，我们哭着喊着忍痛拒绝了你的申请。',
+                                    '2' => '本次活动报名人数较多，发起人忍痛拒绝了你的申请。',
+                                    '3' => '你填写的回答没有get到发起人和活动的重点哦，再接再厉呀！'
+                                    ];
+                    $reject_reason = array_rand($reject_reason_content);
+                    $reject_reason = $reject_reason_content[$reject_reason];
+                    $templateData = NotificationTemplate::fetchFailedWechatTemplateData($openid, $answer['user'], $answer['activity'],$reject_reason);
+                    $wechatResult = $templateData['data']['keyword5']['value'];
                 }
+
+
                 $wechat_template = Yii::$app->beanstalk->putInTube('wechat', ['templateData' => $templateData, 'answer' => $answer]);
                 if (!$wechat_template) {
                     Yii::error('参加活动提醒微信消息模板加到队列失败，请检查');
                 } else {
                     Yii::info('添加微信模板消息到消息队列成功');
                 }
-                $wechatResult = $templateData['data']['first']['value'];
             } else {
                 //记录一个错误, 当前报名用户短信发送失败或者没有绑定微信
                 Yii::error('报名用户id: '.$answer['user']['id'].' 的用户短信发送失败或者没有绑定微信');
