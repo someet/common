@@ -118,25 +118,21 @@ class SpaceSpotController extends BackendController
 
 
     /**
-     * 搜索活动, 供给活动分配发起人的自动完成功能使用
-     * @param string $username 标题
+     * 搜索场地, 供给活动分配发起人的自动完成功能使用
+     * @param string $name 名称
      * @return array
      */
-    public function actionSearch($title) {
+    public function actionSearch($name) {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $activity = SpaceSpot::find()
             ->with([
                 'type',
-                'answerList',
-                'feedbackList'
             ])
-            ->join('LEFT JOIN', 'user', 'user.id = activity.created_by')
+            //->join('LEFT JOIN', 'user', 'user.id = activity.created_by')
             ->where(
-                ['like', 'title', $title]
+                ['like', 'name', $name]
             )
-            ->orWhere(['like','desc',$title])
-            ->orWhere(['like','content',$title])
-            ->orWhere(['like','user.username',$title]);
+            ->orWhere(['like','detail',$name]);
         $activityExists = $activity->exists();
         $countQuery = clone $activity;
         $pages = new Pagination(['totalCount' => $countQuery->count()]);
@@ -144,10 +140,6 @@ class SpaceSpotController extends BackendController
             ->limit($pages->limit)
             ->asArray()
             ->all();
-        foreach($models as $key => $activity) {
-            $models[$key]['answer_count'] = count($activity['answerList']);
-            $models[$key]['feedback_count'] = count($activity['feedbackList']);
-        }
         if ($activityExists) {
             return [
                 'status' => 1,
@@ -163,9 +155,9 @@ class SpaceSpotController extends BackendController
 
     }
     /**
-     * 根据活动类型查询活动列表
+     * 根据活动类型查询场地列表
      *
-     * @param integer $type_id 活动类型ID
+     * @param integer $type_id 场地类型ID
      * @return array|\yii\db\ActiveRecord[]
      */
     public function actionListByTypeId($type_id=0)
@@ -195,7 +187,7 @@ class SpaceSpotController extends BackendController
     }
 
     /**
-     * 活动列表
+     * 场地列表
      *
      * @return array|\yii\db\ActiveRecord[]
     public function actionIndex()
@@ -217,13 +209,13 @@ class SpaceSpotController extends BackendController
      */
 
     /**
-     * 添加一个活动
+     * 添加一个场地
      *
-     * POST 请求 /activity/create
+     * POST 请求 /space-spot/create
      *
      * ~~~
      * {
-     *   "title": <string: 活动名称>,
+     *   "title": <string: 场地名称>,
      * }
      * ~~~
      *
@@ -267,7 +259,7 @@ class SpaceSpotController extends BackendController
 
         if ($model->load($data, '') && $model->save()) {
             // 保存操作记录
-            \someet\common\models\AdminLog::saveLog('添加活动', $model->primaryKey);
+            \someet\common\models\AdminLog::saveLog('添加场地', $model->primaryKey);
             return SpaceSpot::findOne($model->id);
         } elseif ($model->hasErrors()) {
             $errors = $model->getFirstErrors();
@@ -278,9 +270,9 @@ class SpaceSpotController extends BackendController
     }
 
     /**
-     * 修改一个活动
+     * 修改一个场地
      *
-     * POST 提交到 /activity/update?id=10
+     * POST 提交到 /space-spot/update?id=10
      *
      * ~~~
      * {
@@ -326,39 +318,10 @@ class SpaceSpotController extends BackendController
         $model = $this->findModel($id);
         $data = Yii::$app->getRequest()->post();
 
-        if (isset($data['title'])) {
-            $model->title = $data['title'];
-            if (!$model->validate('title')) {
-                throw new DataValidationFailedException($model->getFirstError('title'));
-            }
-        }
-
-        if (isset($data['desc'])) {
-            $model->desc = $data['desc'];
-            if (!$model->validate('desc')) {
-                throw new DataValidationFailedException($model->getFirstError('desc'));
-            }
-        }
-
-        // 如果改变了报名总数的时候，修改一下活动的是否报满的这个字段
-        if (isset($data['peoples'])) {
-            $model->peoples = $data['peoples'];
-            if (!$model->validate('peoples')) {
-                throw new DataValidationFailedException($model->getFirstError('peoples'));
-            }
-        }
-
-        if (isset($data['cost'])) {
-            $model->cost = $data['cost'];
-            if (!$model->validate('cost')) {
-                throw new DataValidationFailedException($model->getFirstError('cost'));
-            }
-        }
-
-        if (isset($data['cost_list'])) {
-            $model->cost_list = $data['cost_list'];
-            if (!$model->validate('cost_list')) {
-                throw new DataValidationFailedException($model->getFirstError('cost_list'));
+        if (isset($data['name'])) {
+            $model->name = $data['name'];
+            if (!$model->validate('name')) {
+                throw new DataValidationFailedException($model->getFirstError('name'));
             }
         }
 
@@ -376,48 +339,75 @@ class SpaceSpotController extends BackendController
             }
         }
 
-        if (isset($data['details'])) {
-            $model->details = $data['details'];
+        if (isset($data['type_id'])) {
+            $model->type_id = $data['type_id'];
+            if (!$model->validate('type_id')) {
+                throw new DataValidationFailedException($model->getFirstError('type_id'));
+            }
+        }
+
+        if (isset($data['image'])) {
+            $model->image = $data['image'];
+            if (!$model->validate('image')) {
+                throw new DataValidationFailedException($model->getFirstError('image'));
+            }
+        }
+
+        if (isset($data['router'])) {
+            $model->router = $data['router'];
+            if (!$model->validate('area')) {
+                throw new DataValidationFailedException($model->getFirstError('router'));
+            }
+        }
+
+        if (isset($data['map_pic'])) {
+            $model->map_pic = $data['map_pic'];
+            if (!$model->validate('address')) {
+                throw new DataValidationFailedException($model->getFirstError('map_pic'));
+            }
+        }
+
+        if (isset($data['detail'])) {
+            $model->detail = $data['detail'];
             if (!$model->validate('details')) {
-                throw new DataValidationFailedException($model->getFirstError('details'));
+                throw new DataValidationFailedException($model->getFirstError('detail'));
             }
         }
 
-        if (isset($data['poster'])) {
-            $model->poster = $data['poster'];
-            if (!$model->validate('poster')) {
-                throw new DataValidationFailedException($model->getFirstError('poster'));
+        if (isset($data['contact'])) {
+            $model->contact = $data['contact'];
+            if (!$model->validate('contact')) {
+                throw new DataValidationFailedException($model->getFirstError('contact'));
             }
         }
 
-        if (isset($data['group_code'])) {
-            $model->group_code = $data['group_code'];
-            if (!$model->validate('group_code')) {
-                throw new DataValidationFailedException($model->getFirstError('group_code'));
+        if (isset($data['base_fee'])) {
+            $model->base_fee = $data['base_fee'];
+            if (!$model->validate('base_fee')) {
+                throw new DataValidationFailedException($model->getFirstError('base_fee'));
             }
         }
 
-        if (isset($data['review'])) {
-            $model->review = $data['review'];
-            if (!$model->validate('review')) {
-                throw new DataValidationFailedException($model->getFirstError('review'));
+        if (isset($data['principal'])) {
+            $model->principal = $data['principal'];
+            if (!$model->validate('principal')) {
+                throw new DataValidationFailedException($model->getFirstError('principal'));
             }
         }
 
-        if (isset($data['tagNames'])) {
-            $model->tagNames = $data['tagNames'];
-            if (!$model->validate('tagNames')) {
-                throw new DataValidationFailedException($model->getFirstError('tagNames'));
+        if (isset($data['logo'])) {
+            $model->logo = $data['logo'];
+            if (!$model->validate('logo')) {
+                throw new DataValidationFailedException($model->getFirstError('logo'));
             }
         }
 
-        if (isset($data['is_top'])) {
-            $model->is_top = $data['is_top'];
-            if (!$model->validate('is_top')) {
-                throw new DataValidationFailedException($model->getFirstError('is_top'));
+        if (isset($data['owner'])) {
+            $model->owner = $data['owner'];
+            if (!$model->validate('owner')) {
+                throw new DataValidationFailedException($model->getFirstError('owner'));
             }
         }
-
 
         if (isset($data['longitude'])) {
             $model->longitude = $data['longitude'];
@@ -433,32 +423,17 @@ class SpaceSpotController extends BackendController
             }
         }
 
-        if (isset($data['type_id'])) {
-            $model->type_id = $data['type_id'];
-            if (!$model->validate('type_id')) {
-                throw new DataValidationFailedException($model->getFirstError('type_id'));
+        if (isset($data['open_time'])) {
+            $model->open_time = $data['open_time'];
+            if (!$model->validate('open_time')) {
+                throw new DataValidationFailedException($model->getFirstError('open_time'));
             }
         }
 
-        //发布活动的时候有值
         if (isset($data['status'])) {
             $model->status = $data['status'];
             if (!$model->validate('status')) {
                 throw new DataValidationFailedException($model->getFirstError('status'));
-            }
-        }
-
-        if (isset($data['edit_status'])) {
-            $model->edit_status = $data['edit_status'];
-            if (!$model->validate('edit_status')) {
-                throw new DataValidationFailedException($model->getFirstError('edit_status'));
-            }
-        }
-
-        if (isset($data['content'])) {
-            $model->content = $data['content'];
-            if (!$model->validate('content')) {
-                throw new DataValidationFailedException($model->getFirstError('content'));
             }
         }
 
@@ -486,103 +461,17 @@ class SpaceSpotController extends BackendController
             }
         }
 
-
-        //扩展字段一
-        if (isset($data['field1'])) {
-            $model->field1= $data['field1'];
-            if (!$model->validate('field1')) {
-                throw new DataValidationFailedException($model->getFirstError('field1'));
-            }
-        }
-        //扩展字段二
-        if (isset($data['field2'])) {
-            $model->field2= $data['field2'];
-            if (!$model->validate('field2')) {
-                throw new DataValidationFailedException($model->getFirstError('field2'));
-            }
-        }
-        //扩展字段三
-        if (isset($data['field3'])) {
-            $model->field1= $data['field3'];
-            if (!$model->validate('field3')) {
-                throw new DataValidationFailedException($model->getFirstError('field3'));
-            }
-        }
-        //扩展字段四
-        if (isset($data['field4'])) {
-            $model->field1= $data['field4'];
-            if (!$model->validate('field4')) {
-                throw new DataValidationFailedException($model->getFirstError('field4'));
-            }
-        }
-        //扩展字段五
-        if (isset($data['field5'])) {
-            $model->field1= $data['field5'];
-            if (!$model->validate('field5')) {
-                throw new DataValidationFailedException($model->getFirstError('field5'));
-            }
-        }
-        //扩展字段六
-        if (isset($data['field6'])) {
-            $model->field1= $data['field6'];
-            if (!$model->validate('field6')) {
-                throw new DataValidationFailedException($model->getFirstError('field6'));
-            }
-        }
-        //扩展字段七
-        if (isset($data['field7'])) {
-            $model->field1= $data['field7'];
-            if (!$model->validate('field7')) {
-                throw new DataValidationFailedException($model->getFirstError('field7'));
-            }
-        }
-        //扩展字段八
-        if (isset($data['field8'])) {
-            $model->field1= $data['field8'];
-            if (!$model->validate('field8')) {
-                throw new DataValidationFailedException($model->getFirstError('field8'));
-            }
-        }
-        //联合发起人1
-        if (isset($data['co_founder1'])) {
-            $model->co_founder1= $data['co_founder1'];
-            if (!$model->validate('co_founder1')) {
-                throw new DataValidationFailedException($model->getFirstError('co_founder1'));
-            }
-        }
-        //联合发起人2
-        if (isset($data['co_founder2'])) {
-            $model->co_founder2= $data['co_founder2'];
-            if (!$model->validate('co_founder2')) {
-                throw new DataValidationFailedException($model->getFirstError('co_founder2'));
-            }
-        }
-        //联合发起人3
-        if (isset($data['co_founder3'])) {
-            $model->co_founder3= $data['co_founder3'];
-            if (!$model->validate('co_founder3')) {
-                throw new DataValidationFailedException($model->getFirstError('co_founder3'));
-            }
-        }
-        //联合发起人4
-        if (isset($data['co_founder4'])) {
-            $model->co_founder4= $data['co_founder4'];
-            if (!$model->validate('co_founder4')) {
-                throw new DataValidationFailedException($model->getFirstError('co_founder4'));
-            }
-        }
-
         if (!$model->save()) {
             throw new ServerErrorHttpException();
         }
-        \someet\common\models\AdminLog::saveLog('更新活动', $model->primaryKey);
+        \someet\common\models\AdminLog::saveLog('更新场地', $model->primaryKey);
 
         return $this->findModel($id);
     }
 
     /**
-     * 删除活动
-     * POST 请求 /activity/delete?id=10
+     * 删除场地
+     * POST 请求 /space-spot/delete?id=10
      *
      * @param $id
      * @return array
@@ -609,14 +498,14 @@ class SpaceSpotController extends BackendController
         if ($model->save() === false) {
             throw new ServerErrorHttpException('删除失败');
         }
-        \someet\common\models\AdminLog::saveLog('删除活动', $model->primaryKey);
+        \someet\common\models\AdminLog::saveLog('删除场地', $model->primaryKey);
 
         return [];
     }
 
     /**
-     * 查看单个活动详情
-     * @param integer $id 活动ID
+     * 查看单个场地详情
+     * @param integer $id 场地ID
      * @return array|null|\yii\db\ActiveRecord
      */
     public function actionView($id)
@@ -627,12 +516,6 @@ class SpaceSpotController extends BackendController
             ->where(['id' => $id])
             ->with([
                 'type',
-                'pma',
-                'pma.profile',
-                'cofounder1',
-                'cofounder1.profile',
-                'cofounder2',
-                'cofounder2.profile',
             ])
             ->asArray()
             ->one();
@@ -641,9 +524,9 @@ class SpaceSpotController extends BackendController
     }
 
     /**
-     * 查找活动
-     * @param integer $id 活动ID
-     * @return Activity 活动对象
+     * 查找场地
+     * @param integer $id 场地ID
+     * @return Activity 场地对象
      * @throws NotFoundHttpException 如果没有查找到则抛出404异常
      */
     public function findModel($id)
@@ -653,7 +536,7 @@ class SpaceSpotController extends BackendController
         if (isset($model)) {
             return $model;
         } else {
-            throw new NotFoundHttpException("活动不存在");
+            throw new NotFoundHttpException("场地不存在");
         }
     }
 

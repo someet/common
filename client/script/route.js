@@ -169,6 +169,17 @@ function($routeProvider) {
       templateUrl: '/partial/space-spot/index.html',
       controller: 'SpaceSpotCtrl'
     })
+    //添加场地
+    .when('/space-spot/add', {
+      templateUrl: '/partial/space-spot/view.html',
+      controller: 'SpaceSpotViewCtrl'
+    })
+    //查看场地
+    .when('/space-spot/:id', {
+      templateUrl: '/partial/space-spot/view.html',
+      controller: 'SpaceSpotViewCtrl'
+    })
+
     .otherwise({
       redirectTo: '/dashboard'
     });

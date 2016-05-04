@@ -5,9 +5,9 @@
   </button>
   <form class="navbar-form navbar-right" role="search">
     <div class="form-group">
-      <input type="text" class="form-control" ng-model="name" placeholder="标题">
+      <input type="text" class="form-control" ng-model="name" placeholder="名称">
     </div>
-    <button type="submit" class="btn btn-default" ng-click='getActivity()'>
+    <button type="submit" class="btn btn-default" ng-click='getSpace()'>
       <span class="glyphicon glyphicon-search" aria-hidden="true"></span> 搜索
     </button>
   </form>
@@ -57,11 +57,7 @@
 
               <!-- 场地标题 -->
               {{entity.id}}#
-              <span ng-if="entity.status==10" >[草稿] {{entity.user.username}}：{{entity.name}} - {{entity.desc}}</span>
-              <span ng-if="entity.status==20" >{{entity.user.username}}：{{entity.name}} - {{entity.desc}}</span>
-              <span ng-if="entity.status==15" >[预发布]{{entity.user.username}}：{{entity.name}} - {{entity.desc}}</span>
-              <span ng-if="entity.status==30" >{{entity.user.username}}：{{entity.name}} - {{entity.desc}}[场地关闭]</span>
-
+              <span>{{entity.user.username}}：{{entity.name}} - {{entity.desc}}</span>
             </h3>
           </div>
           <div class="panel-body">

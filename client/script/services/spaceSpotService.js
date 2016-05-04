@@ -30,7 +30,7 @@ angular.module('backendServices')
       },
       //搜索活动名字
       search: function(query){
-        return $http.get('/space-spot/search?title=' + query);
+        return $http.get('/space-spot/search?name=' + query);
       },
       //搜索用户
       searchUser: function(query) {
