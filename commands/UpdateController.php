@@ -47,7 +47,33 @@ class UpdateController  extends \yii\console\Controller
 		}
 
 	}
+	/**
+	 * 修复黑牌更新时间 弥补之前以为更新时间不对的bug
+	 * 如： docker exec -i backend_app_1 ./yii update/fix-black-label（控制器/方法）
+	 * @return 更新函数 不需要返回
+	 */
+	public function actionFixBlackLabel()
+	{
+		// 查出黄牌在一个月之内大于等于三张的最后一张的黄牌更新时间 来更新之前的黑牌时间
+		$yellowCard = YellowCard::find()
+						->select('id,user_id,sum(card_num) card_count,created_at')
+						->where("card_category > 0")
+	                	->andWhere('created_at > (' .getLastEndTime().' - 2419200) and '.'created_at < ' .getLastEndTime())
+	                	->asArray()
+	                	->groupBy('user_id')
+	                	->all();
+	   	if (!empty($yellowCard)) {
+		     foreach ($yellowCard as  $value) {
+				if ($value['card_count'] >= 3) {
+					User::updateAll([
+						'black_time' => $value['created_at'],
+						],['id' => $value['user_id']]);
 
+					}
+		     }
+	     }
+
+	}
 	/**
     * 每周一凌晨更新 黑牌
 	* 执行方式 在命令行
@@ -57,15 +83,18 @@ class UpdateController  extends \yii\console\Controller
 	public function actionUpdateBlackLabel()
 	{
 		// 每周一 2点执行更新 黑牌 主要更新本周一凌晨往前28天的数据
-		// 根据用户id 查询出每周黄牌的数量，超过三个，则更新 user表里面的是否被拉黑字段
-		$yellowCard = YellowCard::find()
-					->select('id,user_id , sum(card_num) card_count')
-					// ->where(['status' => YellowCard::STATUS_NORMAL])
-					->where('card_category > 0')
+		// 根据用户id 查询出每周黄牌的数量，超过三个，则更新 user表里面的是否被拉黑字段 
+		// 2016年05月04日11:09:59 修复 增加在这个期间排除用户已经为黑牌状态，不然还会更新黑牌时间	
+	    $yellowCard = YellowCard::find()
+					->select('yellow_card.id,yellow_card.user_id , sum(yellow_card.card_num) card_count')
+					// ->where(['status' => yellow_card::STATUS_NORMAL])
+					->joinWith('user')
+					->where('yellow_card.card_category > 0')
+					->andWhere(['user.black_label' => User::BLACK_LIST_NO])
 					// 上周一凌晨前28天到上周一凌晨
-	                ->andWhere('created_at > (' .getLastEndTime().' - 2419200) and '.'created_at < ' .getLastEndTime())
+	                ->andWhere('yellow_card.created_at > (' .getLastEndTime().' - 2419200) and '.'yellow_card.created_at < ' .getLastEndTime())
 	                ->asArray()
-	                ->groupBy('user_id')
+	                ->groupBy('yellow_card.user_id')
 	                ->all();
 	     if (!empty($yellowCard)) {
 		     foreach ($yellowCard as  $value) {
