@@ -73,6 +73,7 @@ class UpdateController  extends \yii\console\Controller
 		     }
 	     }
 
+	     return true;
 	}
 	/**
     * 每周一凌晨更新 黑牌
@@ -84,7 +85,7 @@ class UpdateController  extends \yii\console\Controller
 	{
 		// 每周一 2点执行更新 黑牌 主要更新本周一凌晨往前28天的数据
 		// 根据用户id 查询出每周黄牌的数量，超过三个，则更新 user表里面的是否被拉黑字段 
-		// 2016年05月04日11:09:59 修复 增加在这个期间排除用户已经为黑牌状态，不然还会更新黑牌时间	
+		// 2016年05月04日11:09:59 wangshudong 修复 增加在这个期间排除用户已经为黑牌状态，不然还会更新黑牌时间	
 	    $yellowCard = YellowCard::find()
 					->select('yellow_card.id,yellow_card.user_id , sum(yellow_card.card_num) card_count')
 					// ->where(['status' => yellow_card::STATUS_NORMAL])
