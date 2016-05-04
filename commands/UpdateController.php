@@ -58,7 +58,7 @@ class UpdateController  extends \yii\console\Controller
 		$yellowCard = YellowCard::find()
 						->select('id,user_id,sum(card_num) card_count,created_at')
 						->where("card_category > 0")
-	                	->andWhere('created_at > (' .getLastEndTime().' - 2419200) and '.'created_at < ' .getLastEndTime())
+	                	->andWhere('created_at > (' .getLastEndTime().' - 5184000) and '.'created_at < ' .getLastEndTime())
 	                	->asArray()
 	                	->groupBy('user_id')
 	                	->all();
