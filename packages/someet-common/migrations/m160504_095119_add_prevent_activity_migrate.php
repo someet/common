@@ -10,7 +10,6 @@ class m160504_095119_add_prevent_activity_migrate extends Migration
         $items = [
             '/backend/activity/filter-prevent' => ['founder'],
             '/backend/activity/update-status' => ['founder'],
-            '/backend/activity/update-all-prevent' => ['founder'],
         ];
 
         $authItemTemplate = <<<SQL
