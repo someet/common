@@ -381,7 +381,7 @@ class MemberController extends BackendController
                                 ->select('id,user_id , sum(card_num) card_count')
                                 ->where(['user_id' => $yellow_card->user_id])
                                 // ->andWhere(['status' => YellowCard::STATUS_NORMAL])
-                                ->andwhere('card_category > 0')
+                                // ->andwhere('card_category > 0')
                                 // 前一个月 到现在的数据
                                 ->andWhere('created_at > (' .time().' - 2419200) and '.'created_at < ' .time())
                                 ->asArray()
@@ -620,11 +620,15 @@ class MemberController extends BackendController
 
         $model = $this->findOne($id);
 
-        if (!empty($data['email'])) {
+        if (isset($data['email'])) {
             $model->email = $data['email'];
-            if (!$model->validate('email')) {
-                throw new DataValidationFailedException($model->getFirstError('email'));
-            }
+            // if (!$model->validate('email')) {
+            //     throw new DataValidationFailedException($model->getFirstError('email'));
+            // }
+        }        
+
+        if (isset($data['black_label'])) {
+            $model->black_label = $data['black_label'];
         }
 
         if (isset($data['username'])) {

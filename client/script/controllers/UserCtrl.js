@@ -412,7 +412,8 @@ angular.module('controllers')
         bio: $scope.user.profile.bio,
         username: $scope.user.username,
         mobile: $scope.user.mobile,
-        mobile: $scope.user.profile.sex,
+        sex: $scope.user.profile.sex,
+        black_label: $scope.user.black_label,
       };
 
       var user_id = $scope.user.id;
