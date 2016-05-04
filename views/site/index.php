@@ -62,6 +62,9 @@ use yii\helpers\Url;
           <li ng-class="{active:isActive('/share')}">
             <a target="_parent" href="#/share">分享</a>
           </li>
+          <li ng-class="{active:isActive('/space-spot')}">
+            <a target="_parent" href="#/space-spot/list/0">场地</a>
+          </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">
