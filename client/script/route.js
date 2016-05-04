@@ -163,6 +163,12 @@ function($routeProvider) {
         templateUrl: '/partial/sms-template/view.html',
         controller: 'SmsTemplateViewCtrl'
       })
+
+      //根据场地分类id查询场地列表
+    .when('/space-spot/list/:type_id', {
+      templateUrl: '/partial/space-spot/index.html',
+      controller: 'SpaceSpotCtrl'
+    })
     .otherwise({
       redirectTo: '/dashboard'
     });
