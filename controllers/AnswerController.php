@@ -422,7 +422,8 @@ class AnswerController extends BackendController
                 'good_score' => $good_score,
                 'middle_score'=>$middle_score,
                 'bad_score' => $bad_score,
-                'sponsor_score' => $sponsor_score 
+                'sponsor_score' => $sponsor_score,
+                'feedbacks' => $feedbacks
                 ]; 
     }
 

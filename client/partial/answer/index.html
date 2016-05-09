@@ -8,7 +8,7 @@
                     <br> 发起人：{{list[0].activity.user.username}}&nbsp;&nbsp;
                     <br> 活动时间：{{list[0].activity.start_time * 1000 | date: "MM月dd日 HH:mm"}} - {{list[0].activity.end_time * 1000 | date:"MM月dd日 HH:mm"}}&nbsp;&nbsp;
                     <br> 活动地址：{{list[0].activity.address}}&nbsp;&nbsp;
-                    <br> 整体评分：{{ countScore }}&nbsp;&nbsp;
+                    <br> 整体评分：{{ countScore }}分
                     <br> 好评数：{{ goodScore}}&nbsp;&nbsp;中评数：{{ middleScore }}&nbsp;&nbsp;差评数：{{ badScore }}&nbsp;&nbsp;
                     <br> 发起人最后评分：{{ sponsorScore }}&nbsp;&nbsp;
                     <br> 迟到人数比率：{{ list[0].late_ratio }}&nbsp;&nbsp;
@@ -221,16 +221,29 @@
                 <div style="margin:5px;padding:5px;border-radius:10px;border:1px solid rgba(10,10,10,0.1)">{{answer.question_value}}</div>
             </div>
             <br />
-            <div ng-show="entity.feedback" style="margin-left:20px;">
-                <div>
-                    <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">活动得分：</div>
-                    {{entity.feedback.stars}}
+                <div class="row">
+                    <div class="col-md-5">  
+                        <ul class="list-group" ng-show="entity.feedback.stars">
+                          <li class="list-group-item">旧的评分系统</li>
+                          <li class="list-group-item">活动得分：{{entity.feedback.stars}}分</li>
+                          <li class="list-group-item">发起人分：{{entity.feedback.sponsor_stars}}分</li>
+                        </ul>
+                    </div>                
+                    <div class="col-md-5">  
+                        <ul class="list-group" ng-show="entity.feedback">
+                          <li class="list-group-item">新的评分系统</li>
+                          <li class="list-group-item">
+                            整体活动：
+                                <span ng-if="entity.feedback.grade == 1"> 好评</span>
+                                <span ng-if="entity.feedback.grade == 2"> 中评</span>
+                                <span ng-if="entity.feedback.grade == 3"> 差评</span>
+                            </li>
+                          <li class="list-group-item">态度友好：{{entity.feedback.sponsor_start1}}分</li>
+                          <li class="list-group-item">充分准备：{{entity.feedback.sponsor_start2}}分</li>
+                          <li class="list-group-item">现场控制：{{entity.feedback.sponsor_start3}}分</li>
+                        </ul>
+                    </div>
                 </div>
-                <div>
-                    <div style="display:inline-block;color:#333;width:80px;text-align:right;margin-right:10px;">发起人分：</div>
-                    {{entity.feedback.sponsor_stars}}
-                </div>
-            </div>
             <div ng-show="entity.feedback">
                 <div style="margin:10px;margin:5px;color:#999">用户评价：</div>
                 <div style="margin:5px;padding:5px;border-radius:10px;border:1px solid rgba(10,10,10,0.1)"> {{entity.feedback.feedback}}</div>
