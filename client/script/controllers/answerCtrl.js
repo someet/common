@@ -11,15 +11,15 @@ angular.module('controllers')
           $scope.middleScore = data.middle_score;
           $scope.badScore = data.bad_score;
           $scope.sponsorScore = data.sponsor_score;
-          console.log(data);
 
           $scope.countData = {
             apply:$scope.status
           }
 
           var outInfo = '';
-          angular.forEach(data, function(list,index,array){
+          angular.forEach(data.model, function(list,index,array){
 
+          
             outInfo += list.user.username +'('+list.user.profile.name +') 手机：'+ list.user.mobile +' 微信：'+list.user.wechat_id +' 职业：'+list.user.profile.occupation+' 状态：'+list.status+'\n';
             outInfo += list.user.profile.headimgurl+'\n';
               angular.forEach(list.answerItemList, function(item,index,array){
@@ -28,24 +28,25 @@ angular.module('controllers')
 
               outInfo += '\n';
           });
+
           console.log(outInfo);
+          $scope.answerItemList = data.model[0].answerItemList;
+          // console.log(data);
+          // 将所有的反馈给放到一个数组
+          // var feedbacks = [];
+          // angular.forEach(data, function(list,index,array){
+          //   if (typeof list.feedbacks != "undefined" ) {
+          //     feedbacks.push(list.feedback);
+          //   }
+          //     console.log(array);
+          // });
 
-
-          $scope.answerItemList = data[0].answerItemList;
-
-          //将所有的反馈给放到一个数组
-          var feedbacks = [];
-          angular.forEach(data, function(list,index,array){
-            if (list.feedback) {
-              feedbacks.push(list.feedback);
-            }
-          });
-          if (feedbacks.length > 0) {
+          if (data.feedbacks.length > 0) {
             var countScore = 0;
-            angular.forEach(feedbacks, function(list,index,array){
+            angular.forEach(data.feedbacks, function(list,index,array){
               countScore += ((list.stars * 0.8) + (list.sponsor_stars*0.2));
             });
-            var countScore = countScore/feedbacks.length;
+            var countScore = countScore/data.feedbacks.length;
             $scope.countScore = countScore;
           } else {
             $scope.countScore = 0;
