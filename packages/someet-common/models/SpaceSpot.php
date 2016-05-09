@@ -84,4 +84,11 @@ class SpaceSpot extends \yii\db\ActiveRecord
         return $this->hasOne(SpaceType::className(), ['id' => 'type_id']);
     }
 
+    //设备
+    public function getDevices()
+    {
+        return $this->hasMany(SpaceSpotDevice::className(), ['id' => 'device_id'])
+            ->viaTable('r_spot_device', ['spot_id' => 'id']);
+    }
+
 }
