@@ -10,7 +10,7 @@ angular.module('controllers')
           $scope.goodScore = data.good_score;
           $scope.middleScore = data.middle_score;
           $scope.badScore = data.bad_score;
-          $scope.sponsorScore = data.sponsor_score;
+          $scope.sponsorScore = data.sponsor_score.toFixed(2);
 
           $scope.countData = {
             apply:$scope.status
@@ -47,7 +47,7 @@ angular.module('controllers')
               countScore += ((list.stars * 0.8) + (list.sponsor_stars*0.2));
             });
             var countScore = countScore/data.feedbacks.length;
-            $scope.countScore = countScore;
+            $scope.countScore = countScore.toFixed(2);
           } else {
             $scope.countScore = 0;
           }
