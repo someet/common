@@ -75,6 +75,7 @@ class SpaceSpotController extends BackendController
                 $query = SpaceSpot::find()
                     ->with([
                         'type',
+                        'sections',
                     ])
                     ->asArray()
                     ->where($where);
@@ -82,6 +83,7 @@ class SpaceSpotController extends BackendController
                 $query = SpaceSpot::find()
                     ->with([
                         'type',
+                        'sections',
                     ])
                     ->asArray();
         }
@@ -91,6 +93,7 @@ class SpaceSpotController extends BackendController
                 ->where(['id' => $id])
                 ->with([
                     'type',
+                    'sections',
                 ])
                 ->asArray()
                 ->one();
@@ -127,6 +130,7 @@ class SpaceSpotController extends BackendController
         $activity = SpaceSpot::find()
             ->with([
                 'type',
+                'sections',
             ])
             //->join('LEFT JOIN', 'user', 'user.id = activity.created_by')
             ->where(
