@@ -16,6 +16,11 @@ angular.module('backendServices')
           return data;
         });
       },
+      listBySpotId: function(spot_id) {
+        return $http.post('/space-section/list-by-spot-id?spot_id=' + spot_id).then(function (data) {
+          return data;
+        });
+      },
       fetch: function (id) {
         var url = typeof id == 'undefined' ? '/space-section/index' : '/space-section/view?id=' + id;
 

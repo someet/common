@@ -64,6 +64,31 @@ class SpaceSectionController extends BackendController
     }
 
     /**
+     * 根据场地ID获取区间列表
+     *
+     * @param integer $spot_id 场地ID
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function actionListBySpotId($spot_id=0)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        if ($spot_id > 0) {
+            $models = SpaceSection::find()
+                ->where(['spot_id' => $spot_id])
+                ->asArray()
+                ->all();
+        } else {
+            $models = SpaceSection::find()
+                ->asArray()
+                ->all();
+        }
+
+        return $models;
+    }
+
+
+        /**
      * 添加一个场地区间
      *
      * POST 请求 /space-section/create

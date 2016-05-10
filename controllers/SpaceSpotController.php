@@ -175,6 +175,7 @@ class SpaceSpotController extends BackendController
                 ->where(['type_id' => $type_id])
                 ->with([
                     'type',
+                    'sections',
                 ])
                 ->asArray()
                 ->all();
@@ -182,6 +183,7 @@ class SpaceSpotController extends BackendController
             $activities = Activity::find()
                 ->with([
                     'type',
+                    'sections',
                 ])
                 ->asArray()
                 ->all();
@@ -520,6 +522,7 @@ class SpaceSpotController extends BackendController
             ->where(['id' => $id])
             ->with([
                 'type',
+                'sections',
             ])
             ->asArray()
             ->one();

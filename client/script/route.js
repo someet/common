@@ -196,6 +196,21 @@ function($routeProvider) {
       controller: 'SpaceSpotDeviceViewCtrl'
     })
 
+    //查看区间列表
+    .when('/space-section/list/:spot_id', {
+      templateUrl: '/partial/space-section/index.html',
+      controller: 'SpaceSectionListCtrl'
+    })
+    //查看区间
+    .when('/space-section/:id', {
+      templateUrl: '/partial/space-section/view.html',
+      controller: 'SpaceSectionViewCtrl'
+    })
+    //添加区间
+    .when('/space-section/add/:spot_id', {
+      templateUrl: '/partial/space-section/view.html',
+      controller: 'SpaceSectionViewCtrl'
+    })
     .otherwise({
       redirectTo: '/dashboard'
     });
