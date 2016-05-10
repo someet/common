@@ -49,4 +49,14 @@ class SpaceSpotDevice extends \yii\db\ActiveRecord
             'status' => '状态 0 未设置 10 可用 20 不可用',
         ];
     }
+
+    /**
+     * 获取对应场地
+     * @return int|string
+     */
+    public function getSpots()
+    {
+        return $this->hasMany(SpaceSpot::className(), ['id' => 'spot_id'])
+            ->viaTable('r_spot_device', ['device_id' => 'id']);
+    }
 }

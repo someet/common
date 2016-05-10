@@ -65,6 +65,9 @@ use yii\helpers\Url;
           <li ng-class="{active:isActive('/space-spot')}">
             <a target="_parent" href="#/space-spot/list/0">场地</a>
           </li>
+          <li ng-class="{active:isActive('/space-spot-device')}">
+            <a target="_parent" href="#/space-spot-device">设备</a>
+          </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li class="dropdown">

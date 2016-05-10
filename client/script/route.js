@@ -180,6 +180,22 @@ function($routeProvider) {
       controller: 'SpaceSpotViewCtrl'
     })
 
+    //查询场地设备列表
+    .when('/space-spot-device', {
+      templateUrl: '/partial/space-spot-device/index.html',
+      controller: 'SpaceSpotDeviceCtrl'
+    })
+    //添加设备
+    .when('/space-spot-device/add', {
+      templateUrl: '/partial/space-spot-device/view.html',
+      controller: 'SpaceSpotDeviceViewCtrl'
+    })
+    //查看设备
+    .when('/space-spot-device/:id', {
+      templateUrl: '/partial/space-spot-device/view.html',
+      controller: 'SpaceSpotDeviceViewCtrl'
+    })
+
     .otherwise({
       redirectTo: '/dashboard'
     });
