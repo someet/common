@@ -875,7 +875,9 @@ class ActivityController extends BackendController
                 'cofounder1',
                 'cofounder1.profile',
                 'cofounder2',
+                'space',
                 'cofounder2.profile',
+                'space.sections',
             ])
             ->asArray()
             ->one();
