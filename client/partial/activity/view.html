@@ -85,7 +85,7 @@
                         <!-- 地点 -->
                         <div class="detail-label">
                             <span> <i class="icon"><img src="/static/svg/Location.svg"></i> 
-                {{space_spot.area}}
+                {{selectedSpaceSpot.area}}
               </span>
                         </div>
                         <!-- 人数限制 -->
@@ -323,16 +323,17 @@
                       <a ng-click="ctrl.newState(ctrl.searchText)">Create a new one!</a>
                     </md-not-found>
                   </md-autocomplete> -->
-
+<!-- 
                     <div layout="row">
                     <div flex="">
                         <label>场地</label>
                         <md-autocomplete 
-                        md-selected-item="space_spot" 
+                        md-selected-item="selectedSpaceSpot" 
                         placeholder="请选择场地" 
                         md-search-text="spacename" 
-                        md-selected-item-change="getSection(space_spot)"
                         md-items="space_spot in getSpace(spacename)" 
+                        md-selected-item-change="getSection(space_spot.id)"
+                        md-search-text-change="getSection(space_spot.id)"
                         md-item-text="space_spot.name" 
                         md-min-length="0" 
                         md-menu-class="autocomplete-custom-template"
@@ -346,10 +347,12 @@
                     <div flex="">
                         <label>空间</label>
                         <md-autocomplete 
-                        md-selected-item="section" 
+                        md-selected-item-change="getSection(space_spot.id)"
+                        md-search-text-change="getSection(space_spot.id)"
+                        md-selected-item="selectedSection" 
                         placeholder="请选择空间" 
-                        md-search-text="sectionname" 
-                        md-items="section in sections" 
+                        md-search-text="sectionName" 
+                        md-items="section in getSection(space_spot.id)"
                         md-item-text="section.name" 
                         md-min-length="0" 
                         md-menu-class="autocomplete-custom-template">
@@ -359,20 +362,20 @@
                             <md-not-found>No matches found.</md-not-found>
                         </md-autocomplete>
                     </div>
-                    </div>
+                    </div> -->
 
 
                 <div class="row">
                     <div class="col-md-6">
                         请选场地:
-                        <select ng-model="space" ng-options="space in space_spots"  ng-change="getSection()" class="form-control">
-                            <option value="space.name" ng-selected="space_spot.name == space.name ? selected : ''">{{space.name}}</option>
+                        <select ng-model="selectedSpaceSpot"  ng-options="spaceSpot.name for spaceSpot in spaceSpots track by selectedSpaceSpot.id"  ng-change="getSection(selectedSpaceSpot)" class="form-control" >
+                            <option value="">---请选择场地---</option>  
 
                         </select>
                     </div>
                     <div class="col-md-6">
                         请选空间:
-                        <select ng-model="sections" ng-options="sections.name for sections in space_spot.sections" class="form-control">
+                        <select ng-model="selectedSection"  ng-options="section.name for section in selectedSpaceSpot.sections" class="form-control">
                             <option value="">---请选择空间---</option>
                         </select>   
                     </div>
