@@ -51,6 +51,21 @@ angular.module('backendServices')
         search: function(query){
           return $http.get('/activity/search?title=' + query);
         },
+        //搜索场地
+        searchSpace: function(query) {
+          return $http.get('/space-spot/search?name=' + query).then(function (data) {
+
+            return data.models;
+          });
+        },          
+
+        //搜索空间
+        searchSection: function(query) {
+          return $http.get('/space-spot/search?name=' + query).then(function (data) {
+              console.log(data);
+            return data.models;
+          });
+        },        
         //搜索用户
         searchUser: function(query) {
           return $http.get('/member/search?username=' + query);
