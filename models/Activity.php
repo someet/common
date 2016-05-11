@@ -3,6 +3,7 @@
 namespace someet\common\models;
 
 use common\models\ActivityCheckIn;
+use common\models\SpaceSpot;
 use Yii;
 
 /**
@@ -179,6 +180,8 @@ class Activity extends \yii\db\ActiveRecord
             'co_founder4' => '联合创始人4',
             'is_full' => '是否报满',
             'join_people_count' => '已报名的人数',
+            'space_spot_id' => '场地id',
+            'space_section_id' => '空间id',
         ];
     }
 
@@ -257,6 +260,12 @@ class Activity extends \yii\db\ActiveRecord
     public function getType()
     {
         return $this->hasOne(ActivityType::className(), ['id' => 'type_id']);
+    }
+    
+    // 活动的场地
+    public function getSpace()
+    {
+        return $this->hasOne(SpaceSpot::className(), ['id' => 'space_spot_id']);
     }
 
     // 获取对应的问题
