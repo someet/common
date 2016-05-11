@@ -481,41 +481,50 @@ angular.module('controllers', ['ngTagsInput'])
             $scope.$parent.pageName = '活动详情';
 
             // 搜索场地功能
-            $scope.getSpace = function(query) {
-                // $scope.space_spot = $activityManage.searchSpace(query);
+            $scope.getSpace = function() {
+                $scope.space_spot = $activityManage.searchSpace('');
                 // $scope.sections = $scope.space_spot.sections;
-                // return $scope.space_spot;
-                $activityManage.searchSpace(query).then(function(data) {
-                    // $scope.section = data.sections;
-                    // $scope.space_spot = data;
-                    // console.log(data.models.sections);
-                    // console.log(data.sections);
-                    // console.log(data);
-                    return data;
-                });
+                // console.log($scope.sections);
+                return $scope.space_spot;
+                // $activityManage.searchSpace(query).then(function(data) {
+                //     // $scope.section = data.sections;
+                //     // $scope.space_spot = data;
+                //     // console.log(data.models.sections);
+                //     // console.log(data.sections);
+                //     // console.log(data);
+                //     return data;
+                // });
 
             }
 
 
             // 获取场地
             $activityManage.searchSpace('').then(function(data) {
-                $scope.section = data.sections;
-                $scope.space_spots = data;
+                // $scope.section = data.sections;
+                $scope.spaceSpots = data;
                 // console.log(data.models.sections);
                 // console.log(data.sections);
-                console.log(data);
-                return data;
+                console.log($scope.space_spots);
+                // return data;
             });
 
             //搜索空间
-            $scope.getSection = function(space_spot) {
-                if (space_spot != null) {
-                    $scope.sections = space_spot.sections;
-                    console.log(space_spot);
-                } else {
-                    $scope.sections = {};
-                    console.log(22222);
-                }
+            $scope.getSection = function(obj) {
+                // console.log($scope.selectedSpaceSpot);
+                console.log(obj);
+                $scope.sections = obj.sections;
+
+                console.log($scope.sections);
+                // $scope.sections = '';
+                // return $activityManage.fetch(id);
+                // if (space_spot != null) {
+                //     $scope.sections = space_spot.sections;
+                //     console.log(space_spot.sections);
+                //     return $scope.sections;
+                // } else {
+                //     $scope.sections = {};
+                //     console.log(22222);
+                // }
             }  
 
             // 搜索用户功能
@@ -639,7 +648,7 @@ angular.module('controllers', ['ngTagsInput'])
             var id = $routeParams.id;
             if (id > 0) {
                 $activityManage.fetch(id).then(function(data) {
-                    console.log(data);
+                    // console.log(data);
                     $scope.user = {};
                     $scope.dts = {};
                     $scope.entity = data;
@@ -653,10 +662,14 @@ angular.module('controllers', ['ngTagsInput'])
                     $scope.pma = data.pma;
                     $scope.co_founder1 = data.cofounder1;
                     $scope.co_founder2 = data.cofounder2;
-                    $scope.space_spot = data.space;
-                    $scope.section = data.space.sections;
-
-                    $scope.space_spots = $scope.searchSpace('');
+                    $scope.selectedSpaceSpot = data.space;
+                    $scope.selectedSpace = data.space;
+                    $scope.selectedSection = data.space.sections[data.space_section_id];
+                    // console.log($scope.space_spot);
+                    console.log($scope.selectedSection);
+                    // 
+                    console.log($scope.selectedSpaceSpot);
+                    // $scope.space_spots = $scope.searchSpace('');
                     var tags = [];
                     for (var k in data.tags) {
                         var tag = data.tags[k].name;
@@ -687,8 +700,10 @@ angular.module('controllers', ['ngTagsInput'])
                 newEntity.poster = $scope.poster;
                 newEntity.group_code = $scope.group_code;
                 newEntity.pma_type = $scope.entity.pma_type;
-                newEntity.space_spot_id = $scope.space_spot.id;
-                newEntity.space_section_id = $scope.sections.id;
+                newEntity.space_spot_id = $scope.selectedSpaceSpot.id;
+                newEntity.space_section_id = $scope.selectedSection.id;
+                newEntity.area = $scope.selectedSpaceSpot.area;
+                newEntity.address = $scope.selectedSpaceSpot.address;
 
                 if ($scope.user) {
                     newEntity.created_by = $scope.user.id;
@@ -724,7 +739,7 @@ angular.module('controllers', ['ngTagsInput'])
                             .hideDelay(5000)
                             .position("top right"));
 
-                        console.log(data.pma_type);
+                        // console.log(data.pma_type);
                         // $location.path('/activity/list/0');
                     }, function(err) {
                         $mdToast.show($mdToast.simple()

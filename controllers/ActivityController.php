@@ -723,6 +723,22 @@ class ActivityController extends BackendController
             if (!$model->validate('display_order')) {
                 throw new DataValidationFailedException($model->getFirstError('display_order'));
             }
+        }        
+
+        //排序更新
+        if (isset($data['space_spot_id'])) {
+            $model->space_spot_id= $data['space_spot_id'];
+            if (!$model->validate('space_spot_id')) {
+                throw new DataValidationFailedException($model->getFirstError('space_spot_id'));
+            }
+        }        
+
+        //排序更新
+        if (isset($data['space_section_id'])) {
+            $model->space_section_id= $data['space_section_id'];
+            if (!$model->validate('space_section_id')) {
+                throw new DataValidationFailedException($model->getFirstError('space_section_id'));
+            }
         }
 
 
