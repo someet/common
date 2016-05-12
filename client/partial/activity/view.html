@@ -304,7 +304,7 @@
                 <div layout="row">
                     <div flex="30">
                         <label>场地</label>
-                        <md-autocomplete md-selected-item="selectedSpaceSpot" placeholder="请选择场地" md-search-text="spacename" md-items="space_spot in getSpace(spacename)" md-selected-item-change="getSection(selectedSpaceSpot)" md-search-text-change="getSection(selectedSpaceSpot)" md-item-text="space_spot.name" md-min-length="0" md-menu-class="autocomplete-custom-template">
+                        <md-autocomplete md-selected-item="selectedSpaceSpot" placeholder="请选择场地" md-search-text="spacename" md-items="space_spot in getSpace(spacename)" md-search-text-change="getSection(selectedSpaceSpot)" md-item-text="space_spot.name" md-min-length="0" md-menu-class="autocomplete-custom-template">
                             <md-item-template>
                                 <span md-highlight-text="space_spot">{{space_spot.name}}</span>
                             </md-item-template>
@@ -314,13 +314,13 @@
                     <div flex="20">
                         <md-input-container>
                             <label>空间</label>
-                            <md-select ng-model="selectedToppings" multiple>
-                                    <md-option ng-value="topping.name" ng-repeat="topping in selectedSpaceSpot.sections">{{topping.name}}</md-option>
+                            <md-select ng-model="selectedSection" multiple>
+                                    <md-option ng-value="section.id" ng-repeat="section in selectedSpaceSpot.sections">{{section.name}}</md-option>
                             </md-select>
                         </md-input-container>
                     </div>
                     <div flex="50">
-                    <p ng-if="selectedToppings">
+                    <p ng-if="selectedSection">
     {{printSelectedToppings()}}</p>
                     </div>
 

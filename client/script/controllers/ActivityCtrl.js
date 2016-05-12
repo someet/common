@@ -488,37 +488,26 @@ angular.module('controllers', ['ngTagsInput'])
                 return $scope.space_spot;
             }
 
+        $scope.selectedSection = [];
             
-      $scope.selectedToppings = [];
+      
       $scope.printSelectedToppings = function printSelectedToppings() {
-        var numberOfToppings = this.selectedToppings.length;
-        // If there is more than one topping, we add an 'and'
-        // to be gramatically correct. If there are 3+ toppings
-        // we also add an oxford comma.
-        if (numberOfToppings > 1) {
-          var needsOxfordComma = numberOfToppings > 2;
-          var lastToppingConjunction = (needsOxfordComma ? ',' : '') + ' and ';
-          var lastTopping = lastToppingConjunction +
-              this.selectedToppings[this.selectedToppings.length - 1];
-          return this.selectedToppings.slice(0, -1).join(', ') + lastTopping;
-        }
-        return this.selectedToppings.join('');
+        // console.log($scope.selectedSection);
       };
-
             // 获取场地
             $activityManage.searchSpace('').then(function(data) {
                 // $scope.section = data.sections;
                 $scope.spaceSpots = data;
                 // console.log(data.models.sections);
                 // console.log(data.sections);
-                console.log($scope.space_spots);
+                // console.log($scope.space_spots);
                 // return data;
             });
 
             //搜索空间
             $scope.getSection = function(obj) {
-
                 if (obj != null) {
+                    $scope.selectedSection = [];
                 // 把字符转化为对象
                 var obj = JSON.parse(obj)
                 console.log(typeof obj);
@@ -666,9 +655,9 @@ angular.module('controllers', ['ngTagsInput'])
                     $scope.selectedSpace = data.space;
                     $scope.selectedSection = data.space.sections[data.space_section_id];
                     // console.log($scope.space_spot);
-                    console.log($scope.selectedSection);
+                    // console.log($scope.selectedSection);
                     // 
-                    console.log($scope.selectedSpaceSpot);
+                    // console.log($scope.selectedSpaceSpot);
                     // $scope.space_spots = $scope.searchSpace('');
                     var tags = [];
                     for (var k in data.tags) {
@@ -701,9 +690,11 @@ angular.module('controllers', ['ngTagsInput'])
                 newEntity.group_code = $scope.group_code;
                 newEntity.pma_type = $scope.entity.pma_type;
                 newEntity.space_spot_id = $scope.selectedSpaceSpot.id;
-                newEntity.space_section_id = $scope.selectedSection.id;
                 newEntity.area = $scope.selectedSpaceSpot.area;
                 newEntity.address = $scope.selectedSpaceSpot.address;
+                newEntity.space_section_id = $scope.selectedSection;
+                console.log(newEntity.space_section_id);
+                console.log(typeof newEntity.space_section_id);
 
                 if ($scope.user) {
                     newEntity.created_by = $scope.user.id;

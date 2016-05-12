@@ -725,24 +725,6 @@ class ActivityController extends BackendController
                 throw new DataValidationFailedException($model->getFirstError('display_order'));
             }
         }        
-
-        //排序更新
-        if (isset($data['space_spot_id'])) {
-            $model->space_spot_id= $data['space_spot_id'];
-            if (!$model->validate('space_spot_id')) {
-                throw new DataValidationFailedException($model->getFirstError('space_spot_id'));
-            }
-        }        
-
-        //排序更新
-        if (isset($data['space_section_id'])) {
-            $model->space_section_id= $data['space_section_id'];
-            if (!$model->validate('space_section_id')) {
-                throw new DataValidationFailedException($model->getFirstError('space_section_id'));
-            }
-        }
-
-
         //扩展字段一
         if (isset($data['field1'])) {
             $model->field1= $data['field1'];
@@ -828,6 +810,9 @@ class ActivityController extends BackendController
             }
         }
 
+        if (!$model->save()) {
+            throw new ServerErrorHttpException();
+        }
         if (isset($data['space_spot'])) {
             $model->space_spot= $data['space_spot'];
             if (!$model->validate('space_spot')) {
@@ -835,25 +820,17 @@ class ActivityController extends BackendController
             }
         }
 
-        // if (isset($data['space_section'])) {
-        $space_sections = [
-            ['activity_id' => 22, 'space_spot_id' => 11, 'space_section_id' => 33],
-            ['activity_id' => 21, 'space_spot_id' => 12, 'space_section_id' => 34],
-            ['activity_id' => 23, 'space_spot_id' => 12, 'space_section_id' => 35],
-        ];
-            foreach ($space_sections as $space_section) {
+        if (isset($data['space_section_id'])) {
+            foreach ($data['space_section_id'] as $space_section) {
                 $r_activity_space = new RActivitySpace();
-                $r_activity_space->activity_id = $space_section['activity_id'];
-                $r_activity_space->space_spot_id = $space_section['space_spot_id'];
-                $r_activity_space->space_section_id = $space_section['space_section_id'];
+                $r_activity_space->activity_id = $model->id;
+                $r_activity_space->space_spot_id = $data['space_spot_id'];
+                $r_activity_space->space_section_id = $space_section;
                 $r_activity_space->save();
             }
-        // }
-
-
-        if (!$model->save()) {
-            throw new ServerErrorHttpException();
         }
+
+
         \someet\common\models\AdminLog::saveLog('更新活动', $model->primaryKey);
 
         return $this->findModel($id);
