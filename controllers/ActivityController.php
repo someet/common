@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\components\DataValidationFailedException;
 use someet\common\models\Activity;
+use someet\common\models\RActivitySpace;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -826,6 +827,29 @@ class ActivityController extends BackendController
                 throw new DataValidationFailedException($model->getFirstError('co_founder4'));
             }
         }
+
+        if (isset($data['space_spot'])) {
+            $model->space_spot= $data['space_spot'];
+            if (!$model->validate('space_spot')) {
+                throw new DataValidationFailedException($model->getFirstError('space_spot'));
+            }
+        }
+
+        // if (isset($data['space_section'])) {
+        $space_sections = [
+            ['activity_id' => 22, 'space_spot_id' => 11, 'space_section_id' => 33],
+            ['activity_id' => 21, 'space_spot_id' => 12, 'space_section_id' => 34],
+            ['activity_id' => 23, 'space_spot_id' => 12, 'space_section_id' => 35],
+        ];
+            foreach ($space_sections as $space_section) {
+                $r_activity_space = new RActivitySpace();
+                $r_activity_space->activity_id = $space_section['activity_id'];
+                $r_activity_space->space_spot_id = $space_section['space_spot_id'];
+                $r_activity_space->space_section_id = $space_section['space_section_id'];
+                $r_activity_space->save();
+            }
+        // }
+
 
         if (!$model->save()) {
             throw new ServerErrorHttpException();
