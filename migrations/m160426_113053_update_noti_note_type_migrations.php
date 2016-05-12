@@ -3,13 +3,12 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m160329_064047_add_access_token extends Migration
+class m160426_113053_update_noti_note_type_migrations extends Migration
 {
     public function up()
     {
         $sql = <<<SQL
-        ALTER TABLE `user`
-        ADD COLUMN `access_token` VARCHAR(32) NOT NULL COMMENT '用于移动端访问的TOKEN';
+ALTER TABLE `noti` CHANGE COLUMN `note` `note` text NOT NULL COMMENT '通知内容';
 SQL;
         $this->execute($sql);
         return true;
@@ -18,8 +17,9 @@ SQL;
 
     public function down()
     {
-        $this->dropColumn('user', 'access_token');
-        return true;
+        echo "m160426_113053_update_noti_note_type_migrations cannot be reverted.\n";
+
+        return false;
     }
 
     /*
