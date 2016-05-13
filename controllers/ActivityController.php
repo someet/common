@@ -828,20 +828,23 @@ class ActivityController extends BackendController
             }
         }
 
-        if (!$model->save()) {
-            throw new ServerErrorHttpException();
-        }
-
-        if (isset($data['space_section_id'])) {
-            foreach ($data['space_section_id'] as $space_section) {
-                $r_activity_space = RActivitySpace::findOne($space_section);
-                $r_activity_space->activity_id = $model->id;
-                print_r($model->id);
-                die;
-                $r_activity_space->space_spot_id = $data['space_spot_id'];
-                $r_activity_space->space_section_id = $space_section;
-                $r_activity_space->save();
+        if ($model->save()) {
+            if (isset($data['space_section_id'])) {
+                    $delete_spaces = RActivitySpace::deleteAll([
+                                            'activity_id'=> $model->id,
+                                            ]);
+                    // print_r($delete_spaces);
+                    // die;
+                foreach ($data['space_section_id'] as $space_section) {
+                    $r_activity_space = new RActivitySpace();
+                    $r_activity_space->activity_id = $model->id;
+                    $r_activity_space->space_spot_id = $data['space_spot_id'];
+                    $r_activity_space->space_section_id = $space_section;
+                    $r_activity_space->save();
+                }
             }
+        } else {
+            throw new ServerErrorHttpException();
         }
 
 
