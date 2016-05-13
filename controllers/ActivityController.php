@@ -454,7 +454,8 @@ class ActivityController extends BackendController
 
         $start_time = isset($data['start_time']) ? $data['start_time'] : 0;
         $data['week'] = $start_time > 0 ? date('w', $start_time) : 0;
-
+        // print_r($data);
+        // die;
         $model = new Activity;
 
         if ($model->load($data, '') && $model->save()) {
@@ -833,13 +834,13 @@ class ActivityController extends BackendController
 
         if (isset($data['space_section_id'])) {
             foreach ($data['space_section_id'] as $space_section) {
-                print_r($space_section);
-                // die;
                 $r_activity_space = RActivitySpace::findOne($space_section);
-                // $r_activity_space->activity_id = $model->id;
-                // $r_activity_space->space_spot_id = $data['space_spot_id'];
-                // $r_activity_space->space_section_id = $space_section;
-                // $r_activity_space->save();
+                $r_activity_space->activity_id = $model->id;
+                print_r($model->id);
+                die;
+                $r_activity_space->space_spot_id = $data['space_spot_id'];
+                $r_activity_space->space_section_id = $space_section;
+                $r_activity_space->save();
             }
         }
 

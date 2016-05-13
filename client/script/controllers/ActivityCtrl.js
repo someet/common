@@ -507,12 +507,17 @@ angular.module('controllers', ['ngTagsInput'])
             //搜索空间
             $scope.getSection = function(obj) {
                 if (obj != null) {
+                console.log($scope.selectedSpaceSpot.id);
                     $scope.selectedSection = [];
-                // 把字符转化为对象
-                var obj = JSON.parse(obj)
-                console.log(typeof obj);
-                $scope.sections = obj.sections;
-
+                    // 把字符转化为对象
+                    if (typeof obj == 'string' ) {
+                        console.log(typeof obj);
+                        var obj = JSON.parse(obj)
+                        $scope.sections = obj.sections;
+                    }else if (typeof obj == 'object') {
+                        console.log(typeof obj);
+                        $scope.sections = obj.sections;
+                    }
                 }
             }  
 
@@ -626,6 +631,7 @@ angular.module('controllers', ['ngTagsInput'])
                 };
                 startCode();
             };
+
             $scope.pma_type_count = [
                 { pma_type: 0, name: '线上' },
                 { pma_type: 1, name: '线下' },
@@ -653,13 +659,14 @@ angular.module('controllers', ['ngTagsInput'])
                     $scope.co_founder2 = data.cofounder2;
                     $scope.selectedSpaceSpot = data.space;
                     $scope.selectedSpace = data.space;
-                    console.log(data);
+                    // console.log(data);
                     // $scope.selectedSection = data.space.sections[data.space_section_id];
+                    $scope.selectedSection = [];
                     angular.forEach(data.sections, function(value, key) {
-                        console.log(value);
+                        $scope.selectedSection.push(value.space_section_id);
                     });
-
-                    $scope.selectedSection = data.sections;
+                    console.log(typeof $scope.selectedSection);
+                    // $scope.selectedSection = data.sections;
                     // console.log($scope.space_spot);
                     // console.log($scope.selectedSection);
                     // 
@@ -701,6 +708,7 @@ angular.module('controllers', ['ngTagsInput'])
                 newEntity.space_section_id = $scope.selectedSection;
                 console.log(newEntity.space_section_id);
                 console.log(typeof newEntity.space_section_id);
+                console.log(newEntity.space_spot_id);
 
                 if ($scope.user) {
                     newEntity.created_by = $scope.user.id;
