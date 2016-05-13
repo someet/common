@@ -479,7 +479,7 @@ class AnswerController extends BackendController
                 'feedbacks' => $feedbacks
                 ]; 
     }
-
+    }
     /**
      * 查找报名
      * @param  integer $id 报名id
