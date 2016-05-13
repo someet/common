@@ -653,7 +653,13 @@ angular.module('controllers', ['ngTagsInput'])
                     $scope.co_founder2 = data.cofounder2;
                     $scope.selectedSpaceSpot = data.space;
                     $scope.selectedSpace = data.space;
-                    $scope.selectedSection = data.space.sections[data.space_section_id];
+                    console.log(data);
+                    // $scope.selectedSection = data.space.sections[data.space_section_id];
+                    angular.forEach(data.sections, function(value, key) {
+                        console.log(value);
+                    });
+
+                    $scope.selectedSection = data.sections;
                     // console.log($scope.space_spot);
                     // console.log($scope.selectedSection);
                     // 

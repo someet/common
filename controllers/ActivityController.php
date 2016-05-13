@@ -458,6 +458,16 @@ class ActivityController extends BackendController
         $model = new Activity;
 
         if ($model->load($data, '') && $model->save()) {
+
+            if (isset($data['space_section_id'])) {
+                foreach ($data['space_section_id'] as $space_section) {
+                    $r_activity_space =new RActivitySpace();
+                    $r_activity_space->activity_id = $model->id;
+                    $r_activity_space->space_spot_id = $data['space_spot_id'];
+                    $r_activity_space->space_section_id = $space_section;
+                    $r_activity_space->save();
+                }
+            }
             // 保存操作记录
             \someet\common\models\AdminLog::saveLog('添加活动', $model->primaryKey);
             return Activity::findOne($model->id);
@@ -810,23 +820,26 @@ class ActivityController extends BackendController
             }
         }
 
+        if (isset($data['space_spot_id'])) {
+            $model->space_spot_id= $data['space_spot_id'];
+            if (!$model->validate('space_spot_id')) {
+                throw new DataValidationFailedException($model->getFirstError('space_spot_id'));
+            }
+        }
+
         if (!$model->save()) {
             throw new ServerErrorHttpException();
-        }
-        if (isset($data['space_spot'])) {
-            $model->space_spot= $data['space_spot'];
-            if (!$model->validate('space_spot')) {
-                throw new DataValidationFailedException($model->getFirstError('space_spot'));
-            }
         }
 
         if (isset($data['space_section_id'])) {
             foreach ($data['space_section_id'] as $space_section) {
-                $r_activity_space = new RActivitySpace();
-                $r_activity_space->activity_id = $model->id;
-                $r_activity_space->space_spot_id = $data['space_spot_id'];
-                $r_activity_space->space_section_id = $space_section;
-                $r_activity_space->save();
+                print_r($space_section);
+                // die;
+                $r_activity_space = RActivitySpace::findOne($space_section);
+                // $r_activity_space->activity_id = $model->id;
+                // $r_activity_space->space_spot_id = $data['space_spot_id'];
+                // $r_activity_space->space_section_id = $space_section;
+                // $r_activity_space->save();
             }
         }
 
@@ -898,6 +911,24 @@ class ActivityController extends BackendController
             ])
             ->asArray()
             ->one();
+        $section = RActivitySpace::find()
+                    ->where(['activity_id' => $id, 'space_spot_id' => $model['space_spot_id']])
+                    ->asArray()
+                    ->all();
+        $space_section = [];
+
+        // die;
+        
+        foreach ($section as $key => $value) {
+            $space_section[$key] = $value['space_section_id'];
+        }
+
+        // die;
+        foreach ($model as $key => $value) {
+            $model['sections'] = $section;
+        }
+        // echo "<pre>";
+        // print_r($model);
 
         return $model;
     }
