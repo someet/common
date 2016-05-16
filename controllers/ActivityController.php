@@ -5,7 +5,7 @@ namespace app\controllers;
 use app\components\DataValidationFailedException;
 use someet\common\models\Activity;
 use someet\common\models\RActivitySpace;
-use common\models\SpaceSection;
+use someet\common\models\SpaceSection;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
