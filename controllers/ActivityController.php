@@ -458,6 +458,8 @@ class ActivityController extends BackendController
         $model = new Activity;
 
         if ($model->load($data, '') && $model->save()) {
+            // print_r($data['space_section_id']);
+            // die;
             if (!empty($data['space_spot_id']) && isset($data['space_section_id'])) {
                 if ($data['space_section_id'] > 0) {
                     foreach ($data['space_section_id'] as $space_section) {
@@ -841,7 +843,6 @@ class ActivityController extends BackendController
         }
 
         if ($model->save()) {
-            // print_r(isset($data['space_section_id']));
             // 当场地id不为空时
             if (!empty($data['space_spot_id']) && isset($data['space_section_id']) ) {
                 // 当空间没有选择时默认存储全部
@@ -849,6 +850,7 @@ class ActivityController extends BackendController
                     $delete_spaces = RActivitySpace::deleteAll([
                         'activity_id'=> $model->id,
                         ]);
+            print_r($data['space_section_id']);
                     foreach ($data['space_section_id'] as $space_section) {
                         $r_activity_space =new RActivitySpace();
                         $r_activity_space->activity_id = $model->id;
