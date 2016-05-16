@@ -684,10 +684,16 @@ angular.module('controllers', ['ngTagsInput'])
                     newEntity.address = $scope.selectedSpaceSpot.address;
                     newEntity.space_spot_id = $scope.selectedSpaceSpot.id;
                 }
-                if ($scope.selectedSection) {
+                // 新创建活动时 未定义 更新时数组为0
+                if (typeof($scope.selectedSection) == 'undefined') {
                     newEntity.space_section_id = 0;
-                }else{
-                    newEntity.space_section_id = $scope.selectedSection;
+                } else {
+
+                    if ($scope.selectedSection.length == 0) {
+                        newEntity.space_section_id = 0;
+                    }else{
+                        newEntity.space_section_id = $scope.selectedSection;
+                    }
                 }
                 if ($scope.user) {
                     newEntity.created_by = $scope.user.id;
