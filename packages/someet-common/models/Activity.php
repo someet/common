@@ -1,9 +1,6 @@
 <?php
 
 namespace someet\common\models;
-
-use common\models\ActivityCheckIn;
-use common\models\SpaceSpot;
 use Yii;
 
 /**
@@ -256,7 +253,10 @@ class Activity extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'co_founder4']);
     }
 
-    // 活动的类型
+    /**
+     * 类型
+     * @return \yii\db\ActiveQuery
+     */
     public function getType()
     {
         return $this->hasOne(ActivityType::className(), ['id' => 'type_id']);
@@ -268,22 +268,49 @@ class Activity extends \yii\db\ActiveRecord
         return $this->hasOne(SpaceSpot::className(), ['id' => 'space_spot_id']);
     }
 
-    // 获取对应的问题
+    /**
+     * 活动问题
+     * @return \yii\db\ActiveQuery
+     */
     public function getQuestion()
     {
         return $this->hasOne(Question::className(), ['activity_id' => 'id']);
     }
 
-    // 活动报名列表
+    /**
+     * 报名列表
+     * @return \yii\db\ActiveQuery
+     */
     public function getAnswerList()
     {
         return $this->hasMany(Answer::className(), ['activity_id' => 'id']);
     }
 
-    // 活动反馈列表
+    /**
+     * 反馈列表
+     * @return \yii\db\ActiveQuery
+     */
     public function getFeedbackList()
     {
         return $this->hasMany(ActivityFeedback::className(), ['activity_id' => 'id']);
+    }
+
+    /**
+     * 黄牌列表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getYellowCardList()
+    {
+        return $this->hasMany(YellowCard::className(), ['activity_id' => 'id']);
+    }
+
+    /**
+     * 签到列表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCheckInList()
+    {
+        return $this->hasMany(ActivityCheckIn::className(), ['activity_id' => 'id']);
     }
 }
 

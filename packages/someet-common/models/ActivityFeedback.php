@@ -95,17 +95,28 @@ class ActivityFeedback extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * 用户
+     * @return \yii\db\ActiveQuery
+     */
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
+    /**
+     * 活动
+     * @return \yii\db\ActiveQuery
+     */
     public function getActivity()
     {
         return $this->hasOne(Activity::className(), ['id' => 'activity_id']);
     }
 
-    //活动报名的对象
+    /**
+     * 活动报名
+     * @return \yii\db\ActiveQuery
+     */
     public function getAnswer()
     {
         return $this->hasOne(Answer::className(), ['user_id' => 'user_id', 'activity_id' => 'activity_id']);

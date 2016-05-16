@@ -5,21 +5,22 @@ namespace someet\common\models;
 use Yii;
 
 /**
- * This is the model class for table "noti_type".
+ * This is the model class for table "space_section".
  *
  * @property integer $id
  * @property string $name
- * @property string $mark
+ * @property integer $spot_id
+ * @property integer $people
  * @property integer $status
  */
-class NotiType extends \yii\db\ActiveRecord
+class SpaceSection extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'noti_type';
+        return 'space_section';
     }
 
     /**
@@ -29,9 +30,8 @@ class NotiType extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            [['status'], 'integer'],
-            [['name'], 'string', 'max' => 60],
-            [['mark'], 'string', 'max' => 180]
+            [['spot_id', 'people', 'status'], 'integer'],
+            [['name'], 'string', 'max' => 180],
         ];
     }
 
@@ -42,9 +42,10 @@ class NotiType extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'mark' => 'Mark',
-            'status' => 'Status',
+            'name' => '空间名称',
+            'spot_id' => '地点编号',
+            'people' => '推荐人数',
+            'status' => '状态',
         ];
     }
 }

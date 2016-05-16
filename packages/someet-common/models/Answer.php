@@ -197,16 +197,28 @@ class Answer extends \yii\db\ActiveRecord
         return $fields;
     }
 
+    /**
+     * 回答项列表
+     * @return \yii\db\ActiveQuery
+     */
     public function getAnswerItemList()
     {
         return $this->hasMany(AnswerItem::className(), ['question_id' => 'question_id', 'user_id' => 'user_id']);
     }
 
+    /**
+     * 活动
+     * @return \yii\db\ActiveQuery
+     */
     public function getActivity()
     {
         return $this->hasOne(Activity::className(), ['id' => 'activity_id']);
     }
 
+    /**
+     * 用户
+     * @return \yii\db\ActiveQuery
+     */
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
