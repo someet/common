@@ -3,13 +3,12 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m160329_064047_add_access_token extends Migration
+class m160426_130947_add_pma_type_migrations extends Migration
 {
     public function up()
     {
         $sql = <<<SQL
-        ALTER TABLE `user`
-        ADD COLUMN `access_token` VARCHAR(32) NOT NULL COMMENT '用于移动端访问的TOKEN';
+ALTER TABLE `activity` ADD COLUMN `pma_type` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否是线上pma 或线下pma 0 线上 1 线下' AFTER `principal`;
 SQL;
         $this->execute($sql);
         return true;
@@ -18,8 +17,9 @@ SQL;
 
     public function down()
     {
-        $this->dropColumn('user', 'access_token');
-        return true;
+        echo "m160426_130947_add_pma_type_migrations cannot be reverted.\n";
+
+        return false;
     }
 
     /*

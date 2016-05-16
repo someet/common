@@ -87,16 +87,16 @@ class User extends BaseUser
             //'usernameTrim'     => ['username', 'trim'],
 
             // email rules
-            'emailPattern'  => ['email', 'email'],
-            'emailLength'   => ['email', 'string', 'max' => 200],
-            'emailUnique'   => ['email', 'unique', 'message' => Yii::t('user', 'This email address has already been taken')],
-            'emailTrim'     => ['email', 'trim'],
+            // 'emailPattern'  => ['email', 'email'],
+            // 'emailLength'   => ['email', 'string', 'max' => 200],
+            // 'emailUnique'   => ['email', 'unique', 'message' => Yii::t('user', 'This email address has already been taken')],
+            // 'emailTrim'     => ['email', 'trim'],
 
             // password rules
             'passwordRequired' => ['password', 'required', 'on' => ['register']],
             'passwordLength'   => ['password', 'string', 'min' => 6, 'on' => ['register', 'create']],
 
-            [['email','password'], 'required', 'on'=>'signup'],
+            // [['email','password'], 'required', 'on'=>'signup'],
 
             ['black_label', 'default', 'value' => self::BLACK_LIST_NO],
 
@@ -305,13 +305,19 @@ class User extends BaseUser
         return $this->save();
     }
 
-    // Profile
+    /**
+     * Profile
+     * @return \yii\db\ActiveQuery
+     */
     public function getProfile()
     {
         return $this->hasOne(Profile::className(), ['user_id' => 'id']);
     }
 
-    // 活动列表
+    /**
+     * 活动列表
+     * @return \yii\db\ActiveQuery
+     */
     public function getActivity()
     {
         return $this->hasMany(Activity::className(), ['created_by' => 'id']);
