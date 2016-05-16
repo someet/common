@@ -157,6 +157,7 @@ class User extends BaseUser
     /**
      * @inheritdoc
      */
+    /*
     public function afterSave($insert, $changedAttributes)
     {
         if ($insert) {
@@ -173,6 +174,7 @@ class User extends BaseUser
         }
         parent::afterSave($insert, $changedAttributes);
     }
+    */
 
     /**
      * @inheritdoc
@@ -321,9 +323,67 @@ class User extends BaseUser
         return $this->hasMany(AuthAssignment::className(), ['user_id' => 'id']);
     }
 
-    // 活动报名列表
+    /**
+     * 活动报名列表
+     * @return \yii\db\ActiveQuery
+     */
     public function getAnswerList()
     {
         return $this->hasMany(Answer::className(), ['user_id' => 'id']);
     }
+
+    /**
+     * 黄牌列表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getYelloCardList()
+    {
+        return $this->hasMany(YellowCard::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * Uga问题列表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUgaQuestionList()
+    {
+        return $this->hasMany(UgaQuestion::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * Uga回答列表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUgaAnswerList()
+    {
+        return $this->hasMany(UgaAnswer::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * Uga点赞列表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUgaPraiseList()
+    {
+        return $this->hasMany(UgaPraise::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * 签到列表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCheckInList()
+    {
+        return $this->hasMany(ActivityCheckIn::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * 反馈列表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFeedbackList()
+    {
+        return $this->hasMany(ActivityFeedback::className(), ['user_id', 'id']);
+    }
+
 }
