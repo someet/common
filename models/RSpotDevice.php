@@ -5,19 +5,20 @@ namespace someet\common\models;
 use Yii;
 
 /**
- * This is the model class for table "noti_from_type".
+ * This is the model class for table "r_spot_device".
  *
  * @property integer $id
- * @property string $name
+ * @property integer $spot_id
+ * @property integer $device_id
  */
-class NotiFromType extends \yii\db\ActiveRecord
+class RSpotDevice extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'noti_from_type';
+        return 'r_spot_device';
     }
 
     /**
@@ -26,8 +27,7 @@ class NotiFromType extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
-            [['name'], 'string', 'max' => 60]
+            [['spot_id', 'device_id'], 'integer'],
         ];
     }
 
@@ -38,7 +38,8 @@ class NotiFromType extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
+            'spot_id' => '空间编号',
+            'device_id' => '设备编号',
         ];
     }
 }
