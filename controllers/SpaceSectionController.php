@@ -1,10 +1,8 @@
 <?php
-
 namespace app\controllers;
 
 use app\components\DataValidationFailedException;
-use someet\common\models\Activity;
-use someet\common\models\ActivityType;
+use common\models\SpaceSection;
 use Yii;
 use yii\base\Exception;
 use yii\filters\VerbFilter;
@@ -15,12 +13,12 @@ use yii\web\ServerErrorHttpException;
 
 /**
  *
- * 活动类型控制器
+ * 场地区间控制器
  *
  * @author Maxwell Du <maxwelldu@someet.so>
  * @package app\controllers
  */
-class ActivityTypeController extends BackendController
+class SpaceSectionController extends BackendController
 {
 
     /**
@@ -39,23 +37,24 @@ class ActivityTypeController extends BackendController
                     'view' => ['get'],
                 ],
             ],
+            /*
             'access' => [
                 'class' => '\app\components\AccessControl',
             ],
+            */
         ];
     }
 
     /**
-     * 活动类型列表
+     * 场地区间列表
      *
      * @return array|\yii\db\ActiveRecord[]
      */
     public function actionIndex()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $types = ActivityType::find()
+        $types = SpaceSection::find()
             ->orderBy([
-                'display_order' => SORT_ASC,
                 'id' => SORT_DESC,
             ])
             ->asArray()
@@ -65,14 +64,38 @@ class ActivityTypeController extends BackendController
     }
 
     /**
-     * 添加一个活动类型
+     * 根据场地ID获取区间列表
      *
-     * POST 请求 /activity-type/create
+     * @param integer $spot_id 场地ID
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function actionListBySpotId($spot_id=0)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        if ($spot_id > 0) {
+            $models = SpaceSection::find()
+                ->where(['spot_id' => $spot_id])
+                ->asArray()
+                ->all();
+        } else {
+            $models = SpaceSection::find()
+                ->asArray()
+                ->all();
+        }
+
+        return $models;
+    }
+
+
+        /**
+     * 添加一个场地区间
+     *
+     * POST 请求 /space-section/create
      *
      * ~~~
      * {
-     *   "name": <string: 活动名称>,
-     *   "display_order": <int: 排序，此字段为空为默认值 99>
+     *   "name": <string: 区间名称>,
      * }
      * ~~~
      *
@@ -95,7 +118,6 @@ class ActivityTypeController extends BackendController
      * "data": {
      *   "id": 10,
      *   "name": "户外",
-     *   "display_order": 99,
      *   "status": 10
      * },
      * "status_code": 200
@@ -111,11 +133,11 @@ class ActivityTypeController extends BackendController
         $response->format = Response::FORMAT_JSON;
 
         $data = $request->post();
-        $model = new ActivityType;
+        $model = new SpaceSection();
 
         if ($model->load($data, '') && $model->save()) {
-            \someet\common\models\AdminLog::saveLog('活动类型添加成功', $model->primaryKey);
-            return ActivityType::findOne($model->id);
+            \someet\common\models\AdminLog::saveLog('场地区间添加成功', $model->primaryKey);
+            return SpaceSection::findOne($model->id);
         } elseif ($model->hasErrors()) {
             $errors = $model->getFirstErrors();
             throw new DataValidationFailedException(array_pop($errors));
@@ -125,14 +147,13 @@ class ActivityTypeController extends BackendController
     }
 
     /**
-     * 修改 类型
+     * 修改 场地区间
      *
-     * POST 提交到 /activity-type/update?id=10
+     * POST 提交到 /space-section/update?id=10
      *
      * ~~~
      * {
      *   "name": "户外1",
-     *   "display_order": 96
      * }
      * ~~~
      *
@@ -148,7 +169,6 @@ class ActivityTypeController extends BackendController
      *   "data": {
      *     "id": 10,
      *     "name": "户外1",
-     *     "display_order": 96,
      *     "status": 10
      *   },
      *   "status_code": 200
@@ -182,10 +202,10 @@ class ActivityTypeController extends BackendController
             }
         }
 
-        if (isset($data['display_order'])) {
-            $model->display_order = $data['display_order'];
-            if (!$model->validate('display_order')) {
-                throw new DataValidationFailedException($model->getFirstError('display_order'));
+        if (isset($data['people'])) {
+            $model->people = $data['people'];
+            if (!$model->validate('people')) {
+                throw new DataValidationFailedException($model->getFirstError('people'));
             }
         }
 
@@ -200,13 +220,13 @@ class ActivityTypeController extends BackendController
             throw new ServerErrorHttpException();
         }
 
-        \someet\common\models\AdminLog::saveLog('更新活动类型', $model->primaryKey);
+        \someet\common\models\AdminLog::saveLog('更新场地区间', $model->primaryKey);
         return $this->findModel($id);
     }
 
     /**
-     * 删除活动
-     * POST 请求 /activity-type/delete?id=10
+     * 删除场地区间
+     * POST 请求 /space-section/delete?id=10
      *
      * @param $id
      * @return array
@@ -230,23 +250,19 @@ class ActivityTypeController extends BackendController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = $this->findModel($id);
 
-        // 检查该类型下是否有活动, 如果有则提示不能删除
-        if (Activity::findOne(['type_id' => $id])) {
-            throw new ServerErrorHttpException('当前分类下还有活动, 无法删除');
-        }
-
-        if ($model->delete() === false) {
+        $model->status = SpaceSection::STATUS_DELETE;
+        if (!$model->save()) {
             throw new ServerErrorHttpException('删除失败');
         }
 
-        \someet\common\models\AdminLog::saveLog('删除活动分类', $model->primaryKey);
+        \someet\common\models\AdminLog::saveLog('删除场地分类', $model->primaryKey);
         return [];
     }
 
     /**
-     * 查看一个活动分类
-     * @param integer $id 活动分类ID
-     * @return ActivityType 活动分类对象
+     * 查看一个场地区间
+     * @param integer $id 场地区间ID
+     * @return SpaceSection 场地区间对象
      */
     public function actionView($id)
     {
@@ -257,20 +273,21 @@ class ActivityTypeController extends BackendController
     }
 
     /**
-     * 查找活动分类
-     * @param integer $id 活动分类id
-     * @return ActivityType 活动分类对象
-     * @throws NotFoundHttpException 如果找不到活动分类则抛出404异常
+     * 查找场地区间
+     * @param integer $id 场地区间id
+     * @return SpaceSection 场地区间对象
+     * @throws NotFoundHttpException 如果找不到分类则抛出404异常
      */
     public function findModel($id)
     {
-        $model = ActivityType::findOne($id);
+        $model = SpaceSection::findOne($id);
 
         if (isset($model)) {
             return $model;
         } else {
-            throw new NotFoundHttpException("类型不存在");
+            throw new NotFoundHttpException("场地区间不存在");
         }
     }
 
 }
+
