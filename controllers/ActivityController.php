@@ -845,8 +845,6 @@ class ActivityController extends BackendController
             if (!empty($data['space_spot_id'])) {
                 // 当空间没有选择时默认存储全部
                 if ($data['space_section_id'] > 0) {
-                    print_r($data['space_section_id']);
-                    echo "1111111";
                     $delete_spaces = RActivitySpace::deleteAll([
                         'activity_id'=> $model->id,
                         ]);
