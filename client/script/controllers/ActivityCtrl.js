@@ -684,7 +684,7 @@ angular.module('controllers', ['ngTagsInput'])
                     newEntity.address = $scope.selectedSpaceSpot.address;
                     newEntity.space_spot_id = $scope.selectedSpaceSpot.id;
                 }
-                if ($scope.selectedSection.length == 0) {
+                if ($scope.selectedSection) {
                     newEntity.space_section_id = 0;
                 }else{
                     newEntity.space_section_id = $scope.selectedSection;
