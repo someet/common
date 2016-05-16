@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use app\components\DataValidationFailedException;
-use common\models\SpaceType;
+use someet\common\models\SpaceType;
 use Yii;
 use yii\base\Exception;
 use yii\filters\VerbFilter;
