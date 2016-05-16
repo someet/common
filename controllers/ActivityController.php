@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\components\DataValidationFailedException;
 use someet\common\models\Activity;
 use someet\common\models\RActivitySpace;
+use common\models\SpaceSection;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -460,12 +461,26 @@ class ActivityController extends BackendController
 
         if ($model->load($data, '') && $model->save()) {
 
-            if (isset($data['space_section_id'])) {
+            if ($data['space_section_id'] > 0) {
                 foreach ($data['space_section_id'] as $space_section) {
                     $r_activity_space =new RActivitySpace();
                     $r_activity_space->activity_id = $model->id;
                     $r_activity_space->space_spot_id = $data['space_spot_id'];
                     $r_activity_space->space_section_id = $space_section;
+                    $r_activity_space->save();
+                }
+            } else {
+                $space_section = SpaceSection::find()
+                                ->where(['spot_id' => $data['space_spot_id']])
+                                ->asArray()
+                                ->all();
+                // print_r($space_section);
+                // die;
+                foreach ($space_section as $section) {
+                    $r_activity_space =new RActivitySpace();
+                    $r_activity_space->activity_id = $model->id;
+                    $r_activity_space->space_spot_id = $data['space_spot_id'];
+                    $r_activity_space->space_section_id = $section['id'];
                     $r_activity_space->save();
                 }
             }
@@ -829,12 +844,10 @@ class ActivityController extends BackendController
         }
 
         if ($model->save()) {
-            if (isset($data['space_section_id'])) {
+            if ($data['space_section_id'] > 0) {
                     $delete_spaces = RActivitySpace::deleteAll([
                                             'activity_id'=> $model->id,
                                             ]);
-                    // print_r($delete_spaces);
-                    // die;
                 foreach ($data['space_section_id'] as $space_section) {
                     $r_activity_space = new RActivitySpace();
                     $r_activity_space->activity_id = $model->id;
@@ -842,7 +855,7 @@ class ActivityController extends BackendController
                     $r_activity_space->space_section_id = $space_section;
                     $r_activity_space->save();
                 }
-            }
+            } 
         } else {
             throw new ServerErrorHttpException();
         }

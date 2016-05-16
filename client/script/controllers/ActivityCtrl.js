@@ -665,7 +665,6 @@ angular.module('controllers', ['ngTagsInput'])
                     angular.forEach(data.sections, function(value, key) {
                         $scope.selectedSection.push(value.space_section_id);
                     });
-                    console.log(typeof $scope.selectedSection);
                     // $scope.selectedSection = data.sections;
                     // console.log($scope.space_spot);
                     // console.log($scope.selectedSection);
@@ -705,10 +704,12 @@ angular.module('controllers', ['ngTagsInput'])
                 newEntity.space_spot_id = $scope.selectedSpaceSpot.id;
                 newEntity.area = $scope.selectedSpaceSpot.area;
                 newEntity.address = $scope.selectedSpaceSpot.address;
-                newEntity.space_section_id = $scope.selectedSection;
+                if (newEntity.space_section_id == null) {
+                    newEntity.space_section_id = 0;                    
+                }else{
+                    newEntity.space_section_id = $scope.selectedSection;
+                }
                 console.log(newEntity.space_section_id);
-                console.log(typeof newEntity.space_section_id);
-                console.log(newEntity.space_spot_id);
 
                 if ($scope.user) {
                     newEntity.created_by = $scope.user.id;

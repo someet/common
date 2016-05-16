@@ -315,14 +315,12 @@
                         <md-input-container>
                             <label>空间</label>
                             <md-select ng-model="selectedSection" multiple>
-                                        <md-option ng-value="0">全部</md-option>
                                         <md-option ng-value="section.id" ng-repeat="section in selectedSpaceSpot.sections">{{section.name}}</md-option>
                             </md-select>
                         </md-input-container>
                     </div>
                     <div flex="50">
-                    <p ng-if="selectedSection">
-    {{printSelectedToppings()}}</p>
+                        空间不选择默认为全部
                     </div>
 
                 </div>
