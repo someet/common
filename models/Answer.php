@@ -32,6 +32,7 @@ use Yii;
  * @property integer $apply_status
  * @property integer $cancel_apply_time
  * @property integer $leave_time
+ * @property string $reject_reason
  */
 class Answer extends \yii\db\ActiveRecord
 {
@@ -50,7 +51,14 @@ class Answer extends \yii\db\ActiveRecord
     const STATUS_SMS_SUCC = 1;
     /* 短信发送失败 */
     const STATUS_SMS_Fail = 2;
-
+     /*好评*/
+    const GOOD_SCORE = 1;
+     /*中评*/
+    const MIDDLE_SCORE = 2;
+    /*差评*/
+    const BAD_SCORE = 3;
+    /*默认分数*/
+    const DEFAULT_SCORE = 0;
     /* 微信模板消息未发送 */
     const STATUS_WECHAT_TEMPLATE_YET = 0;
     /* 微信模板消息发送成功 */
@@ -117,6 +125,7 @@ class Answer extends \yii\db\ActiveRecord
             [['question_id'], 'required'],
             [['question_id', 'activity_id', 'user_id', 'is_finish', 'is_send', 'is_feedback', 'send_at', 'created_at', 'updated_at', 'status', 'wechat_template_push_at', 'wechat_template_is_send', 'wechat_template_msg_id', 'join_noti_is_send', 'join_noti_send_at', 'join_noti_wechat_template_push_at', 'join_noti_wechat_template_is_send', 'join_noti_wechat_template_msg_id', 'arrive_status', 'leave_status', 'apply_status', 'cancel_apply_time', 'leave_time'], 'integer'],
             [['leave_msg'], 'string', 'max' => 180],
+            [['reject_reason'], 'string', 'max' => 255],
             [['status'], 'default', 'value' => 10],
             [['question_id', 'user_id'], 'unique', 'targetAttribute' => ['question_id', 'user_id'], 'message' => 'The combination of Question ID and User ID has already been taken.']
         ];
@@ -153,6 +162,8 @@ class Answer extends \yii\db\ActiveRecord
             'apply_status' => 'Apply Status',
             'cancel_apply_time' => 'Cancel Apply Time',
             'leave_time' => 'Leave Time',
+            'reject_reason' => 'Reject Reason', 
+
         ];
     }
 
@@ -186,16 +197,28 @@ class Answer extends \yii\db\ActiveRecord
         return $fields;
     }
 
+    /**
+     * 回答项列表
+     * @return \yii\db\ActiveQuery
+     */
     public function getAnswerItemList()
     {
         return $this->hasMany(AnswerItem::className(), ['question_id' => 'question_id', 'user_id' => 'user_id']);
     }
 
+    /**
+     * 活动
+     * @return \yii\db\ActiveQuery
+     */
     public function getActivity()
     {
         return $this->hasOne(Activity::className(), ['id' => 'activity_id']);
     }
 
+    /**
+     * 用户
+     * @return \yii\db\ActiveQuery
+     */
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);

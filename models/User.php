@@ -87,16 +87,16 @@ class User extends BaseUser
             //'usernameTrim'     => ['username', 'trim'],
 
             // email rules
-            'emailPattern'  => ['email', 'email'],
-            'emailLength'   => ['email', 'string', 'max' => 200],
-            'emailUnique'   => ['email', 'unique', 'message' => Yii::t('user', 'This email address has already been taken')],
-            'emailTrim'     => ['email', 'trim'],
+            // 'emailPattern'  => ['email', 'email'],
+            // 'emailLength'   => ['email', 'string', 'max' => 200],
+            // 'emailUnique'   => ['email', 'unique', 'message' => Yii::t('user', 'This email address has already been taken')],
+            // 'emailTrim'     => ['email', 'trim'],
 
             // password rules
             'passwordRequired' => ['password', 'required', 'on' => ['register']],
             'passwordLength'   => ['password', 'string', 'min' => 6, 'on' => ['register', 'create']],
 
-            [['email','password'], 'required', 'on'=>'signup'],
+            // [['email','password'], 'required', 'on'=>'signup'],
 
             ['black_label', 'default', 'value' => self::BLACK_LIST_NO],
 
@@ -157,6 +157,7 @@ class User extends BaseUser
     /**
      * @inheritdoc
      */
+    /*
     public function afterSave($insert, $changedAttributes)
     {
         if ($insert) {
@@ -173,6 +174,7 @@ class User extends BaseUser
         }
         parent::afterSave($insert, $changedAttributes);
     }
+    */
 
     /**
      * @inheritdoc
@@ -303,13 +305,19 @@ class User extends BaseUser
         return $this->save();
     }
 
-    // Profile
+    /**
+     * Profile
+     * @return \yii\db\ActiveQuery
+     */
     public function getProfile()
     {
         return $this->hasOne(Profile::className(), ['user_id' => 'id']);
     }
 
-    // 活动列表
+    /**
+     * 活动列表
+     * @return \yii\db\ActiveQuery
+     */
     public function getActivity()
     {
         return $this->hasMany(Activity::className(), ['created_by' => 'id']);
@@ -321,9 +329,67 @@ class User extends BaseUser
         return $this->hasMany(AuthAssignment::className(), ['user_id' => 'id']);
     }
 
-    // 活动报名列表
+    /**
+     * 活动报名列表
+     * @return \yii\db\ActiveQuery
+     */
     public function getAnswerList()
     {
         return $this->hasMany(Answer::className(), ['user_id' => 'id']);
     }
+
+    /**
+     * 黄牌列表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getYelloCardList()
+    {
+        return $this->hasMany(YellowCard::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * Uga问题列表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUgaQuestionList()
+    {
+        return $this->hasMany(UgaQuestion::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * Uga回答列表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUgaAnswerList()
+    {
+        return $this->hasMany(UgaAnswer::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * Uga点赞列表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUgaPraiseList()
+    {
+        return $this->hasMany(UgaPraise::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * 签到列表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCheckInList()
+    {
+        return $this->hasMany(ActivityCheckIn::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * 反馈列表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFeedbackList()
+    {
+        return $this->hasMany(ActivityFeedback::className(), ['user_id', 'id']);
+    }
+
 }

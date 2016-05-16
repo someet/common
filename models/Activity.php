@@ -2,7 +2,6 @@
 
 namespace someet\common\models;
 
-use common\models\ActivityCheckIn;
 use Yii;
 
 /**
@@ -52,6 +51,7 @@ use Yii;
  * @property integer $co_founder4
  * @property integer $is_full
  * @property integer $join_people_count
+ * @property integer $pma_type
  */
 class Activity extends \yii\db\ActiveRecord
 {
@@ -66,7 +66,12 @@ class Activity extends \yii\db\ActiveRecord
     const STATUS_RELEASE  = 20;
     /* 关闭 */
     const STATUS_SHUT  = 30;
-
+     /*好评*/
+    const GOOD_SCORE = 1;
+     /*中评*/
+    const MIDDLE_SCORE = 2;
+    /*差评*/
+    const BAD_SCORE = 3;
     /* 报名已满 */
     const IS_FULL_YES = 1;
     /* 报名未满 */
@@ -89,10 +94,10 @@ class Activity extends \yii\db\ActiveRecord
     {
         return [
             [['title'], 'required'],
-            [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'created_at', 'created_by', 'updated_at', 'updated_by', 'status', 'edit_status', 'display_order', 'co_founder1', 'co_founder2', 'co_founder3', 'co_founder4', 'is_full', 'join_people_count'], 'integer'],
+            [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'pma_type','created_at', 'created_by', 'updated_at', 'updated_by', 'status', 'edit_status', 'display_order', 'co_founder1', 'co_founder2', 'co_founder3', 'co_founder4', 'is_full', 'join_people_count'], 'integer'],
             [['details', 'review', 'content', 'field1', 'field2', 'field3', 'field4', 'field5', 'field6', 'field7', 'field8'], 'string'],
             [['longitude', 'latitude'], 'number'],
-            [['longitude', 'latitude'], 'default', 'value' => 0],
+            [['longitude', 'latitude','pma_type'], 'default', 'value' => 0],
             ['group_code', 'default', 'value' => '0'],
             [['area','desc','address','details'], 'default', 'value' => '0'],
             ['poster', 'default', 'value' => 'http://7xn8h3.com2.z0.glb.qiniucdn.com/FtlMz_y5Pk8xMEPQCw5MGKCRuGxe'],
@@ -150,6 +155,7 @@ class Activity extends \yii\db\ActiveRecord
             'is_digest' => '0 非精华 1 精华',
             'is_top' => '0 正常 1 置顶',
             'principal' => '负责人 0为未设置',
+            'pma_type' => 'pma类型',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',
@@ -191,13 +197,7 @@ class Activity extends \yii\db\ActiveRecord
     {
         if (parent::beforeSave($insert)) {
             if ($insert) {
-                if ($this->created_by < 1) {
-                    $this->updated_by = $this->created_by = Yii::$app->user && Yii::$app->user->id > 0 ? Yii::$app->user->id : 0;
-                } else {
-                    $this->updated_by = $this->created_by;
-                }
-            } else {
-                $this->updated_by = Yii::$app->user && Yii::$app->user->id > 0 ? Yii::$app->user->id : 0;
+                $this->updated_by = Yii::$app->user->id;
             }
             return true;
         } else {
@@ -217,11 +217,18 @@ class Activity extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'principal']);
     }
 
+    // DTS
+    public function getDts()
+    {
+        return $this->hasOne(User::className(), ['id' => 'updated_by']);
+    }
+
     // 发起人
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'created_by']);
     }
+
 
     // 联合发起人1
     public function getCofounder1()
@@ -245,28 +252,58 @@ class Activity extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'co_founder4']);
     }
 
-    // 活动的类型
+    /**
+     * 类型
+     * @return \yii\db\ActiveQuery
+     */
     public function getType()
     {
         return $this->hasOne(ActivityType::className(), ['id' => 'type_id']);
     }
 
-    // 获取对应的问题
+    /**
+     * 活动问题
+     * @return \yii\db\ActiveQuery
+     */
     public function getQuestion()
     {
         return $this->hasOne(Question::className(), ['activity_id' => 'id']);
     }
 
-    // 活动报名列表
+    /**
+     * 报名列表
+     * @return \yii\db\ActiveQuery
+     */
     public function getAnswerList()
     {
         return $this->hasMany(Answer::className(), ['activity_id' => 'id']);
     }
 
-    // 活动反馈列表
+    /**
+     * 反馈列表
+     * @return \yii\db\ActiveQuery
+     */
     public function getFeedbackList()
     {
         return $this->hasMany(ActivityFeedback::className(), ['activity_id' => 'id']);
+    }
+
+    /**
+     * 黄牌列表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getYellowCardList()
+    {
+        return $this->hasMany(YellowCard::className(), ['activity_id' => 'id']);
+    }
+
+    /**
+     * 签到列表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCheckInList()
+    {
+        return $this->hasMany(ActivityCheckIn::className(), ['activity_id' => 'id']);
     }
 }
 
