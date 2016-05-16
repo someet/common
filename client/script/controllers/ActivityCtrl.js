@@ -483,25 +483,11 @@ angular.module('controllers', ['ngTagsInput'])
             // 搜索场地功能
             $scope.getSpace = function() {
                 $scope.space_spot = $activityManage.searchSpace('');
-                // $scope.sections = $scope.space_spot.sections;
-                // console.log($scope.sections);
                 return $scope.space_spot;
             }
-
-        $scope.selectedSection = [];
-            
-      
-      $scope.printSelectedToppings = function printSelectedToppings() {
-        // console.log($scope.selectedSection);
-      };
             // 获取场地
             $activityManage.searchSpace('').then(function(data) {
-                // $scope.section = data.sections;
                 $scope.spaceSpots = data;
-                // console.log(data.models.sections);
-                // console.log(data.sections);
-                // console.log($scope.space_spots);
-                // return data;
             });
 
             //搜索空间
@@ -659,18 +645,10 @@ angular.module('controllers', ['ngTagsInput'])
                     $scope.co_founder2 = data.cofounder2;
                     $scope.selectedSpaceSpot = data.space;
                     $scope.selectedSpace = data.space;
-                    // console.log(data);
-                    // $scope.selectedSection = data.space.sections[data.space_section_id];
                     $scope.selectedSection = [];
                     angular.forEach(data.sections, function(value, key) {
                         $scope.selectedSection.push(value.space_section_id);
                     });
-                    // $scope.selectedSection = data.sections;
-                    // console.log($scope.space_spot);
-                    // console.log($scope.selectedSection);
-                    // 
-                    // console.log($scope.selectedSpaceSpot);
-                    // $scope.space_spots = $scope.searchSpace('');
                     var tags = [];
                     for (var k in data.tags) {
                         var tag = data.tags[k].name;
@@ -701,16 +679,16 @@ angular.module('controllers', ['ngTagsInput'])
                 newEntity.poster = $scope.poster;
                 newEntity.group_code = $scope.group_code;
                 newEntity.pma_type = $scope.entity.pma_type;
-                newEntity.space_spot_id = $scope.selectedSpaceSpot.id;
-                newEntity.area = $scope.selectedSpaceSpot.area;
-                newEntity.address = $scope.selectedSpaceSpot.address;
-                if (newEntity.space_section_id == null) {
-                    newEntity.space_section_id = 0;                    
+                if ($scope.selectedSpaceSpot) {
+                    newEntity.area = $scope.selectedSpaceSpot.area;
+                    newEntity.address = $scope.selectedSpaceSpot.address;
+                    newEntity.space_spot_id = $scope.selectedSpaceSpot.id;
+                }
+                if ($scope.selectedSection.length == 0) {
+                    newEntity.space_section_id = 0;
                 }else{
                     newEntity.space_section_id = $scope.selectedSection;
                 }
-                console.log(newEntity.space_section_id);
-
                 if ($scope.user) {
                     newEntity.created_by = $scope.user.id;
                 }
@@ -744,9 +722,6 @@ angular.module('controllers', ['ngTagsInput'])
                             .content('活动保存成功')
                             .hideDelay(5000)
                             .position("top right"));
-
-                        // console.log(data.pma_type);
-                        // $location.path('/activity/list/0');
                     }, function(err) {
                         $mdToast.show($mdToast.simple()
                             .content(err.toString())
