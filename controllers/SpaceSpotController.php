@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use app\components\DataValidationFailedException;
-use common\models\SpaceSpot;
+use someet\common\models\SpaceSpot;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
