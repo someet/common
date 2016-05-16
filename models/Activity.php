@@ -1,7 +1,6 @@
 <?php
 
 namespace someet\common\models;
-
 use Yii;
 
 /**
@@ -94,7 +93,7 @@ class Activity extends \yii\db\ActiveRecord
     {
         return [
             [['title'], 'required'],
-            [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'pma_type','created_at', 'created_by', 'updated_at', 'updated_by', 'status', 'edit_status', 'display_order', 'co_founder1', 'co_founder2', 'co_founder3', 'co_founder4', 'is_full', 'join_people_count'], 'integer'],
+            [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'pma_type','created_at', 'created_by', 'updated_at', 'updated_by', 'status', 'edit_status', 'display_order', 'co_founder1', 'co_founder2', 'co_founder3', 'co_founder4', 'is_full', 'join_people_count','space_spot_id'], 'integer'],
             [['details', 'review', 'content', 'field1', 'field2', 'field3', 'field4', 'field5', 'field6', 'field7', 'field8'], 'string'],
             [['longitude', 'latitude'], 'number'],
             [['longitude', 'latitude','pma_type'], 'default', 'value' => 0],
@@ -178,6 +177,8 @@ class Activity extends \yii\db\ActiveRecord
             'co_founder4' => '联合创始人4',
             'is_full' => '是否报满',
             'join_people_count' => '已报名的人数',
+            'space_spot_id' => '场地id',
+            'space_section_id' => '空间id',
         ];
     }
 
@@ -259,6 +260,12 @@ class Activity extends \yii\db\ActiveRecord
     public function getType()
     {
         return $this->hasOne(ActivityType::className(), ['id' => 'type_id']);
+    }
+    
+    // 活动的场地
+    public function getSpace()
+    {
+        return $this->hasOne(SpaceSpot::className(), ['id' => 'space_spot_id']);
     }
 
     /**

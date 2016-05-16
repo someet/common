@@ -1,6 +1,6 @@
 <?php
 
-namespace someet\common\models;
+namespace common\models;
 
 use Yii;
 

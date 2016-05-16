@@ -1,6 +1,6 @@
 <?php
 
-namespace someet\common\models;
+namespace common\models;
 
 use Yii;
 
@@ -15,6 +15,9 @@ use Yii;
  */
 class SpaceSection extends \yii\db\ActiveRecord
 {
+    const STATUS_DELETE = 0;
+    const STATUS_NORMAL = 10;
+
     /**
      * @inheritdoc
      */
@@ -31,6 +34,7 @@ class SpaceSection extends \yii\db\ActiveRecord
         return [
             [['name'], 'required'],
             [['spot_id', 'people', 'status'], 'integer'],
+            [['status'], 'default', 'value' => 10],
             [['name'], 'string', 'max' => 180],
         ];
     }
@@ -45,7 +49,14 @@ class SpaceSection extends \yii\db\ActiveRecord
             'name' => '空间名称',
             'spot_id' => '地点编号',
             'people' => '推荐人数',
-            'status' => '状态',
+            'status' => '状态 0 删除 10 正常',
         ];
     }
+
+    // 场地数
+    public function getSpots()
+    {
+        return $this->hasMany(SpaceSpot::className(), ['id' => 'spot_id']);
+    }
+
 }
