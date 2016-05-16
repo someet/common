@@ -39,7 +39,7 @@
                             <div class="name"> <strong>{{entity.user.username}}</strong></div>
                             <div>
                                 <span>“</span>
-                                <img src="{{entity.user.profile.headimgurl}}" />
+                                <img ng-src="{{entity.user.profile.headimgurl}}" />
                             </div>
                         </div>
                         <div class="description">
@@ -53,7 +53,7 @@
                             <div class="name"> <strong>{{entity.cofounder1.username}}</strong></div>
                             <div>
                                 <span>“</span>
-                                <img src="{{entity.cofounder1.profile.headimgurl}}" />
+                                <img ng-src="{{entity.cofounder1.profile.headimgurl}}" />
                             </div>
                         </div>
                         <div class="description">
@@ -67,7 +67,7 @@
                             <div class="name"> <strong>{{entity.cofounder2.username}}</strong></div>
                             <div>
                                 <span>“</span>
-                                <img src="{{entity.cofounder2.profile.headimgurl}}" />
+                                <img ng-src="{{entity.cofounder2.profile.headimgurl}}" />
                             </div>
                         </div>
                         <div class="description">
@@ -109,7 +109,7 @@
                         <div class="detail-label">
                             <span>
                 <i class="icon">
-                  <img src="/static/svg/Flow.svg"></i>
+                  <img ng-src="/static/svg/Flow.svg"></i>
                 活动流程
               </span>
                         </div>
@@ -117,7 +117,7 @@
                         </div>
                         <!-- tips -->
                         <div class="detail-label" style="margin-top:0.6rem;">
-                            <span> <i class="icon"><img src="/static/svg/Tips.svg"></i> Tips       
+                            <span> <i class="icon"><img ng-src="/static/svg/Tips.svg"></i> Tips
             <div ng-bind-html="entity.field2"  class="detail-flow">
 
             </div>
