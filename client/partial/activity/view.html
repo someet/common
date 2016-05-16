@@ -302,6 +302,22 @@
                     </md-input-container>
                 </div>
                 <div layout="row">
+                    <md-input-container>
+                        <label>地区(商圈)</label>
+                        <input type="text" name="area" ng-model="entity.area" md-maxlength="6" ng-disabled="true"/>
+                        <div ng-messages="entityForm.area.$error">
+                            <div ng-message="md-maxlength">地区文字不能超过6个字符</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container flex="">
+                        <label>详细地址</label>
+                        <textarea name="address" ng-model="entity.address" md-maxlength="60" ng-disabled="true"></textarea>
+                        <div ng-messages="entityForm.address.$error">
+                            <div ng-message="md-maxlength">详细地址文字不能超过60个字符</div>
+                        </div>
+                    </md-input-container>
+                </div>
+                <div layout="row">
                     <div flex="30">
                         <label>场地</label>
                         <md-autocomplete md-selected-item="selectedSpaceSpot" placeholder="请选择场地" md-search-text="spacename" md-items="space_spot in getSpace(spacename)" md-search-text-change="getSection(selectedSpaceSpot)" md-item-text="space_spot.name" md-min-length="0" md-menu-class="autocomplete-custom-template">
