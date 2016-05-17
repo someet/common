@@ -44,8 +44,15 @@
         <ul class="activityListProperty">
           <li ng-if=" list == '' " ><div class="alert alert-danger" role="alert">没有搜到活动</div></li>
             <li ng-if="list" ng-repeat="entity in list | filter:query">
-                <!--针对过往的活动显示一个灰色的背景,如果活动的结束时间小于当周一之前 orderBy: 'display_order' -->
-                <div ng-class="{true: 'panel-default', false: 'panel-danger'}[entity.status==10]" class="panel">
+                <!--
+                针对过往的活动显示一个灰色的背景,如果活动的结束时间小于当周一之前 orderBy: 'display_order' 
+                ng-class="{'panel-default': entity.status==10, 'panel-danger': entity.status==20, 'panel-info': entity.status==30, 'panel-warning': entity.status==40, 'panel-danger':entity.status==15}" 
+
+                ng-class="{true: 'panel-default', false: 'panel-danger'}[entity.status==10]"
+                -->
+                <div 
+                ng-class="{true: 'panel-default', false: 'panel-danger'}[entity.status==10]" 
+                class="panel">
                     <div class="panel-heading">
                         <h3 class="panel-title">
              <!-- 按照序号排序 -->
@@ -61,10 +68,11 @@
 
               <!-- 活动标题 -->
               {{entity.id}}#
-              <span ng-if="entity.status==10" >[草稿] {{entity.user.username}}：{{entity.title}} - {{entity.desc}}</span>
-              <span ng-if="entity.status==20" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}</span>
+              <span ng-if="entity.status==10" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[草稿]</span>
+              <span ng-if="entity.status==20" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[启用]</span>
               <span ng-if="entity.status==15" >[预发布]{{entity.user.username}}：{{entity.title}} - {{entity.desc}}</span>
-              <span ng-if="entity.status==30" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[活动关闭]</span>
+              <span ng-if="entity.status==30" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[关闭]</span>
+              <span ng-if="entity.status==40" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[取消]</span>
 
 
               <!-- 内部使用的状态标签 -->
@@ -73,40 +81,37 @@
                 <button ng-class="{true: 'label-warning', false: 'label'}[entity.edit_status==20]" type="button" class="btn label" ng-click="onEditStatusChangeClick(entity, 20)">pause</button>
                 <button ng-class="{true: 'label-success', false: 'label'}[entity.edit_status==30]" type="button" class="btn label" ng-click="onEditStatusChangeClick(entity, 30)">done</button>
               </div>
-
-
-            <span >
+<!--             <span >
                 <md-switch  style="display:inline-block;margin:2px;" ng-model="entity.status" aria-label="Switch 2" ng-true-value="'20'" ng-false-value="'30'" class="md-warn" ng-change="updateStatus(entity.id,entity.status)">
                 <span ng-if="entity.status == 20">启用</span>
                 <span ng-if="entity.status == 40">取消</span>
                 </md-switch>
-            </span>
-                        <div class="btn-group btn-float-right">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                活动状态
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a ng-click="updateStatus(entity.id,20)">启用活动</a>
-                                </li>
-                                <li>
-                                    <a ng-click="updateStatus(entity.id,30)">关闭活动</a>
-                                </li>
-                                <li>
-                                    <a ng-click="updateStatus(entity.id,40)">取消活动</a>
-                                </li>
-                            </ul>
-                        </div>
-              <span ng-if="entity.status == 20 || entity.status == 30">
+            </span> -->
+            
+
+                <span class="btn-group btn-float-right" ng-show="entity.status >= 20">
+                <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
+                    活动状态
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a ng-click="updateStatus(entity.id,20)">启用活动</a>
+                    </li>
+                    <li>
+                        <a ng-click="updateStatus(entity.id,30)">关闭活动</a>
+                    </li>
+                    <li>
+                        <a ng-click="updateStatus(entity.id,40)">取消活动</a>
+                    </li>
+                </ul>
                 <a href="#/answer/{{entity.id}}" target="_blank" ng-class="{true: 'btn-danger', false: 'btn-default'}[entity.question.status==10]" ng-if="entity.question" class="btn  btn-float-right" type="button">
                   <span>管理</span>
                   （{{entity.answer_count}}/{{entity.peoples}}）
                   <span class="badge">{{entity.feedback_count}}</span>
                 </a>
               </span>
-              <button ng-if="entity.status==10" class="btn btn-primary btn-float-right" ng-click="release(entity)" type="button">发布</button>
-              <button ng-if="entity.status==15" class="btn btn-primary btn-float-right" ng-click="release(entity)" type="button">发布</button>
+              <button ng-if="entity.status==10 || entity.status==15" class="btn btn-primary btn-float-right" ng-click="release(entity)" type="button">发布</button>
             <!-- 下拉功能 -->
             <div ng-if="entity.status == 10 ||  entity.status == 15" class="btn-group btn-float-right">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">

@@ -86,9 +86,11 @@ angular.module('controllers', ['ngTagsInput'])
             // 更新活动状态
             $scope.updateStatus = function(id, status) {
                 $activityManage.updateStatus(id, status).then(function(data) {
-                    // angular.forEach(data,)
-                    // $scope.entity.status
-                    console.log(data);
+                    angular.forEach($scope.list,function(index,value){
+                        if (index.id == data.id) {
+                            index.status = data.status;
+                        }
+                    })
                 })
             }
 
