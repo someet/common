@@ -1,7 +1,8 @@
 <?php
 namespace app\commands;
+
 use app\components\NotificationTemplate;
-use common\models\Noti;
+use someet\common\models\Noti;
 use someet\common\components\SomeetValidator;
 use someet\common\models\Activity;
 use Yii;
@@ -9,7 +10,7 @@ use someet\common\models\Answer;
 use dektrium\user\models\Account;
 use someet\common\models\User;
 
-class CronController  extends \yii\console\Controller
+class CronController extends \yii\console\Controller
 {
 
     /**
@@ -25,9 +26,8 @@ class CronController  extends \yii\console\Controller
                 ->all();
 
         foreach ($noties as $noti) {
-
             //判断渠道为微信
-            if ( Noti::TUNNEL_WECHAT == $noti['tunnel_id']) {
+            if (Noti::TUNNEL_WECHAT == $noti['tunnel_id']) {
                 // 查询出openid
                 
 
@@ -43,10 +43,9 @@ class CronController  extends \yii\console\Controller
                 }
 
                 //判断来源类型为活动
-                if ( Noti::FROM_ACTIVITY == $noti['from_id_type']) {
+                if (Noti::FROM_ACTIVITY == $noti['from_id_type']) {
                     $templateData = $noti['note'];
-                } else if (Noti::FROM_USER == $noti['from_id_type']) {
-
+                } elseif (Noti::FROM_USER == $noti['from_id_type']) {
                 }
 
                 if (empty($templateData)) {
@@ -61,14 +60,11 @@ class CronController  extends \yii\console\Controller
                 }
 
             // 判断渠道为短信
-            } else if ( Noti::TUNNEL_SMS == $noti['tunnel_id']) {
-
+            } elseif (Noti::TUNNEL_SMS == $noti['tunnel_id']) {
             // 判断渠道为app
-            } else if ( Noti::TUNNEL_APP == $noti['tunnel_id']) {
-
+            } elseif (Noti::TUNNEL_APP == $noti['tunnel_id']) {
             // 判断渠道为站内信
-            } else if ( Noti::TUNNEL_MSG == $noti['tunnel_id']) {
-
+            } elseif (Noti::TUNNEL_MSG == $noti['tunnel_id']) {
             }
         }
     }
@@ -90,7 +86,7 @@ class CronController  extends \yii\console\Controller
             ->all();
         
         //遍历列表
-        foreach($answerList as $answer) {
+        foreach ($answerList as $answer) {
             //判断报名的用户是否存在
             if (!$answer['user']) {
                 //记录一个错误, 提示计划任务中报名的用户不存在, 请检查
@@ -101,7 +97,6 @@ class CronController  extends \yii\console\Controller
 
             // 用户的手机号码不为空, 并且手机号码是合法的手机号
             if (!empty($answer['user']['mobile']) && SomeetValidator::isTelNumber($answer['user']['mobile'])) {
-
                 //手机号
                 $mobile = $answer['user']['mobile'];
 
@@ -110,7 +105,6 @@ class CronController  extends \yii\console\Controller
 
                 //判断状态是通过
                 if (Answer::STATUS_REVIEW_PASS == $answer['status']) {
-
                     //获取通过的短信内容
                     $smsData = NotificationTemplate::fetchSuccessSmsData($answer['activity']['start_time'], $answer['activity']['title']);
                 }
@@ -176,7 +170,7 @@ class CronController  extends \yii\console\Controller
         //先找到在2个小时内即将开始的活动IDs, 并且活动在2个小时内即将开始, 并且当时时间不能大于开始时间
         $activities = Activity::find()
             ->where(['status' => Activity::STATUS_RELEASE])
-            ->andWhere(" start_time > " . time() . " and start_time < " . (time()+7200) )
+            ->andWhere(" start_time > " . time() . " and start_time < " . (time()+7200))
             ->asArray()
             ->all();
         if (count($activities)<=0) {
@@ -205,8 +199,7 @@ class CronController  extends \yii\console\Controller
         }
 
         //遍历列表
-        foreach($answerList as $answer) {
-
+        foreach ($answerList as $answer) {
             //判断报名的用户是否存在
             if (!$answer['user']) {
                 //记录一个错误, 提示计划任务中报名的用户不存在, 请检查
@@ -217,7 +210,6 @@ class CronController  extends \yii\console\Controller
 
             // 用户的手机号码不为空, 并且手机号码是合法的手机号
             if (!empty($answer['user']['mobile']) && SomeetValidator::isTelNumber($answer['user']['mobile'])) {
-
                 //手机号
                 $mobile = $answer['user']['mobile'];
 
