@@ -248,7 +248,8 @@ class ActivityTagController extends BackendController
      * @param $query
      * @return array
      */
-    public function actionList($query) {
+    public function actionList($query)
+    {
         $models = ActivityTag::find()->where(['like', 'name', $query])->all();
         $items = [];
 

@@ -1,6 +1,7 @@
 <?php
 
 namespace app\controllers;
+
 use someet\common\models\UgaAnswer;
 use yii\filters\VerbFilter;
 use yii\web\Response;
@@ -9,7 +10,7 @@ use someet\common\models\UgaQuestion;
 use yii\data\Pagination;
 
 /**
-*	Uga问题系统控制器
+*   Uga问题系统控制器
 *
 */
 class UgaQuestionController extends \yii\web\Controller
@@ -62,7 +63,7 @@ class UgaQuestionController extends \yii\web\Controller
             throw new ServerErrorHttpException();
         }
     }
-	/**
+    /**
      * 首页获取问题的项
      */
     public function actionData()
@@ -105,20 +106,19 @@ class UgaQuestionController extends \yii\web\Controller
      * 获取所有的问题列表
      * @param int $order ups|times 按赞|间
      */
-    public function actionList($id = null, $is_official=10,$order = 'id', $perPage = 20, $scenario = null)
+    public function actionList($id = null, $is_official = 10, $order = 'id', $perPage = 20, $scenario = null)
     {
 
-    	Yii::$app->response->format = Response::FORMAT_JSON;
+        Yii::$app->response->format = Response::FORMAT_JSON;
         //分页查询所有的问题，两种排序方式，按时间或者按赞降序
-        if ( 10 == $is_official || 0 == $is_official || 2 == $is_official || 1 == $is_official) {
-            
+        if (10 == $is_official || 0 == $is_official || 2 == $is_official || 1 == $is_official) {
             //官方问题
             $officialQuestion = UgaQuestion::find()
-            			->with(['answerList'])
+                        ->with(['answerList'])
                         ->where(['is_official'=>$is_official])
                         ->orderBy([$order => SORT_DESC])
-            			->asArray();
-            			// ->all();
+                        ->asArray();
+                        // ->all();
 
 
             // print_r($officialQuestions);
@@ -130,17 +130,13 @@ class UgaQuestionController extends \yii\web\Controller
                             ->orderBy([$order => SORT_DESC])
                             ->asArray()
                             ->one();
-
-
             } elseif ($scenario == "total") {
-
                 $countOfficialQuestion = clone $officialQuestion;
                 $pagination = new Pagination([
                         'totalCount' => $countOfficialQuestion->count(),
                         'pageSize' => $perPage
                     ]);
                 return $pagination->totalCount;
-
             } elseif ($scenario == "page") {
                 $countOfficialQuestion = clone $officialQuestion;
                 $pagination = new Pagination([
@@ -153,8 +149,7 @@ class UgaQuestionController extends \yii\web\Controller
                     ->all();
                 return $officialQuestions;
             }
-
-        }else {
+        } else {
             return '参数不正确';
         }
     }
@@ -204,7 +199,7 @@ class UgaQuestionController extends \yii\web\Controller
      * 审核问题
      * @param int $delete 1|0 删除|恢复
      */
-    public function actionReview($id,$status)
+    public function actionReview($id, $status)
     {
 
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -214,9 +209,9 @@ class UgaQuestionController extends \yii\web\Controller
         
         $model = UgaQuestion::findOne($id);
 
-        if(UgaQuestion::STATUS_DELETED == $status ){
+        if (UgaQuestion::STATUS_DELETED == $status) {
             $model->status = UgaQuestion::STATUS_DELETED;
-        }elseif (UgaQuestion::STATUS_NORMAL == $status) {
+        } elseif (UgaQuestion::STATUS_NORMAL == $status) {
             $model->status = UgaQuestion::STATUS_NORMAL;
         }
         if ($model->save() === false) {
@@ -231,7 +226,7 @@ class UgaQuestionController extends \yii\web\Controller
      * 放入公共库
      * @param int $open 1|0 公共库|私有库
      */
-    public function actionPublic($id,$open)
+    public function actionPublic($id, $open)
     {
         //状态 = $open ? 1 : 0;
         Yii::$app->response->format = Response::FORMAT_JSON;
@@ -241,9 +236,9 @@ class UgaQuestionController extends \yii\web\Controller
 
         $model = UgaQuestion::findOne($id);
 
-        if(UgaQuestion::FOLK_PUBLICK == $open ){
+        if (UgaQuestion::FOLK_PUBLICK == $open) {
             $model->is_official = UgaQuestion::FOLK_PUBLICK;
-        }elseif (UgaQuestion::FOLK_PRIVATE == $open) {
+        } elseif (UgaQuestion::FOLK_PRIVATE == $open) {
             $model->is_official = UgaQuestion::FOLK_PRIVATE;
         }
         if ($model->save() === false) {
@@ -271,5 +266,4 @@ class UgaQuestionController extends \yii\web\Controller
             throw new NotFoundHttpException("Uga问题不存在");
         }
     }
-
 }

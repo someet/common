@@ -62,7 +62,7 @@ class SpaceSpotDeviceController extends BackendController
             ])
             ->asArray()
             ->all();
-        foreach($types as $key => $type) {
+        foreach ($types as $key => $type) {
             $types[$key]['spot_count'] = count($type['spots']);
         }
 
@@ -285,5 +285,4 @@ class SpaceSpotDeviceController extends BackendController
             throw new NotFoundHttpException("设备不存在");
         }
     }
-
 }

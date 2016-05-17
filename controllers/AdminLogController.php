@@ -1,13 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: michaeldu
- * Date: 15/11/9
- * Time: 下午6:21
- */
-
 namespace app\controllers;
-
 
 use someet\common\models\AdminLog;
 use yii\data\ActiveDataProvider;
@@ -41,7 +33,7 @@ class AdminLogController extends BackendController
                 ]
             ],
         ]);
-        return $this->render('index',[
+        return $this->render('index', [
             'dataProvider' => $dataProvider
         ]);
     }
@@ -51,8 +43,9 @@ class AdminLogController extends BackendController
      * @param integer $id 操作日志记录id
      * @return string
      */
-    public function actionView($id){
-        return $this->render('view',[
+    public function actionView($id)
+    {
+        return $this->render('view', [
             'model'=>AdminLog::findOne($id),
         ]);
     }

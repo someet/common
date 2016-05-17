@@ -62,7 +62,7 @@ class SpaceTypeController extends BackendController
             ])
             ->asArray()
             ->all();
-        foreach($types as $key => $type) {
+        foreach ($types as $key => $type) {
             $types[$key]['spot_count'] = count($type['spots']);
         }
 
@@ -277,5 +277,4 @@ class SpaceTypeController extends BackendController
             throw new NotFoundHttpException("类型不存在");
         }
     }
-
 }

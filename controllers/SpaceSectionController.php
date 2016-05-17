@@ -69,7 +69,7 @@ class SpaceSectionController extends BackendController
      * @param integer $spot_id 场地ID
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function actionListBySpotId($spot_id=0)
+    public function actionListBySpotId($spot_id = 0)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
@@ -288,6 +288,4 @@ class SpaceSectionController extends BackendController
             throw new NotFoundHttpException("场地区间不存在");
         }
     }
-
 }
-
