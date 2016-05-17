@@ -42,7 +42,7 @@
             <div class="list-group-item">
                 <div class="row">
                     <div class="col-md-3">
-                        <img width="60" height="60" src="{{entity.user.profile.headimgurl}}" alt=""> {{entity.user.username}}
+                        <img width="60" height="60" ng-src="{{entity.user.profile.headimgurl}}" alt=""> {{entity.user.username}}
                     </div>
                     <div class="col-md-6">
                         <del ng-if="entity.status == 0"> {{entity.content}} </del>

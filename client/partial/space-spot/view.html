@@ -1,5 +1,6 @@
 <!-- 编辑活动内容页面 -->
 <div class="container" id="content">
+
   <form name="entityForm" ng-submit="save()">
     <div>
       <md-input-container layout="row" class="btn-float-right">
@@ -29,6 +30,12 @@
             </div>
           </md-input-container>
         </div>
+
+        区间
+        <div layout="row" ng-value="section.id" ng-repeat="section in entity.sections">
+          {{section.name}}
+        </div>
+
         <md-input-container flex="100">
           <label>到达路线</label>
           <textarea ng-model="entity.router"></textarea>
@@ -82,7 +89,7 @@
           <textarea ng-model="entity.base_fee"></textarea>
         </md-input-container>
         <md-input-container>
-          <label>活动详情</label>
+          <label>场地详情</label>
           <text-angular ng-model="entity.detail"></text-angular>
         </md-input-container>
         <md-input-container layout="row" class="btn-float-right">
