@@ -161,7 +161,7 @@ class MemberController extends BackendController
 
             //黑名单用户列表
             case 'black':
-                $where = ['status' => User::STATUS_ACTIVE, 'in_black_list' => User::BLACK_LIST_YES];
+                $where = ['status' => User::STATUS_ACTIVE, 'black_label' => User::BLACK_LIST_YES];
                 $query = User::find()
                     ->with(['profile'])
                     ->asArray()
