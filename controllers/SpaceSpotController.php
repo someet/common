@@ -125,9 +125,10 @@ class SpaceSpotController extends BackendController
      * @param string $name 名称
      * @return array
      */
-    public function actionSearch($name) {
+    public function actionSearch($name)
+    {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $activity = SpaceSpot::find()
+        $models = SpaceSpot::find()
             ->with([
                 'type',
                 'sections',
@@ -136,25 +137,31 @@ class SpaceSpotController extends BackendController
             ->where(
                 ['like', 'name', $name]
             )
-            ->orWhere(['like','detail',$name]);
-        $activityExists = $activity->exists();
-        $countQuery = clone $activity;
-        $pages = new Pagination(['totalCount' => $countQuery->count()]);
-        $models = $activity->offset($pages->offset)
-            ->limit($pages->limit)
+            ->orWhere(['like','detail',$name])
             ->asArray()
             ->all();
-        if ($activityExists) {
+
             return [
-                'status' => 1,
                 'models' => $models,
-                'pages' => $pages,
             ];
-        }else{
-            return [
-                'status' => 0,
-            ];
-        }
+        // $activityExists = $activity->exists();
+        // $countQuery = clone $activity;
+        // $pages = new Pagination(['totalCount' => $countQuery->count()]);
+        // $models = $activity->offset($pages->offset)
+        //     ->limit($pages->limit)
+        //     ->asArray()
+        //     ->all();
+        // if ($activityExists) {
+            // return [
+            // 'status' => 1,
+            // 'models' => $models,
+            // 'pages' => $pages,
+            // ];
+        // } else {
+        //     return [
+        //         'status' => 0,
+        //     ];
+        // }
 
 
     }
@@ -164,7 +171,7 @@ class SpaceSpotController extends BackendController
      * @param integer $type_id 场地类型ID
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function actionListByTypeId($type_id=0)
+    public function actionListByTypeId($type_id = 0)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         // only show draft and release activities
@@ -546,6 +553,4 @@ class SpaceSpotController extends BackendController
             throw new NotFoundHttpException("场地不存在");
         }
     }
-
-
 }

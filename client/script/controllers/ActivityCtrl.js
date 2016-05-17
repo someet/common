@@ -487,8 +487,8 @@ angular.module('controllers', ['ngTagsInput'])
             $scope.$parent.pageName = '活动详情';
 
             // 搜索场地功能
-            $scope.getSpace = function() {
-                $scope.space_spot = $activityManage.searchSpace('');
+            $scope.getSpace = function(spacename) {
+                $scope.space_spot = $activityManage.searchSpace(spacename);
                 return $scope.space_spot;
             }
             // 获取场地
