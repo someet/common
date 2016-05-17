@@ -56,4 +56,13 @@ class QuestionItem extends \yii\db\ActiveRecord
             'status' => '冗余扩展',
         ];
     }
+
+    /**
+     * 活动问题
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFeedbackList()
+    {
+        return $this->hasMany(Question::className(), ['id', 'question_id']);
+    }
 }

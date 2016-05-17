@@ -70,17 +70,28 @@ class Question extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * 问题项列表
+     * @return \yii\db\ActiveQuery
+     */
     public function getQuestionItemList()
     {
         return $this->hasMany(QuestionItem::className(), ['question_id' => 'id']);
     }
 
-      // 活动报名列表
+    /**
+     * 报名列表
+     * @return \yii\db\ActiveQuery
+     */
     public function getAnswerList()
     {
         return $this->hasMany(Answer::className(), ['activity_id' => 'activity_id']);
     }
 
+    /**
+     * 活动
+     * @return \yii\db\ActiveQuery
+     */
     public function getActivity()
     {
         return $this->hasOne(Activity::className(), ['id' => 'activity_id']);
