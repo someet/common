@@ -52,6 +52,7 @@ use Yii;
  * @property integer $is_full
  * @property integer $join_people_count
  * @property integer $pma_type
+ * @property integer $space_spot_id
  */
 class Activity extends \yii\db\ActiveRecord
 {
@@ -124,7 +125,7 @@ class Activity extends \yii\db\ActiveRecord
 
     public function extraFields()
     {
-        return ['type', 'user','pma', 'profile' => function() {
+        return ['type', 'user','pma', 'spot', 'profile' => function() {
             return $this->user->profile;
         }];
     }
