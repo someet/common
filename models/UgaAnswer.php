@@ -60,15 +60,30 @@ class UgaAnswer extends \yii\db\ActiveRecord
         ];
     }
 
-    // 用户
+    /**
+     * 用户
+     * @return \yii\db\ActiveQuery
+     */
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
-    // 问题
+    /**
+     * Uga问题
+     * @return \yii\db\ActiveQuery
+     */
     public function getQuestion()
     {
         return $this->hasOne(UgaQuestion::className(), ['id' => 'question_id']);
+    }
+
+    /**
+     * 点赞列表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPraiseList()
+    {
+       return $this->hasMany(UgaPraise::className(), ['answer_id' => 'id']);
     }
 }

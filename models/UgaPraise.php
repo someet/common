@@ -43,4 +43,13 @@ class UgaPraise extends \yii\db\ActiveRecord
             'user_id' => 'User ID',
         ];
     }
+
+    /**
+     * 用户
+     * @return \yii\db\ActiveQuery
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
 }
