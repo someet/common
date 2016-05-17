@@ -85,7 +85,7 @@
                         <!-- 地点 -->
                         <div class="detail-label">
                             <span> <i class="icon"><img src="/static/svg/Location.svg"></i> 
-                {{entity.area}}
+                {{selectedSpaceSpot.area}}
               </span>
                         </div>
                         <!-- 人数限制 -->
@@ -182,22 +182,18 @@
                     </div>
                     <div flex="">
                         <label>PMA类型</label>
-
-                                          <md-input-container>
-                    <md-select name="group"  ng-model="entity.pma_type" placeholder="选择分类">
-                        <md-option ng-value="opt.pma_type" ng-repeat="opt in pma_type_count">
-                            {{opt.name}}
-                        </md-option>
-                    </md-select>
-                    <div ng-messages="entityForm.group.$error">
-                        <div ng-message="required">必填项目</div>
+                        <md-input-container>
+                            <md-select name="group" ng-model="entity.pma_type" placeholder="选择分类">
+                                <md-option ng-value="opt.pma_type" ng-repeat="opt in pma_type_count">
+                                    {{opt.name}}
+                                </md-option>
+                            </md-select>
+                            <div ng-messages="entityForm.group.$error">
+                                <div ng-message="required">必填项目</div>
+                            </div>
+                        </md-input-container>
                     </div>
-                </md-input-container>
-                    </div>
-
-
                 </div>
-
                 <div layout="row">
                     <div flex="">
                         <label>联合发起人1</label>
@@ -308,18 +304,41 @@
                 <div layout="row">
                     <md-input-container>
                         <label>地区(商圈)</label>
-                        <input type="text" name="area" ng-model="entity.area" md-maxlength="6" />
+                        <input type="text" name="area" ng-model="entity.area" md-maxlength="6" ng-disabled="true"/>
                         <div ng-messages="entityForm.area.$error">
                             <div ng-message="md-maxlength">地区文字不能超过6个字符</div>
                         </div>
                     </md-input-container>
                     <md-input-container flex="">
                         <label>详细地址</label>
-                        <textarea name="address" ng-model="entity.address" md-maxlength="60"></textarea>
+                        <textarea name="address" ng-model="entity.address" md-maxlength="60" ng-disabled="true"></textarea>
                         <div ng-messages="entityForm.address.$error">
                             <div ng-message="md-maxlength">详细地址文字不能超过60个字符</div>
                         </div>
                     </md-input-container>
+                </div>
+                <div layout="row">
+                    <div flex="30">
+                        <label>场地</label>
+                        <md-autocomplete md-selected-item="selectedSpaceSpot" placeholder="请选择场地" md-search-text="spacename" md-items="space_spot in getSpace(spacename)" md-search-text-change="getSection(selectedSpaceSpot)" md-item-text="space_spot.name" md-min-length="0" md-menu-class="autocomplete-custom-template">
+                            <md-item-template>
+                                <span md-highlight-text="space_spot">{{space_spot.name}}</span>
+                            </md-item-template>
+                            <md-not-found>No matches found.</md-not-found>
+                        </md-autocomplete>
+                    </div>
+                    <div flex="20">
+                        <md-input-container>
+                            <label>空间</label>
+                            <md-select ng-model="selectedSection" multiple>
+                                        <md-option ng-value="section.id" ng-repeat="section in selectedSpaceSpot.sections">{{section.name}}</md-option>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <div flex="50">
+                        空间不选择默认为全部
+                    </div>
+
                 </div>
                 <md-input-container>
                     <label>收费金额(0为免费)</label>

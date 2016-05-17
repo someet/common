@@ -65,7 +65,7 @@ class ActivityType extends \yii\db\ActiveRecord
     }
 
     /**
-     * 获取对应活动
+     * 活动列表
      * @return int|string
      */
     public function getActivities()

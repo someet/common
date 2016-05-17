@@ -40,8 +40,9 @@ class ActivityFeedback extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['activity_id', 'stars', 'sponsor_id', 'sponsor_stars', 'feedback'], 'required'],
+            [['activity_id', 'sponsor_id', 'feedback'], 'required'],
             [['activity_id', 'user_id', 'stars', 'created_at', 'updated_at', 'status', 'sponsor_stars', 'sponsor_id', 'sponsor_start1', 'sponsor_start2', 'sponsor_start3', 'grade'], 'integer'],
+            ['stars', 'default', 'value' => '0'],
             ['status', 'default', 'value' => '10'],
             [['feedback'], 'string', 'max' => 255]
         ];
@@ -94,17 +95,28 @@ class ActivityFeedback extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * 用户
+     * @return \yii\db\ActiveQuery
+     */
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
+    /**
+     * 活动
+     * @return \yii\db\ActiveQuery
+     */
     public function getActivity()
     {
         return $this->hasOne(Activity::className(), ['id' => 'activity_id']);
     }
 
-    //活动报名的对象
+    /**
+     * 活动报名
+     * @return \yii\db\ActiveQuery
+     */
     public function getAnswer()
     {
         return $this->hasOne(Answer::className(), ['user_id' => 'user_id', 'activity_id' => 'activity_id']);

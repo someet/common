@@ -132,11 +132,20 @@ class YellowCard extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * 属于一个活动
+     * @return \yii\db\ActiveQuery
+     */
     public function getActivity()
     {
         return $this->hasOne(Activity::className(), ['id' => 'activity_id']);
     }
 
+
+    /**
+     * 属于一个用户
+     * @return \yii\db\ActiveQuery
+     */
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
