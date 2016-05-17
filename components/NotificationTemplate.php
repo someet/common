@@ -32,7 +32,8 @@ class NotificationTemplate extends Component
      * @param string $activity_name 活动名称
      * @return string 短信内容
      */
-    public static function fetchSuccessSmsData($start_time, $activity_name) {
+    public static function fetchSuccessSmsData($start_time, $activity_name)
+    {
         $start_time = $start_time > 0 ? date('n月j日', $start_time) : '';
         //获取通过的短信模板
         return "恭喜，你报名的{$start_time}“{$activity_name}”活动已通过筛选。详情请到微信公众号(SomeetInc)查看。";
@@ -44,7 +45,8 @@ class NotificationTemplate extends Component
      * @param string $reason 被拒绝的原因
      * @return string 失败的短信内容
      */
-    public static function fetchFailSmsData($start_time, $activity_name, $reason = '') {
+    public static function fetchFailSmsData($start_time, $activity_name, $reason = '')
+    {
         $start_time = $start_time > 0 ? date('n月j日', $start_time) : '';
         //获取拒绝的短信模板
         return "Shit happens！{$reason}很抱歉你报名的{$start_time}“{$activity_name}”活动未通过筛选。祝下次好运。详情请到微信公众号(SomeetInc)查看。";
@@ -55,7 +57,8 @@ class NotificationTemplate extends Component
      * @param string $activity_name 活动名称
      * @return string 通知参加活动的短信内容
      */
-    public static function fetchNotiSmsData($activity_name, $start_time, $weather) {
+    public static function fetchNotiSmsData($activity_name, $start_time, $weather)
+    {
         //获取通知参加活动的短信
         return "你报名的活动“{$activity_name}”在今天的{$start_time}开始。{$weather}请合理安排时间出行，不要迟到哦。";
     }
@@ -65,7 +68,8 @@ class NotificationTemplate extends Component
      * @param string $activity_name 活动名称
      * @return string 通知参加活动的短信内容
      */
-    public static function fetchNeedFeedbackSmsData($activity_name) {
+    public static function fetchNeedFeedbackSmsData($activity_name)
+    {
         //获取需要反馈的短信内容
         return " 你好，你已成功参加“{$activity_name}”活动，请及时对活动进行反馈，之后会提高下次通过筛选概率哦。";
     }
@@ -78,7 +82,8 @@ class NotificationTemplate extends Component
      * @return array
      * 活动报名失败通知
      */
-    public static function fetchFailedWechatTemplateData($openid, $account, $activity, $reject_reason) {
+    public static function fetchFailedWechatTemplateData($openid, $account, $activity, $reject_reason)
+    {
         //获取失败的模板消息id
         $template_id = Yii::$app->params['sms.failed_template_id'];
         if (empty($template_id)) {
@@ -87,7 +92,7 @@ class NotificationTemplate extends Component
         }
 
         // 活动开始时间
-        $activity_start_time = date('m月d号 H:i',$activity['start_time'])
+        $activity_start_time = date('m月d号 H:i', $activity['start_time'])
                                 . self::$week[date('w', $activity['start_time'])]
                                 . date('H:i', $activity['start_time']);
         $data = [
@@ -134,7 +139,8 @@ class NotificationTemplate extends Component
      * @param $activity 活动对象
      * @return array
      */
-    public static function fetchNotiWechatTemplateData($openid, $activity) {
+    public static function fetchNotiWechatTemplateData($openid, $activity)
+    {
         //获取失败的模板消息id
         $template_id = Yii::$app->params['sms.noti_template_id'];
         if (empty($template_id)) {
@@ -179,7 +185,8 @@ class NotificationTemplate extends Component
      * @param $activity 活动对象
      * @return array
      */
-    public static function fetchNeedFeedbackWechatTemplateData($openid, $account, $activity) {
+    public static function fetchNeedFeedbackWechatTemplateData($openid, $account, $activity)
+    {
 
         //获取需反馈活动通知的微信模板消息id
         $template_id = Yii::$app->params['sms.feedback_template_id'];
@@ -230,13 +237,14 @@ class NotificationTemplate extends Component
      * @param $activity 活动对象
      * @return array
      */
-    public static function fetchSuccessWechatTemplateData($openid, $account, $activity) {
+    public static function fetchSuccessWechatTemplateData($openid, $account, $activity)
+    {
         //获取成功的模板消息id
         $template_id = Yii::$app->params['sms.success_template_id'];
         if (!empty($activity['group_code'])) {
             $url = Yii::$app->params['domain'].'join/'.$activity['id'];
-        }else{
-            $url = Yii::$app->params['domain'].'activity/'.$activity['id'];            
+        } else {
+            $url = Yii::$app->params['domain'].'activity/'.$activity['id'];
         }
         if (empty($template_id)) {
             //记录一个错误, 请设置成功的模板消息id
@@ -289,7 +297,8 @@ class NotificationTemplate extends Component
      * @param $activity 活动对象
      * @return array
      */
-    public static function fetchSuccessCheckInWechatTemplateData($openid, $account, $activity) {
+    public static function fetchSuccessCheckInWechatTemplateData($openid, $account, $activity)
+    {
         //获取模板消息id
         $template_id = Yii::$app->params['sms.success_check_in_template_id'];
         $url = Yii::$app->params['domain'].'feedback/'.$activity['id'];
@@ -335,7 +344,7 @@ class NotificationTemplate extends Component
             ]
         ];
         return $data;
-    }    
+    }
 
     /**
      * 获取活动信用变更的微信模板消息
@@ -344,7 +353,8 @@ class NotificationTemplate extends Component
      * @param $activity 活动对象
      * @return array
      */
-    public static function fetchUpdateCreditWechatTemplateData($openid, $activity,$yellowcard) {
+    public static function fetchUpdateCreditWechatTemplateData($openid, $activity, $yellowcard)
+    {
         //获取模板消息id
         $template_id = Yii::$app->params['sms.update_credit_template_id'];
         $url = Yii::$app->params['domain'].'member/credit-record/'.$activity['id'];
@@ -370,7 +380,7 @@ class NotificationTemplate extends Component
                     '6' => '骚扰',
                     ];
         // 活动开始时间
-        $activity_start_time = date('m月d号 H:i',$activity['start_time'])
+        $activity_start_time = date('m月d号 H:i', $activity['start_time'])
                                 . self::$week[date('w', $activity['start_time'])]
                                 . date('H:i', $activity['start_time']);
         $data = [
@@ -409,18 +419,17 @@ class NotificationTemplate extends Component
     }
 
 
-    /**
+  /**
      * 获取活动取消 信用变更的微信模板消息
-     * @param $openid openid
-     * @param $account Account对象
-     * @param $activity 活动对象
+     * @param $openid OPENID
+     * @param $answer 答案
      * @return array
      */
-    public static function fetchUpdateCancelActivityWechatTemplateData($openid, $answer) 
+    public static function fetchUpdateCancelActivityWechatTemplateData($openid, $answer)
     {
         //获取模板消息id
         $template_id = Yii::$app->params['sms.update_credit_template_id'];
-        $url = Yii::$app->params['domain'].'member/credit-record/'.$activity['id'];
+        $url = Yii::$app->params['domain'].'member/credit-record/'.$answer->activity['id'];
         if (empty($template_id)) {
             //记录一个错误, 请设置成功的模板消息id
             Yii::error('请设置取消报名的模板消息id');
@@ -443,9 +452,9 @@ class NotificationTemplate extends Component
                     '6' => '骚扰',
                     ];
         // 活动开始时间
-        $activity_start_time = date('m月d号 H:i',$activity['start_time'])
-                                . self::$week[date('w', $activity['start_time'])]
-                                . date('H:i', $activity['start_time']);
+        $activity_start_time = date('m月d号 H:i', $answer->activity['start_time'])
+                                . self::$week[date('w', $answer->activity['start_time'])]
+                                . date('H:i', $answer->activity['start_time']);
         $data = [
             "touser" => "{$openid}",
             "template_id" => $template_id,
@@ -480,5 +489,4 @@ class NotificationTemplate extends Component
         ];
         return $data;
     }
-
 }
