@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models;
+namespace someet\common\models;
 
 use Yii;
 
@@ -58,5 +58,4 @@ class SpaceSection extends \yii\db\ActiveRecord
     {
         return $this->hasMany(SpaceSpot::className(), ['id' => 'spot_id']);
     }
-
 }
