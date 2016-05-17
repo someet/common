@@ -305,13 +305,19 @@ class User extends BaseUser
         return $this->save();
     }
 
-    // Profile
+    /**
+     * Profile
+     * @return \yii\db\ActiveQuery
+     */
     public function getProfile()
     {
         return $this->hasOne(Profile::className(), ['user_id' => 'id']);
     }
 
-    // 活动列表
+    /**
+     * 活动列表
+     * @return \yii\db\ActiveQuery
+     */
     public function getActivity()
     {
         return $this->hasMany(Activity::className(), ['created_by' => 'id']);
