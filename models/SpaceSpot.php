@@ -84,6 +84,13 @@ class SpaceSpot extends \yii\db\ActiveRecord
         return $this->hasOne(SpaceType::className(), ['id' => 'type_id']);
     }
 
+
+    // 活动的区间数
+    public function getSections()
+    {
+        return $this->hasMany(SpaceSection::className(), ['spot_id' => 'id']);
+    }
+
     //设备
     public function getDevices()
     {

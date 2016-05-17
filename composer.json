@@ -1,70 +1,18 @@
 {
-	"name": "codemix/yii2-dockerized",
-	"description": "A template for docker based Yii 2 applications",
-	"keywords": ["yii2", "framework", "docker", "application template"],
+	"name": "someet/common",
+	"description": "someet common repo",
+	"keywords": [],
 	"type": "project",
 	"license": "MIT",
 	"minimum-stability": "stable",
 	"require": {
-		"php": ">=5.4.0",
-		"yiisoft/yii2": "2.0.7",
-		"yiisoft/yii2-bootstrap": "~2.0.0",
-		"yiisoft/yii2-jui": "~2.0.0",
-		"yiisoft/yii2-swiftmailer": "~2.0.0",
-		"vlucas/phpdotenv": "1.0.*",
-		"codemix/yii2-streamlog": "0.0.1",
-		"qiniu/php-sdk": "^7.0",
-		"someet/common": "*@dev",
-		"dektrium/yii2-user": "*@dev",
-		"dektrium/yii2-rbac": "*@dev",
-        "yiisoft/yii2-redis": "*@dev",
-        "e96/yii2-sentry": "dev-master",
-        "yiisoft/yii2-authclient": "*@dev",
-        "callmez/yii2-wechat-sdk": "dev-master",
-        "maxwelldu/yii2-sms": "1.1",
-        "bazilio/yii2-newrelic": "~0.0.1",
-		"udokmeci/yii2-beanstalk" : "dev-master"
+		"php": ">=5.4.0"
 	},
 	"require-dev": {
-		"yiisoft/yii2-debug": "~2.0.0",
-		"yiisoft/yii2-gii": "~2.0.0",
-		"yiisoft/yii2-codeception": "~2.0.0",
-		"yiisoft/yii2-faker": "~2.0.0"
-	},
-	"config": {
-		"process-timeout": 1800,
-        "allow_superuser": 1,
-		"vendor-dir": "/var/www/vendor",
-		"secure-http": false
-	},
-	"extra": {
-		"asset-installer-paths": {
-			"npm-asset-library": "/var/www/vendor/npm",
-			"bower-asset-library": "/var/www/vendor/bower"
-		}
 	},
 	"autoload": {
-		"files": [
-			"./packages/someet-common/components/SomeetValidator.php",
-			"./packages/someet-common/components/GlobalFunctions.php"
-		]
-	},
-	"repositories": [
-		{
-			"type": "path",
-			"url": "./packages/someet-common/"
-		},
-		{
-			"type": "path",
-			"url": "./packages/yii2-user"
-		},
-		{
-			"type": "path",
-			"url": "./packages/yii2-rbac"
-		},
-        {
-          "type": "path",
-          "url": "./packages/yii2-redis"
+        	"psr-4": {
+	            "someet\\common\\": "."
 		}
-	]
+	}
 }
