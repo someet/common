@@ -80,30 +80,23 @@
                 <span ng-if="entity.status == 30">关闭</span>
                 </md-switch>
             </span>            
-
-            <span >
-                <md-switch  style="display:inline-block;margin:2px;" ng-model="entity.status" aria-label="Switch 2" ng-true-value="'20'" ng-false-value="'30'" class="md-warn" ng-change="updateStatus(entity.id,entity.status)">
-                <span ng-if="entity.status == 20">启用</span>
-                <span ng-if="entity.status == 40">取消</span>
-                </md-switch>
-            </span>
-                        <div class="btn-group btn-float-right">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                活动状态
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a ng-click="updateStatus(entity.id,20)">启用活动</a>
-                                </li>
-                                <li>
-                                    <a ng-click="updateStatus(entity.id,30)">关闭活动</a>
-                                </li>
-                                <li>
-                                    <a ng-click="updateStatus(entity.id,40)">取消活动</a>
-                                </li>
-                            </ul>
-                        </div>
+            <div class="btn-group btn-float-right">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                    活动状态
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a ng-click="updateStatus(entity.id,20)">启用活动</a>
+                    </li>
+                    <li>
+                        <a ng-click="updateStatus(entity.id,30)">关闭活动</a>
+                    </li>
+                    <li>
+                        <a ng-click="updateStatus(entity.id,40)">取消活动</a>
+                    </li>
+                </ul>
+            </div>
               <span ng-if="entity.status == 20 || entity.status == 30">
                 <a href="#/answer/{{entity.id}}" target="_blank" ng-class="{true: 'btn-danger', false: 'btn-default'}[entity.question.status==10]" ng-if="entity.question" class="btn  btn-float-right" type="button">
                   <span>管理</span>
