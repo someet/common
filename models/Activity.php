@@ -305,5 +305,14 @@ class Activity extends \yii\db\ActiveRecord
     {
         return $this->hasMany(ActivityCheckIn::className(), ['activity_id' => 'id']);
     }
+
+    /**
+     * 场地
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSpot()
+    {
+        return $this->hasOne(SpaceSpot::className(), ['id' => 'space_spot_id']);
+    }
 }
 
