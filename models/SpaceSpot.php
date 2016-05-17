@@ -1,6 +1,6 @@
 <?php
 
-namespace common\models;
+namespace someet\common\models;
 
 use someet\common\models\User;
 use Yii;
@@ -83,6 +83,7 @@ class SpaceSpot extends \yii\db\ActiveRecord
     {
         return $this->hasOne(SpaceType::className(), ['id' => 'type_id']);
     }
+
 
     // 活动的区间数
     public function getSections()
