@@ -5,7 +5,11 @@ namespace app\controllers;
 use app\components\DataValidationFailedException;
 use someet\common\models\Activity;
 use someet\common\models\RActivitySpace;
+<<<<<<< HEAD
 use common\models\SpaceSection;
+=======
+use someet\common\models\SpaceSection;
+>>>>>>> 49b64f8d1c243d7895a1562fa50b1f3fde1a6a22
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
