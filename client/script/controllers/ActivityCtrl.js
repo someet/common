@@ -484,6 +484,33 @@ angular.module('controllers', ['ngTagsInput'])
         function($scope, $routeParams, $location, $activityManage, $activityTypeManage, $qupload, $qiniuManage, $mdToast) {
             $scope.$parent.pageName = '活动详情';
 
+            // 搜索场地功能
+            $scope.getSpace = function() {
+                $scope.space_spot = $activityManage.searchSpace('');
+                return $scope.space_spot;
+            }
+            // 获取场地
+            $activityManage.searchSpace('').then(function(data) {
+                $scope.spaceSpots = data;
+            });
+
+            //搜索空间
+            $scope.getSection = function(obj) {
+                if (obj != null) {
+                console.log($scope.selectedSpaceSpot.id);
+                    $scope.selectedSection = [];
+                    // 把字符转化为对象
+                    if (typeof obj == 'string' ) {
+                        console.log(typeof obj);
+                        var obj = JSON.parse(obj)
+                        $scope.sections = obj.sections;
+                    }else if (typeof obj == 'object') {
+                        console.log(typeof obj);
+                        $scope.sections = obj.sections;
+                    }
+                }
+            }  
+
             // 搜索用户功能
             $scope.getUsers = function(query) {
                 return $activityManage.searchFounder(query);
@@ -594,6 +621,7 @@ angular.module('controllers', ['ngTagsInput'])
                 };
                 startCode();
             };
+
             $scope.pma_type_count = [
                 { pma_type: 0, name: '线上' },
                 { pma_type: 1, name: '线下' },
@@ -605,6 +633,7 @@ angular.module('controllers', ['ngTagsInput'])
             var id = $routeParams.id;
             if (id > 0) {
                 $activityManage.fetch(id).then(function(data) {
+                    // console.log(data);
                     $scope.user = {};
                     $scope.dts = {};
                     $scope.entity = data;
@@ -618,7 +647,12 @@ angular.module('controllers', ['ngTagsInput'])
                     $scope.pma = data.pma;
                     $scope.co_founder1 = data.cofounder1;
                     $scope.co_founder2 = data.cofounder2;
-
+                    $scope.selectedSpaceSpot = data.space;
+                    $scope.selectedSpace = data.space;
+                    $scope.selectedSection = [];
+                    angular.forEach(data.sections, function(value, key) {
+                        $scope.selectedSection.push(value.space_section_id);
+                    });
                     var tags = [];
                     for (var k in data.tags) {
                         var tag = data.tags[k].name;
@@ -640,7 +674,7 @@ angular.module('controllers', ['ngTagsInput'])
             $scope.cancel = function() {
                 $location.path('/activity/list/0');
             }
-
+ 
             //保存活动
             $scope.save = function() {
                 var newEntity = $scope.entity;
@@ -649,8 +683,22 @@ angular.module('controllers', ['ngTagsInput'])
                 newEntity.poster = $scope.poster;
                 newEntity.group_code = $scope.group_code;
                 newEntity.pma_type = $scope.entity.pma_type;
-                console.log(newEntity.pma_type);
+                if ($scope.selectedSpaceSpot) {
+                    newEntity.area = $scope.selectedSpaceSpot.area;
+                    newEntity.address = $scope.selectedSpaceSpot.address;
+                    newEntity.space_spot_id = $scope.selectedSpaceSpot.id;
+                }
+                // 新创建活动时 未定义 更新时数组为0
+                if (typeof($scope.selectedSection) == 'undefined') {
+                    newEntity.space_section_id = 0;
+                } else {
 
+                    if ($scope.selectedSection.length == 0) {
+                        newEntity.space_section_id = 0;
+                    }else{
+                        newEntity.space_section_id = $scope.selectedSection;
+                    }
+                }
                 if ($scope.user) {
                     newEntity.created_by = $scope.user.id;
                 }
@@ -684,9 +732,6 @@ angular.module('controllers', ['ngTagsInput'])
                             .content('活动保存成功')
                             .hideDelay(5000)
                             .position("top right"));
-
-                        console.log(data.pma_type);
-                        // $location.path('/activity/list/0');
                     }, function(err) {
                         $mdToast.show($mdToast.simple()
                             .content(err.toString())
