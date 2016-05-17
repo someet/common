@@ -152,7 +152,7 @@ class AnswerController extends BackendController
 
     /**
      * 更新用户请假
-     * @param $id 更新的对象id
+     * @param $id int 更新的对象id
      * @param $leave_status 请假状态 0 未请假 1 已请假
      * @return array|null|\yii\db\ActiveRecord
      * @throws DataValidationFailedException
@@ -401,7 +401,6 @@ class AnswerController extends BackendController
             $sponsor_sum = ActivityFeedback::find()
                         ->select('
                             activity_feedback.user_id,
-                            sum(activity_feedback.sponsor_start1) sponsor_start1,
                             activity_feedback.activity_id,
                             activity_feedback.stars,
                             activity_feedback.feedback,
@@ -409,7 +408,7 @@ class AnswerController extends BackendController
                             activity_feedback.updated_at,
                             activity_feedback.sponsor_id,
                             activity_feedback.sponsor_stars,
-                            activity_feedback.sponsor_start1,
+                            sum(activity_feedback.sponsor_start1) sponsor_start1,
                             sum(activity_feedback.sponsor_start2) sponsor_start2,
                             sum(activity_feedback.sponsor_start3) sponsor_start3,
                             activity_feedback.grade
