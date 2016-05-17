@@ -22,10 +22,10 @@
         <div layout="row">
           <md-input-container flex="">
             <label>场地名称</label>
-            <input name="name" type="text" md-maxlength="30" required minlength="5" ng-model="entity.name">
+            <input name="name" type="text" md-maxlength="30" required minlength="1" ng-model="entity.name">
             <div ng-messages="entityForm.name.$error">
               <div ng-message="required">必填项目</div>
-              <div ng-message="minlength">场地名称不能少于5个字符</div>
+              <div ng-message="minlength">场地名称不能少于1个字符</div>
               <div ng-message="md-maxlength">场地名称不能超过30个字符</div>
             </div>
           </md-input-container>
