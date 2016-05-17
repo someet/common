@@ -166,77 +166,82 @@ class ActivityController extends BackendController
 
         // only show draft and release activities
 
-            $andwhere = ['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE, Activity::STATUS_PREVENT ,Activity::STATUS_SHUT]];
+            $andwhere = ['in', 'status', [
+            Activity::STATUS_DRAFT,
+            Activity::STATUS_RELEASE,
+            Activity::STATUS_PREVENT,
+            Activity::STATUS_SHUT,
+            Activity::STATUS_CANCEL,
+            ]];
     
-
-        if ($type>0) {
-            //判断周末非周末
-            if ($isWeek == 0) {
-                $where = ['type_id' => $type];
-                $query = Activity::find()
-                ->with([
+            if ($type>0) {
+                //判断周末非周末
+                if ($isWeek == 0) {
+                    $where = ['type_id' => $type];
+                    $query = Activity::find()
+                    ->with([
                     'type',
                     'tags',
                     'question',
                     'user',
                     'answerList',
                     'feedbackList'
-                ])
-                ->asArray()
-                ->where($where)
-                ->andWhere('start_time > '.getLastEndTime())
-                ->andWhere($andwhere)
-                ->orderBy($this->activity_order);
-            } else {
-                $where = ['type_id' => $type];
-                $query = Activity::find()
-                ->with([
+                    ])
+                    ->asArray()
+                    ->where($where)
+                    ->andWhere('start_time > '.getLastEndTime())
+                    ->andWhere($andwhere)
+                    ->orderBy($this->activity_order);
+                } else {
+                    $where = ['type_id' => $type];
+                    $query = Activity::find()
+                    ->with([
                     'type',
                     'question',
                     'user',
                     'answerList',
                     'feedbackList'
-                ])
-                ->asArray()
-                ->where($where)
-                ->andWhere('start_time < '.getLastEndTime())
-                ->andWhere($andwhere)
-                ->orderBy($this->activity_order);
-            }
-        } else {
-            //判断周末非周末
-            if ($isWeek == 0) {
-                $query = Activity::find()
-                ->with([
+                    ])
+                    ->asArray()
+                    ->where($where)
+                    ->andWhere('start_time < '.getLastEndTime())
+                    ->andWhere($andwhere)
+                    ->orderBy($this->activity_order);
+                }
+            } else {
+                //判断周末非周末
+                if ($isWeek == 0) {
+                    $query = Activity::find()
+                    ->with([
                     'type',
                     'question',
                     'user',
                     'answerList',
                     'feedbackList'
-                ])
-                ->where($andwhere)
-                ->andWhere('start_time > '.getLastEndTime())
-                ->asArray()
-                ->orderBy($this->activity_order);
-            } else {
-                $query = Activity::find()
-                ->with([
+                    ])
+                    ->where($andwhere)
+                    ->andWhere('start_time > '.getLastEndTime())
+                    ->asArray()
+                    ->orderBy($this->activity_order);
+                } else {
+                    $query = Activity::find()
+                    ->with([
                     'type',
                     'tags',
                     'question',
                     'user',
                     'answerList',
                     'feedbackList'
-                ])
-                ->where($andwhere)
-                ->andWhere('start_time < '.getLastEndTime())
-                ->asArray()
-                ->orderBy($this->activity_order);
+                    ])
+                    ->where($andwhere)
+                    ->andWhere('start_time < '.getLastEndTime())
+                    ->asArray()
+                    ->orderBy($this->activity_order);
+                }
             }
-        }
 
-        if ($id) {
-            $query = Activity::find()
+            if ($id) {
+                $query = Activity::find()
                 ->where(['id' => $id])
                 ->with([
                     'type',
@@ -247,37 +252,37 @@ class ActivityController extends BackendController
                 ])
                 ->asArray()
                 ->one();
-        } elseif ($scenario == "total") {
-            $countQuery = clone $query;
-            $pagination = new Pagination([
+            } elseif ($scenario == "total") {
+                $countQuery = clone $query;
+                $pagination = new Pagination([
                 'totalCount' => $countQuery->count(),
                 'pageSize' => $perPage
-            ]);
+                ]);
 
-            return $pagination->totalCount;
-        } elseif ($scenario == "page") {
-            $countQuery = clone $query;
-            $pagination = new Pagination([
+                return $pagination->totalCount;
+            } elseif ($scenario == "page") {
+                $countQuery = clone $query;
+                $pagination = new Pagination([
                 'totalCount' => $countQuery->count(),
                 'pageSize' => $perPage
-            ]);
+                ]);
 
-            $activities = $query->offset($pagination->offset)
+                $activities = $query->offset($pagination->offset)
                 ->limit($pagination->limit)
                 ->all();
 
 
-            foreach ($activities as $key => $activity) {
-                $activities[$key]['answer_count'] = count($activity['answerList']);
-                $activities[$key]['feedback_count'] = count($activity['feedbackList']);
-                $activities[$key]['preview_url'] = Yii::$app->params['domain'].'preview/'.$activity['id'];
-                $activities[$key]['filter_url'] = Yii::$app->params['domain'].'filter/'.$activity['id'];
+                foreach ($activities as $key => $activity) {
+                    $activities[$key]['answer_count'] = count($activity['answerList']);
+                    $activities[$key]['feedback_count'] = count($activity['feedbackList']);
+                    $activities[$key]['preview_url'] = Yii::$app->params['domain'].'preview/'.$activity['id'];
+                    $activities[$key]['filter_url'] = Yii::$app->params['domain'].'filter/'.$activity['id'];
 
-                //set last week days
-                $activities[$key]['this_week'] = getLastEndTime() < $activity['end_time'] ? 1 : 0;
+                    //set last week days
+                    $activities[$key]['this_week'] = getLastEndTime() < $activity['end_time'] ? 1 : 0;
+                }
             }
-        }
-        return $activities;
+            return $activities;
     }
 
 
@@ -846,6 +851,7 @@ class ActivityController extends BackendController
                     $delete_spaces = RActivitySpace::deleteAll([
                         'activity_id'=> $model->id,
                         ]);
+                    print_r($data['space_section_id']);
                     foreach ($data['space_section_id'] as $space_section) {
                         $r_activity_space =new RActivitySpace();
                         $r_activity_space->activity_id = $model->id;

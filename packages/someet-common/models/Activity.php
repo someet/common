@@ -66,6 +66,8 @@ class Activity extends \yii\db\ActiveRecord
     const STATUS_RELEASE  = 20;
     /* 关闭 */
     const STATUS_SHUT  = 30;
+    /* 取消 */
+    const STATUS_CANCEL = 40;
      /*好评*/
     const GOOD_SCORE = 1;
      /*中评*/
@@ -124,7 +126,7 @@ class Activity extends \yii\db\ActiveRecord
 
     public function extraFields()
     {
-        return ['type', 'user','pma', 'profile' => function() {
+        return ['type', 'user','pma', 'profile' => function () {
             return $this->user->profile;
         }];
     }
@@ -314,4 +316,3 @@ class Activity extends \yii\db\ActiveRecord
         return $this->hasMany(ActivityCheckIn::className(), ['activity_id' => 'id']);
     }
 }
-
