@@ -128,7 +128,7 @@ class SpaceSpotController extends BackendController
     public function actionSearch($name)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $activity = SpaceSpot::find()
+        $models = SpaceSpot::find()
             ->with([
                 'type',
                 'sections',
@@ -137,25 +137,31 @@ class SpaceSpotController extends BackendController
             ->where(
                 ['like', 'name', $name]
             )
-            ->orWhere(['like','detail',$name]);
-        $activityExists = $activity->exists();
-        $countQuery = clone $activity;
-        $pages = new Pagination(['totalCount' => $countQuery->count()]);
-        $models = $activity->offset($pages->offset)
-            ->limit($pages->limit)
+            ->orWhere(['like','detail',$name])
             ->asArray()
             ->all();
-        if ($activityExists) {
+
             return [
-                'status' => 1,
                 'models' => $models,
-                'pages' => $pages,
             ];
-        } else {
-            return [
-                'status' => 0,
-            ];
-        }
+        // $activityExists = $activity->exists();
+        // $countQuery = clone $activity;
+        // $pages = new Pagination(['totalCount' => $countQuery->count()]);
+        // $models = $activity->offset($pages->offset)
+        //     ->limit($pages->limit)
+        //     ->asArray()
+        //     ->all();
+        // if ($activityExists) {
+            // return [
+            // 'status' => 1,
+            // 'models' => $models,
+            // 'pages' => $pages,
+            // ];
+        // } else {
+        //     return [
+        //         'status' => 0,
+        //     ];
+        // }
 
 
     }
