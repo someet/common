@@ -66,14 +66,14 @@ class SiteController extends BackendController
         // 所有已经完善资料的人数
         $countUserInfo = User::find()
                         ->andwhere(['not', ['wechat_id'=> null]])
-                        ->count('wechat_id');  
+                        ->count('wechat_id');
 
         // 所有已经完善资料的人数 男
         $countUserInfoBoy = User::find()
                         ->andwhere(['not', ['wechat_id'=> null]])
                         ->joinWith('profile')
-                        ->andwhere('profile.sex ='.Profile::SEX_BOY )
-                        ->count('wechat_id');  
+                        ->andwhere('profile.sex ='.Profile::SEX_BOY)
+                        ->count('wechat_id');
 
         // 所有已经完善资料的人数 女
         $countUserInfoGirl = User::find()
@@ -147,32 +147,32 @@ class SiteController extends BackendController
             foreach ($countJoin as $key => $value) {
                 if ($value['peoples'] == 0) {
                     $countJoin[$key]['order'] = 0;
-                }else {
+                } else {
                     $countJoin[$key]['order'] = round($value['countJoin'] / $value['peoples']*100);
                 }
             }
 
-            $sort_desc = array(  
-                'direction' => 'SORT_DESC', //排序顺序标志  SORT_DESC  降序；  SORT_ASC 升序  
-                'field'     => 'order',       //排序字段  
-            );         
+            $sort_desc = array(
+                'direction' => 'SORT_DESC', //排序顺序标志  SORT_DESC  降序；  SORT_ASC 升序
+                'field'     => 'order',       //排序字段
+            );
 
             $sort_asc = array(
-                'direction' => 'SORT_ASC', //排序顺序标志  SORT_DESC  降序；  SORT_ASC 升序  
-                'field'     => 'order',       //排序字段  
-            ); 
+                'direction' => 'SORT_ASC', //排序顺序标志  SORT_DESC  降序；  SORT_ASC 升序
+                'field'     => 'order',       //排序字段
+            );
             
             $arrSort = array();
-            foreach($countJoin AS $uniqid => $row){  
-                foreach($row AS $key=>$value){  
-                    $arrSort[$key][$uniqid] = $value;  
-                }  
-            } 
+            foreach ($countJoin as $uniqid => $row) {
+                foreach ($row as $key => $value) {
+                    $arrSort[$key][$uniqid] = $value;
+                }
+            }
 
             // 处理多维数组 升序
             array_multisort($arrSort[$sort_asc['field']], constant($sort_asc['direction']), $countJoin);  //升序
 
-            $countJoinAsc =  $countJoin;  
+            $countJoinAsc =  $countJoin;
             // array_slice($countJoin,0,10);
 
             // 处理多维数组 降序
@@ -188,11 +188,11 @@ class SiteController extends BackendController
             // 迟到人数
             $arrive_late = Answer::find()
                             ->where(['arrive_status' => Answer::STATUS_ARRIVE_LATE,'status' => Answer::STATUS_REVIEW_PASS])
-                            ->count();            
+                            ->count();
             // 请假人数
             $leave = Answer::find()
                             ->where(['leave_status' => Answer::STATUS_LEAVE_YES,'status' => Answer::STATUS_REVIEW_PASS])
-                            ->count();            
+                            ->count();
             // 爽约人数
             $arrive_no = Answer::find()
                             ->where(['arrive_status' => Answer::STATUS_ARRIVE_YET,'status' => Answer::STATUS_REVIEW_PASS])
@@ -200,17 +200,14 @@ class SiteController extends BackendController
             // echo $pass_count;
             // echo $arrive_late;
             if ($pass_count > 0) {
-                $late_ratio = round($arrive_late / $pass_count,2) *100 ."%";
-                $leave_ratio = round($leave / $pass_count,2) *100 ."%";
-                $arrive_no_ratio = round($arrive_no / $pass_count,2) *100 ."%";
-            }else {
+                $late_ratio = round($arrive_late / $pass_count, 2) *100 ."%";
+                $leave_ratio = round($leave / $pass_count, 2) *100 ."%";
+                $arrive_no_ratio = round($arrive_no / $pass_count, 2) *100 ."%";
+            } else {
                 $late_ratio = "0%";
                 $leave_ratio = "0%";
                 $arrive_no_ratio = "0%";
             }
-
-
-            
         }
 
         return [

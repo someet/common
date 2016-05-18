@@ -1,6 +1,7 @@
 <?php
 
 namespace app\controllers;
+
 use app\components\NotificationTemplate;
 use dektrium\user\models\Account;
 use someet\common\models\ActivityFeedback;
@@ -70,7 +71,6 @@ class AnswerController extends BackendController
                 foreach ($answerList as $answer) {
                     $answerModel = new AnswerItem();
                     if ($answerModel->load($answer, '') && $answerModel->save()) {
-
                     } elseif ($answerModel->hasErrors()) {
                         $errors = $model->getFirstErrors();
                         throw new DataValidationFailedException(array_pop($errors));
@@ -93,7 +93,8 @@ class AnswerController extends BackendController
         }
     }
 
-    public static function isTelNumber($number) {
+    public static function isTelNumber($number)
+    {
         return 0 < preg_match('/^\+?[0\s]*[\d]{0,4}[\-\s]?\d{4,12}$/', $number);
     }
 
@@ -148,7 +149,7 @@ class AnswerController extends BackendController
                 ->with('answerItemList')
                 ->one();
         }
-    }    
+    }
 
     /**
      * 更新用户请假
@@ -316,15 +317,15 @@ class AnswerController extends BackendController
                     'answer.arrive_status'=>[
                                 Answer::STATUS_ARRIVE_LATE,
                                 Answer::STATUS_ARRIVE_ON_TIME,
-                ]
+                    ]
             ])
             ->asArray()
             ->all();
 
         // 遍历反馈
-        foreach($feedbacks as $feedback) {
+        foreach ($feedbacks as $feedback) {
             // 将同一个用户的反馈放到报名对象上面
-            foreach($models as &$model) {
+            foreach ($models as &$model) {
                 if ($model['user_id'] == $feedback['user_id']) {
                     $model['feedback'] = $feedback;
                 }
@@ -341,7 +342,7 @@ class AnswerController extends BackendController
         $arrive_late = Answer::find()
                         ->where(['activity_id' => $activity_id ])
                         ->andWhere(['arrive_status' => Answer::STATUS_ARRIVE_LATE,'status' => Answer::STATUS_REVIEW_PASS])
-                        ->count();            
+                        ->count();
         // 请假人数
         $leave = Answer::find()
                         // ->select(['count(activity_id) as leave_count'])
@@ -349,7 +350,7 @@ class AnswerController extends BackendController
                         ->andWhere(['leave_status' => Answer::STATUS_LEAVE_YES,'status' => Answer::STATUS_REVIEW_PASS])
                         // ->groupBy('activity_id')
                         // ->asArray()
-                        // ->one();  
+                        // ->one();
                         ->count();
 
         //好评，差评，中评数统计
@@ -383,7 +384,7 @@ class AnswerController extends BackendController
                 Answer::STATUS_ARRIVE_LATE,
                 Answer::STATUS_ARRIVE_ON_TIME,
             ]
-        ])
+            ])
         ->count();
 
         $bad_score = ActivityFeedback::find()
@@ -394,12 +395,11 @@ class AnswerController extends BackendController
                 Answer::STATUS_ARRIVE_LATE,
                 Answer::STATUS_ARRIVE_ON_TIME,
             ]
-        ])
+            ])
         ->count();
-         if($sponsor_count != 0){               
-
+        if ($sponsor_count != 0) {
             $sponsor_sum = ActivityFeedback::find()
-                        ->select('
+                      ->select('
                             activity_feedback.user_id,
                             activity_feedback.activity_id,
                             activity_feedback.stars,
@@ -413,19 +413,19 @@ class AnswerController extends BackendController
                             sum(activity_feedback.sponsor_start3) sponsor_start3,
                             activity_feedback.grade
                             ')
-                        ->joinWith('answer')
-                        ->where([
-                            'activity_feedback.activity_id' => $activity_id,
-                            'answer.arrive_status'=>[
-                                Answer::STATUS_ARRIVE_LATE,
-                                Answer::STATUS_ARRIVE_ON_TIME,
-                                ]
-                            ])
-                        ->asArray()
-                        ->one();
+                      ->joinWith('answer')
+                      ->where([
+                          'activity_feedback.activity_id' => $activity_id,
+                          'answer.arrive_status'=>[
+                              Answer::STATUS_ARRIVE_LATE,
+                              Answer::STATUS_ARRIVE_ON_TIME,
+                              ]
+                          ])
+                      ->asArray()
+                      ->one();
 
             $sponsor_score = (($sponsor_sum['sponsor_start1'])*0.4+($sponsor_sum['sponsor_start2'])*0.3+($sponsor_sum['sponsor_start3'])*0.3)/$sponsor_count;
-        }else{
+        } else {
             $sponsor_score = Answer::DEFAULT_SCORE;
         }
         
@@ -436,10 +436,10 @@ class AnswerController extends BackendController
                         ->count();
             
         if ($pass_count > 0) {
-            $late_ratio = round($arrive_late / $pass_count,2) *100 ."%";
-            $leave_ratio = round($leave / $pass_count,2) *100 ."%";
-            $arrive_no_ratio = round($arrive_no / $pass_count,2) *100 ."%";
-        }else {
+            $late_ratio = round($arrive_late / $pass_count, 2) *100 ."%";
+            $leave_ratio = round($leave / $pass_count, 2) *100 ."%";
+            $arrive_no_ratio = round($arrive_no / $pass_count, 2) *100 ."%";
+        } else {
             $late_ratio = "0%";
             $leave_ratio = "0%";
             $arrive_no_ratio = "0%";
@@ -447,10 +447,9 @@ class AnswerController extends BackendController
 
 
         foreach ($models as $key => $value) {
-
             // 反馈的次数
             $models[$key]['feedback_count'] = ActivityFeedback::find()
-                            ->where('user_id =' .$value['user']['id'] )
+                            ->where('user_id =' .$value['user']['id'])
                             ->count();
 
             // 迟到次数
@@ -469,15 +468,15 @@ class AnswerController extends BackendController
             $models[$key]['late_ratio'] = $late_ratio;
             $models[$key]['leave_ratio'] = $leave_ratio;
             $models[$key]['arrive_no_ratio'] = $arrive_no_ratio;
-        return [
-                'model' => $models, 
+            return [
+                'model' => $models,
                 'good_score' => $good_score,
                 'middle_score'=>$middle_score,
                 'bad_score' => $bad_score,
                 'sponsor_score' => $sponsor_score,
                 'feedbacks' => $feedbacks
-                ]; 
-    }
+                ];
+        }
     }
     /**
      * 查找报名
@@ -503,9 +502,9 @@ class AnswerController extends BackendController
      * @param $user_id int 用户编号
      * @param $activity_id int 活动编号
      * @return boolean true(发送成功) | false (发送失败)
-     */ 
+     */
     public function actionSendNotification($user_id, $activity_id)
-     {
+    {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         //参数校验
@@ -531,7 +530,6 @@ class AnswerController extends BackendController
         $result = '';
         // 用户的手机号码不为空, 并且手机号码是合法的手机号
         if (!empty($answer['user']['mobile']) && SomeetValidator::isTelNumber($answer['user']['mobile'])) {
-
             //手机号
             $mobile = $answer['user']['mobile'];
 
@@ -540,10 +538,8 @@ class AnswerController extends BackendController
 
             //判断状态是通过
             if (Answer::STATUS_REVIEW_PASS == $answer['status']) {
-
                 //获取通过的短信内容
                 $smsData = NotificationTemplate::fetchSuccessSmsData($answer['activity']['start_time'], $answer['activity']['title']);
-
             } elseif (Answer::STATUS_REVIEW_REJECT == $answer['status']) {
                 //获取不通过的短信内容
                 $smsData = NotificationTemplate::fetchFailSmsData($answer['activity']['start_time'], $answer['activity']['title']);
@@ -572,7 +568,6 @@ class AnswerController extends BackendController
 
             //如果短信发送成功绑定了微信对象
             if ($account) {
-
                 //获取微信的openid
                 $openid = $account->client_id;
 
@@ -592,7 +587,7 @@ class AnswerController extends BackendController
                                     ];
                     $reject_reason = array_rand($reject_reason_content);
                     $reject_reason = $reject_reason_content[$reject_reason];
-                    $templateData = NotificationTemplate::fetchFailedWechatTemplateData($openid, $answer['user'], $answer['activity'],$reject_reason);
+                    $templateData = NotificationTemplate::fetchFailedWechatTemplateData($openid, $answer['user'], $answer['activity'], $reject_reason);
                     $wechatResult = $templateData['data']['keyword5']['value'];
                 }
 
@@ -617,6 +612,4 @@ class AnswerController extends BackendController
         return $result = ['status' => '0','sms' => $smsData,'wechatResult' => $wechatResult];
 
     }
-
-
 }
