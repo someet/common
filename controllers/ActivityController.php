@@ -112,35 +112,6 @@ class ActivityController extends BackendController
     }
 
     /**
-     * 增加发起人
-     * @param  integer $activity_id 活动id
-     * @param  integer $founder_id 发起人id
-     * @return obj 返回所有对象
-     */
-    public function actionAddFounder($activity_id, $founder_id)
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $r_activity_founder = new RActivityFounder();
-        $r_activity_founder->activity_id = $activity_id;
-        $r_activity_founder->founder_id = $founder_id;
-        $r_activity_founder->save();
-        return $r_activity_founder;
-        
-    }
-
-    /**
-     * 删除发起人
-     * @param  integer id 关系id
-     * @return obj 返回所有数据
-     */
-    public function actionDeteFounder($id)
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $r_activity_founder = RActivityFounder::updateAll(['id' => $id]);
-        return $r_activity_founder;
-    }
-
-    /**
      * 活动状态更新 更新预发布，与草稿之间切换
      * @param  integer $id
      * @param  int $status
