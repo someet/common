@@ -89,10 +89,8 @@ class MemberController extends BackendController
 
         //判断是赋权还是撤权
         if ($assign_or_not) {
-
             //判断当前状态是未赋权的状态再进行赋权, 否则提示已经赋权
             if ($auth->getAssignment($role_name, $user_id)) {
-
                 //提示已经授权, 无需再进行赋权
                 return ['msg' => '该角色已经赋权'];
             }
@@ -104,21 +102,17 @@ class MemberController extends BackendController
                 return ['msg' => '更新角色失败'];
             }
         } else {
-
             //判断当前状态是否有该权限, 如果没有则不能进行撤权
             if (!$auth->getAssignment($role_name, $user_id)) {
-
                 //提示当前用户没有该角色权限, 无法撤权
                 return ['msg' => '当前用户没有该角色权限, 无法撤权'];
             }
 
             //如果上面的不成立表示有权限，可以尝试进行撤权
             if ($auth->revoke($role, $user_id)) {
-
                 //提示撤权成功
                 return ['msg' => '撤权成功'];
             } else {
-
                 //提示撤权失败
                 return ['msg' => '撤权失败'];
             }
@@ -158,7 +152,6 @@ class MemberController extends BackendController
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         switch ($type) {
-
             //黑名单用户列表
             case 'black':
                 $where = ['status' => User::STATUS_ACTIVE, 'black_label' => User::BLACK_LIST_YES];
@@ -361,7 +354,6 @@ class MemberController extends BackendController
             default:
                 $card_num = 0;
                 break;
-
         }
         // 用户的id
         $user_id = Yii::$app->user->id;
@@ -369,7 +361,7 @@ class MemberController extends BackendController
         $yellow_card->handle_user_id = $user_id;
         $yellow_card->card_category = $status;
         $yellow_card->card_num = $card_num;
-        if ($yellow_card->appeal_status == YellowCard::APPEAL_STATUS_YES ) {
+        if ($yellow_card->appeal_status == YellowCard::APPEAL_STATUS_YES) {
             $yellow_card->appeal_status = YellowCard::APPEAL_STATUS_COMPLETE;
         }
         if ($yellow_card->save()) {
@@ -387,18 +379,16 @@ class MemberController extends BackendController
                                 ->asArray()
                                 ->groupBy('user_id')
                                 ->all();
-                if (!empty($count_yellow)) {
-                     foreach ($count_yellow as  $value) {
-                        if ($value['card_count'] < 3) {
-                            User::updateAll([
-                                'black_label' => User::BLACK_LIST_NO,
-                                'black_time' => time(),
-                                ],['id' => $value['user_id']]);
-
-                            }
-                     }
-                 }
-            
+            if (!empty($count_yellow)) {
+                foreach ($count_yellow as $value) {
+                    if ($value['card_count'] < 3) {
+                        User::updateAll([
+                            'black_label' => User::BLACK_LIST_NO,
+                            'black_time' => time(),
+                            ], ['id' => $value['user_id']]);
+                    }
+                }
+            }
         }
 
         return $yellow_card;
@@ -625,7 +615,7 @@ class MemberController extends BackendController
             // if (!$model->validate('email')) {
             //     throw new DataValidationFailedException($model->getFirstError('email'));
             // }
-        }        
+        }
 
         if (isset($data['black_label'])) {
             $model->black_label = $data['black_label'];

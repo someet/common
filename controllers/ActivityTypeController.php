@@ -272,5 +272,4 @@ class ActivityTypeController extends BackendController
             throw new NotFoundHttpException("类型不存在");
         }
     }
-
 }

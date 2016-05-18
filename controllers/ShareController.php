@@ -20,13 +20,14 @@ use yii\data\Pagination;
  * @package app\controllers
  */
 
-class ShareController extends BackendController{
+class ShareController extends BackendController
+{
 
     /**
     *权限控制
     *
     */
-	public function behaviors()
+    public function behaviors()
     {
         return [
             'verbs' => [
@@ -47,7 +48,8 @@ class ShareController extends BackendController{
     *获取单页数据
     *
     */
-    public function actionIndex($id){
+    public function actionIndex($id)
+    {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         $model = Share::find()
@@ -63,7 +65,8 @@ class ShareController extends BackendController{
     *
     */
 
-    public function actionList(){
+    public function actionList()
+    {
         //查询出本周的所有列表内容
         Yii::$app->response->format = Response::FORMAT_JSON;
 
@@ -79,7 +82,8 @@ class ShareController extends BackendController{
     *创建数据
     *
     */
-    public function actionCreate(){
+    public function actionCreate()
+    {
         $request = Yii::$app->getRequest();
         $response = Yii::$app->getResponse();
         $response->format = Response::FORMAT_JSON;
@@ -101,9 +105,9 @@ class ShareController extends BackendController{
 
     }
 
-	public function actionUpdate($id)
-	{
-		Yii::$app->response->format = Response::FORMAT_JSON;
+    public function actionUpdate($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $user_id = Yii::$app->user->id;
 
         $model = Share::findOne($id);
@@ -117,14 +121,14 @@ class ShareController extends BackendController{
             if (!$model->validate('title')) {
                 throw new DataValidationFailedException($model->getFirstError('title'));
             }
-        }        
+        }
 
         if (isset($data['desc'])) {
             $model->desc = $data['desc'];
             if (!$model->validate('desc')) {
                 throw new DataValidationFailedException($model->getFirstError('desc'));
             }
-        }        
+        }
 
         if (isset($data['link'])) {
             $model->link = $data['link'];
@@ -138,7 +142,7 @@ class ShareController extends BackendController{
             if (!$model->validate('imgurl')) {
                 throw new DataValidationFailedException($model->getFirstError('imgurl'));
             }
-        }        
+        }
 
         if (isset($data['status'])) {
             $model->status = $data['status'];
@@ -153,7 +157,6 @@ class ShareController extends BackendController{
         // \someet\common\models\AdminLog::saveLog('更新分享', $model->primaryKey);
 
         return $model;
-		
-	}
-	
+        
+    }
 }

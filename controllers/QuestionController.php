@@ -131,7 +131,6 @@ class QuestionController extends BackendController
 
             //判断是否有错误
             if ($questionFlag) {
-
                 //提交事务
                 $transaction->commit();
 
@@ -332,5 +331,4 @@ class QuestionController extends BackendController
             throw new NotFoundHttpException("问题不存在");
         }
     }
-
 }
