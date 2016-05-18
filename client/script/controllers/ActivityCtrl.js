@@ -486,7 +486,7 @@ angular.module('controllers', ['ngTagsInput'])
         function($scope, $routeParams, $location, $activityManage, $activityTypeManage, $qupload, $qiniuManage, $mdToast) {
             $scope.$parent.pageName = '活动详情';
                 $scope.founder = [];
-                $scope.founder = ['1','20'];
+                // $scope.founder = ['1','20'];
                 // $scope.founder = {founder_id:2,activity_id:2};
             // 添加发起人
             $scope.addFounder = function(obj){
@@ -678,6 +678,14 @@ angular.module('controllers', ['ngTagsInput'])
                     $scope.co_founder2 = data.cofounder2;
                     $scope.selectedSpaceSpot = data.space;
                     $scope.selectedSpace = data.space;
+                    $scope.founder = data.founder;
+                    console.log(data.founder);
+                    // 发起人id
+                    // $scope.founder = [];
+                    // angular.forEach(data.founder, function(value, key) {
+                    //     $scope.founder.push(value.founder_id);
+                    // });
+                    // 场地的id
                     $scope.selectedSection = [];
                     angular.forEach(data.sections, function(value, key) {
                         $scope.selectedSection.push(value.space_section_id);
@@ -712,6 +720,11 @@ angular.module('controllers', ['ngTagsInput'])
                 newEntity.poster = $scope.poster;
                 newEntity.group_code = $scope.group_code;
                 newEntity.pma_type = $scope.entity.pma_type;
+                // 创建发起人
+                if ($scope.founder) {
+                    newEntity.founder = $scope.founder;
+                }
+                // 创建场地
                 if ($scope.selectedSpaceSpot) {
                     newEntity.area = $scope.selectedSpaceSpot.area;
                     newEntity.address = $scope.selectedSpaceSpot.address;
