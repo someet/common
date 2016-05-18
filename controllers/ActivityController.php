@@ -56,6 +56,7 @@ class ActivityController extends BackendController
                 // 'update-all-prevent',
                 // 'update-status',
                 // 'filter-prevent',
+                // 'add-founder',
                 // ]
             ],
         ];
@@ -107,6 +108,35 @@ class ActivityController extends BackendController
         // return Activity::find()->where(['status' => Activity::STATUS_PREVENT])->all();
         return $activities;
 
+    }
+
+    /**
+     * 增加发起人
+     * @param  integer $activity_id 活动id
+     * @param  integer $founder_id 发起人id
+     * @return obj 返回所有对象
+     */
+    public function actionAddFounder($activity_id, $founder_id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $r_activity_founder = new RActivityFounder();
+        $r_activity_founder->activity_id = $activity_id;
+        $r_activity_founder->founder_id = $founder_id;
+        $r_activity_founder->save();
+        return $r_activity_founder;
+        
+    }
+
+    /**
+     * 删除发起人
+     * @param  integer id 关系id
+     * @return obj 返回所有数据
+     */
+    public function actionDeteFounder($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $r_activity_founder = RActivityFounder::updateAll(['id' => $id]);
+        return $r_activity_founder;
     }
 
     /**
@@ -460,8 +490,17 @@ class ActivityController extends BackendController
         $model = new Activity;
 
         if ($model->load($data, '') && $model->save()) {
-            // print_r($data['space_section_id']);
-            // die;
+            // 添加发起人
+            
+            if (!empty($data['founder'])) {
+                foreach ($data['founder'] as $founder_id) {
+                    $r_activity_founder = new RActivityFounder();
+                    $r_activity_founder->activity_id = $model->id;
+                    $r_activity_founder->founder_id = $founder_id;
+                    $r_activity_founder->save();
+                }
+            }
+            // 添加活动场地
             if (!empty($data['space_spot_id']) && isset($data['space_section_id'])) {
                 if ($data['space_section_id'] > 0) {
                     foreach ($data['space_section_id'] as $space_section) {
@@ -851,7 +890,6 @@ class ActivityController extends BackendController
                     $delete_spaces = RActivitySpace::deleteAll([
                         'activity_id'=> $model->id,
                         ]);
-                    print_r($data['space_section_id']);
                     foreach ($data['space_section_id'] as $space_section) {
                         $r_activity_space =new RActivitySpace();
                         $r_activity_space->activity_id = $model->id;

@@ -485,6 +485,33 @@ angular.module('controllers', ['ngTagsInput'])
     .controller('ActivityViewCtrl', ['$scope', '$routeParams', '$location', '$activityManage', '$activityTypeManage', '$qupload', '$qiniuManage', '$mdToast',
         function($scope, $routeParams, $location, $activityManage, $activityTypeManage, $qupload, $qiniuManage, $mdToast) {
             $scope.$parent.pageName = '活动详情';
+                $scope.founder = [];
+                $scope.founder = ['1','20'];
+                // $scope.founder = {founder_id:2,activity_id:2};
+            // 添加发起人
+            $scope.addFounder = function(obj){
+                var founderBull = true;
+                angular.forEach($scope.founder,function(index,value){
+                    if (index.id == obj.id) {
+                        $mdToast.show($mdToast.simple()
+                            .content('发起人不能重复添加')
+                            .hideDelay(5000)
+                            .position("top right"));
+                        founderBull = false;
+                    }
+                })
+
+                if (founderBull) {
+                    $scope.founder.push(obj);
+                }
+                console.log($scope.founder);
+            }            
+
+            // 删除发起人
+            $scope.deteFounder = function(founder){
+                $scope.founder.splice(founder,1);
+                console.log($scope.founder);
+            }
 
             // 搜索场地功能
             $scope.getSpace = function(spacename) {

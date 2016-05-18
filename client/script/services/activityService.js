@@ -1,6 +1,20 @@
 angular.module('backendServices')
     .factory('$activityManage', ['$http', '$q', '$rootScope', function ($http, $q, $rootScope) {
       return {
+        // 创建发起人
+        createFounder: function (activity_id, founder_id){
+          return $http.get('/activity/add-founder',{activity_id:'activity_id', founder_id:'founder_id'}).then(function (data){
+            return data;
+          })
+        },
+
+        // 删除发起人
+        deteFounder: function (id){
+          return $http.get('/activity/dete-founder',{id,id}).then(function (data){
+            return data;
+          })
+        },
+
         // 更新状态
         updateStatus: function (id,status){
           return $http.get('/activity/update-status?id='+id+'&status='+status).then(function (data) {

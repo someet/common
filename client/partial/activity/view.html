@@ -195,7 +195,7 @@
                     </div>
                 </div>
                 <div layout="row">
-                    <div flex="">
+                    <!--                     <div flex="">
                         <label>联合发起人1</label>
                         <md-autocomplete md-selected-item="co_founder1" placeholder="请选择联合发起人1" md-search-text="co_founder1_name" md-items="co_founder1 in getUsers(co_founder1_name)" md-item-text="co_founder1.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
                             <md-item-template>
@@ -204,8 +204,8 @@
                             </md-item-template>
                             <md-not-found>No matches found.</md-not-found>
                         </md-autocomplete>
-                    </div>
-                    <div flex="">
+                    </div> -->
+                    <!--                     <div flex="">
                         <label>联合发起人2</label>
                         <md-autocomplete md-selected-item="co_founder2" placeholder="请选择联合发起人2" md-search-text="co_founder2_name" md-items="co_founder2 in getUsers(co_founder2_name)" md-item-text="co_founder2.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
                             <md-item-template>
@@ -214,6 +214,31 @@
                             </md-item-template>
                             <md-not-found>No matches found.</md-not-found>
                         </md-autocomplete>
+                    </div> -->
+                </div>
+                <div layout="column">
+                    <div class="panel panel-default" ng-repeat="(key, value) in founder">
+                        <div class="panel-heading">发起人</div>
+                        <ul class="list-group">
+                            <li class="list-group-item">{{value.username}}
+                                <button class="btn btn-primary" ng-click="deteFounder(key)">删除</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div layout="row">
+                    <div flex>
+                        <label>联合发起人</label>
+                        <md-autocomplete md-selected-item="co_founder2" placeholder="请选择联合发起人2" md-search-text="co_founder2_name" md-items="co_founder2 in getUsers(co_founder2_name)" md-item-text="co_founder2.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
+                            <md-item-template>
+                                <span md-highlight-text="co_founder2_name">{{co_founder2.username}}</span>
+                                <img ng-if="user" width="50" style="border-radius:25px" ng-src="{{co_founder2.profile.headimgurl}}" />
+                            </md-item-template>
+                            <md-not-found>No matches found.</md-not-found>
+                        </md-autocomplete>
+                    </div>
+                    <div flex>
+                        <div class="md-raised md-primary" ng-click="addFounder(co_founder2)">添加</div>
                     </div>
                 </div>
                 <md-input-container>
@@ -304,7 +329,7 @@
                 <div layout="row">
                     <md-input-container>
                         <label>地区(商圈)</label>
-                        <input type="text" name="area" ng-model="entity.area" md-maxlength="6" ng-disabled="true"/>
+                        <input type="text" name="area" ng-model="entity.area" md-maxlength="6" ng-disabled="true" />
                         <div ng-messages="entityForm.area.$error">
                             <div ng-message="md-maxlength">地区文字不能超过6个字符</div>
                         </div>
@@ -331,14 +356,13 @@
                         <md-input-container>
                             <label>空间</label>
                             <md-select ng-model="selectedSection" multiple>
-                                        <md-option ng-value="section.id" ng-repeat="section in selectedSpaceSpot.sections">{{section.name}}</md-option>
+                                <md-option ng-value="section.id" ng-repeat="section in selectedSpaceSpot.sections">{{section.name}}</md-option>
                             </md-select>
                         </md-input-container>
                     </div>
                     <div flex="50">
                         空间不选择默认为全部
                     </div>
-
                 </div>
                 <md-input-container>
                     <label>收费金额(0为免费)</label>
