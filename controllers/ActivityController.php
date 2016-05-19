@@ -947,6 +947,10 @@ class ActivityController extends BackendController
     public function actionView($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
+        // 场地
+        $space_section = [];
+        // 发起人
+        $new_founder = [];
 
         $model = Activity::find()
             ->where(['id' => $id])
@@ -973,19 +977,12 @@ class ActivityController extends BackendController
                     ->where(['activity_id' => $id])
                     ->asArray()
                     ->all();
-        // print_r($founder);
-        // die;
         // 场地
         $section = RActivitySpace::find()
                     ->where(['activity_id' => $id, 'space_spot_id' => $model['space_spot_id']])
                     ->asArray()
                     ->all();
 
-        $space_section = [];
-        $new_founder = [];
-
-        // die;
-        
         foreach ($section as $key => $value) {
             $space_section[$key] = $value['space_section_id'];
         }
@@ -993,16 +990,11 @@ class ActivityController extends BackendController
         foreach ($founder as $key => $value) {
             $new_founder[$key] = $value['user'];
         }
-        // print_r($new_founder);
-        // die;
-        // die;
+        
         foreach ($model as $key => $value) {
             $model['sections'] = $section;
             $model['founder'] = $new_founder;
         }
-        // echo "<pre>";
-        // print_r($model);
-
         return $model;
     }
 
