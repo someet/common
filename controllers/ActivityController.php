@@ -868,7 +868,6 @@ class ActivityController extends BackendController
                 }
             }
 
-
             // 当场地id不为空时
             if (!empty($data['space_spot_id']) && isset($data['space_section_id'])) {
                 // 当空间没有选择时默认存储全部
@@ -900,7 +899,6 @@ class ActivityController extends BackendController
         } else {
             throw new ServerErrorHttpException();
         }
-
 
         \someet\common\models\AdminLog::saveLog('更新活动', $model->primaryKey);
 
