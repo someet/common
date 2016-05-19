@@ -14,12 +14,14 @@ CREATE TABLE `r_activity_founder` (
   PRIMARY KEY (`id`)
 ) COMMENT='活动与发起人列表';
 SQL;
+        $this->execute($sql);
+        return true;
     }
 
     public function down()
     {
-        $this->dropColumn('space_spot_id');
-        return false;
+        $this->dropTable('r_activity_founder');
+        return true;
     }
 
     /*
