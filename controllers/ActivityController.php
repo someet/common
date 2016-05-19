@@ -855,8 +855,10 @@ class ActivityController extends BackendController
         }
 
         if ($model->save()) {
-            // 添加发起人
-            if (!empty($data['founder'])) {
+            // 更新发起人
+            if (empty($data['founder'])) {
+                $delete_founder = RActivityFounder::deleteAll(['activity_id'=> $model->id]);
+            } else {
                 $delete_founder = RActivityFounder::deleteAll(['activity_id'=> $model->id]);
                 foreach ($data['founder'] as $founder) {
                     $r_activity_founder = new RActivityFounder();
@@ -990,7 +992,7 @@ class ActivityController extends BackendController
         foreach ($founder as $key => $value) {
             $new_founder[$key] = $value['user'];
         }
-        
+
         foreach ($model as $key => $value) {
             $model['sections'] = $section;
             $model['founder'] = $new_founder;

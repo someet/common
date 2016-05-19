@@ -352,7 +352,6 @@ angular.module('controllers', ['ngTagsInput'])
 
             // 更新活动排名序号
             // $scope.$watch($scope.list,function(newvalue,oldvalue){
-            //   console.log(newvalue+'----'+oldvalue);
             // })
 
 
@@ -502,7 +501,6 @@ angular.module('controllers', ['ngTagsInput'])
                         .position("top right"));
                     return false;
                 } else {
-                    console.log(1111111);
                     var founderBull = true;
                     angular.forEach($scope.founder, function(index, value) {
                         if (index.id == obj.id) {
@@ -517,7 +515,6 @@ angular.module('controllers', ['ngTagsInput'])
                     if (founderBull) {
                         $scope.founder.push(obj);
                     }
-                    console.log($scope.founder);
                 }
 
             }
@@ -525,7 +522,6 @@ angular.module('controllers', ['ngTagsInput'])
             // 删除发起人
             $scope.deteFounder = function(founder) {
                 $scope.founder.splice(founder, 1);
-                console.log($scope.founder);
             }
 
             // 搜索场地功能
@@ -544,11 +540,9 @@ angular.module('controllers', ['ngTagsInput'])
                     $scope.selectedSection = [];
                     // 把字符转化为对象
                     if (typeof obj == 'string') {
-                        console.log(typeof obj);
                         var obj = JSON.parse(obj)
                         $scope.sections = obj.sections;
                     } else if (typeof obj == 'object') {
-                        console.log(typeof obj);
                         $scope.sections = obj.sections;
                     }
                 }
@@ -676,12 +670,10 @@ angular.module('controllers', ['ngTagsInput'])
             var id = $routeParams.id;
             if (id > 0) {
                 $activityManage.fetch(id).then(function(data) {
-                    // console.log(data);
                     $scope.user = {};
                     $scope.dts = {};
                     $scope.entity = data;
                     $scope.start_time_str = getTimeByTimestamp(data.start_time);
-                    // $scope.start_time_str = getTimeByTimestamp(data.start_time);
                     $scope.end_time_str = getTimeByTimestamp(data.end_time);
                     $scope.poster = data.poster;
                     $scope.group_code = data.group_code;
@@ -693,12 +685,6 @@ angular.module('controllers', ['ngTagsInput'])
                     $scope.selectedSpaceSpot = data.space;
                     $scope.selectedSpace = data.space;
                     $scope.founder = data.founder;
-                    console.log(data.founder);
-                    // 发起人id
-                    // $scope.founder = [];
-                    // angular.forEach(data.founder, function(value, key) {
-                    //     $scope.founder.push(value.founder_id);
-                    // });
                     // 场地的id
                     $scope.selectedSection = [];
                     angular.forEach(data.sections, function(value, key) {
