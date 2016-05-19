@@ -488,7 +488,13 @@ angular.module('controllers', ['ngTagsInput'])
             // 添加发起人
             $scope.founder = [];
             $scope.addFounder = function(obj) {
-                if (obj == null) {
+                if ($scope.user == null) {
+                    $mdToast.show($mdToast.simple()
+                        .content('请先添加发起人')
+                        .hideDelay(5000)
+                        .position("top right"));
+                    return false;
+                }else if (obj == null) {
                     $mdToast.show($mdToast.simple()
                         .content('联合发起人不能为空')
                         .hideDelay(5000)
