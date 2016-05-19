@@ -489,13 +489,15 @@ angular.module('controllers', ['ngTagsInput'])
             // 添加发起人
             $scope.founder = [];
             $scope.addFounder = function(obj) {
+                console.log($scope.user);
+
                 if (obj == null) {
                     $mdToast.show($mdToast.simple()
                         .content('联合发起人不能为空')
                         .hideDelay(5000)
                         .position("top right"));
                     return false;
-                } else if (obj.id == $scope.entity.created_by) {
+                } else if (obj.id == $scope.user.id) {
                     $mdToast.show($mdToast.simple()
                         .content('联合发起人不能与发起人相同')
                         .hideDelay(5000)
