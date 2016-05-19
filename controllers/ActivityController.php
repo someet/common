@@ -6,6 +6,7 @@ use app\components\DataValidationFailedException;
 use someet\common\models\Activity;
 use someet\common\models\RActivitySpace;
 use someet\common\models\SpaceSection;
+use someet\common\models\RActivityFounder;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -56,6 +57,7 @@ class ActivityController extends BackendController
                 // 'update-all-prevent',
                 // 'update-status',
                 // 'filter-prevent',
+                // 'add-founder',
                 // ]
             ],
         ];
@@ -460,8 +462,17 @@ class ActivityController extends BackendController
         $model = new Activity;
 
         if ($model->load($data, '') && $model->save()) {
-            // print_r($data['space_section_id']);
-            // die;
+            // 添加发起人
+            if (!empty($data['founder'])) {
+                foreach ($data['founder'] as $founder) {
+                    $r_activity_founder = new RActivityFounder();
+                    $r_activity_founder->activity_id = $model->id;
+                    $r_activity_founder->founder_id = $founder['id'];
+                    $r_activity_founder->save();
+                }
+            }
+
+            // 添加活动场地
             if (!empty($data['space_spot_id']) && isset($data['space_section_id'])) {
                 if ($data['space_section_id'] > 0) {
                     foreach ($data['space_section_id'] as $space_section) {
@@ -844,6 +855,19 @@ class ActivityController extends BackendController
         }
 
         if ($model->save()) {
+            // 更新发起人
+            if (empty($data['founder'])) {
+                $delete_founder = RActivityFounder::deleteAll(['activity_id'=> $model->id]);
+            } else {
+                $delete_founder = RActivityFounder::deleteAll(['activity_id'=> $model->id]);
+                foreach ($data['founder'] as $founder) {
+                    $r_activity_founder = new RActivityFounder();
+                    $r_activity_founder->activity_id = $model->id;
+                    $r_activity_founder->founder_id = $founder['id'];
+                    $r_activity_founder->save();
+                }
+            }
+
             // 当场地id不为空时
             if (!empty($data['space_spot_id']) && isset($data['space_section_id'])) {
                 // 当空间没有选择时默认存储全部
@@ -851,7 +875,6 @@ class ActivityController extends BackendController
                     $delete_spaces = RActivitySpace::deleteAll([
                         'activity_id'=> $model->id,
                         ]);
-                    print_r($data['space_section_id']);
                     foreach ($data['space_section_id'] as $space_section) {
                         $r_activity_space =new RActivitySpace();
                         $r_activity_space->activity_id = $model->id;
@@ -876,7 +899,6 @@ class ActivityController extends BackendController
         } else {
             throw new ServerErrorHttpException();
         }
-
 
         \someet\common\models\AdminLog::saveLog('更新活动', $model->primaryKey);
 
@@ -925,6 +947,10 @@ class ActivityController extends BackendController
     public function actionView($id)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
+        // 场地
+        $space_section = [];
+        // 发起人
+        $new_founder = [];
 
         $model = Activity::find()
             ->where(['id' => $id])
@@ -945,25 +971,30 @@ class ActivityController extends BackendController
             ])
             ->asArray()
             ->one();
+        // 发起人
+        $founder = RActivityFounder::find()
+                    ->with(['user','user.profile'])
+                    ->where(['activity_id' => $id])
+                    ->asArray()
+                    ->all();
+        // 场地
         $section = RActivitySpace::find()
                     ->where(['activity_id' => $id, 'space_spot_id' => $model['space_spot_id']])
                     ->asArray()
                     ->all();
-        $space_section = [];
 
-        // die;
-        
         foreach ($section as $key => $value) {
             $space_section[$key] = $value['space_section_id'];
         }
 
-        // die;
+        foreach ($founder as $key => $value) {
+            $new_founder[$key] = $value['user'];
+        }
+
         foreach ($model as $key => $value) {
             $model['sections'] = $section;
+            $model['founder'] = $new_founder;
         }
-        // echo "<pre>";
-        // print_r($model);
-
         return $model;
     }
 

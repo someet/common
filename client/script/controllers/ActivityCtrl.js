@@ -86,7 +86,7 @@ angular.module('controllers', ['ngTagsInput'])
             // 更新活动状态
             $scope.updateStatus = function(id, status) {
                 $activityManage.updateStatus(id, status).then(function(data) {
-                    angular.forEach($scope.list,function(index,value){
+                    angular.forEach($scope.list, function(index, value) {
                         if (index.id == data.id) {
                             index.status = data.status;
                         }
@@ -352,7 +352,6 @@ angular.module('controllers', ['ngTagsInput'])
 
             // 更新活动排名序号
             // $scope.$watch($scope.list,function(newvalue,oldvalue){
-            //   console.log(newvalue+'----'+oldvalue);
             // })
 
 
@@ -486,12 +485,51 @@ angular.module('controllers', ['ngTagsInput'])
         function($scope, $routeParams, $location, $activityManage, $activityTypeManage, $qupload, $qiniuManage, $mdToast) {
             $scope.$parent.pageName = '活动详情';
 
+            // 添加发起人
+            $scope.founder = [];
+            $scope.addFounder = function(obj) {
+                if (obj == null) {
+                    $mdToast.show($mdToast.simple()
+                        .content('联合发起人不能为空')
+                        .hideDelay(5000)
+                        .position("top right"));
+                    return false;
+                } else if (obj.id == $scope.user.id) {
+                    $mdToast.show($mdToast.simple()
+                        .content('联合发起人不能与发起人相同')
+                        .hideDelay(5000)
+                        .position("top right"));
+                    return false;
+                } else {
+                    var founderBull = true;
+                    angular.forEach($scope.founder, function(index, value) {
+                        if (index.id == obj.id) {
+                            $mdToast.show($mdToast.simple()
+                                .content('联合发起人不能重复添加')
+                                .hideDelay(5000)
+                                .position("top right"));
+                            founderBull = false;
+                        }
+                    })
+
+                    if (founderBull) {
+                        $scope.founder.push(obj);
+                    }
+                }
+
+            }
+
+            // 删除发起人
+            $scope.deteFounder = function(founder) {
+                $scope.founder.splice(founder, 1);
+            }
+
             // 搜索场地功能
             $scope.getSpace = function(spacename) {
-                $scope.space_spot = $activityManage.searchSpace(spacename);
-                return $scope.space_spot;
-            }
-            // 获取场地
+                    $scope.space_spot = $activityManage.searchSpace(spacename);
+                    return $scope.space_spot;
+                }
+                // 获取场地
             $activityManage.searchSpace('').then(function(data) {
                 $scope.spaceSpots = data;
             });
@@ -499,19 +537,16 @@ angular.module('controllers', ['ngTagsInput'])
             //搜索空间
             $scope.getSection = function(obj) {
                 if (obj != null) {
-                console.log($scope.selectedSpaceSpot.id);
                     $scope.selectedSection = [];
                     // 把字符转化为对象
-                    if (typeof obj == 'string' ) {
-                        console.log(typeof obj);
+                    if (typeof obj == 'string') {
                         var obj = JSON.parse(obj)
                         $scope.sections = obj.sections;
-                    }else if (typeof obj == 'object') {
-                        console.log(typeof obj);
+                    } else if (typeof obj == 'object') {
                         $scope.sections = obj.sections;
                     }
                 }
-            }  
+            }
 
             // 搜索用户功能
             $scope.getUsers = function(query) {
@@ -635,12 +670,10 @@ angular.module('controllers', ['ngTagsInput'])
             var id = $routeParams.id;
             if (id > 0) {
                 $activityManage.fetch(id).then(function(data) {
-                    // console.log(data);
                     $scope.user = {};
                     $scope.dts = {};
                     $scope.entity = data;
                     $scope.start_time_str = getTimeByTimestamp(data.start_time);
-                    // $scope.start_time_str = getTimeByTimestamp(data.start_time);
                     $scope.end_time_str = getTimeByTimestamp(data.end_time);
                     $scope.poster = data.poster;
                     $scope.group_code = data.group_code;
@@ -651,6 +684,8 @@ angular.module('controllers', ['ngTagsInput'])
                     $scope.co_founder2 = data.cofounder2;
                     $scope.selectedSpaceSpot = data.space;
                     $scope.selectedSpace = data.space;
+                    $scope.founder = data.founder;
+                    // 场地的id
                     $scope.selectedSection = [];
                     angular.forEach(data.sections, function(value, key) {
                         $scope.selectedSection.push(value.space_section_id);
@@ -676,7 +711,7 @@ angular.module('controllers', ['ngTagsInput'])
             $scope.cancel = function() {
                 $location.path('/activity/list/0');
             }
- 
+
             //保存活动
             $scope.save = function() {
                 var newEntity = $scope.entity;
@@ -685,6 +720,11 @@ angular.module('controllers', ['ngTagsInput'])
                 newEntity.poster = $scope.poster;
                 newEntity.group_code = $scope.group_code;
                 newEntity.pma_type = $scope.entity.pma_type;
+                // 创建发起人
+                if ($scope.founder) {
+                    newEntity.founder = $scope.founder;
+                }
+                // 创建场地
                 if ($scope.selectedSpaceSpot) {
                     newEntity.area = $scope.selectedSpaceSpot.area;
                     newEntity.address = $scope.selectedSpaceSpot.address;
@@ -697,7 +737,7 @@ angular.module('controllers', ['ngTagsInput'])
 
                     if ($scope.selectedSection.length == 0) {
                         newEntity.space_section_id = 0;
-                    }else{
+                    } else {
                         newEntity.space_section_id = $scope.selectedSection;
                     }
                 }
