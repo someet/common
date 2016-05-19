@@ -232,10 +232,10 @@
                 <div class="row">
                     <div class="col-md-6">
                         <label>请选择联合发起人</label>
-                        <md-autocomplete md-selected-item="co_founder2" placeholder="请选择联合发起人2" md-search-text="co_founder2_name" md-items="co_founder2 in getUsers(co_founder2_name)" md-item-text="co_founder2.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
+                        <md-autocomplete md-selected-item="co_founder" placeholder="请选择联合发起人" md-search-text="co_founder_name" md-items="co_founder in getUsers(co_founder_name)" md-item-text="co_founder.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
                             <md-item-template>
-                                <span md-highlight-text="co_founder2_name">{{co_founder2.username}}</span>
-                                <img ng-if="user" width="50" style="border-radius:25px" ng-src="{{co_founder2.profile.headimgurl}}" />
+                                <span md-highlight-text="co_founder_name">{{co_founder.username}}</span>
+                                <img ng-if="user" width="50" style="border-radius:25px" ng-src="{{co_founder.profile.headimgurl}}" />
                             </md-item-template>
                             <md-not-found>No matches found.</md-not-found>
                         </md-autocomplete>
@@ -244,7 +244,7 @@
                         <div>
                             <label>发起人添加按钮</label>
                         </div>
-                        <div class="btn btn-info" ng-click="addFounder(co_founder2)">添加</div>
+                        <div class="btn btn-info" ng-click="addFounder(co_founder)">添加</div>
                     </div>
                 </div>
 

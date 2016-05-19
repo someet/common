@@ -86,7 +86,7 @@ angular.module('controllers', ['ngTagsInput'])
             // 更新活动状态
             $scope.updateStatus = function(id, status) {
                 $activityManage.updateStatus(id, status).then(function(data) {
-                    angular.forEach($scope.list,function(index,value){
+                    angular.forEach($scope.list, function(index, value) {
                         if (index.id == data.id) {
                             index.status = data.status;
                         }
@@ -485,40 +485,55 @@ angular.module('controllers', ['ngTagsInput'])
     .controller('ActivityViewCtrl', ['$scope', '$routeParams', '$location', '$activityManage', '$activityTypeManage', '$qupload', '$qiniuManage', '$mdToast',
         function($scope, $routeParams, $location, $activityManage, $activityTypeManage, $qupload, $qiniuManage, $mdToast) {
             $scope.$parent.pageName = '活动详情';
-                $scope.founder = [];
-                // $scope.founder = ['1','20'];
-                // $scope.founder = {founder_id:2,activity_id:2};
-            // 添加发起人
-            $scope.addFounder = function(obj){
-                var founderBull = true;
-                angular.forEach($scope.founder,function(index,value){
-                    if (index.id == obj.id) {
-                        $mdToast.show($mdToast.simple()
-                            .content('发起人不能重复添加')
-                            .hideDelay(5000)
-                            .position("top right"));
-                        founderBull = false;
-                    }
-                })
 
-                if (founderBull) {
-                    $scope.founder.push(obj);
+            // 添加发起人
+            $scope.founder = [];
+            $scope.addFounder = function(obj) {
+                if (obj == null) {
+                    $mdToast.show($mdToast.simple()
+                        .content('联合发起人不能为空')
+                        .hideDelay(5000)
+                        .position("top right"));
+                    return false;
+                } else if (obj.id == $scope.entity.created_by) {
+                    $mdToast.show($mdToast.simple()
+                        .content('联合发起人不能与发起人相同')
+                        .hideDelay(5000)
+                        .position("top right"));
+                    return false;
+                } else {
+                    console.log(1111111);
+                    var founderBull = true;
+                    angular.forEach($scope.founder, function(index, value) {
+                        if (index.id == obj.id) {
+                            $mdToast.show($mdToast.simple()
+                                .content('联合发起人不能重复添加')
+                                .hideDelay(5000)
+                                .position("top right"));
+                            founderBull = false;
+                        }
+                    })
+
+                    if (founderBull) {
+                        $scope.founder.push(obj);
+                    }
+                    console.log($scope.founder);
                 }
-                console.log($scope.founder);
-            }            
+
+            }
 
             // 删除发起人
-            $scope.deteFounder = function(founder){
-                $scope.founder.splice(founder,1);
+            $scope.deteFounder = function(founder) {
+                $scope.founder.splice(founder, 1);
                 console.log($scope.founder);
             }
 
             // 搜索场地功能
             $scope.getSpace = function(spacename) {
-                $scope.space_spot = $activityManage.searchSpace(spacename);
-                return $scope.space_spot;
-            }
-            // 获取场地
+                    $scope.space_spot = $activityManage.searchSpace(spacename);
+                    return $scope.space_spot;
+                }
+                // 获取场地
             $activityManage.searchSpace('').then(function(data) {
                 $scope.spaceSpots = data;
             });
@@ -526,19 +541,18 @@ angular.module('controllers', ['ngTagsInput'])
             //搜索空间
             $scope.getSection = function(obj) {
                 if (obj != null) {
-                console.log($scope.selectedSpaceSpot.id);
                     $scope.selectedSection = [];
                     // 把字符转化为对象
-                    if (typeof obj == 'string' ) {
+                    if (typeof obj == 'string') {
                         console.log(typeof obj);
                         var obj = JSON.parse(obj)
                         $scope.sections = obj.sections;
-                    }else if (typeof obj == 'object') {
+                    } else if (typeof obj == 'object') {
                         console.log(typeof obj);
                         $scope.sections = obj.sections;
                     }
                 }
-            }  
+            }
 
             // 搜索用户功能
             $scope.getUsers = function(query) {
@@ -711,7 +725,7 @@ angular.module('controllers', ['ngTagsInput'])
             $scope.cancel = function() {
                 $location.path('/activity/list/0');
             }
- 
+
             //保存活动
             $scope.save = function() {
                 var newEntity = $scope.entity;
@@ -737,7 +751,7 @@ angular.module('controllers', ['ngTagsInput'])
 
                     if ($scope.selectedSection.length == 0) {
                         newEntity.space_section_id = 0;
-                    }else{
+                    } else {
                         newEntity.space_section_id = $scope.selectedSection;
                     }
                 }
