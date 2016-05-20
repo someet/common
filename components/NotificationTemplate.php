@@ -92,7 +92,7 @@ class NotificationTemplate extends Component
         }
 
         // 活动开始时间
-        $activity_start_time = date('m月d号 H:i', $activity['start_time'])
+        $activity_start_time = date('m月d号', $activity['start_time'])
                                 . self::$week[date('w', $activity['start_time'])]
                                 . date('H:i', $activity['start_time']);
         $data = [
@@ -380,7 +380,7 @@ class NotificationTemplate extends Component
                     '6' => '骚扰',
                     ];
         // 活动开始时间
-        $activity_start_time = date('m月d号 H:i', $activity['start_time'])
+        $activity_start_time = date('m月d号', $activity['start_time'])
                                 . self::$week[date('w', $activity['start_time'])]
                                 . date('H:i', $activity['start_time']);
         $data = [
@@ -429,7 +429,7 @@ class NotificationTemplate extends Component
     {
         //获取模板消息id
         $template_id = Yii::$app->params['sms.update_credit_template_id'];
-        $url = Yii::$app->params['domain'].'member/credit-record/'.$answer->activity['id'];
+        $url = Yii::$app->params['domain'].'member/credit-record';
         if (empty($template_id)) {
             //记录一个错误, 请设置成功的模板消息id
             Yii::error('请设置取消报名的模板消息id');
@@ -452,7 +452,7 @@ class NotificationTemplate extends Component
                     '6' => '骚扰',
                     ];
         // 活动开始时间
-        $activity_start_time = date('m月d号 H:i', $answer->activity['start_time'])
+        $activity_start_time = date('m月d号', $answer->activity['start_time'])
                                 . self::$week[date('w', $answer->activity['start_time'])]
                                 . date('H:i', $answer->activity['start_time']);
         $data = [
