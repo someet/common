@@ -315,5 +315,10 @@ class Activity extends \yii\db\ActiveRecord
     {
         return $this->hasOne(SpaceSpot::className(), ['id' => 'space_spot_id']);
     }
+
+    public function getFounders()
+    {
+        return $this->hasMany(User::className(), ['id' => 'founder_id'])->viaTable('r_activity_founder', ['activity_id' => 'id']);
+    }
 }
 
