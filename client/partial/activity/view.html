@@ -77,7 +77,9 @@
                         <!-- 人数限制 -->
                         <div class="detail-label">
                             <span> <i class="icon"><img src="/static/svg/Participant.svg"></i> 
-                理想{{entity.ideal_number}}人
+        <span ng-if="entity.ideal_number != 0">理想人数{{entity.ideal_number}}人</span>
+        <span ng-if="entity.ideal_number == 0">理想人数{{entity.field1}}人</span>
+               
               </span>
                         </div>
                         <!-- 收费情况 -->
