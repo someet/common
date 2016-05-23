@@ -46,7 +46,7 @@
                             {{entity.user.profile.bio}}
                         </div>
                     </div>
-                    <!-- 联合发起人 1-->
+                    <!-- 联合发起人-->
                     <div ng-if="founder" class="detail-host" ng-repeat="(key, value) in founder">
                         <label>联合发起人</label>
                         <div class="hoster">
@@ -60,20 +60,6 @@
                             {{value.profile.bio}}
                         </div>
                     </div>
-                    <!-- 联合发起人 2-->
-                    <!--                     <div ng-if="co_founder2" class="detail-host">
-                        <label>联合发起人</label>
-                        <div class="hoster">
-                            <div class="name"> <strong>{{entity.cofounder2.username}}</strong></div>
-                            <div>
-                                <span>“</span>
-                                <img ng-src="{{entity.cofounder2.profile.headimgurl}}" />
-                            </div>
-                        </div>
-                        <div class="description">
-                            {{entity.cofounder2.profile.bio}}
-                        </div>
-                    </div> -->
                     <div class="detail-info">
                         <label>活动细节</label>
                         <!-- 时间 -->
@@ -91,7 +77,7 @@
                         <!-- 人数限制 -->
                         <div class="detail-label">
                             <span> <i class="icon"><img src="/static/svg/Participant.svg"></i> 
-                {{entity.field1}}
+                理想{{entity.ideal_number}}人
               </span>
                         </div>
                         <!-- 收费情况 -->
@@ -195,34 +181,14 @@
                     </div>
                 </div>
                 <div layout="row">
-                    <!--                     <div flex="">
-                        <label>联合发起人1</label>
-                        <md-autocomplete md-selected-item="co_founder1" placeholder="请选择联合发起人1" md-search-text="co_founder1_name" md-items="co_founder1 in getUsers(co_founder1_name)" md-item-text="co_founder1.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
-                            <md-item-template>
-                                <span md-highlight-text="co_founder1_name">{{co_founder1.username}}</span>
-                                <img ng-if="user" width="50" style="border-radius:25px" ng-src="{{co_founder1.profile.headimgurl}}" />
-                            </md-item-template>
-                            <md-not-found>No matches found.</md-not-found>
-                        </md-autocomplete>
-                    </div> -->
-                    <!--                     <div flex="">
-                        <label>联合发起人2</label>
-                        <md-autocomplete md-selected-item="co_founder2" placeholder="请选择联合发起人2" md-search-text="co_founder2_name" md-items="co_founder2 in getUsers(co_founder2_name)" md-item-text="co_founder2.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
-                            <md-item-template>
-                                <span md-highlight-text="co_founder2_name">{{co_founder2.username}}</span>
-                                <img ng-if="user" width="50" style="border-radius:25px" ng-src="{{co_founder2.profile.headimgurl}}" />
-                            </md-item-template>
-                            <md-not-found>No matches found.</md-not-found>
-                        </md-autocomplete>
-                    </div> -->
                 </div>
-                <div layout="column"> 
+                <div layout="column">
                     <div class="row">
-                            <div class="panel-heading">联合发起人</div>
+                        <div class="panel-heading">联合发起人</div>
                         <div class="panel panel-default col-md-6" ng-repeat="(key, value) in founder">
-                            <ul class="list-group" >
+                            <ul class="list-group">
                                 <li class="list-group-item">
-                                <img with="50" height="50" ng-src="{{value.profile.headimgurl}}" />发起人:{{value.username}}
+                                    <img with="50" height="50" ng-src="{{value.profile.headimgurl}}" />发起人:{{value.username}}
                                     <button class="btn btn-warning" ng-click="deteFounder(key)">删除</button>
                                 </li>
                             </ul>
@@ -247,7 +213,6 @@
                         <div class="btn btn-info" ng-click="addFounder(co_founder)">添加</div>
                     </div>
                 </div>
-
                 <div class="row">
                     <div class="col-md-6 margin-top-10">
                         <label>活动类型</label>
@@ -261,8 +226,6 @@
                         </md-input-container>
                     </div>
                 </div>
-
-
                 <div layout="row">
                     <md-input-container flex="">
                         <label>标题</label>
@@ -300,13 +263,35 @@
                     </p>
                 </div>
                 <div layout="row">
-                    <md-input-container>
-                        <label>人数限制(最多200人)</label>
-                        <input type="number" name="people" ng-model="entity.peoples" value="{{entity.peoples}}" max="200" />
-                        <div ng-messages="entityForm.people.$error">
-                            <div ng-message="max">人数超过限制</div>
-                        </div>
-                    </md-input-container>
+                    <div flex="30">
+                        <md-input-container>
+                            <label>人数限制(最多200人)</label>
+                            <input type="number" name="people" ng-model="entity.peoples" value="{{entity.peoples}}" max="200" />
+                            <div ng-messages="entityForm.people.$error">
+                                <div ng-message="max">人数超过限制</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div flex="30">
+                        <md-input-container>
+                            <label>理想人数(最多200人)</label>
+                            <input type="number" name="ideal_number" ng-model="entity.ideal_number" value="{{entity.ideal_number}}" max="200" />
+                            <div ng-messages="entityForm.ideal_number.$error">
+                                <div ng-message="max">人数超过限制</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div flex="40">
+                        <md-input-container>
+                            <label>理想人数限制(最多200人)</label>
+                            <input type="number" name="ideal_number_limit" ng-model="entity.ideal_number_limit" value="{{entity.ideal_number_limit}}" max="200" />
+                            <div ng-messages="entityForm.ideal_number_limit.$error">
+                                <div ng-message="max">人数超过限制</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+                <div layout="row">
                     <md-input-container>
                         <label>开始时间</label>
                         <div class="dropdown">
@@ -396,10 +381,6 @@
                 <md-input-container>
                     <label>活动流程</label>
                     <text-angular ng-model="entity.review" placeholder="活动流程"></text-angular>
-                </md-input-container>
-                <md-input-container flex="100">
-                    <label>活动人数</label>
-                    <textarea ng-model="entity.field1"></textarea>
                 </md-input-container>
                 <md-input-container>
                     <label>Tips</label>
