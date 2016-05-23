@@ -15,6 +15,7 @@
                 <input type="hidden" ng-model="entity.id" />
                 <div class="detail-page">
                     <img class="activity-photo" ng-src="{{poster}}">
+                    
                     <!-- 标题 开始-->
                     <div class="detail-describe">
                         <div class="detail-title">
@@ -28,10 +29,13 @@
                         </div>
                     </div>
                     <!-- 标题 结束 -->
+
                     <!-- 分隔条 -->
                     <div class="divider center"></div>
+
                     <!-- 活动详情 -->
                     <div class="detail-activity" ng-bind-html="entity.details"></div>
+
                     <!-- 发起人 -->
                     <div class="detail-host">
                         <label>发起人</label>
@@ -62,55 +66,43 @@
                     </div>
                     <div class="detail-info">
                         <label>活动细节</label>
+
                         <!-- 时间 -->
                         <div class="detail-label">
-                            <span> <i class="icon"><img src="/static/svg/Calendar.svg"></i></i>
-                {{start_time_str}} - {{end_time_str}}
-              </span>
+                            <span> <i class="icon"><img src="/static/svg/Calendar.svg"></i>{{start_time_str}} - {{end_time_str}}</span>
                         </div>
+
                         <!-- 地点 -->
                         <div class="detail-label">
-                            <span> <i class="icon"><img src="/static/svg/Location.svg"></i> 
-                {{selectedSpaceSpot.area}}
-              </span>
+                            <span> <i class="icon"><img src="/static/svg/Location.svg"></i> {{selectedSpaceSpot.area}}</span>
                         </div>
+
                         <!-- 人数限制 -->
                         <div class="detail-label">
-                            <span> <i class="icon"><img src="/static/svg/Participant.svg"></i> 
-        <span ng-if="entity.ideal_number != 0">理想人数{{entity.ideal_number}}人</span>
-        <span ng-if="entity.ideal_number == 0">理想人数{{entity.field1}}人</span>
-               
-              </span>
+                            <i class="icon"><img src="/static/svg/Participant.svg"></i> 
+                            <span ng-if="entity.ideal_number != 0">理想人数{{entity.ideal_number}}人</span>
+                            <span ng-if="entity.ideal_number == 0">理想人数{{entity.field1}}人</span>
                         </div>
+
                         <!-- 收费情况 -->
                         <div class="detail-label">
-                            <span>
-                <i class="icon">
-                  <img src="/static/svg/Funds.svg"></i>
-                  <span ng-show="entity.cost>0">
-                    {{entity.cost}}元/人</span>
+                            <i class="icon"><img src="/static/svg/Funds.svg"></i><span ng-show="entity.cost>0">{{entity.cost}}元/人</span>
                             <div ng-show="entity.cost>0" class="description">{{entity.cost_list}}</div>
                             <span ng-show="entity.cost==0">免费</span>
-                            </span>
                         </div>
+
                         <!-- 活动流程 -->
                         <div class="detail-label">
-                            <span>
-                <i class="icon">
-                  <img ng-src="/static/svg/Flow.svg"></i>
-                活动流程
-              </span>
+                            <span><i class="icon"><img ng-src="/static/svg/Flow.svg"></i>活动流程</span>
                         </div>
-                        <div ng-bind-html="entity.review" class="detail-flow">
-                        </div>
+
+                        <div ng-bind-html="entity.review" class="detail-flow"></div>
+
                         <!-- tips -->
                         <div class="detail-label" style="margin-top:0.6rem;">
-                            <span> <i class="icon"><img ng-src="/static/svg/Tips.svg"></i> Tips
-            <div ng-bind-html="entity.field2"  class="detail-flow">
-
-            </div>
-        </span>
+                            <span> <i class="icon"><img ng-src="/static/svg/Tips.svg"></i> Tips<div ng-bind-html="entity.field2"  class="detail-flow"></div></span>
                         </div>
+
                         <!-- 微信二维码 -->
                         <div class="detail-rqcode">
                             <div class="imgrqcode">
