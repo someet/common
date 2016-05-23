@@ -52,6 +52,8 @@ use Yii;
  * @property integer $is_full
  * @property integer $join_people_count
  * @property integer $pma_type
+ * @property integer $ideal_number
+ * @property integer $ideal_number_limit
  */
 class Activity extends \yii\db\ActiveRecord
 {
@@ -96,10 +98,11 @@ class Activity extends \yii\db\ActiveRecord
     {
         return [
             [['title'], 'required'],
-            [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'pma_type','created_at', 'created_by', 'updated_at', 'updated_by', 'status', 'edit_status', 'display_order', 'co_founder1', 'co_founder2', 'co_founder3', 'co_founder4', 'is_full', 'join_people_count','space_spot_id'], 'integer'],
+            [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'pma_type','created_at', 'created_by', 'updated_at', 'updated_by', 'status', 'edit_status', 'display_order', 'co_founder1', 'co_founder2', 'co_founder3', 'co_founder4', 'is_full', 'join_people_count','space_spot_id','ideal_number','ideal_number_limit'], 'integer'],
             [['details', 'review', 'content', 'field1', 'field2', 'field3', 'field4', 'field5', 'field6', 'field7', 'field8'], 'string'],
             [['longitude', 'latitude'], 'number'],
             [['longitude', 'latitude','pma_type'], 'default', 'value' => 0],
+            [['ideal_number','ideal_number_limit','peoples'], 'default', 'value' => 10],
             ['group_code', 'default', 'value' => '0'],
             [['area','desc','address','details'], 'default', 'value' => '0'],
             ['poster', 'default', 'value' => 'http://7xn8h3.com2.z0.glb.qiniucdn.com/FtlMz_y5Pk8xMEPQCw5MGKCRuGxe'],
@@ -182,6 +185,8 @@ class Activity extends \yii\db\ActiveRecord
             'join_people_count' => '已报名的人数',
             'space_spot_id' => '场地id',
             'space_section_id' => '空间id',
+            'ideal_number' => '理想人数',
+            'ideal_number_limit' => '理想人数限制',
         ];
     }
 
