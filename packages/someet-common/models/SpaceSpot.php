@@ -78,12 +78,14 @@ class SpaceSpot extends \yii\db\ActiveRecord
         ];
     }
 
-    // 活动的类型
+    /**
+     * 活动的类型
+     * @return \yii\db\ActiveQuery
+     */
     public function getType()
     {
         return $this->hasOne(SpaceType::className(), ['id' => 'type_id']);
     }
-
 
     // 活动的区间数
     public function getSections()
@@ -91,11 +93,23 @@ class SpaceSpot extends \yii\db\ActiveRecord
         return $this->hasMany(SpaceSection::className(), ['spot_id' => 'id']);
     }
 
-    //设备
+    /**
+     * 设备
+     * @return $this
+     */
     public function getDevices()
     {
         return $this->hasMany(SpaceSpotDevice::className(), ['id' => 'device_id'])
             ->viaTable('r_spot_device', ['spot_id' => 'id']);
+    }
+
+    /**
+     * 活动
+     * @return \yii\db\ActiveQuery
+     */
+    public function getActivity()
+    {
+       return $this->hasOne(Activity::className(), ['space_spot_id' => 'id']);
     }
 
 }
