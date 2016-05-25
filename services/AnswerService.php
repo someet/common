@@ -1,36 +1,27 @@
 <?php
 namespace someet\common\services;
 
-use someet\common\models\User;
 use someet\common\models\Activity;
 use someet\common\models\QuestionItem;
 use someet\common\models\AnswerItem;
-use yii\filters\auth\QueryParamAuth;
-use yii\rest\Controller;
-use yii\data\ActiveDataProvider;
 use someet\common\models\Answer;
-use yii\web\NotFoundHttpException;
-use app\components\ActiveController;
 use Yii;
 
 class AnswerService extends \someet\common\models\Answer
 {
-    use \someet\common\models\ActiveRecord;
+    use ServiceError;
+
     /**
      * 报名
      *
      * @param int $question_id 问题ID
      * @param int $activity_id 活动ID
      * @param int $user_id 用户ID
-     * @param $q1
-     * @param $q2
-     * @param $q3
      * @return array
      * @throws \yii\db\Exception
      */
-    static function join($question_id, $activity_id, $post)
+    public function join($question_id, $activity_id, $post)
     {
-        $answerList = [];
         $user_id = Yii::$app->user->id;
         $activity = Activity::findOne($activity_id);
 
@@ -51,18 +42,18 @@ class AnswerService extends \someet\common\models\Answer
         // 组装answerlist
         $answerItemList = [
             'q1' => [
-                'question_item_id' => $result['q1']['question_item_id'],
-                'question_value' => $result['q1']['question_value'],
+                'question_item_id' => $post['q1']['question_item_id'],
+                'question_value' => $post['q1']['question_value'],
                 'question_label'=>$questionItemList['0']['label']
             ],
             'q2' => [
-                'question_item_id' => $result['q2']['question_item_id'],
-                'question_value' => $result['q2']['question_value'],
+                'question_item_id' => $post['q2']['question_item_id'],
+                'question_value' => $post['q2']['question_value'],
                 'question_label'=>$questionItemList['1']['label']
             ],
             'q3' => [
-                'question_item_id' => $result['q3']['question_item_id'],
-                'question_value' => $result['q3']['question_value'],
+                'question_item_id' => $post['q3']['question_item_id'],
+                'question_value' => $post['q3']['question_value'],
                 'question_label'=>$questionItemList['2']['label']
             ],
         ];
