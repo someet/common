@@ -25,7 +25,7 @@ class ActivityCheckInService extends ActivityCheckIn
      * @return array
      * @throws \yii\db\Exception
      */
-    public function someetCheckIn($answer_id, $seconds = 900)
+    public function checkIn($answer_id, $seconds = 900)
     {
         //参数校验
         $answer_id = intval($answer_id);
