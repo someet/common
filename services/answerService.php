@@ -50,21 +50,21 @@ class AnswerService extends \someet\common\models\Answer
         
         // 组装answerlist
         $answerItemList = [
-                'q1' => [
-                    'question_item_id' => $result['q1']['question_item_id'],
-                    'question_value' => $result['q1']['question_value'],
-                    'question_label'=>$questionItemList['0']['label']
-                    ],
-                'q2' => [
-                    'question_item_id' => $result['q2']['question_item_id'],
-                    'question_value' => $result['q2']['question_value'],
-                    'question_label'=>$questionItemList['1']['label']
-                    ],
-                'q3' => [
-                    'question_item_id' => $result['q3']['question_item_id'],
-                    'question_value' => $result['q3']['question_value'],
-                    'question_label'=>$questionItemList['2']['label']
-                    ],
+            'q1' => [
+                'question_item_id' => $result['q1']['question_item_id'],
+                'question_value' => $result['q1']['question_value'],
+                'question_label'=>$questionItemList['0']['label']
+                ],
+            'q2' => [
+                'question_item_id' => $result['q2']['question_item_id'],
+                'question_value' => $result['q2']['question_value'],
+                'question_label'=>$questionItemList['1']['label']
+                ],
+            'q3' => [
+                'question_item_id' => $result['q3']['question_item_id'],
+                'question_value' => $result['q3']['question_value'],
+                'question_label'=>$questionItemList['2']['label']
+                ],
         ];
 
         //创建主答案对象
