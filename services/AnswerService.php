@@ -157,7 +157,7 @@ class AnswerService extends \someet\common\models\Answer
     public function updateArriveStatus($id, $status_arrive)
     {
         // 参数验证
-        if ($id < 1 || !in_array($status_arrive, [Answer::STATUS_ARRIVE_ON_TIME, Answer::STATUS_ARRIVE_LATE, Answer::STATUS_ARRIVE_YET])) {
+        if (!in_array($status_arrive, [Answer::STATUS_ARRIVE_ON_TIME, Answer::STATUS_ARRIVE_LATE, Answer::STATUS_ARRIVE_YET])) {
             $this->setError('参数不正确');
             return false;
         }
@@ -178,6 +178,148 @@ class AnswerService extends \someet\common\models\Answer
             return false;
         }
 
+        return true;
+    }
+
+    /**
+     * 报名审核通过与否
+     *
+     * @param int $answer_id
+     * @param int $pass_or_not
+     * @param string $reject_reason
+     * @return array|null|\yii\db\ActiveRecord
+     * @throws \yii\db\Exception
+     */
+    public function reviewJoin($answer_id, $pass_or_not, $reject_reason = null)
+    {
+        $PASS = 1;
+        $REJECT = 0;
+        $halfAnHour = 1790;
+
+        //参数校验
+        if (!in_array($pass_or_not, [$REJECT, $PASS])) {
+            $this->setError('请检查参数');
+            return false;
+        }
+
+        //查找报名信息
+        $answer = Answer::find()->where(['id' => $answer_id])->with(['user', 'activity'])->one();
+        if (!$answer) {
+            $this->setError('该报名信息不存在');
+            return false;
+        }
+
+        $user = $answer->user;
+        $activity = $answer->activity;
+        $user_id = $answer->user_id;
+        $activity_id = $answer->activity_id;
+
+        $transaction = $answer->getDb()->beginTransaction();
+        $answer->status = $pass_or_not == $PASS ? Answer::STATUS_REVIEW_PASS : Answer::STATUS_REVIEW_REJECT;
+        if (!$answer->save()) {
+            $transaction->rollBack();
+            $this->setError('审核报名失败');
+            return false;
+        }
+
+        //组装推送消息
+        /*
+         * push系统
+         * 来源id  微信渠道 TUNNEL_WECHAT 1; 短信渠道 TUNNEL_SMS 2;
+         * 来源类型 活动类型 FROM_ACTIVITY 1; 用户类型 FROM_USER 2;
+         * 系统类型 FROM_SYSTEM  3;
+         * 场地类型 FROM_SPACE 4;
+         */
+        $account = Account::find()->where(['user_id' => $user_id])->one();
+        if (!$account) {
+            $transaction->rollBack();
+            $this->setError('报名用户不存在', self::CODE_NOT_FOUND, '用户ID: ' . $user_id);
+            return false;
+        }
+        $openid = $account->client_id;
+
+        $noti = new Noti();
+        $noti->tunnel_id = Noti::TUNNEL_WECHAT;
+        $noti->from_id_type = Noti::FROM_ACTIVITY;
+        $noti->user_id = $user_id;
+        $noti->from_id = $activity_id;
+
+        //如果拒绝
+        if ($pass_or_not == $REJECT) {
+            if (!empty($reject_reason)) {
+                $answer->reject_reason = $reject_reason;
+                $answer->updated_at = time();
+                if (!$answer->save()) {
+                    $transaction->rollBack();
+                    $this->setError('审核失败,拒绝理由保存失败');
+                    return false;
+                }
+            }
+
+            $noti->note = json_encode(NotificationTemplate::fetchFailedWechatTemplateData($openid, $user, $activity, $reject_reason));
+            if (!$noti->save()) {
+                $transaction->rollBack();
+                $this->setError('拒绝消息保存失败');
+                return false;
+            }
+
+            //提交事务
+            $transaction->commit();
+            //返回数据
+            return Answer::find()
+                ->where(['id' => $answer_id])
+                ->asArray()
+                ->with('answerItemList')
+                ->one();
+        }
+
+        //通过的消息保存
+        $noti->note = json_encode(NotificationTemplate::fetchSuccessWechatTemplateData($openid, $user, $activity));
+        if (!$noti->save()) {
+            $transaction->rollBack();
+            $this->setError('通过的消息保存失败');
+            return false;
+        }
+
+        //查找冲突的活动
+        $start_time = $activity->start_time - $halfAnHour;
+        $end_time = $activity->end_time + $halfAnHour;
+        $conflict_activity = Activity::find()
+            ->andwhere(['between', 'activity.start_time', $start_time, $end_time])
+            ->orWhere(['between', 'activity.end_time', $start_time, $end_time])
+            ->andWhere(['status' => Activity::STATUS_RELEASE])
+            // 不包含本次活动
+            ->andWhere('activity.id != ' . $activity_id)
+            ->asArray()
+            ->all();
+        $conflict_activity_ids = [];
+        foreach ($conflict_activity as $key => $value) {
+            $conflict_activity_ids[$key] = $value['id'];
+        }
+
+        if (count($conflict_activity_ids) > 0) {
+            $conflict_answer = Answer::find()
+                ->where(['user_id' => $user_id])
+                ->andWhere(['activity_id' => $conflict_activity_ids])
+                ->andWhere(['apply_status' => Answer::APPLY_STATUS_YES])
+                ->all();
+
+            if (count($conflict_answer) > 0) {
+                //如果存在冲突则更新其他的活动为拒绝
+                foreach ($conflict_answer as $conflict_answer) {
+                    $conflict_answer->status = Answer::STATUS_REVIEW_REJECT;
+                    $conflict_answer->reject_reason = "由于 和其他活动时间冲突系统自动拒绝";
+                    if (!$conflict_answer->save()) {
+                        $transaction->rollBack();
+                        $this->setError('报名冲突的活动修改失败');
+                        return false;
+                    }
+                }
+            }
+
+        }
+
+        $transaction->commit();
         return true;
     }
 }
