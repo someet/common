@@ -12,6 +12,7 @@ use someet\common\models\User;
 use someet\common\models\AnswerItem;
 use someet\common\models\Question;
 use someet\common\components\SomeetValidator;
+use someet\common\services\AnswerService;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -203,38 +204,21 @@ class AnswerController extends BackendController
     public function actionArrive($id, $arrive_status)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-
-        // 参数验证
-        if ($id < 1 || !in_array($arrive_status, [0,1, 2])) {
-            return ['msg' => '参数不正确'];
-        }
-
-        //后台操作日志记录
         AdminLog::saveLog('更新用户到场情况', $id);
 
-        //获取报名信息
-        $model = Answer::find()->where(['id' => $id])->with(['user', 'activity'])->one();
-        //修改当前报名的状态为通过或者不通过
-
-        //设置答案的状态为通过或不通过
-        $model->arrive_status = $arrive_status;
-        if (!$model->save()) {
-            //返回错误信息
-            return ['msg' => '操作失败'];
-        } else {
-            //返回正确的消息
-            return Answer::find()
-                ->where(['id' => $model->id])
-                ->asArray()
-                ->with('answerItemList')
-                ->one();
+        $answerService = new AnswerService();
+        $result = $answerService->updateArriveStatus($id, $arrive_status);
+        if ($result) {
+            return ['更新到达状态成功'];
         }
+        return $answerService->getLastError();
     }
 
     /**
      * 过滤报名是否通过
-     * @param $id 过滤的对象id
-     * @param $pass_or_not 通过或者不通过, 值为1或0
+     *
+     * @param int $id 过滤的对象id
+     * @param int $pass_or_not 通过或者不通过, 值为1或0
      * @return array|null|\yii\db\ActiveRecord
      * @throws DataValidationFailedException
      * @throws NotFoundHttpException
@@ -243,32 +227,14 @@ class AnswerController extends BackendController
     public function actionFilter($id, $pass_or_not)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
+        AdminLog::saveLog('审核报名对象', $id);
 
-        // 参数验证
-        if ($id < 1 || !in_array($pass_or_not, [0,1])) {
-            return ['msg' => '参数不正确'];
+        $answerService = new AnswerService();
+        $result = $answerService->reviewJoin($id, $pass_or_not);
+        if ($result) {
+            return ['审核成功'];
         }
-
-        //后台操作日志记录
-        AdminLog::saveLog('筛选报名结果', $id);
-
-        //获取报名信息
-        $model = Answer::find()->where(['id' => $id])->with(['user', 'activity'])->one();
-        //修改当前报名的状态为通过或者不通过
-
-        //设置答案的状态为通过或不通过
-        $model->status = $pass_or_not ? Answer::STATUS_REVIEW_PASS : Answer::STATUS_REVIEW_REJECT;
-        if (!$model->save()) {
-            //返回错误信息
-            return ['msg' => '审核失败'];
-        } else {
-            //返回正确的消息
-            return Answer::find()
-                ->where(['id' => $model->id])
-                ->asArray()
-                ->with('answerItemList')
-                ->one();
-        }
+        return $answerService->getLastError();
     }
 
     /**
