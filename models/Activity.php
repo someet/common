@@ -52,6 +52,7 @@ use Yii;
  * @property integer $is_full
  * @property integer $join_people_count
  * @property integer $pma_type
+ * @property integer $space_spot_id
  * @property integer $ideal_number
  * @property integer $ideal_number_limit
  */
@@ -70,12 +71,14 @@ class Activity extends \yii\db\ActiveRecord
     const STATUS_SHUT  = 30;
     /* 取消 */
     const STATUS_CANCEL = 40;
-     /*好评*/
+
+    /* 好评 */
     const GOOD_SCORE = 1;
-     /*中评*/
+    /* 中评 */
     const MIDDLE_SCORE = 2;
-    /*差评*/
+    /* 差评 */
     const BAD_SCORE = 3;
+
     /* 报名已满 */
     const IS_FULL_YES = 1;
     /* 报名未满 */
@@ -129,8 +132,11 @@ class Activity extends \yii\db\ActiveRecord
 
     public function extraFields()
     {
-        return ['type', 'user','pma', 'profile' => function () {
-            return $this->user->profile;
+        return ['type', 'user','pma', 'spot', 'founders', 'profile' => function() {
+            if ($this->user) {
+                return $this->user->profile;
+            }
+            return null;
         }];
     }
 
@@ -319,5 +325,19 @@ class Activity extends \yii\db\ActiveRecord
     public function getCheckInList()
     {
         return $this->hasMany(ActivityCheckIn::className(), ['activity_id' => 'id']);
+    }
+
+    /**
+     * 场地
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSpot()
+    {
+        return $this->hasOne(SpaceSpot::className(), ['id' => 'space_spot_id']);
+    }
+
+    public function getFounders()
+    {
+        return $this->hasMany(User::className(), ['id' => 'founder_id'])->viaTable('r_activity_founder', ['activity_id' => 'id']);
     }
 }
