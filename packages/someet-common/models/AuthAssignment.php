@@ -21,7 +21,8 @@ class AuthAssignment extends \yii\db\ActiveRecord
     const ROLE_FOUNDER  = 'founder';
     /* PMA */
     const ROLE_PMA      = 'pma';
-
+    /*发起人*/
+    const ROLE_CREATER = 'creater';
     /**
      * @inheritdoc
      */
