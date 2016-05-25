@@ -145,4 +145,39 @@ class AnswerService extends \someet\common\models\Answer
         $transaction->commit();
         return true;
     }
+
+
+    /**
+     * 报名状态修改
+     *
+     * @param int $id 报名的ID
+     * @param int $status_arrive 0|1|2 到达的状态
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public function updateArriveStatus($id, $status_arrive)
+    {
+        // 参数验证
+        if ($id < 1 || !in_array($status_arrive, [Answer::STATUS_ARRIVE_ON_TIME, Answer::STATUS_ARRIVE_LATE, Answer::STATUS_ARRIVE_YET])) {
+            $this->setError('参数不正确');
+            return false;
+        }
+
+        $answer = Answer::find()
+            ->where(['id' => $id])
+            ->with(['user', 'activity'])
+            ->one();
+
+        if (!$answer) {
+            $this->setError('该报名信息不存在');
+            return false;
+        }
+
+        $answer->arrive_status = $status_arrive;
+        if (!$answer->save()) {
+            $this->setError('更新失败');
+            return false;
+        }
+
+        return true;
+    }
 }
