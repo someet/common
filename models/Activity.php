@@ -67,11 +67,11 @@ class Activity extends \yii\db\ActiveRecord
     const STATUS_RELEASE  = 20;
     /* 关闭 */
     const STATUS_SHUT  = 30;
-     /*好评*/
+    /* 好评 */
     const GOOD_SCORE = 1;
-     /*中评*/
+    /* 中评 */
     const MIDDLE_SCORE = 2;
-    /*差评*/
+    /* 差评 */
     const BAD_SCORE = 3;
     /* 报名已满 */
     const IS_FULL_YES = 1;
@@ -324,4 +324,3 @@ class Activity extends \yii\db\ActiveRecord
         return $this->hasMany(User::className(), ['id' => 'founder_id'])->viaTable('r_activity_founder', ['activity_id' => 'id']);
     }
 }
-
