@@ -1,7 +1,10 @@
 <?php
 namespace someet\common\services;
 
+use dektrium\user\models\Account;
 use someet\common\models\Activity;
+use someet\common\models\Noti;
+use someet\common\models\NotificationTemplate;
 use someet\common\models\QuestionItem;
 use someet\common\models\AnswerItem;
 use someet\common\models\Answer;
@@ -233,7 +236,7 @@ class AnswerService extends \someet\common\models\Answer
         $account = Account::find()->where(['user_id' => $user_id])->one();
         if (!$account) {
             $transaction->rollBack();
-            $this->setError('报名用户不存在', self::CODE_NOT_FOUND, '用户ID: ' . $user_id);
+            $this->setError('报名没有关联微信');
             return false;
         }
         $openid = $account->client_id;
