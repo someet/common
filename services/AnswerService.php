@@ -151,7 +151,7 @@ class AnswerService extends \someet\common\models\Answer
 
 
     /**
-     * 报名状态修改
+     * 更新用户到场情况
      *
      * @param int $id 报名的ID
      * @param int $status_arrive 0|1|2 到达的状态
