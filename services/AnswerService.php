@@ -11,7 +11,7 @@ use someet\common\models\Answer;
 use someet\common\models\User;
 use Yii;
 
-class AnswerService extends \someet\common\models\Answer
+class AnswerService extends Answer
 {
     use ServiceError;
 
