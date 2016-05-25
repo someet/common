@@ -134,7 +134,7 @@
                 <div layout="row">
                     <div flex="">
                         <label>DTS</label>
-                        <md-autocomplete md-selected-item="dts" placeholder="请选择DTS" md-search-text="dtsname" md-items="dts in getDts(dtsname)" md-item-text="dts.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
+                        <md-autocomplete ng-disabled="true" md-selected-item="dts" placeholder="请选择DTS" md-search-text="dtsname" md-items="dts in getDts(dtsname)" md-item-text="dts.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
                             <md-item-template>
                                 <span md-highlight-text="dts">{{dts.username}}</span>
                                 <img ng-if="dts" width="50" style="border-radius:25px" ng-src="{{dts.profile.headimgurl}}" />
@@ -142,7 +142,7 @@
                             <md-not-found>No matches found.</md-not-found>
                         </md-autocomplete>
                         <label>发起人</label>
-                        <md-autocomplete md-selected-item="user" placeholder="请选择发起人" md-search-text="username" md-items="user in getUsers(username)" md-item-text="user.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
+                        <md-autocomplete ng-disabled="true" md-selected-item="user" placeholder="请选择发起人" md-search-text="username" md-items="user in getUsers(username)" md-item-text="user.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
                             <md-item-template>
                                 <span md-highlight-text="username">{{user.username}}</span>
                                 <img ng-if="user" width="50" style="border-radius:25px" ng-src="{{user.profile.headimgurl}}" />
@@ -152,7 +152,7 @@
                     </div>
                     <div flex="">
                         <label>PMA</label>
-                        <md-autocomplete md-selected-item="pma" placeholder="请选择PMA" md-search-text="principalname" md-items="pma in getPrincipals(principalname)" md-item-text="pma.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
+                        <md-autocomplete ng-disabled="true" md-selected-item="pma" placeholder="请选择PMA" md-search-text="principalname" md-items="pma in getPrincipals(principalname)" md-item-text="pma.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
                             <md-item-template>
                                 <span md-highlight-text="principalname">{{pma.username}}</span>
                                 <img width="50" style="border-radius:25px" ng-src="{{pma.profile.headimgurl}}" />
@@ -163,7 +163,7 @@
                     <div flex="">
                         <label>PMA类型</label>
                         <md-input-container>
-                            <md-select name="group" ng-model="entity.pma_type" placeholder="选择分类">
+                            <md-select name="group" ng-model="entity.pma_type" placeholder="选择分类" ng-disabled="true">
                                 <md-option ng-value="opt.pma_type" ng-repeat="opt in pma_type_count">
                                     {{opt.name}}
                                 </md-option>
@@ -187,24 +187,6 @@
                                 </li>
                             </ul>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <label>请选择联合发起人</label>
-                        <md-autocomplete md-selected-item="co_founder" placeholder="请选择联合发起人" md-search-text="co_founder_name" md-items="co_founder in getUsers(co_founder_name)" md-item-text="co_founder.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
-                            <md-item-template>
-                                <span md-highlight-text="co_founder_name">{{co_founder.username}}</span>
-                                <img ng-if="user" width="50" style="border-radius:25px" ng-src="{{co_founder.profile.headimgurl}}" />
-                            </md-item-template>
-                            <md-not-found>No matches found.</md-not-found>
-                        </md-autocomplete>
-                    </div>
-                    <div class="col-md-6">
-                        <div>
-                            <label>发起人添加按钮</label>
-                        </div>
-                        <div class="btn btn-info" ng-click="addFounder(co_founder)">添加</div>
                     </div>
                 </div>
                 <div class="row">
@@ -249,9 +231,6 @@
                     <p>
                         {{ selectPoster.progress.p }}%
                     </p>
-                    <div ng-file-select="onCodeSelect($files)" data-multiple="false" title="select file" onclick="this.value = null" class="btn btn-upload">
-                        <md-button class="md-raised md-info">活动群二维码</md-button>
-                    </div>
                     <p>
                         {{ selectCode.progress.p }}%
                     </p>
@@ -260,7 +239,7 @@
                     <div flex="30">
                         <md-input-container>
                             <label>人数限制(最多200人)</label>
-                            <input type="number" name="people" ng-model="entity.peoples" value="{{entity.peoples}}" max="200" />
+                            <input type="number" name="people" ng-model="entity.peoples" value="{{entity.peoples}}" max="200" ng-disabled="true"/>
                             <div ng-messages="entityForm.people.$error">
                                 <div ng-message="max">人数超过限制</div>
                             </div>
@@ -269,7 +248,7 @@
                     <div flex="30">
                         <md-input-container>
                             <label>理想人数(最多200人)</label>
-                            <input type="number" name="ideal_number" ng-model="entity.ideal_number" value="{{entity.ideal_number}}" max="200" />
+                            <input type="number" name="ideal_number" ng-model="entity.ideal_number" value="{{entity.ideal_number}}" max="200" ng-disabled="true"/>
                             <div ng-messages="entityForm.ideal_number.$error">
                                 <div ng-message="max">人数超过限制</div>
                             </div>
@@ -278,7 +257,7 @@
                     <div flex="40">
                         <md-input-container>
                             <label>理想人数限制(最多200人)</label>
-                            <input type="number" name="ideal_number_limit" ng-model="entity.ideal_number_limit" value="{{entity.ideal_number_limit}}" max="200" />
+                            <input type="number" name="ideal_number_limit" ng-model="entity.ideal_number_limit" value="{{entity.ideal_number_limit}}" max="200" ng-disabled="true"/>
                             <div ng-messages="entityForm.ideal_number_limit.$error">
                                 <div ng-message="max">人数超过限制</div>
                             </div>
@@ -334,28 +313,6 @@
                             <div ng-message="md-maxlength">详细地址文字不能超过60个字符</div>
                         </div>
                     </md-input-container>
-                </div>
-                <div layout="row">
-                    <div flex="30">
-                        <label>场地</label>
-                        <md-autocomplete md-selected-item="selectedSpaceSpot" placeholder="请选择场地" md-search-text="spacename" md-items="space_spot in getSpace(spacename)" md-search-text-change="getSection(selectedSpaceSpot)" md-item-text="space_spot.name" md-min-length="0" md-menu-class="autocomplete-custom-template">
-                            <md-item-template>
-                                <span md-highlight-text="space_spot">{{space_spot.name}}</span>
-                            </md-item-template>
-                            <md-not-found>No matches found.</md-not-found>
-                        </md-autocomplete>
-                    </div>
-                    <div flex="20">
-                        <md-input-container>
-                            <label>空间</label>
-                            <md-select ng-model="selectedSection" multiple>
-                                <md-option ng-value="section.id" ng-repeat="section in selectedSpaceSpot.sections">{{section.name}}</md-option>
-                            </md-select>
-                        </md-input-container>
-                    </div>
-                    <div flex="50">
-                        空间不选择默认为全部
-                    </div>
                 </div>
                 <md-input-container>
                     <label>收费金额(0为免费)</label>

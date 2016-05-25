@@ -10,7 +10,7 @@ angular.module('controllers', ['ngTagsInput'])
               alert(err);
             });
             */
-
+            console.log(3333333);
             //活动列表开始
             var listtype = $routeParams.type_id;
             if (listtype > 0) {

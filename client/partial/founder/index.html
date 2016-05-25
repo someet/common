@@ -3,10 +3,6 @@
     <button type="button" class="btn btn-success btn-lg" ng-click="createPage()">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 新建活动
     </button>
-    <button type="button" class="btn btn-info btn-lg" ng-click="weekActivity()">本周活动</button>
-    <button type="button" class="btn btn-info btn-lg" ng-click="historyActivity()">历史活动</button>
-    <button type="button" class="btn btn-info btn-lg" ng-click="preventActivity()">预发布活动</button>
-    <button type="button" class="btn btn-info btn-lg" ng-click="prevenIssuetActivity()">一键发布预发布活动</button>
     <form class="navbar-form navbar-right" role="search">
         <div class="form-group">
             <input type="text" class="form-control" ng-model="title" placeholder="标题">
@@ -15,27 +11,6 @@
             <span class="glyphicon glyphicon-search" aria-hidden="true"></span> 搜索
         </button>
     </form>
-</div>
-<!-- 活动分类tab -->
-<div class="container">
-    <ul class="nav nav-tabs">
-        <li ng-class="{active:isActive('0')}">
-            <a href="#/activity/list/0">全部</a>
-        </li>
-        <li ng-class="{active:isActive(entity.id)}" ng-repeat="entity in activityTypeList | orderBy: display_order ">
-            <a href="#/activity/list/{{entity.id}}">{{entity.name}}</a>
-        </li>
-        <li>
-            <a ng-if="!showAddForm" ng-click="onTypeAddClicked()">
-                <span class="glyphicon glyphicon-plus-sign"></span>
-            </a>
-            <div ng-if="showAddForm">
-                <input type="text" ng-model="addForm.newType" />
-                <button class="btn-success" ng-click="commitTypeName(addForm.newType)">确认添加</button>
-                <button class="btn-default" ng-click="cancelAddType()">取消</button>
-            </div>
-        </li>
-    </ul>
 </div>
 <!-- 活动分类tab end -->
 <!-- 活动列表 -->
@@ -55,16 +30,6 @@
                 class="panel">
                     <div class="panel-heading">
                         <h3 class="panel-title">
-             <!-- 按照序号排序 -->
-              <input type="text" ng-model="entity.display_order" value="{{entity.display_order}}" style="width:60px;" />
-              <button class="btn btn-primary" ng-click="adjust_order(entity)" type="button">调整</button>
-              <!-- 置顶按钮 -->
-              <button type="button" class="btn btn-danger " ng-if="entity.is_top==1" ng-click="top(entity, 0)" data-toggle="button" >
-                <span class="glyphicon glyphicon-circle-arrow-down" aria-hidden="true">取消置顶</span>
-              </button>
-              <button type="button" class="btn btn-default " ng-if="entity.is_top==0" ng-click="top(entity, 1)" data-toggle="button" >
-                <span class="glyphicon glyphicon-circle-arrow-up" aria-hidden="true">置顶</span>
-              </button>
 
               <!-- 活动标题 -->
               {{entity.id}}#
@@ -88,29 +53,6 @@
                 </md-switch>
             </span> -->
             
-
-                <span class="btn-group btn-float-right" ng-show="entity.status >= 20">
-                <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
-                    活动状态
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                    <li>
-                        <a ng-click="updateStatus(entity.id,20)">启用活动</a>
-                    </li>
-                    <li>
-                        <a ng-click="updateStatus(entity.id,30)">关闭活动</a>
-                    </li>
-                    <li>
-                        <a ng-click="updateStatus(entity.id,40)">取消活动</a>
-                    </li>
-                </ul>
-                <a href="#/answer/{{entity.id}}" target="_blank" ng-class="{true: 'btn-danger', false: 'btn-default'}[entity.question.status==10]" ng-if="entity.question" class="btn  btn-float-right" type="button">
-                  <span>管理</span>
-                  （{{entity.answer_count}}/{{entity.peoples}}）
-                  <span class="badge">{{entity.feedback_count}}</span>
-                </a>
-              </span>
               <button ng-if="entity.status==10 || entity.status==15" class="btn btn-primary btn-float-right" ng-click="release(entity)" type="button">发布</button>
             <!-- 下拉功能 -->
             <div ng-if="entity.status == 10 ||  entity.status == 15" class="btn-group btn-float-right">
@@ -149,24 +91,7 @@
                         <a class="btn btn-primary" target="_blank" href="http://bshare.optimix.asia/barCode?site=weixin&url=https://m.someet.cc/activity/{{entity.id}}">生成活动二维码</a>
                         <button ng-if="!entity.question" class="btn" ng-click="viewQuestion(entity)">设置表单</button>
                         <button ng-if="entity.question" class="btn" ng-click="viewQuestion(entity)">修改表单</button>
-                        <a class="btn btn-success" href="#/activity/{{entity.id}}" target="_blank">编辑</a>
-
-
-                        <!-- 下拉功能 -->
-                        <div class="btn-group btn-float-right">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                更多
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a ng-click="delete(entity)">删除活动</a>
-                                </li>
-                                <li>
-                                    <a ng-click="copy(entity)">复制活动</a>
-                                </li>
-                            </ul>
-                        </div>
+                        <a class="btn btn-success" href="#/founder/{{entity.id}}" target="_blank">编辑</a>
                     </div>
                 </div>
             </li>

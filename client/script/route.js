@@ -2,7 +2,7 @@ app.config(
 ['$routeProvider',
 function($routeProvider) {
   $routeProvider
-      // 面板
+    // 面板
     .when('/dashboard', {
       templateUrl: '/partial/dashboard.html',
       controller: 'DashboardCtrl'
@@ -11,7 +11,8 @@ function($routeProvider) {
     .when('/share',{
       templateUrl: '/partial/share/index.html',
       controller :'ShareCtrl'
-    })     //分享
+    })     
+    //更新分享
     .when('/share/update/:id',{
       templateUrl: '/partial/share/update.html',
       controller :'ShareUpdateCtrl'
@@ -82,7 +83,16 @@ function($routeProvider) {
       templateUrl: '/partial/activity/view.html',
       controller: 'ActivityViewCtrl'
     })
-
+    // 发起人查看活动列表
+    .when('/founder',{
+      templateUrl: '/partial/founder/index.html',
+      controller : 'FounderListCtrl'
+    })
+    //发起人编辑活动
+    .when('/founder/:id', {
+      templateUrl: '/partial/founder/view.html',
+      controller: 'FounderViewCtrl'
+    })
     //专题列表
     .when('/special', {
       templateUrl: '/partial/special/index.html',
