@@ -1,7 +1,10 @@
 <?php
 namespace someet\common\services;
 
+use dektrium\user\models\Account;
 use someet\common\models\Activity;
+use someet\common\models\Noti;
+use someet\common\models\NotificationTemplate;
 use someet\common\models\QuestionItem;
 use someet\common\models\AnswerItem;
 use someet\common\models\Answer;
