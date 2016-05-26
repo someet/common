@@ -14,9 +14,8 @@ use someet\common\models\Answer;
 use someet\common\models\Noti;
 use someet\common\models\NotificationTemplate;
 
-class ActivityCheckInService extends ActivityCheckIn
+class ActivityCheckInService extends BaseService
 {
-    use ServiceError;
 
 
     /**
@@ -29,13 +28,6 @@ class ActivityCheckInService extends ActivityCheckIn
      */
     public function checkIn($answer_id, $seconds = 900)
     {
-        //参数校验
-        $answer_id = intval($answer_id);
-        if ($answer_id < 0) {
-            $this->setError('参数不正确');
-            return false;
-        }
-
         //查找报名信息
         $answer = Answer::find()
             ->where(['id' => $answer_id])

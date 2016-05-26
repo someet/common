@@ -10,9 +10,8 @@ namespace someet\common\services;
 
 use someet\common\models\Activity;
 
-class ActivityService extends Activity
+class ActivityService extends BaseService
 {
-    use ServiceError;
 
     /**
      * 更新活动的状态

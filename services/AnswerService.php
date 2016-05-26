@@ -11,9 +11,8 @@ use someet\common\models\Answer;
 use someet\common\models\User;
 use Yii;
 
-class AnswerService extends Answer
+class AnswerService extends BaseService
 {
-    use ServiceError;
 
     /**
      * 报名

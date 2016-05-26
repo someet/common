@@ -10,9 +10,8 @@ namespace someet\common\services;
 
 use someet\common\models\ActivityFeedback;
 
-class ActivityFeedbackService extends ActivityFeedback
+class ActivityFeedbackService extends BaseService
 {
-    use  ServiceError;
 
     /**
      * 活动反馈

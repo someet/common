@@ -10,9 +10,8 @@ namespace someet\common\services;
 
 use someet\common\models\User;
 
-class UserService extends User
+class UserService extends BaseService
 {
-    use ServiceError;
 
     /**
      * 根据unionid获取用户编号和access token
@@ -22,22 +21,6 @@ class UserService extends User
      */
     public function getUserinfoByUnionId($unionid)
     {
-        //校验参数
-        if (empty($unionid)) {
-            $this->setError('uniondid不能为空');
-            return false;
-        }
-
-        if (!is_string($unionid)) {
-            $this->setError('unionid必须是字符串');
-            return false;
-        }
-
-        if (strlen($unionid) > 60 || strlen($unionid) < 20) {
-            $this->setError('传递的uniond位数不正确');
-            return false;
-        }
-
         $user = User::find()->where(['unionid' => $unionid])->one();
         if (!$user) {
             $this->setError('用户不存在');

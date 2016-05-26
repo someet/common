@@ -11,9 +11,8 @@ namespace someet\common\services;
 
 use someet\common\models\ActivityType;
 
-class ActivityTypeService extends ActivityType
+class ActivityTypeService extends BaseService
 {
-    use ServiceError;
 
     /**
      * 删除活动分类

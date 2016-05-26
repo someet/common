@@ -10,9 +10,8 @@ namespace someet\common\services;
 
 use someet\common\models\YellowCard;
 
-class YellowCardService extends YellowCard
+class YellowCardService extends BaseService
 {
-    use ServiceError;
 
     /**
      * 黄牌申诉
