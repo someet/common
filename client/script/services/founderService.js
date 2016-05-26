@@ -8,7 +8,7 @@ angular.module('backendServices')
           })
         },  
         create: function (newEntity) {
-          return $http.post('/activity/create', newEntity).then(function (data) {
+          return $http.post('/founder/create', newEntity).then(function (data) {
             return data;
           });
         },
@@ -30,7 +30,7 @@ angular.module('backendServices')
         },
         //搜索活动名字
         search: function(query){
-          return $http.get('/activity/search?title=' + query);
+          return $http.get('/founder/search?title=' + query);
         },      
         //搜索发起人
         defaultData: function() {

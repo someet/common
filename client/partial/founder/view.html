@@ -40,7 +40,7 @@
                     <div class="detail-host">
                         <label>发起人</label>
                         <div class="hoster">
-                            <div class="name"> <strong>{{user.username}}</strong></div>
+                            <div class="name"> <strong>{{entity.user.username}}</strong></div>
                             <div>
                                 <span>“</span>
                                 <img ng-src="{{entity.user.profile.headimgurl}}" />
@@ -131,9 +131,8 @@
             <!-- 预览 end -->
             <div class="col-md-7">
                 <input type="hidden" ng-model="entity.id" />
-                <div layout="row">
-                发起人
-
+                <div class="page-header">
+                  <h1>发起人 {{user.username}}</h1>
                 </div>
                 <div class="row">
                     <div class="col-md-6 margin-top-10">
@@ -172,13 +171,10 @@
                 </md-input-container>
                 <div layout="row">
                     <div ng-file-select="onPosterSelect($files)" data-multiple="false" title="select file" onclick="this.value = null" class="btn btn-upload">
-                        <md-button class="md-raised md-info">标题图片</md-button>
+                        <md-button class="md-raised md-info"> <i class="fa fa-cloud-upload fa-3x">标题图片</i> </md-button>
                     </div>
                     <p>
-                        {{ selectPoster.progress.p }}%
-                    </p>
-                    <p>
-                        {{ selectCode.progress.p }}%
+                        {{selectPoster.progress.p}}%
                     </p>
                 </div>
                 <div layout="row">
@@ -189,8 +185,8 @@
                                 <div class="input-append">
                                     <input type="text" class="input-large" ng-model="start_time_str">
                                     <span class="add-on">
-                    <i class="icon-calendar"></i>
-                  </span>
+                                        <i class="icon-calendar"></i>
+                                    </span>
                                 </div>
                             </a>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">

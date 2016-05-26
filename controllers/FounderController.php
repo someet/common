@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\components\DataValidationFailedException;
+use someet\common\models\User;
 use someet\common\models\Activity;
 use someet\common\models\RActivitySpace;
 use someet\common\models\SpaceSection;
@@ -57,6 +58,44 @@ class FounderController extends BackendController
 
 	}
 
+     /**
+     * 搜索活动, 供给活动分配发起人的自动完成功能使用
+     * @param string $username 标题
+     * @return array
+     */
+    public function actionSearch($title)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $user_id = Yii::$app->user->id;
+        $activity = Activity::find()
+                    ->where(
+                        ['like', 'title', $title]
+                    )
+                    ->andwhere(['created_by' => $user_id]);
+                    // ->orWhere(['like','desc',$title])
+                    // ->orWhere(['like','content',$title]);
+        $activityExists = $activity->exists();
+        $countQuery = clone $activity;
+        $pages = new Pagination(['totalCount' => $countQuery->count()]);
+        $models = $activity->offset($pages->offset)
+            ->limit($pages->limit)
+            ->asArray()
+            ->all();
+
+        if ($activityExists) {
+            return [
+                'status' => 1,
+                'models' => $models,
+                'pages' => $pages,
+            ];
+        } else {
+            return [
+                'status' => 0,
+            ];
+        }
+
+
+    }
 
     /**
      * 默认数据
@@ -67,7 +106,7 @@ class FounderController extends BackendController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $user_id = Yii::$app->user->id;
         $user = User::findOne($user_id);
-        return ['user_id' => $user];
+        return ['user' => $user];
     }
 
 
@@ -87,10 +126,7 @@ class FounderController extends BackendController
         $user_id = Yii::$app->user->id;
             $andwhere = ['in', 'status', [
             Activity::STATUS_DRAFT,
-            Activity::STATUS_RELEASE,
-            Activity::STATUS_PREVENT,
-            Activity::STATUS_SHUT,
-            Activity::STATUS_CANCEL,
+            Activity::STATUS_FOUNDER_DRAFT,
             ]];
     
             $query = Activity::find()
@@ -163,8 +199,8 @@ class FounderController extends BackendController
 
         $start_time = isset($data['start_time']) ? $data['start_time'] : 0;
         $data['week'] = $start_time > 0 ? date('w', $start_time) : 0;
+        $data['status'] = Activity::STATUS_FOUNDER_DRAFT;
         $model = new Activity;
-
         if ($model->load($data, '') && $model->save()) {
             // 添加发起人
             if (!empty($data['founder'])) {

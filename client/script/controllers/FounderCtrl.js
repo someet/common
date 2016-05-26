@@ -140,54 +140,23 @@ angular.module('controllers')
                 });
             };
 
-            // 草稿
-            $scope.draft = function(entity) {
-
-                // var confirm = $mdDialog.confirm()
-                //   .title('确定要更改为草稿吗')
-                //   .ariaLabel('delete activity item')
-                //   .ok('确定发布')
-                //   .cancel('点错了，再看看');
-
-                // $mdDialog.show(confirm).then(function() {
-
-
-                var newEntity = entity;
-                newEntity.status = 10; //活动状态20为发布
-                $founderManage.update(newEntity.id, newEntity).then(function(data) {
-                    // $location.path('/activity/list/' + entity.type_id);
-                    $mdToast.show($mdToast.simple()
-                        .content('切换为草稿成功')
-                        .hideDelay(5000)
-                        .position("top right"));
-
-                }, function(err) {
-                    $mdToast.show($mdToast.simple()
-                        .content(err.toString())
-                        .hideDelay(5000)
-                        .position("top right"));
-                });
-                // });
-
-            }
-
 
             // 发布活动
             $scope.release = function(entity) {
                 if (entity.question) {
                     var confirm = $mdDialog.confirm()
-                        .title('确定要发布活动“' + entity.title + '”吗？')
+                        .title('确定要提交审核“' + entity.title + '”吗？')
                         .ariaLabel('delete activity item')
-                        .ok('确定发布')
+                        .ok('确定提交审核')
                         .cancel('点错了，再看看');
 
                     $mdDialog.show(confirm).then(function() {
                         var newEntity = entity;
-                        newEntity.status = 20; //活动状态20为发布
+                        newEntity.status = 10; //活动状态10为提交审核
                         $founderManage.update(newEntity.id, newEntity).then(function(data) {
                             $location.path('/activity/list/' + entity.type_id);
                             $mdToast.show($mdToast.simple()
-                                .content('活动 “' + entity.title + '” 已发布')
+                                .content('活动 “' + entity.title + '” 已提交审核')
                                 .hideDelay(5000)
                                 .position("top right"));
 
@@ -201,7 +170,7 @@ angular.module('controllers')
                 } else {
 
                     var noquestion = $mdDialog.alert()
-                        .title('请先设置问题表单然后再发布活动！')
+                        .title('请先设置问题表单然后再提交审核！')
                         .clickOutsideToClose(true)
                         .ariaLabel('delete activity item')
                         .ok('知道了');
