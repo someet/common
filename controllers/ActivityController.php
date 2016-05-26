@@ -6,6 +6,7 @@ use app\components\DataValidationFailedException;
 use someet\common\models\Activity;
 use someet\common\models\RActivitySpace;
 use someet\common\models\SpaceSection;
+use someet\common\models\AdminLog;
 use someet\common\models\RActivityFounder;
 use Yii;
 use yii\filters\VerbFilter;
@@ -872,6 +873,9 @@ class ActivityController extends BackendController
             // 更新发起人
             if (empty($data['founder'])) {
                 $delete_founder = RActivityFounder::deleteAll(['activity_id'=> $model->id]);
+                if ($delete_founder) {
+                    AdminLog::saveLog('删除全部联合发起人', $model->primaryKey);
+                }
             } else {
                 $delete_founder = RActivityFounder::deleteAll(['activity_id'=> $model->id]);
                 foreach ($data['founder'] as $founder) {
@@ -879,6 +883,9 @@ class ActivityController extends BackendController
                     $r_activity_founder->activity_id = $model->id;
                     $r_activity_founder->founder_id = $founder['id'];
                     $r_activity_founder->save();
+                }
+                if ($delete_founder && $r_activity_founder) {
+                    AdminLog::saveLog('更新联合发起人', $model->primaryKey);
                 }
             }
 
