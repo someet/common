@@ -10,6 +10,7 @@ use someet\common\models\AnswerItem;
 use someet\common\models\Answer;
 use someet\common\models\User;
 use Yii;
+use yii\db\ActiveQuery;
 
 class AnswerService extends BaseService
 {
@@ -74,7 +75,7 @@ class AnswerService extends BaseService
         //获取问题列表
         $questionItemList = QuestionItem::findAll(['question_id' => $question_id]);
         if (3 != count($questionItemList)) {
-            $this->setError('问题不是三个');
+            $this->setError('活动设置的问题不是三个');
             return false;
         }
 
@@ -145,7 +146,19 @@ class AnswerService extends BaseService
         }
 
         $transaction->commit();
-        return true;
+        return Answer::find()
+            ->select(['id', 'question_id', 'activity_id', 'user_id'])
+            ->where(['id' => $model->id])
+            ->with([
+                'user' => function(ActiveQuery $query) {
+                    $query->select(['id', 'username', 'mobile', 'wechat_id']);
+                },
+                'answerItemList' => function(ActiveQuery $query) {
+                    $query->select(['id', 'user_id', 'question_item_id', 'question_id', 'question_label', 'question_value']);
+                }
+            ])
+            ->asArray()
+            ->one();
     }
 
 

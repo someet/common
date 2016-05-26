@@ -11,6 +11,7 @@ namespace someet\common\services;
 use someet\common\models\Answer;
 use Yii;
 use someet\common\models\ActivityFeedback;
+use yii\db\ActiveQuery;
 
 class ActivityFeedbackService extends BaseService
 {
@@ -47,7 +48,19 @@ class ActivityFeedbackService extends BaseService
         $feedback = new ActivityFeedback();
         if ($feedback->load($data, '') && $feedback->save()) {
             Answer::updateAll(['is_feedback' => Answer::FEEDBACK_IS], ['activity_id' => $feedback->activity_id ,'user_id' => $user_id]);
-            return true;
+            return Answer::find()
+                ->select(['id', 'question_id', 'activity_id', 'user_id'])
+                ->where(['id' => $model->id])
+                ->with([
+                    'user' => function(ActiveQuery $query) {
+                        $query->select(['id', 'username', 'mobile', 'wechat_id']);
+                    },
+                    'answerItemList' => function(ActiveQuery $query) {
+                        $query->select(['id', 'user_id', 'question_item_id', 'question_id', 'question_label', 'question_value']);
+                    }
+                ])
+                ->asArray()
+                ->one();
         } elseif ($feedback->hasErrors()) {
             $errors = $feedback->getFirstErrors();
             $this->setError(array_pop($errors));
