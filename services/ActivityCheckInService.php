@@ -8,8 +8,10 @@
 
 namespace someet\common\services;
 
+use dektrium\user\models\Account;
 use someet\common\models\ActivityCheckIn;
 use someet\common\models\Answer;
+use someet\common\models\Noti;
 use someet\common\models\NotificationTemplate;
 
 class ActivityCheckInService extends ActivityCheckIn
