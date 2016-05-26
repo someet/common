@@ -8,6 +8,8 @@
 
 namespace someet\common\services;
 
+use someet\common\models\Answer;
+use Yii;
 use someet\common\models\ActivityFeedback;
 
 class ActivityFeedbackService extends BaseService
@@ -27,11 +29,12 @@ class ActivityFeedbackService extends BaseService
             return false;
         }
 
+        $user_id = Yii::$app->user->id;
         //检查是否重复提交
         $exists = ActivityFeedback::find()
             ->where(
                 [
-                    'user_id' => $data['user_id'],
+                    'user_id' => $user_id,
                     'activity_id' => $data['activity_id']
                 ]
             )
@@ -43,7 +46,7 @@ class ActivityFeedbackService extends BaseService
 
         $feedback = new ActivityFeedback();
         if ($feedback->load($data, '') && $feedback->save()) {
-            Answer::updateAll(['is_feedback' => Answer::FEEDBACK_IS], ['activity_id' => $feedback->activity_id ,'user_id' => $feedback->user_id]);
+            Answer::updateAll(['is_feedback' => Answer::FEEDBACK_IS], ['activity_id' => $feedback->activity_id ,'user_id' => $user_id]);
             return true;
         } elseif ($feedback->hasErrors()) {
             $errors = $feedback->getFirstErrors();
