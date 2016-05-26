@@ -1,43 +1,14 @@
 angular.module('backendServices')
     .factory('$founderManage', ['$http', '$q', '$rootScope', function ($http, $q, $rootScope) {
       return {
-        // 创建发起人
-        createFounder: function (activity_id, founder_id){
-          return $http.get('/activity/add-founder',{activity_id:'activity_id', founder_id:'founder_id'}).then(function (data){
-            return data;
-          })
-        },
-
-        // 删除发起人
-        deteFounder: function (id){
-          return $http.get('/activity/dete-founder',{id,id}).then(function (data){
-            return data;
-          })
-        },
-
         // 更新状态
         updateStatus: function (id,status){
           return $http.get('/activity/update-status?id='+id+'&status='+status).then(function (data) {
             return data;
           })
         },  
-        updateAllPrevent: function (newEntity){
-          return $http.get('/activity/update-all-prevent').then(function (data) {
-            return data;
-          })
-        },        
-        filterPrevent: function (newEntity){
-          return $http.get('/activity/filter-prevent').then(function (data) {
-            return data;
-          })
-        },
         create: function (newEntity) {
           return $http.post('/activity/create', newEntity).then(function (data) {
-            return data;
-          });
-        },
-        delete: function (entity) {
-          return $http.post('/activity/delete?id=' + entity.id, {}).success(function (data) {
             return data;
           });
         },
@@ -47,8 +18,7 @@ angular.module('backendServices')
           });
         },
         fetch: function (id) {
-          var url = typeof id == 'undefined' ? '/activity/index' : '/activity/view?id=' + id;
-
+          var url = typeof id == 'undefined' ? '/founder/index' : '/activity/view?id=' + id;
           return $http.get(url).then(function (data) {
             return data;
           });
@@ -58,43 +28,13 @@ angular.module('backendServices')
             return data;
           });
         },
-        tags: function(query) {
-          return $http.get('/activity-tag/list?query=' + query);
-        },
         //搜索活动名字
         search: function(query){
           return $http.get('/activity/search?title=' + query);
-        },
-        //搜索场地
-        searchSpace: function(query) {
-          return $http.get('/space-spot/search?name=' + query).then(function (data) {
-
-            return data.models;
-          });
-        },          
-
-        //搜索空间
-        searchSection: function(query) {
-          return $http.get('/space-spot/search?name=' + query).then(function (data) {
-              console.log(data);
-            return data.models;
-          });
-        },        
-        //搜索用户
-        searchUser: function(query) {
-          return $http.get('/member/search?username=' + query);
-        },
+        },      
         //搜索发起人
-        searchFounder: function(query) {
-          return $http.get('/member/search-by-auth?username=' + query + '&auth=founder');
-        },
-        //搜索pma
-        searchPrincipal: function(query) {
-          return $http.get('/member/search-by-auth?username=' + query + '&auth=pma');
-        },
-        //搜索管理员
-        searchDts: function(query) {
-          return $http.get('/member/search-by-auth?username=' + query + '&auth=admin');
+        defaultData: function() {
+          return $http.get('/founder/default-data');
         },
         modelPageMeta: function(type, pageNum, isWeek) {
           return $http.get('/founder/index?scenario=total&perPage='+pageNum+'&type='+type+'isWeek='+isWeek).then(function(data) {

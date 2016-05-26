@@ -40,7 +40,7 @@
                     <div class="detail-host">
                         <label>发起人</label>
                         <div class="hoster">
-                            <div class="name"> <strong>{{entity.user.username}}</strong></div>
+                            <div class="name"> <strong>{{user.username}}</strong></div>
                             <div>
                                 <span>“</span>
                                 <img ng-src="{{entity.user.profile.headimgurl}}" />
@@ -132,62 +132,8 @@
             <div class="col-md-7">
                 <input type="hidden" ng-model="entity.id" />
                 <div layout="row">
-                    <div flex="">
-                        <label>DTS</label>
-                        <md-autocomplete ng-disabled="true" md-selected-item="dts" placeholder="请选择DTS" md-search-text="dtsname" md-items="dts in getDts(dtsname)" md-item-text="dts.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
-                            <md-item-template>
-                                <span md-highlight-text="dts">{{dts.username}}</span>
-                                <img ng-if="dts" width="50" style="border-radius:25px" ng-src="{{dts.profile.headimgurl}}" />
-                            </md-item-template>
-                            <md-not-found>No matches found.</md-not-found>
-                        </md-autocomplete>
-                        <label>发起人</label>
-                        <md-autocomplete ng-disabled="true" md-selected-item="user" placeholder="请选择发起人" md-search-text="username" md-items="user in getUsers(username)" md-item-text="user.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
-                            <md-item-template>
-                                <span md-highlight-text="username">{{user.username}}</span>
-                                <img ng-if="user" width="50" style="border-radius:25px" ng-src="{{user.profile.headimgurl}}" />
-                            </md-item-template>
-                            <md-not-found>No matches found.</md-not-found>
-                        </md-autocomplete>
-                    </div>
-                    <div flex="">
-                        <label>PMA</label>
-                        <md-autocomplete ng-disabled="true" md-selected-item="pma" placeholder="请选择PMA" md-search-text="principalname" md-items="pma in getPrincipals(principalname)" md-item-text="pma.username" md-min-length="0" md-menu-class="autocomplete-custom-template">
-                            <md-item-template>
-                                <span md-highlight-text="principalname">{{pma.username}}</span>
-                                <img width="50" style="border-radius:25px" ng-src="{{pma.profile.headimgurl}}" />
-                            </md-item-template>
-                            <md-not-found>No matches found.</md-not-found>
-                        </md-autocomplete>
-                    </div>
-                    <div flex="">
-                        <label>PMA类型</label>
-                        <md-input-container>
-                            <md-select name="group" ng-model="entity.pma_type" placeholder="选择分类" ng-disabled="true">
-                                <md-option ng-value="opt.pma_type" ng-repeat="opt in pma_type_count">
-                                    {{opt.name}}
-                                </md-option>
-                            </md-select>
-                            <div ng-messages="entityForm.group.$error">
-                                <div ng-message="required">必填项目</div>
-                            </div>
-                        </md-input-container>
-                    </div>
-                </div>
-                <div layout="row">
-                </div>
-                <div layout="column">
-                    <div class="row">
-                        <div class="panel-heading">联合发起人</div>
-                        <div class="panel panel-default col-md-6" ng-repeat="(key, value) in founder">
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    <img with="50" height="50" ng-src="{{value.profile.headimgurl}}" />发起人:{{value.username}}
-                                    <button class="btn btn-warning" ng-click="deteFounder(key)">删除</button>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                发起人
+
                 </div>
                 <div class="row">
                     <div class="col-md-6 margin-top-10">
@@ -236,35 +182,6 @@
                     </p>
                 </div>
                 <div layout="row">
-                    <div flex="30">
-                        <md-input-container>
-                            <label>人数限制(最多200人)</label>
-                            <input type="number" name="people" ng-model="entity.peoples" value="{{entity.peoples}}" max="200" ng-disabled="true"/>
-                            <div ng-messages="entityForm.people.$error">
-                                <div ng-message="max">人数超过限制</div>
-                            </div>
-                        </md-input-container>
-                    </div>
-                    <div flex="30">
-                        <md-input-container>
-                            <label>理想人数(最多200人)</label>
-                            <input type="number" name="ideal_number" ng-model="entity.ideal_number" value="{{entity.ideal_number}}" max="200" ng-disabled="true"/>
-                            <div ng-messages="entityForm.ideal_number.$error">
-                                <div ng-message="max">人数超过限制</div>
-                            </div>
-                        </md-input-container>
-                    </div>
-                    <div flex="40">
-                        <md-input-container>
-                            <label>理想人数限制(最多200人)</label>
-                            <input type="number" name="ideal_number_limit" ng-model="entity.ideal_number_limit" value="{{entity.ideal_number_limit}}" max="200" ng-disabled="true"/>
-                            <div ng-messages="entityForm.ideal_number_limit.$error">
-                                <div ng-message="max">人数超过限制</div>
-                            </div>
-                        </md-input-container>
-                    </div>
-                </div>
-                <div layout="row">
                     <md-input-container>
                         <label>开始时间</label>
                         <div class="dropdown">
@@ -295,22 +212,6 @@
                             <ul class="dropdown-menu" role="menu" aria-labelledby="endLabel">
                                 <datetimepicker data-on-set-time="onStopTimeSet(newDate, oldDate)" ng-model="end_time_str"></datetimepicker>
                             </ul>
-                        </div>
-                    </md-input-container>
-                </div>
-                <div layout="row">
-                    <md-input-container>
-                        <label>地区(商圈)</label>
-                        <input type="text" name="area" ng-model="entity.area" md-maxlength="6" ng-disabled="true" />
-                        <div ng-messages="entityForm.area.$error">
-                            <div ng-message="md-maxlength">地区文字不能超过6个字符</div>
-                        </div>
-                    </md-input-container>
-                    <md-input-container flex="">
-                        <label>详细地址</label>
-                        <textarea name="address" ng-model="entity.address" md-maxlength="60" ng-disabled="true"></textarea>
-                        <div ng-messages="entityForm.address.$error">
-                            <div ng-message="md-maxlength">详细地址文字不能超过60个字符</div>
                         </div>
                     </md-input-container>
                 </div>

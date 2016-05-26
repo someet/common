@@ -59,6 +59,19 @@ class FounderController extends BackendController
 
 
     /**
+     * 默认数据
+     * @return 返回对象
+     */
+    public function actionDefaultData()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $user_id = Yii::$app->user->id;
+        $user = User::findOne($user_id);
+        return ['user_id' => $user];
+    }
+
+
+    /**
      * 活动列表
      * @param integer $id
      * @param string $scenario 场景
@@ -81,18 +94,18 @@ class FounderController extends BackendController
             ]];
     
             $query = Activity::find()
-            ->with([
-            'type',
-            'tags',
-            'question',
-            'user',
-            'answerList',
-            'feedbackList'
-            ])
-            ->where($andwhere)
-            ->andwhere(['created_by' => $user_id])
-            ->asArray()
-            ->orderBy($this->activity_order);
+                    ->with([
+                    'type',
+                    'tags',
+                    'question',
+                    'user',
+                    'answerList',
+                    'feedbackList'
+                    ])
+                    ->where($andwhere)
+                    ->andwhere(['created_by' => $user_id])
+                    ->asArray()
+                    ->orderBy($this->activity_order);
 
             if ($id) {
                 $query = Activity::find()
@@ -134,5 +147,67 @@ class FounderController extends BackendController
                 }
             }
             return $activities;
+    }
+
+    /**
+     * 创建活动
+     * @return 活动对象
+     */
+    public function actionCreate()
+    {
+        $request = Yii::$app->getRequest();
+        $response = Yii::$app->getResponse();
+        $response->format = Response::FORMAT_JSON;
+
+        $data = $request->post();
+
+        $start_time = isset($data['start_time']) ? $data['start_time'] : 0;
+        $data['week'] = $start_time > 0 ? date('w', $start_time) : 0;
+        $model = new Activity;
+
+        if ($model->load($data, '') && $model->save()) {
+            // 添加发起人
+            if (!empty($data['founder'])) {
+                foreach ($data['founder'] as $founder) {
+                    $r_activity_founder = new RActivityFounder();
+                    $r_activity_founder->activity_id = $model->id;
+                    $r_activity_founder->founder_id = $founder['id'];
+                    $r_activity_founder->save();
+                }
+            }
+
+            // 添加活动场地
+            if (!empty($data['space_spot_id']) && isset($data['space_section_id'])) {
+                if ($data['space_section_id'] > 0) {
+                    foreach ($data['space_section_id'] as $space_section) {
+                        $r_activity_space =new RActivitySpace();
+                        $r_activity_space->activity_id = $model->id;
+                        $r_activity_space->space_spot_id = $data['space_spot_id'];
+                        $r_activity_space->space_section_id = $space_section;
+                        $r_activity_space->save();
+                    }
+                } else {
+                    $space_section = SpaceSection::find()
+                                    ->where(['spot_id' => $data['space_spot_id']])
+                                    ->asArray()
+                                    ->all();
+                    foreach ($space_section as $section) {
+                        $r_activity_space =new RActivitySpace();
+                        $r_activity_space->activity_id = $model->id;
+                        $r_activity_space->space_spot_id = $data['space_spot_id'];
+                        $r_activity_space->space_section_id = $section['id'];
+                        $r_activity_space->save();
+                    }
+                }
+            }
+            // 保存操作记录
+            \someet\common\models\AdminLog::saveLog('添加活动', $model->primaryKey);
+            return Activity::findOne($model->id);
+        } elseif ($model->hasErrors()) {
+            $errors = $model->getFirstErrors();
+            throw new DataValidationFailedException(array_pop($errors));
+        } else {
+            throw new ServerErrorHttpException();
+        }
     }
 }

@@ -93,6 +93,11 @@ function($routeProvider) {
       templateUrl: '/partial/founder/view.html',
       controller: 'FounderViewCtrl'
     })
+    //发起人添加活动
+    .when('/founder/add', {
+      templateUrl: '/partial/founder/view.html',
+      controller: 'ActivityViewCtrl'
+    })
     //专题列表
     .when('/special', {
       templateUrl: '/partial/special/index.html',
