@@ -3,11 +3,81 @@ angular.module('controllers')
         function($scope, $routeParams, $location, $questionManage, $founderManage, $activityTypeManage, $mdDialog, lodash, $mdToast) {
             //活动列表开始
             var listtype = $routeParams.type_id;
+
+            console.log($routeParams);
             if (listtype > 0) {
                 normalPagination(listtype, 0);
             } else {
                 normalPagination(0, 0);
             }
+            // 设置问题
+            $scope.questionSave = function() {
+
+                console.log(11111111);
+                var newEntity = {
+                    activity_id: $scope.activity_id,
+                    //title: $scope.entity.title,
+                    //desc: $scope.entity.desc,
+                    //status: $scope.entity.status,
+                    questionItemList: [],
+                };
+
+                if ($scope.entity != null && $scope.entity.id > 0) { // 更新
+
+                    newEntity.id = $scope.entity.id;
+                    for (var k in $scope.entity.questionItemList) {
+                        var questionItem = {
+                            question_id: newEntity.id,
+                            id: $scope.entity.questionItemList[k].id,
+                            label: $scope.entity.questionItemList[k].label,
+                        };
+                        newEntity.questionItemList.push(questionItem);
+                    }
+
+                    $questionManage.update($scope.entity.id, newEntity).then(function(data) {
+                        $location.path('/activity/list/0');
+                        $mdToast.show($mdToast.simple()
+                            .content('问题保存成功')
+                            .hideDelay(5000)
+                            .position("top right"));
+                    }, function(err) {
+                        alert(err);
+                    });
+                } else { // 新建
+                    var questionItem1 = {
+                        label: $scope.questionItem.q1,
+                    };
+                    var questionItem2 = {
+                        label: $scope.questionItem.q2,
+                    };
+                    var questionItem3 = {
+                        label: $scope.questionItem.q3,
+                    };
+                    newEntity.questionItemList.push(questionItem1);
+                    newEntity.questionItemList.push(questionItem2);
+                    newEntity.questionItemList.push(questionItem3);
+                    $questionManage.create(newEntity).then(function(data) {
+                        $location.path('/activity/list/0');
+                        $mdToast.show($mdToast.simple()
+                            .content('问题添加成功')
+                            .hideDelay(5000)
+                            .position("top right"));
+                    }, function(err) {
+                        alert(err);
+                    });
+                }
+            };
+
+
+
+
+
+
+
+
+
+
+
 
             function normalPagination(type, isWeek) {
                 $scope.modelPagination = {
@@ -26,7 +96,6 @@ angular.module('controllers')
                 });
 
                 $scope.userList = fetchPage(type, $scope.modelPagination.currentPage, $scope.modelPagination.isWeek);
-                console.log($scope.userList);
             }
 
             $scope.changePage = function(type, page) {
@@ -48,9 +117,9 @@ angular.module('controllers')
             }
 
             function fetchPage(type, page, isWeek) {
-                $founderManage.fetchPage(type, page, isWeek).then(function(modelList) {
-                    $scope.list = modelList;
-                    console.log(modelList);
+                $founderManage.fetchPage(type, page, isWeek).then(function(data) {
+                    $scope.list = data.model;
+                    $scope.user = data.user;
                     $scope.modelPagination.currentPage = page;
                     //纯js分页
                     if ($scope.modelPagination.currentPage > 1 && $scope.modelPagination.currentPage < $scope.modelPagination.totalItems) {
@@ -313,4 +382,3 @@ angular.module('controllers')
 
         }
     ])
-    

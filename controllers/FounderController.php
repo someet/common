@@ -8,6 +8,7 @@ use someet\common\models\Activity;
 use someet\common\models\RActivitySpace;
 use someet\common\models\SpaceSection;
 use someet\common\models\RActivityFounder;
+use someet\common\models\AdminLog;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -124,9 +125,15 @@ class FounderController extends BackendController
 
         Yii::$app->response->format = Response::FORMAT_JSON;
         $user_id = Yii::$app->user->id;
+        $user = User::findOne($user_id);
+
             $andwhere = ['in', 'status', [
             Activity::STATUS_DRAFT,
             Activity::STATUS_FOUNDER_DRAFT,
+            Activity::STATUS_RELEASE,
+            Activity::STATUS_PREVENT,
+            Activity::STATUS_SHUT,
+            Activity::STATUS_CANCEL,
             ]];
     
             $query = Activity::find()
@@ -182,7 +189,7 @@ class FounderController extends BackendController
                     $activities[$key]['this_week'] = getLastEndTime() < $activity['end_time'] ? 1 : 0;
                 }
             }
-            return $activities;
+            return ['model' => $activities, 'user' => $user];
     }
 
     /**
@@ -246,4 +253,157 @@ class FounderController extends BackendController
             throw new ServerErrorHttpException();
         }
     }
+
+    /**
+     * 查看单个活动详情
+     * @param integer $id 活动ID
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public function actionView($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $model = Activity::find()
+            ->where(['id' => $id])
+            ->with([
+                'type',
+                'user',
+                'user.profile',
+                'dts',
+                'dts.profile',
+                'pma',
+                'pma.profile',
+                'cofounder1',
+                'cofounder1.profile',
+                'cofounder2',
+                'space',
+                'cofounder2.profile',
+                'space.sections',
+            ])
+            ->asArray()
+            ->one();
+
+        return $model;
+    }
+    /**
+     * 修改一个活动
+     * @param $id
+     * @return array
+     */
+    public function actionUpdate($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $user_id = Yii::$app->user->id;
+        $model = Activity::find()->where(['created_by' => $user_id, 'id' => $id])->all();
+        if (empty($model)) {
+            return "活动不存在！";
+        }
+
+        $data = Yii::$app->getRequest()->post();
+
+        if (isset($data['title'])) {
+            $model->title = $data['title'];
+            if (!$model->validate('title')) {
+                throw new DataValidationFailedException($model->getFirstError('title'));
+            }
+        }
+
+        if (isset($data['desc'])) {
+            $model->desc = $data['desc'];
+            if (!$model->validate('desc')) {
+                throw new DataValidationFailedException($model->getFirstError('desc'));
+            }
+        }               
+        
+        if (isset($data['cost'])) {
+            $model->cost = $data['cost'];
+            if (!$model->validate('cost')) {
+                throw new DataValidationFailedException($model->getFirstError('cost'));
+            }
+        }
+
+        if (isset($data['cost_list'])) {
+            $model->cost_list = $data['cost_list'];
+            if (!$model->validate('cost_list')) {
+                throw new DataValidationFailedException($model->getFirstError('cost_list'));
+            }
+        }
+
+        if (isset($data['start_time'])) {
+            $model->start_time = $data['start_time'];
+            if (!$model->validate('start_time')) {
+                throw new DataValidationFailedException($model->getFirstError('start_time'));
+            }
+
+            $start_time = $model->start_time;
+            $model->week = $start_time > 0 ? date('w', $start_time) : 0;
+        }
+
+        if (isset($data['end_time'])) {
+            $model->end_time = $data['end_time'];
+            if (!$model->validate('end_time')) {
+                throw new DataValidationFailedException($model->getFirstError('end_time'));
+            }
+        }
+
+ 
+        if (isset($data['details'])) {
+            $model->details = $data['details'];
+            if (!$model->validate('details')) {
+                throw new DataValidationFailedException($model->getFirstError('details'));
+            }
+        }
+
+        if (isset($data['poster'])) {
+            $model->poster = $data['poster'];
+            if (!$model->validate('poster')) {
+                throw new DataValidationFailedException($model->getFirstError('poster'));
+            }
+        }
+
+ 
+        if (isset($data['review'])) {
+            $model->review = $data['review'];
+            if (!$model->validate('review')) {
+                throw new DataValidationFailedException($model->getFirstError('review'));
+            }
+        }
+
+        if (isset($data['type_id'])) {
+            $model->type_id = $data['type_id'];
+            if (!$model->validate('type_id')) {
+                throw new DataValidationFailedException($model->getFirstError('type_id'));
+            }
+        }
+
+        //发布活动的时候有值
+        if (isset($data['status'])) {
+            $model->status = $data['status'];
+            if (!$model->validate('status')) {
+                throw new DataValidationFailedException($model->getFirstError('status'));
+            }
+        }
+
+        if (isset($data['content'])) {
+            $model->content = $data['content'];
+            if (!$model->validate('content')) {
+                throw new DataValidationFailedException($model->getFirstError('content'));
+            }
+        }
+
+        //DTS
+        if (isset($data['updated_by'])) {
+            $model->updated_by = $data['updated_by'];
+            if (!$model->validate('updated_by')) {
+                throw new DataValidationFailedException($model->getFirstError('updated_by'));
+            }
+        }
+
+        if ($model->save()) {
+            AdminLog::saveLog('更新活动', $model->primaryKey);
+        }
+
+        return $this->findModel($id);
+    }
+   
 }

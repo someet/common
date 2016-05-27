@@ -27,26 +27,78 @@
 
                 ng-class="{true: 'panel-default', false: 'panel-danger'}[entity.status==10]"
                 -->
-                <div ng-class="{true: 'panel-default', false: 'panel-info'}[entity.status==5]" class="panel">
+                <div ng-class="{
+                'panel-default' : entity.status == 5, 
+                'panel-info': entity.status == 10,
+                'panel-success' : entity.status == 20, 
+                'panel-danger' : entity.status == 30, 
+                'panel-warning' :entity.status == 40
+                }" class="panel">
                     <div class="panel-heading">
                         <h3 class="panel-title">
                             <!-- 活动标题 -->
                             {{entity.id}}#
                             <span ng-if="entity.status==5" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[草稿]</span>
                             <span ng-if="entity.status==10" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[已提交审核]</span>
+                            <span ng-if="entity.status==20" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[发布成功]</span>
+                            <span ng-if="entity.status==30" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[关闭活动]</span>
+                            <span ng-if="entity.status==40" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[取消活动]</span>
                         </h3>
                     </div>
                     <div class="panel-body">
                         <!-- 活动相关功能 -->
                         <a class="btn btn-info" target="_blank" href="http://bshare.optimix.asia/barCode?site=weixin&url=https://m.someet.cc/activity/{{entity.id}}">生成活动二维码</a>
-                        <button ng-if="!entity.question" class="btn" ng-click="viewQuestion(entity)">设置表单</button>
-                        <button ng-if="entity.question" class="btn" ng-click="viewQuestion(entity)">修改表单</button>
-                        <a class="btn btn-success" href="#/founder/{{entity.id}}" target="_blank">编辑</a>
+                        <button ng-if="!entity.question && entity.status==5" class="btn" ng-click="viewQuestion(entity)">设置表单</button>
+                        <button ng-if="entity.question && entity.status==5" class="btn" ng-click="viewQuestion(entity)">修改表单</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" >设置表单</button>
+                        <a ng-if="entity.status==5" class="btn btn-success" href="#/founder/{{entity.id}}" target="_blank">编辑</a>
                         <button ng-if="entity.status==5" class="btn btn-success btn-float-right" ng-click="release(entity)" type="button">提交审核</button>
                     </div>
                 </div>
             </li>
         </ul>
+    </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel">设置问题</h4>
+                </div>
+                <div class="modal-body">
+                    <form name="entityForm" ng-submit="questionSave()">
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">问题一:</label>
+                            <input name="q1" type="text" class="form-control" id="recipient-name" required minlength="5" ng-model="questionItem.q1">
+                            <div ng-messages="entityForm.q1.$error">
+                                <div ng-message="required">必填项目</div>
+                                <div ng-message="minlength">问题文字不能少于5个字符</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">问题二:</label>
+                            <input type="text" class="form-control" id="recipient-name" name="q2" type="text" required minlength="5" ng-model="questionItem.q2">
+                            <div ng-messages="entityForm.q2.$error">
+                                <div ng-message="required">必填项目</div>
+                                <div ng-message="minlength">问题文字不能少于5个字符</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">问题三:</label>
+                            <input type="text" class="form-control" id="recipient-name" name="q3" type="text" required minlength="5" ng-model="questionItem.q3">
+                            <div ng-messages="entityForm.q3.$error">
+                                <div ng-message="required">必填项目</div>
+                                <div ng-message="minlength">问题文字不能少于5个字符</div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" ng-disabled="entityForm.$invalid" >保存</button>
+                </div>
+            </div>
+        </div>
     </div>
     <div ng-show="modelPagination" class="someet-pagination user-pagination">
         <pagination total-items="modelPagination.totalItems" ng-model="modelPagination.currentPage" ng-change="modelPagination.pageChange()" items-per-page="modelPagination.itemsPerPage" max-size="modelPagination.maxSize" class="pagination-sm" boundary-links="false" previous-text="上一页" next-text="下一页" rotate="false">

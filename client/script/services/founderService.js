@@ -13,12 +13,12 @@ angular.module('backendServices')
           });
         },
         update: function (id, newEntity) {
-          return $http.post('/activity/update?id=' + id, newEntity).then(function (data) {
+          return $http.post('/founder/update?id=' + id, newEntity).then(function (data) {
             return data;
           });
         },
         fetch: function (id) {
-          var url = typeof id == 'undefined' ? '/founder/index' : '/activity/view?id=' + id;
+          var url = typeof id == 'undefined' ? '/founder/index' : '/founder/view?id=' + id;
           return $http.get(url).then(function (data) {
             return data;
           });
