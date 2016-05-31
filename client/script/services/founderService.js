@@ -38,7 +38,6 @@ angular.module('backendServices')
         },
         modelPageMeta: function(type, pageNum, isWeek) {
           return $http.get('/founder/index?scenario=total&perPage='+pageNum+'&type='+type+'isWeek='+isWeek).then(function(data) {
-          	console.log(data);
             return data;
           });
         },

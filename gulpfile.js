@@ -68,6 +68,7 @@ gulp.task('copy-bundle', function(){
       './bower_components/angular-messages/angular-messages.min.js',
       './bower_components/angular-local-storage/dist/angular-local-storage.min.js',
       './bower_components/angular-bootstrap/ui-bootstrap.min.js',
+      './bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       './bower_components/moment/min/moment.min.js',
       './bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js',
       './bower_components/angular-jquery/dist/angular-jquery.min.js',

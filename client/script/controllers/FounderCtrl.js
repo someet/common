@@ -1,83 +1,69 @@
 angular.module('controllers')
-    .controller('FounderListCtrl', ['$scope', '$routeParams', '$location', '$questionManage', '$founderManage', '$activityTypeManage', '$mdDialog', 'lodash', '$mdToast',
-        function($scope, $routeParams, $location, $questionManage, $founderManage, $activityTypeManage, $mdDialog, lodash, $mdToast) {
+    .controller('FounderListCtrl', [
+        '$scope',
+        '$routeParams',
+        '$location',
+        '$questionManage',
+        '$founderManage',
+        '$activityTypeManage',
+        '$mdDialog',
+        'lodash',
+        '$mdToast',
+        '$uibModal',
+        '$log',
+        function($scope, $routeParams, $location, $questionManage, $founderManage, $activityTypeManage, $mdDialog, lodash, $mdToast, $uibModal, $log) {
             //活动列表开始
             var listtype = $routeParams.type_id;
 
-            console.log($routeParams);
+            // console.log($routeParams);
             if (listtype > 0) {
                 normalPagination(listtype, 0);
             } else {
                 normalPagination(0, 0);
             }
-            // 设置问题
-            $scope.questionSave = function() {
 
-                console.log(11111111);
-                var newEntity = {
-                    activity_id: $scope.activity_id,
-                    //title: $scope.entity.title,
-                    //desc: $scope.entity.desc,
-                    //status: $scope.entity.status,
-                    questionItemList: [],
-                };
 
-                if ($scope.entity != null && $scope.entity.id > 0) { // 更新
-
-                    newEntity.id = $scope.entity.id;
-                    for (var k in $scope.entity.questionItemList) {
-                        var questionItem = {
-                            question_id: newEntity.id,
-                            id: $scope.entity.questionItemList[k].id,
-                            label: $scope.entity.questionItemList[k].label,
-                        };
-                        newEntity.questionItemList.push(questionItem);
+            $scope.open = function(entity) {
+                // console.log(entity);
+                var modalInstance = $uibModal.open({
+                    animation: $scope.animationsEnabled,
+                    templateUrl: 'question.html',
+                    controller: 'ModalInstanceCtrl',
+                    entity: entity,
+                    resolve: {
+                        entity: function() {
+                            return entity;
+                        }
                     }
+                });
 
-                    $questionManage.update($scope.entity.id, newEntity).then(function(data) {
-                        $location.path('/activity/list/0');
-                        $mdToast.show($mdToast.simple()
-                            .content('问题保存成功')
-                            .hideDelay(5000)
-                            .position("top right"));
-                    }, function(err) {
-                        alert(err);
-                    });
-                } else { // 新建
-                    var questionItem1 = {
-                        label: $scope.questionItem.q1,
-                    };
-                    var questionItem2 = {
-                        label: $scope.questionItem.q2,
-                    };
-                    var questionItem3 = {
-                        label: $scope.questionItem.q3,
-                    };
-                    newEntity.questionItemList.push(questionItem1);
-                    newEntity.questionItemList.push(questionItem2);
-                    newEntity.questionItemList.push(questionItem3);
-                    $questionManage.create(newEntity).then(function(data) {
-                        $location.path('/activity/list/0');
-                        $mdToast.show($mdToast.simple()
-                            .content('问题添加成功')
-                            .hideDelay(5000)
-                            .position("top right"));
-                    }, function(err) {
-                        alert(err);
-                    });
-                }
+                modalInstance.result.then(function(data) {
+                    console.log(data);
+                }, function() {
+                    $log.info('Modal dismissed at: ' + new Date());
+                });
             };
 
 
+            var activity_id = $routeParams.activity_id;
+            $scope.activity_id = activity_id;
+            $scope.questionItem = {};
 
+            $scope.status_list = [{
+                id: 10,
+                title: "打开",
+            }, {
+                id: 20,
+                title: "关闭",
+            }, ];
 
-
-
-
-
-
-
-
+            $questionManage.fetchByActivityId(activity_id).then(function(data) {
+                $scope.entity = data;
+                // console.log(data);
+            }, function(err) {
+                alert(err);
+            });
+            
 
             function normalPagination(type, isWeek) {
                 $scope.modelPagination = {
@@ -277,10 +263,7 @@ angular.module('controllers')
                 copyTextToClipboard('https://m.someet.cc/activity/' + activity.id);
             }
 
-            // 设置问题
-            $scope.viewQuestion = function(activity) {
-                $location.path('/question/view/' + activity.id);
-            }
+
 
             // 查看反馈
             $scope.viewFeedback = function(activity) {
@@ -382,3 +365,4 @@ angular.module('controllers')
 
         }
     ])
+
