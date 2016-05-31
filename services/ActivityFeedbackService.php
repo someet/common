@@ -57,7 +57,7 @@ class ActivityFeedbackService extends BaseService
                     },
                     'answerItemList' => function(ActiveQuery $query) {
                         $query->select(['id', 'user_id', 'question_item_id', 'question_id', 'question_label', 'question_value']);
-                    }
+                    },
                 ])
                 ->asArray()
                 ->one();

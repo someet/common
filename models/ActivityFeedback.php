@@ -33,7 +33,10 @@ class ActivityFeedback extends \yii\db\ActiveRecord
     {
         return 'activity_feedback';
     }
-
+    public function extraFields()
+    {
+        return ['user'];
+    }
     /**
      * @inheritdoc
      */
