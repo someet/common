@@ -20,7 +20,7 @@ class m160526_074012_add_api_permission extends Migration
             '/api/v1/activity-feedback/view' => ['user'],
             '/api/v1/user/unionid' => ['user'],
             '/api/v1/activity/attend-activity' => ['user'],
-            '/api/v1/activity/index' => ['founder'],
+            '/api/v1/activity/index' => ['user'],
             '/api/v1/user/view' => ['founder'],
             '/api/v1/question/view' => ['founder'],
             '/api/v1/answer/index' => ['founder'],
