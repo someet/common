@@ -50,7 +50,7 @@ class ActivityFeedbackService extends BaseService
             Answer::updateAll(['is_feedback' => Answer::FEEDBACK_IS], ['activity_id' => $feedback->activity_id ,'user_id' => $user_id]);
             return Answer::find()
                 ->select(['id', 'question_id', 'activity_id', 'user_id'])
-                ->where(['id' => $model->id])
+                ->where(['id' => $feedback->id])
                 ->with([
                     'user' => function(ActiveQuery $query) {
                         $query->select(['id', 'username', 'mobile', 'wechat_id']);
