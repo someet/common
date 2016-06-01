@@ -51,6 +51,8 @@
                         <button ng-if="entity.question" class="btn" ng-click="open(entity)">修改表单</button>
                         <button ng-if="!entity.question" class="btn btn-primary" ng-click="open(entity)">设置表单</button>
                         <a ng-if="entity.status==5" class="btn btn-success" href="#/founder/{{entity.id}}" target="_blank">编辑</a>
+                        <button class="btn btn-default" ng-click="copy(entity)">复制活动</button>
+
                         <button ng-if="entity.status==5" class="btn btn-success btn-float-right" ng-click="release(entity)" type="button">提交审核</button>
                     </div>
                 </div>
@@ -106,6 +108,10 @@
             </form>
         </div>
     </script>
+    <h4>Default</h4>
+
+        <uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" rotate="false"></uib-pagination>
+    <pre>Page: {{bigCurrentPage}} / {{numPages}}</pre>
     <div ng-show="modelPagination" class="someet-pagination user-pagination">
         <pagination total-items="modelPagination.totalItems" ng-model="modelPagination.currentPage" ng-change="modelPagination.pageChange()" items-per-page="modelPagination.itemsPerPage" max-size="modelPagination.maxSize" class="pagination-sm" boundary-links="false" previous-text="上一页" next-text="下一页" rotate="false">
             <a href="javascript:void(0)" ng-click="modelPagination.currentPage=1;changePage(1)">首页</a>

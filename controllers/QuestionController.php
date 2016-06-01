@@ -109,14 +109,17 @@ class QuestionController extends BackendController
 
         //开启事务
         $transaction = $model->getDb()->beginTransaction();
-
+        // $model->load($data, '');
+        // $model->save();
         //问题标记
         $questionFlag = true;
-
+        // echo "<pre>";
         //尝试保存问题主记录
+
+        // print_r($data);
+        // die;
         if ($model->load($data, '') && $model->save()) {
             $question_id = $model->id;
-
             //遍历三个问题
             foreach ($questionItemList as $questionItem) {
                 $questionItemModel = new QuestionItem();

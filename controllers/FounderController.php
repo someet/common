@@ -294,11 +294,11 @@ class FounderController extends BackendController
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $user_id = Yii::$app->user->id;
-        $model = Activity::find()->where(['created_by' => $user_id, 'id' => $id])->all();
+        $model = Activity::findOne($id);
         if (empty($model)) {
             return "活动不存在！";
-        }
-
+        } 
+        // post提交的数据
         $data = Yii::$app->getRequest()->post();
 
         if (isset($data['title'])) {
@@ -391,19 +391,11 @@ class FounderController extends BackendController
             }
         }
 
-        //DTS
-        if (isset($data['updated_by'])) {
-            $model->updated_by = $data['updated_by'];
-            if (!$model->validate('updated_by')) {
-                throw new DataValidationFailedException($model->getFirstError('updated_by'));
-            }
-        }
-
         if ($model->save()) {
             AdminLog::saveLog('更新活动', $model->primaryKey);
         }
 
-        return $this->findModel($id);
+        return $model;
     }
    
 }

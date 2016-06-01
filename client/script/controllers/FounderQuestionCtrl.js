@@ -5,7 +5,6 @@ angular.module('controllers').controller('ModalInstanceCtrl', ['$scope', '$uibMo
         $scope.questionItem = {};
         $questionManage.fetchByActivityId(entity.id).then(function(data) {
             $scope.entity = data;
-            console.log($scope.entity);
         }, function(err) {
             alert(err);
         });

@@ -48,10 +48,29 @@ class MemberController extends BackendController
                 'allowActions' => [
                    'index',
                    'page',
-                   'update-category'
+                   'update-category',
+                   'user-role'
                 ]
             ],
         ];
+    }
+
+    /**
+     * 登陆用户的权限
+     */
+    public function actionUserRole()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $auth = Yii::$app->authManager;
+        $current_user_id = Yii::$app->user->getId();
+        $assignments = $auth->getAssignments($current_user_id);
+        $isManager = array_key_exists('admin', $assignments);
+        $isFounder = array_key_exists('founder', $assignments) || !array_key_exists('admin', $assignments);
+        if ($isManager) {
+            return 1;
+        }elseif ($isFounder) {
+            return 0;
+        }
     }
 
     /**

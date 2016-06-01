@@ -72,6 +72,8 @@ angular.module('controllers')
                     $scope.start_time_str = getTimeByTimestamp(data.start_time);
                     $scope.end_time_str = getTimeByTimestamp(data.end_time);
                     $scope.poster = data.poster;
+                    // 转化为number类型
+                    $scope.entity.cost = parseInt(data.cost);
                 }, function(err) {
                     alert(err);
                 });
@@ -100,7 +102,7 @@ angular.module('controllers')
                     });
                 } else { // 添加活动
                     $founderManage.create(newEntity).then(function(data) {
-                        $location.path('/founder/list/0');
+                        $location.path('/founder');
                         $mdToast.show($mdToast.simple()
                             .content('活动添加成功')
                             .hideDelay(5000)

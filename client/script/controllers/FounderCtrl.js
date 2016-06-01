@@ -22,7 +22,7 @@ angular.module('controllers')
                 normalPagination(0, 0);
             }
 
-
+            // 打开问题表单
             $scope.open = function(entity) {
                 // console.log(entity);
                 var modalInstance = $uibModal.open({
@@ -44,26 +44,6 @@ angular.module('controllers')
                 });
             };
 
-
-            var activity_id = $routeParams.activity_id;
-            $scope.activity_id = activity_id;
-            $scope.questionItem = {};
-
-            $scope.status_list = [{
-                id: 10,
-                title: "打开",
-            }, {
-                id: 20,
-                title: "关闭",
-            }, ];
-
-            $questionManage.fetchByActivityId(activity_id).then(function(data) {
-                $scope.entity = data;
-                // console.log(data);
-            }, function(err) {
-                alert(err);
-            });
-            
 
             function normalPagination(type, isWeek) {
                 $scope.modelPagination = {
@@ -87,6 +67,7 @@ angular.module('controllers')
             $scope.changePage = function(type, page) {
                 fetchPage(type, page, $scope.modelPagination.isWeek);
             }
+
             $scope.prev = function(type) {
                 var page = $scope.modelPagination.currentPage - 1;
                 if (page < 1) {
@@ -160,17 +141,6 @@ angular.module('controllers')
                 });
             };
 
-            // 内部编辑状态
-            $scope.onEditStatusChangeClick = function(activity, edit_status) {
-                var newActivity = activity;
-                newActivity.edit_status = edit_status;
-                $founderManage.update(newActivity.id, newActivity).then(function(data) {
-                    $location.path('/activity/list/' + activity.type_id);
-                }, function(err) {
-                    alert(err);
-                })
-            };
-
             // 设置报名表单状态 20关闭 10打开
             $scope.applyStatus = function(entity, status) {
                 var new_question = entity.question;
@@ -181,17 +151,70 @@ angular.module('controllers')
             };
 
             // 复制一个活动
-            $scope.copy = function(entity) {
+            $scope.copy = function(activityData) {
 
-                var newEntity = entity;
-                newEntity.id = null;
-                newEntity.title = entity.title + " 副本";
-                newEntity.status = 10; //活动状态10为草稿
-                $founderManage.create(newEntity).then(function(data) {
-                    $location.path('/activity/list/' + entity.type_id);
+                // 原活动的id  下面下面直接取不到值 会被覆盖
+                var originActivityID = activityData.id;
 
-                }, function(err) {
-                    alert(err);
+                var confirm = $mdDialog.confirm()
+                    .title('确定要复制“' + activityData.title + '”吗？')
+                    .ariaLabel('delete activity item')
+                    .ok('确定复制')
+                    .cancel('点错了，再看看');
+
+                // 确认提醒
+                $mdDialog.show(confirm).then(function() {
+                    var originActivity = activityData;
+                    originActivity.id = null;
+                    originActivity.title = activityData.title + " 副本";
+                    originActivity.status = 10; //活动状态10为草稿
+                    $founderManage.create(originActivity).then(function(newActivity) {
+                        // 复制表单
+                        $questionManage.fetchByActivityId(originActivityID).then(function(originQuestion) {
+
+                            // 如果表单问题存在则创建表单
+                            if (originQuestion) {
+
+                                // 组建新的问题表单
+                                var newQuestion = {
+                                    // 新的活动的id
+                                    activity_id: newActivity.id,
+                                    questionItemList: [],
+                                };
+
+                                // 遍历表单数据结构
+                                for (var k in originQuestion.questionItemList) {
+                                    var questionItem = {
+                                        label: originQuestion.questionItemList[k].label,
+                                    };
+                                    newQuestion.questionItemList.push(questionItem);
+                                }
+
+                                // 创建活动的表单
+                                $questionManage.create(newQuestion).then(function(lastQuestion) {
+                                    $mdToast.show($mdToast.simple()
+                                        .content('活动和问题复制成功')
+                                        .hideDelay(5000)
+                                        .position("top right"));
+                                    $location.path('/founder/');
+                                }, function(err) {
+                                    alert(err);
+                                });
+                            }else{
+                                $mdToast.show($mdToast.simple()
+                                        .content('活动复制成功')
+                                        .hideDelay(5000)
+                                        .position("top right"));
+                                $location.path('/founder/');                                
+                            }
+
+
+                        }, function(err) {
+                            alert(err);
+                        });
+                    }, function(err) {
+                        alert(err);
+                    });
                 });
             };
 
@@ -209,7 +232,6 @@ angular.module('controllers')
                         var newEntity = entity;
                         newEntity.status = 10; //活动状态10为提交审核
                         $founderManage.update(newEntity.id, newEntity).then(function(data) {
-                            $location.path('/activity/list/' + entity.type_id);
                             $mdToast.show($mdToast.simple()
                                 .content('活动 “' + entity.title + '” 已提交审核')
                                 .hideDelay(5000)
@@ -262,8 +284,6 @@ angular.module('controllers')
             $scope.copyActivityUrl = function(activity) {
                 copyTextToClipboard('https://m.someet.cc/activity/' + activity.id);
             }
-
-
 
             // 查看反馈
             $scope.viewFeedback = function(activity) {
@@ -363,6 +383,22 @@ angular.module('controllers')
                 $location.path('/founder/add');
             }
 
+
+            $scope.totalItems = 64;
+            $scope.currentPage = 4;
+
+            $scope.setPage = function (pageNo) {
+                console.log(11111);
+                $scope.currentPage = pageNo;
+            };
+
+            $scope.pageChanged = function() {
+                $log.log('Page changed to: ' + $scope.currentPage);
+            };
+
+            $scope.maxSize = 5;
+            $scope.bigTotalItems = 175;
+            $scope.bigCurrentPage = 1;
+
         }
     ])
-

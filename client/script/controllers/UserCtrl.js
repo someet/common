@@ -1,6 +1,8 @@
 angular.module('controllers')
 .controller('UserAddCtrl', ['$scope', '$location', '$userManage','$mdDialog', function($scope, $location, $userManage, $mdDialog){
     $scope.$parent.pageName = '添加用户';
+    
+
 
     $scope.user = {
     username: "",

@@ -1,6 +1,12 @@
 angular.module('backendServices')
   .factory('$userManage', ['$http', '$q', function($http, $q) {
     return {
+      // 获取登陆用户的权限
+      fetchUserRole: function(params) {
+        return $http.get('/member/user-role').then(function(data){
+          return data;
+        });
+      },
       //联系人列表
       fetch: function(params) {
         return $http.get('/member', {
