@@ -108,18 +108,12 @@
             </form>
         </div>
     </script>
-    <h4>Default</h4>
-
-        <uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize" class="pagination-sm" boundary-link-numbers="true" rotate="false"></uib-pagination>
-    <pre>Page: {{bigCurrentPage}} / {{numPages}}</pre>
     <div ng-show="modelPagination" class="someet-pagination user-pagination">
-        <pagination total-items="modelPagination.totalItems" ng-model="modelPagination.currentPage" ng-change="modelPagination.pageChange()" items-per-page="modelPagination.itemsPerPage" max-size="modelPagination.maxSize" class="pagination-sm" boundary-links="false" previous-text="上一页" next-text="下一页" rotate="false">
-            <a href="javascript:void(0)" ng-click="modelPagination.currentPage=1;changePage(1)">首页</a>
-            <a href="javascript:void(0);" ng-click="prev()">上一页</a>
-            <a href="javascript:void(0);" ng-click="changePage(page)" ng-repeat="page in pages">{{ page }}</a>
-            <a href="javascript:void(0);" ng-click="next()">下一页</a>
-            <a href="javascript:void(0)" ng-click="modelPagination.currentPage=modelPagination.totalItems;changePage(modelPagination.totalItems)">末页</a>
-        </pagination>
+        
+
+        <uib-pagination total-items="modelPagination.totalItems" ng-model="modelPagination.currentPage" ng-change="modelPagination.pageChange()" items-per-page="modelPagination.itemsPerPage" max-size="modelPagination.maxSize" class="pagination-sm" boundary-links="false" previous-text="上一页" next-text="下一页" rotate="false">
+            
+        </uib-pagination>
     </div>
 </md-content>
 <!-- 活动列表 end
