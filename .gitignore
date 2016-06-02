@@ -9,7 +9,7 @@ config/console-local.php
 /web/partial/
 /.idea/
 /apidoc
-
+sd.sh
 composer.lock
 *.swp
 .vimrc
