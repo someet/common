@@ -263,7 +263,7 @@ class ActivityController extends BackendController
                             ]
                             ],
                             ['or',
-                                ['like','id',$title],
+                                ['like','activity.id',$title],
                                 ['like','desc',$title],
                                 ['like','content',$title],
                                 ['like','user.username',$title]
