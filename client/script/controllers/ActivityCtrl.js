@@ -13,7 +13,7 @@ angular.module('controllers', ['ngTagsInput'])
                     currentPage: 1,
                     totalItems: 0,
                     maxSize: 5,
-                    itemsPerPage: 2, 
+                    itemsPerPage: 20, 
                     pageChange: function() {
                         fetchPage();
                     }
