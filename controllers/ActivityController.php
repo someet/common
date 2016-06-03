@@ -229,9 +229,14 @@ class ActivityController extends BackendController
      * @param string $username 标题
      * @return array
      */
-    public function actionSearch($title, $perPage = 20)
+    public function actionSearch($search, $perPage = 20)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
+
+        if (empty($search)) {
+            return false;
+        }
+        
         $where = ['in', 'activity.status', [
             Activity::STATUS_DRAFT,
             Activity::STATUS_RELEASE,
@@ -261,10 +266,10 @@ class ActivityController extends BackendController
                             ]
                             ],
                             ['or',
-                                ['like','activity.id',$title],
-                                ['like','desc',$title],
-                                ['like','content',$title],
-                                ['like','user.username',$title]
+                                ['like','activity.id',$search],
+                                ['like','desc',$search],
+                                ['like','content',$search],
+                                ['like','user.username',$search]
                             ]
                             
                         ]

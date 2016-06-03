@@ -103,6 +103,9 @@ angular.module('backendServices')
       },
       //搜索用户
       search: function(search,page) {
+        if (typeof search == 'undefined') {
+          search = '';
+        }
         page = page || 1;
 
         var params = {

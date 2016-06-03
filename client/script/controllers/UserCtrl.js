@@ -44,8 +44,6 @@ angular.module('controllers')
     .controller('UserListCtrl', ['$scope', '$routeParams', '$location', '$userManage', function($scope, $routeParams, $location, $userManage) {
         $scope.$parent.pageName = '用户管理';
         $scope.today = new Date();
-
-        // $scope.userList = [];
         $scope.userPageList = [];
 
         function modelPagination(listtype){
@@ -62,8 +60,6 @@ angular.module('controllers')
         $userManage.fetchUserAppealList().then(function(data) {
             $scope.countAppealnum = data;
         });
-
-        // fetchPage();
 
         $scope.isActive = function(type_id) {
             var route = "/member/list/" + type_id;

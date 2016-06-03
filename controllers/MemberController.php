@@ -276,6 +276,10 @@ class MemberController extends BackendController
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 
+        if (empty($search)) {
+            return false;
+        }
+        
         $query = User::find()
             ->with(['profile'])
             ->where(
