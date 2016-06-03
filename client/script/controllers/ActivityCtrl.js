@@ -20,7 +20,6 @@ angular.module('controllers', ['ngTagsInput'])
 
             // 正常分页
             function fetchPage() {
-                console.log('正常分页');
                 $scope.modelPagination = {
                     currentPage: 1,
                     totalItems: 0,
@@ -36,9 +35,14 @@ angular.module('controllers', ['ngTagsInput'])
                 });
             }
 
-            //搜索活动函数
+            //搜索活动按钮 页面使用
+            $scope.getActivity = function(query) {
+                $scope.modelPagination.currentPage = 1;
+                searchActivity($scope.search,1);
+            }
+
+            //搜索活动函数 分页调用 活动按钮调用
             function searchActivity(query,page) {
-                console.log('搜索分页');
                 $activityManage.search(query,page).then(function(data) {
                     if (data.status == 1) {
                         $scope.list = data.models;
@@ -48,12 +52,7 @@ angular.module('controllers', ['ngTagsInput'])
                     }
                 });
             }
-            
-            //搜索活动按钮
-            $scope.getActivity = function(query) {
-                $scope.modelPagination.currentPage = 1;
-                searchActivity($scope.search,1);
-            }
+
 
             // 本周活动
             $scope.weekActivity = function() {
@@ -110,14 +109,15 @@ angular.module('controllers', ['ngTagsInput'])
 
             // 调整顺序
             $scope.adjust_order = function(entity) {
-                    // entity.display_order
-                    $activityManage.update(entity.id, entity).then(function(data) {
-                        // $location.path('/activity/list/' + type_id);
-                    }, function(err) {
-                        alert(err);
-                    });
-                }
-                // 更新活动类型
+                // entity.display_order
+                $activityManage.update(entity.id, entity).then(function(data) {
+                    // $location.path('/activity/list/' + type_id);
+                }, function(err) {
+                    alert(err);
+                });
+            }
+
+            // 更新活动类型
             $scope.onTypeChangeClick = function(activity, type_id) {
                 var old_type_id = activity.type_id;
                 activity.type_id = type_id;
@@ -148,20 +148,75 @@ angular.module('controllers', ['ngTagsInput'])
                 });
             };
 
-            // 复制一个活动
-            $scope.copy = function(entity) {
 
-                var newEntity = entity;
-                newEntity.id = null;
-                newEntity.title = entity.title + " 副本";
-                newEntity.status = 10; //活动状态10为草稿
-                $activityManage.create(newEntity).then(function(data) {
-                    $location.path('/activity/list/' + entity.type_id);
+            // 复制一个活动 如果表单存在则复制表单
+            $scope.copy = function(activityData) {
 
-                }, function(err) {
-                    alert(err);
+                // 原活动的id  下面下面直接取不到值 会被覆盖
+                var originActivityID = activityData.id;
+
+                var confirm = $mdDialog.confirm()
+                    .title('确定要复制“' + activityData.title + '”吗？')
+                    .ariaLabel('delete activity item')
+                    .ok('确定复制')
+                    .cancel('点错了，再看看');
+
+                // 确认提醒
+                $mdDialog.show(confirm).then(function() {
+                    var originActivity = activityData;
+                    originActivity.id = null;
+                    originActivity.title = activityData.title + " 副本";
+                    originActivity.status = 10; //活动状态10为草稿
+                    $activityManage.create(originActivity).then(function(newActivity) {
+                        // 复制表单
+                        $questionManage.fetchByActivityId(originActivityID).then(function(originQuestion) {
+
+                            // 如果表单问题存在则创建表单
+                            if (originQuestion) {
+
+                                // 组建新的问题表单
+                                var newQuestion = {
+                                    // 新的活动的id
+                                    activity_id: newActivity.id,
+                                    questionItemList: [],
+                                };
+
+                                // 遍历表单数据结构
+                                for (var k in originQuestion.questionItemList) {
+                                    var questionItem = {
+                                        label: originQuestion.questionItemList[k].label,
+                                    };
+                                    newQuestion.questionItemList.push(questionItem);
+                                }
+
+                                // 创建活动的表单
+                                $questionManage.create(newQuestion).then(function(lastQuestion) {
+                                    $mdToast.show($mdToast.simple()
+                                        .content('活动和问题复制成功')
+                                        .hideDelay(5000)
+                                        .position("top right"));
+                                    $location.path('/activity/list/' + activityData.type_id);
+                                }, function(err) {
+                                    alert(err);
+                                });
+                            } else {
+                                $mdToast.show($mdToast.simple()
+                                    .content('活动复制成功')
+                                    .hideDelay(5000)
+                                    .position("top right"));
+                                $location.path('/activity/list/' + activityData.type_id);
+                            }
+
+
+                        }, function(err) {
+                            alert(err);
+                        });
+                    }, function(err) {
+                        alert(err);
+                    });
                 });
             };
+
 
             // 草稿
             $scope.draft = function(entity) {

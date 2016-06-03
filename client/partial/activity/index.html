@@ -58,10 +58,7 @@
                 'panel-info': entity.status == 30,
                 'panel-warning': entity.status == 40, 
                 'panel-danger': entity.status == 15
-                }"  
-
-
-                class="panel">
+                }" class="panel">
                     <div class="panel-heading">
                         <h3 class="panel-title">
              <!-- 按照序号排序 -->
@@ -100,64 +97,65 @@
                         </div>
                         <button class="btn btn-info" class="btn" ng-click="copyActivityUrl(entity)">活动链接</button>
                         <button class="btn btn-info" class="btn" ng-click="copyFilterUrl(entity)">筛选链接</button>
-                        <a class="btn btn-primary" target="_blank" href="http://bshare.optimix.asia/barCode?site=weixin&url=https://m.someet.cc/activity/{{entity.id}}">活动二维码</a>
+                        <a class="btn btn-info" target="_blank" href="http://bshare.optimix.asia/barCode?site=weixin&url=https://m.someet.cc/activity/{{entity.id}}">活动二维码</a>
                         <button ng-if="!entity.question" class="btn" ng-click="viewQuestion(entity)">设置表单</button>
                         <button ng-if="entity.question" class="btn" ng-click="viewQuestion(entity)">修改表单</button>
+                        <button class="btn" ng-click="groupQrcode(entity)">设置群二维码</button>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                                操作
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a ng-show="entity.status >= 20" ng-click="updateStatus(entity.id,20)">启用活动</a>
+                                </li>
+                                <li>
+                                    <a ng-show="entity.status >= 20" ng-click="updateStatus(entity.id,30)">关闭活动</a>
+                                </li>
+                                <li>
+                                    <a ng-show="entity.status >= 20" ng-click="updateStatus(entity.id,40)">取消活动</a>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li>
+                                    <a ng-click="delete(entity)">删除活动</a>
+                                </li>
+                                <li>
+                                    <a ng-click="copy(entity)">复制活动</a>
+                                </li>
+                            </ul>
+                        </div>
                         <span class="btn-group btn-float-right" ng-show="entity.status >= 20">
-
-                        <div class="btn-group btn-float-right">
-                        <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown">
-                            操作
-                        <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li>
-                                <a ng-click="updateStatus(entity.id,20)">启用活动</a>
-                            </li>
-                            <li>
-                                <a ng-click="updateStatus(entity.id,30)">关闭活动</a>
-                            </li>
-                            <li>
-                                <a ng-click="updateStatus(entity.id,40)">取消活动</a>
-                            </li>
-                             <li role="separator" class="divider"></li>
-                            <li>
-                                <a ng-click="delete(entity)">删除活动</a>
-                            </li>
-                            <li>
-                                <a ng-click="copy(entity)">复制活动</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <a href="#/answer/{{entity.id}}" target="_blank" ng-class="{true: 'btn-danger', false: 'btn-default'}[entity.question.status==10]" ng-if="entity.question" class="btn  btn-float-right" type="button">
-                        <span>管理</span> （{{entity.answer_count}}/{{entity.peoples}}）
+                            <a href="#/answer/{{entity.id}}" target="_blank" ng-class="{true: 'btn-danger', false: 'btn-default'}[entity.question.status==10]" ng-if="entity.question" class="btn  btn-float-right" type="button">
+                                <span>管理</span> （{{entity.answer_count}}/{{entity.peoples}}）
                         <span class="badge">{{entity.feedback_count}}</span>
-                    </a>
-                    </span>
-                                <!-- 下拉功能 -->
-                    <div ng-if="entity.status == 10 ||  entity.status == 15" class="btn-group">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                            切换状态
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li>
-                                <a ng-click="draft(entity)">草稿</a>
-                            </li>
-                            <li>
-                                <a ng-click="prevent(entity)">预发布</a>
-                            </li>
-                        </ul>
+                        </a>
+                        </span>
+                        <!-- 下拉功能 -->
+                        <div ng-if="entity.status == 10 ||  entity.status == 15" class="btn-group">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                切换状态
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a ng-click="draft(entity)">草稿</a>
+                                </li>
+                                <li>
+                                    <a ng-click="prevent(entity)">预发布</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <a class="btn btn-success" href="#/activity/{{entity.id}}" target="_blank">编辑</a>
+                        <button ng-if="entity.status==10 || entity.status==15" class="btn btn-primary btn-float-right" ng-click="release(entity)" type="button">发布</button>
                     </div>
-                    <a class="btn btn-success" href="#/activity/{{entity.id}}" target="_blank">编辑</a>
-                    <button ng-if="entity.status==10 || entity.status==15" class="btn btn-primary btn-float-right" ng-click="release(entity)" type="button">发布</button>
                 </div>
-    </div>
-    </li>
-    </ul>
+            </li>
+        </ul>
     </div>
     <div ng-show="modelPagination" class="someet-pagination user-pagination">
-        <uib-pagination total-items="modelPagination.totalItems" ng-model="modelPagination.currentPage" ng-change="pageChange()" items-per-page="modelPagination.itemsPerPage" max-size="modelPagination.maxSize" class="pagination-sm" boundary-links="false" previous-text="上一页" next-text="下一页" rotate="false">
+        <uib-pagination total-items="modelPagination.totalItems" ng-model="modelPagination.currentPage" ng-change="pageChange()" items-per-page="modelPagination.itemsPerPage" max-size="modelPagination.maxSize" class="pagination-sm" boundary-links="false" previous-text="上一页" next-text="下一页" first-text="第一页"
+        last-text="最后一页" rotate="false">
         </uib-pagination>
     </div>
 </md-content>

@@ -216,7 +216,7 @@ class MemberController extends BackendController
                     ->where($where)
                     ->orderBy(['id' => SORT_DESC]);
                 break;
-            //已删除的用户
+            //已申请的用户
             case 'appeal':
                 // $where = ['appeal_status' => YellowCard::APPEAL_STATUS_YES];
                 $userAppeal = YellowCard::find()

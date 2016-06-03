@@ -113,7 +113,7 @@ angular.module('backendServices')
                     return data;
                 });
             },
-            fetchPage: function(type, page, isWeek, search) {
+            fetchPage: function(type, page, isWeek) {
                 page = page || 1;
                 var params = {
                     'type': type,
@@ -124,7 +124,6 @@ angular.module('backendServices')
                 return $http.get('/activity', {
                     params: params
                 }).then(function(data) {
-
                     return data;
                 });
 

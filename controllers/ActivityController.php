@@ -154,14 +154,12 @@ class ActivityController extends BackendController
 
     /**
      * 活动列表
-     * @param integer $id
-     * @param string $scenario 场景
-     * @param string $type 类型,例如黑白名单或所有名单
      * @param int $perPage 每页多少条
+     * @param string $type 活动类型，0 全部 ，其他数字是单独指定的活动
      * @param int $isWeek  是否是本周活动  0 本周 1 非本周
      * @return array|int|null|\yii\db\ActiveRecord|\yii\db\ActiveRecord[]
      */
-    public function actionIndex($id = null, $scenario = null, $perPage = 20, $type = null, $isWeek = 0, $search = null)
+    public function actionIndex($perPage = 20, $type = null, $isWeek = 0)
     {   
         Yii::$app->response->format = Response::FORMAT_JSON;            
         //判断周末非周末
