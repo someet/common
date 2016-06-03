@@ -126,7 +126,7 @@
                             </ul>
                         </div>
                         <span class="btn-group btn-float-right" ng-show="entity.status >= 20">
-                            <a href="#/answer/{{entity.id}}" target="_blank" ng-class="{true: 'btn-danger', false: 'btn-default'}[entity.question.status==10]" ng-if="entity.question" class="btn  btn-float-right" type="button">
+                            <a href="#/answer/{{entity.id}}" target="_blank" ng-class="{true: 'btn-info', false: 'btn-default'}[entity.question.status==10]" ng-if="entity.question" class="btn  btn-float-right" type="button">
                             <span>管理</span>（{{entity.answer_count}}/{{entity.peoples}}）
                             <span class="badge">{{entity.feedback_count}}</span>
                         </a>
