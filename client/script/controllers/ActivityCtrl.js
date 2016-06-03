@@ -5,20 +5,19 @@ angular.module('controllers', ['ngTagsInput'])
             // 默认为本周
             $scope.isWeek = 0;
             $scope.activityType = $routeParams.type_id;
+
             $scope.modelPagination = {
                 currentPage: 1,
                 totalItems: 0,
+                maxSize: 5,
+                itemsPerPage: 10, //每页多少条
                 pageChange: function() {
                     fetchPage();
                 }
             };
-            normalPagination($scope.activityType, $scope.isWeek);
-            
-            //活动列表开始
-            function normalPagination(type) {
 
-                fetchPage($scope.modelPagination.currentPage);
-            }
+            //活动列表开始
+            fetchPage($scope.modelPagination.currentPage);
 
             // 改变页数
             $scope.pageChange = function(){

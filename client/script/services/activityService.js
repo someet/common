@@ -66,7 +66,7 @@ angular.module('backendServices')
                 page = page || 1;
                 var params = {
                     'page': page,
-                    'perPage': 2 //每页20条
+                    'perPage': 10 //每页20条
                 };
                 return $http.get('/activity/search?title=' + query,{params: params});
             },
