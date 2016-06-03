@@ -33,6 +33,10 @@ class ActivityService extends BaseService
             return false;
         }
 
+        if ($status == $activity->status) {
+            return true;
+        }
+
         $activity->status = $status;
         if (!$activity->save()) {
             $this->setError('更新失败');
@@ -54,6 +58,9 @@ class ActivityService extends BaseService
         if (!$model) {
             $this->setError('活动不存在, ID: ' . $id);
             return false;
+        }
+        if (Activity::STATUS_DELETE == $model->status) {
+            return true;
         }
 
         $model->status = Activity::STATUS_DELETE;

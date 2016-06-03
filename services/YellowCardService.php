@@ -33,6 +33,10 @@ class YellowCardService extends BaseService
             return false;
         }
 
+        if (YellowCard::APPEAL_STATUS_YES == $yellowCard) {
+            return true;
+        }
+
         $yellowCard->appeal_reason = $appeal_reason;
         $yellowCard->appeal_status = YellowCard::APPEAL_STATUS_YES;
         $yellowCard->appeal_time = time();

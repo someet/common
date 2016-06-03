@@ -63,8 +63,7 @@ class ActivityCheckInService extends BaseService
             ->exists();
 
         if ($exists_check_in) {
-            $this->setError('当前用户已经签到');
-            return false;
+            return true;
         }
 
         $check_in = new ActivityCheckIn();
