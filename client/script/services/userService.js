@@ -102,8 +102,14 @@ angular.module('backendServices')
         });
       },
       //搜索用户
-      search: function(username) {
-        return $http.get('/member/search?username='+username);
+      search: function(search,page) {
+        page = page || 1;
+
+        var params = {
+          'page': page,
+          'perPage': 2  //每页20条
+        };
+        return $http.get('/member/search?search='+search,{params:params});
       },
       userPageMeta: function(type, pageNum) {
         return $http.get('/member?scenario=total&perPage='+pageNum+'&type='+type).then(function(data) {
@@ -111,14 +117,15 @@ angular.module('backendServices')
         });
       },
       fetchPage: function(type, page) {
+        console.log(page);
         page = page || 1;
 
         var params = {
           'type': type,
           'page': page,
-          'perPage': 20  //每页20条
+          'perPage': 2  //每页20条
         };
-        return $http.get('/member?scenario=page', {
+        return $http.get('/member', {
           params: params
         }).then(function(data) {
           return data;

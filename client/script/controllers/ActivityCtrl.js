@@ -7,7 +7,7 @@ angular.module('controllers', ['ngTagsInput'])
             $scope.activityType = $routeParams.type_id;
 
             //活动列表开始
-            fetchPage();
+            modelPagination();
 
             // 改变页数
             $scope.pageChange = function(){
@@ -18,17 +18,20 @@ angular.module('controllers', ['ngTagsInput'])
                 }
             }
 
-            // 正常分页
-            function fetchPage() {
+            // 初始化分页
+            function modelPagination(){
                 $scope.modelPagination = {
-                    currentPage: 1,
                     totalItems: 0,
+                    currentPage: 1,
                     maxSize: 5,
                     itemsPerPage: 10, //每页多少条
-                    pageChange: function() {
-                    fetchPage();
-                    }
                 };
+                fetchPage();
+            }
+
+
+            // 正常分页
+            function fetchPage() {
                 $activityManage.fetchPage($scope.activityType, $scope.modelPagination.currentPage, $scope.isWeek).then(function(data) {
                     $scope.list = data.activities;
                     $scope.modelPagination.totalItems = data.totalCount;
