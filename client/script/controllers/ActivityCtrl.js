@@ -6,18 +6,8 @@ angular.module('controllers', ['ngTagsInput'])
             $scope.isWeek = 0;
             $scope.activityType = $routeParams.type_id;
 
-            $scope.modelPagination = {
-                currentPage: 1,
-                totalItems: 0,
-                maxSize: 5,
-                itemsPerPage: 10, //每页多少条
-                pageChange: function() {
-                    fetchPage();
-                }
-            };
-
             //活动列表开始
-            fetchPage($scope.modelPagination.currentPage);
+            fetchPage();
 
             // 改变页数
             $scope.pageChange = function(){
@@ -30,7 +20,16 @@ angular.module('controllers', ['ngTagsInput'])
 
             // 正常分页
             function fetchPage() {
-                    console.log('正常分页');
+                console.log('正常分页');
+                $scope.modelPagination = {
+                    currentPage: 1,
+                    totalItems: 0,
+                    maxSize: 5,
+                    itemsPerPage: 10, //每页多少条
+                    pageChange: function() {
+                    fetchPage();
+                    }
+                };
                 $activityManage.fetchPage($scope.activityType, $scope.modelPagination.currentPage, $scope.isWeek).then(function(data) {
                     $scope.list = data.activities;
                     $scope.modelPagination.totalItems = data.totalCount;
@@ -49,6 +48,7 @@ angular.module('controllers', ['ngTagsInput'])
                     }
                 });
             }
+            
             //搜索活动按钮
             $scope.getActivity = function(query) {
                 $scope.modelPagination.currentPage = 1;
@@ -66,14 +66,6 @@ angular.module('controllers', ['ngTagsInput'])
                 $scope.isWeek = 1;
                 fetchPage();
             }
-            // console.log($scope.search);
-
-
- 
-
-
-
-
 
             // 更新活动状态
             $scope.updateStatus = function(id, status) {
