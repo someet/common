@@ -96,19 +96,29 @@ angular.module('backendServices')
             searchDts: function(query) {
                 return $http.get('/member/search-by-auth?username=' + query + '&auth=admin');
             },
-            modelPageMeta: function(type, pageNum, isWeek) {
-                return $http.get('/activity?scenario=total&perPage=' + pageNum + '&type=' + type + 'isWeek=' + isWeek).then(function(data) {
+            modelPageMeta: function(type, pageNum, isWeek, search) {
+                console.log(search);
+                if (typeof search == 'undefined') {
+                    search = '';
+                }
+
+                return $http.get('/activity?scenario=total&perPage=' + pageNum + '&type=' + type + '&isWeek=' + isWeek + '&search=' + search
+                    ).then(function(data) {
                     return data;
                 });
             },
-            fetchPage: function(type, page, isWeek) {
+            fetchPage: function(type, page, isWeek, search) {
+                if (typeof search == 'undefined') {
+                    search = '';
+                }
                 page = page || 1;
 
                 var params = {
+                    'search': search,
                     'type': type,
                     'page': page,
                     'isWeek': isWeek,
-                    'perPage': 20 //每页20条
+                    'perPage': 2 //每页20条
                 };
 
                 return $http.get('/activity?scenario=page', {
