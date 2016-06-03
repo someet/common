@@ -31,14 +31,14 @@ angular.module('controllers', ['ngTagsInput'])
             }
 
             // 正常分页
-            function fetchPage(search) {
+            function fetchPage() {
                     console.log('正常分页');
-                $activityManage.fetchPage($scope.activityType, $scope.modelPagination.currentPage, $scope.isWeek, search).then(function(data) {
+                $activityManage.fetchPage($scope.activityType, $scope.modelPagination.currentPage, $scope.isWeek).then(function(data) {
                     $scope.list = data.activities;
                     $scope.modelPagination.totalItems = data.totalCount;
                 });
             }
-            
+
             //搜索活动
             function searchActivity(query,page) {
                 console.log('搜索分页');
@@ -53,6 +53,7 @@ angular.module('controllers', ['ngTagsInput'])
             }
             //搜索活动
             $scope.getActivity = function(query) {
+                $scope.modelPagination.currentPage = 1;
                 searchActivity($scope.search,1);
             }
 

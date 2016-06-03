@@ -114,19 +114,13 @@ angular.module('backendServices')
                 });
             },
             fetchPage: function(type, page, isWeek, search) {
-                if (typeof search == 'undefined') {
-                    search = '';
-                }
                 page = page || 1;
-
                 var params = {
-                    'search': search,
                     'type': type,
                     'page': page,
                     'isWeek': isWeek,
                     'perPage': 2 //每页20条
                 };
-
                 return $http.get('/activity', {
                     params: params
                 }).then(function(data) {

@@ -163,105 +163,65 @@ class ActivityController extends BackendController
      */
     public function actionIndex($id = null, $scenario = null, $perPage = 20, $type = null, $isWeek = 0, $search = null)
     {   
-        Yii::$app->response->format = Response::FORMAT_JSON;
-            // $where = ['in', 'status', [
-            // Activity::STATUS_DRAFT,
-            // Activity::STATUS_RELEASE,
-            // Activity::STATUS_PREVENT,
-            // Activity::STATUS_SHUT,
-            // Activity::STATUS_CANCEL,
-            // ]];
+        Yii::$app->response->format = Response::FORMAT_JSON;            
+        //判断周末非周末
+        $weekWhere = $isWeek == 0 ? ['>','start_time',getLastEndTime()]: ['<','start_time',getLastEndTime()];
+        // 判断互动的类型是否为全部或单独的活动类型
+        $typeWhere = $type > 0 ? ['type_id' => $type]: '';
 
-            // 拼接搜索
-            // SELECT
-            //     *
-            // FROM
-            //     `activity`
-            // WHERE
-            //     (
-            //         STATUS IN (10, 20, 15, 30, 40)
-            //         AND start_time < 1464537600
-            //         AND type_id = 1
-            //     )
-            // AND (
-            //     (`desc` LIKE '%a%')
-            //     OR (`content` LIKE '%a%')
-            //     OR (`title` LIKE '%a%')
-            // )
-            // ORDER BY
-            //     `is_top` DESC,
-            //     `display_order`,
-            //     `id` DESC
-            // LIMIT 20
-            
-            $statusWhere = "status in (". Activity::STATUS_DRAFT .",".
-            Activity::STATUS_RELEASE .",".
-            Activity::STATUS_PREVENT. ",".
-            Activity::STATUS_SHUT .",".
-            Activity::STATUS_CANCEL .")";
+        $query = Activity::find()
+                ->with([
+                'type',
+                'tags',
+                'question',
+                'user',
+                'answerList',
+                'feedbackList'
+                ])
+                ->asArray()
+                ->where(
+                        ['and',
+                            ['in', 'status', [
+                                Activity::STATUS_DRAFT,
+                                Activity::STATUS_RELEASE,
+                                Activity::STATUS_PREVENT,
+                                Activity::STATUS_SHUT,
+                                Activity::STATUS_CANCEL,
+                            ]],
+                            $weekWhere,
+                            $typeWhere,
+                        ]
+                    )
+                ->orderBy($this->activity_order);        
 
-            // echo $statusWhere;
-            //判断周末非周末
-            $weekWhere = $isWeek == 0 ? ' and start_time > '.getLastEndTime() : ' and start_time < '.getLastEndTime();
-            $typeWhere = $type > 0 ? " and type_id = " . $type : '';
+        $countQuery = clone $query;
+        $pagination = new Pagination([
+            'totalCount' => $countQuery->count(),
+            'pageSize' => $perPage
+        ]);
 
-            // 搜索条件
-            $searchDesc = "(`desc` LIKE '%".$search."%')";
-            $searchContent = " or (`content` LIKE '%".$search."%')";
-            $searchTitle = " or (`title` LIKE '%".$search."%')";
+        // 总页数
+        $totalCount =  $pagination->totalCount;
 
-            
-            $searchWhere = '';
-            if (!empty($search)) {
-                $searchWhere = " and (".$searchDesc . $searchContent . $searchTitle .")";
-            }
+        // 活动的数据
+        $activities = $query->offset($pagination->offset)
+        ->limit($pagination->limit)
+        ->all();
 
-            // 拼接条件
-            $activityWhere = "(".$statusWhere . $weekWhere . $typeWhere.")";
+        foreach ($activities as $key => $activity) {
+            $activities[$key]['answer_count'] = count($activity['answerList']);
+            $activities[$key]['feedback_count'] = count($activity['feedbackList']);
+            $activities[$key]['preview_url'] = Yii::$app->params['domain'].'preview/'.$activity['id'];
+            $activities[$key]['filter_url'] = Yii::$app->params['domain'].'filter/'.$activity['id'];
 
-            $where =  $activityWhere .  $searchWhere;
-            // echo $where;
-            // die;
-            $query = Activity::find()
-            ->with([
-            'type',
-            'tags',
-            'question',
-            'user',
-            'answerList',
-            'feedbackList'
-            ])
-            ->asArray()
-            ->where($where)
-            ->orderBy($this->activity_order);        
+            //set last week days
+            $activities[$key]['this_week'] = getLastEndTime() < $activity['end_time'] ? 1 : 0;
+        }
 
-                $countQuery = clone $query;
-                $pagination = new Pagination([
-                    'totalCount' => $countQuery->count(),
-                    'pageSize' => $perPage
-                ]);
-
-                // 总页数
-                $totalCount =  $pagination->totalCount;
-
-                // 活动的数据
-                $activities = $query->offset($pagination->offset)
-                ->limit($pagination->limit)
-                ->all();
-
-                foreach ($activities as $key => $activity) {
-                    $activities[$key]['answer_count'] = count($activity['answerList']);
-                    $activities[$key]['feedback_count'] = count($activity['feedbackList']);
-                    $activities[$key]['preview_url'] = Yii::$app->params['domain'].'preview/'.$activity['id'];
-                    $activities[$key]['filter_url'] = Yii::$app->params['domain'].'filter/'.$activity['id'];
-
-                    //set last week days
-                    $activities[$key]['this_week'] = getLastEndTime() < $activity['end_time'] ? 1 : 0;
-                }
-            return [
-                'totalCount' => $totalCount,
-                'activities' => $activities,
-            ]; 
+        return [
+            'totalCount' => $totalCount,
+            'activities' => $activities,
+        ]; 
 
     }
 
@@ -303,6 +263,7 @@ class ActivityController extends BackendController
                             ]
                             ],
                             ['or',
+                                ['like','id',$title],
                                 ['like','desc',$title],
                                 ['like','content',$title],
                                 ['like','user.username',$title]
