@@ -236,7 +236,7 @@ class ActivityController extends BackendController
         if (empty($search)) {
             return false;
         }
-        
+
         $where = ['in', 'activity.status', [
             Activity::STATUS_DRAFT,
             Activity::STATUS_RELEASE,
@@ -254,6 +254,7 @@ class ActivityController extends BackendController
                             'answerList',
                             'feedbackList'
                         ])
+                    ->asArray()
                     ->join('LEFT JOIN', 'user', 'user.id = activity.created_by')
                     ->where(
                         ['and',
@@ -290,11 +291,11 @@ class ActivityController extends BackendController
                 ->all();
 
 
-        foreach ($activities as $key => $activity) {
-            // $activities[$key]['answer_count'] = count($activity['answerList']);
-            // $activities[$key]['feedback_count'] = count($activity['feedbackList']);
-        }
         if ($activityExists) {
+            foreach ($activities as $key => $activity) {
+                $activities[$key]['answer_count'] = count($activity['answerList']);
+                $activities[$key]['feedback_count'] = count($activity['feedbackList']);
+            }
             return [
                 'status' => 1,
                 'models' => $activities,

@@ -100,7 +100,7 @@
                         <a class="btn btn-info" target="_blank" href="http://bshare.optimix.asia/barCode?site=weixin&url=https://m.someet.cc/activity/{{entity.id}}">活动二维码</a>
                         <button ng-if="!entity.question" class="btn" ng-click="viewQuestion(entity)">设置表单</button>
                         <button ng-if="entity.question" class="btn" ng-click="viewQuestion(entity)">修改表单</button>
-                        <button class="btn" ng-click="groupQrcode(entity)">设置群二维码</button>
+                        <!-- <button class="btn" ng-click="groupQrcode(entity)">设置群二维码</button> -->
                         <div class="btn-group">
                             <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
                                 操作
@@ -127,8 +127,8 @@
                         </div>
                         <span class="btn-group btn-float-right" ng-show="entity.status >= 20">
                             <a href="#/answer/{{entity.id}}" target="_blank" ng-class="{true: 'btn-danger', false: 'btn-default'}[entity.question.status==10]" ng-if="entity.question" class="btn  btn-float-right" type="button">
-                                <span>管理</span> （{{entity.answer_count}}/{{entity.peoples}}）
-                        <span class="badge">{{entity.feedback_count}}</span>
+                            <span>管理</span>（{{entity.answer_count}}/{{entity.peoples}}）
+                            <span class="badge">{{entity.feedback_count}}</span>
                         </a>
                         </span>
                         <!-- 下拉功能 -->
