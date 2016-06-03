@@ -62,8 +62,13 @@ angular.module('backendServices')
                 return $http.get('/activity-tag/list?query=' + query);
             },
             //搜索活动名字
-            search: function(query) {
-                return $http.get('/activity/search?title=' + query);
+            search: function(query,page) {
+                page = page || 1;
+                var params = {
+                    'page': page,
+                    'perPage': 2 //每页20条
+                };
+                return $http.get('/activity/search?title=' + query,{params: params});
             },
             //搜索场地
             searchSpace: function(query) {
@@ -90,6 +95,7 @@ angular.module('backendServices')
             },
             //搜索pma
             searchPrincipal: function(query) {
+
                 return $http.get('/member/search-by-auth?username=' + query + '&auth=pma');
             },
             //搜索管理员
@@ -121,7 +127,7 @@ angular.module('backendServices')
                     'perPage': 2 //每页20条
                 };
 
-                return $http.get('/activity?scenario=page', {
+                return $http.get('/activity', {
                     params: params
                 }).then(function(data) {
 

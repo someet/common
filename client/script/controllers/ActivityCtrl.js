@@ -10,29 +10,50 @@ angular.module('controllers', ['ngTagsInput'])
             //活动列表开始
             function normalPagination(type) {
                 $scope.modelPagination = {
-                    totalItems: 0,
                     currentPage: 1,
+                    totalItems: 0,
                     maxSize: 5,
-                    itemsPerPage: 2, //每页多少条
+                    itemsPerPage: 2, 
                     pageChange: function() {
                         fetchPage();
                     }
                 };
 
-                $activityManage.modelPageMeta(type, $scope.modelPagination.itemsPerPage,$scope.isWeek,$scope.search).then(function(total) {
-                    $scope.modelPagination.totalItems = total;
-                });
-
-                $scope.userList = fetchPage($scope.modelPagination.currentPage);
+                fetchPage($scope.modelPagination.currentPage);
             }
 
-            function fetchPage(search) {
+            $scope.pageChange = function(){
+                if (!$scope.search) {
+                    fetchPage();
+                }else{
+                    searchActivity($scope.search,$scope.modelPagination.currentPage)
+                }
+            }
 
-                console.log(search);
-                $activityManage.fetchPage($scope.activityType, $scope.modelPagination.currentPage, $scope.isWeek, search).then(function(modelList) {
-                    $scope.list = modelList;
-                    // $scope.modelPagination.currentPage = page;
+            // 正常分页
+            function fetchPage(search) {
+                    console.log('正常分页');
+                $activityManage.fetchPage($scope.activityType, $scope.modelPagination.currentPage, $scope.isWeek, search).then(function(data) {
+                    $scope.list = data.activities;
+                    $scope.modelPagination.totalItems = data.totalCount;
                 });
+            }
+            
+            //搜索活动
+            function searchActivity(query,page) {
+                console.log('搜索分页');
+                $activityManage.search(query,page).then(function(data) {
+                    if (data.status == 1) {
+                        $scope.list = data.models;
+                        $scope.modelPagination.totalItems = data.totalCount;
+                    } else {
+                        $scope.list = '';
+                    }
+                });
+            }
+            //搜索活动
+            $scope.getActivity = function(query) {
+                searchActivity($scope.search,1);
             }
 
             // 本周活动
@@ -47,26 +68,9 @@ angular.module('controllers', ['ngTagsInput'])
                 normalPagination();
             }
             // console.log($scope.search);
-            //搜索活动
-            $scope.getActivity = function(query) {
-                console.log($scope.search);
-                fetchPage($scope.search);
-                $activityManage.modelPageMeta($scope.activityType, $scope.modelPagination.itemsPerPage,$scope.isWeek, $scope.search).then(function(total) {
-                    $scope.modelPagination.totalItems = total;
-                });
-            }
 
 
-            //搜索活动
-            $scope.searchActivity = function(query) {
-                $activityManage.search(query).then(function(activityList) {
-                    if (activityList.status == 1) {
-                        $scope.list = activityList.models;
-                    } else {
-                        $scope.list = '';
-                    }
-                });
-            } 
+ 
 
 
 

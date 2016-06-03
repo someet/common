@@ -164,7 +164,6 @@ class ActivityController extends BackendController
     public function actionIndex($id = null, $scenario = null, $perPage = 20, $type = null, $isWeek = 0, $search = null)
     {   
         Yii::$app->response->format = Response::FORMAT_JSON;
-
             // $where = ['in', 'status', [
             // Activity::STATUS_DRAFT,
             // Activity::STATUS_RELEASE,
@@ -234,63 +233,35 @@ class ActivityController extends BackendController
             ])
             ->asArray()
             ->where($where)
-            // ->andwhere($typeWhere)
-            // ->andWhere($weekWhere)
-            ->orderBy($this->activity_order);            
-
-
-            // $query = Activity::find()
-            // ->with([
-            // 'type',
-            // 'tags',
-            // 'question',
-            // 'user',
-            // 'answerList',
-            // 'feedbackList'
-            // ])
-            // ->asArray()
-            // ->where($where)
-            // ->andwhere($typeWhere)
-            // ->andWhere($weekWhere)
-            // ->orderBy($this->activity_order);
-            
-            // 搜索
-            // if (!empty($search)) {
-                // $query->andWhere(['like', 'title', $search]);
-                // ->orWhere(['like','content',$search]);
-                // ->orwhere(['like', 'title', $title])
-                // ->orWhere(['like','user.username',$search]);
-            // }
-
+            ->orderBy($this->activity_order);        
 
                 $countQuery = clone $query;
                 $pagination = new Pagination([
-                'totalCount' => $countQuery->count(),
-                'pageSize' => $perPage
+                    'totalCount' => $countQuery->count(),
+                    'pageSize' => $perPage
                 ]);
 
                 // 总页数
                 $totalCount =  $pagination->totalCount;
-                
+
                 // 活动的数据
                 $activities = $query->offset($pagination->offset)
                 ->limit($pagination->limit)
                 ->all();
 
-                    // $answer_count = count($activity['answerList']);
-                    // $feedback_count = count($activity['feedbackList']);
-                    $preview_url = Yii::$app->params['domain'].'preview/'.$activity['id'];
-                    $filter_url = Yii::$app->params['domain'].'filter/'.$activity['id'];
+                foreach ($activities as $key => $activity) {
+                    $activities[$key]['answer_count'] = count($activity['answerList']);
+                    $activities[$key]['feedback_count'] = count($activity['feedbackList']);
+                    $activities[$key]['preview_url'] = Yii::$app->params['domain'].'preview/'.$activity['id'];
+                    $activities[$key]['filter_url'] = Yii::$app->params['domain'].'filter/'.$activity['id'];
 
                     //set last week days
                     $activities[$key]['this_week'] = getLastEndTime() < $activity['end_time'] ? 1 : 0;
+                }
             return [
                 'totalCount' => $totalCount,
                 'activities' => $activities,
-                'preview_url' => $preview_url,
-                'filter_url' => $filter_url,
-                'activities' => $activities,
-            ] 
+            ]; 
 
     }
 
@@ -300,10 +271,18 @@ class ActivityController extends BackendController
      * @param string $username 标题
      * @return array
      */
-    public function actionSearch($title)
+    public function actionSearch($title, $perPage = 20)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $activity = Activity::find()
+        $where = ['in', 'activity.status', [
+            Activity::STATUS_DRAFT,
+            Activity::STATUS_RELEASE,
+            Activity::STATUS_PREVENT,
+            Activity::STATUS_SHUT,
+            Activity::STATUS_CANCEL,
+            ]];
+
+        $query = Activity::find()
                     ->with([
                             'type',
                             'tags',
@@ -314,27 +293,48 @@ class ActivityController extends BackendController
                         ])
                     ->join('LEFT JOIN', 'user', 'user.id = activity.created_by')
                     ->where(
-                        ['like', 'title', $title]
-                    )
-                    ->orWhere(['like','desc',$title])
-                    ->orWhere(['like','content',$title])
-                    ->orWhere(['like','user.username',$title]);
-        $activityExists = $activity->exists();
-        $countQuery = clone $activity;
-        $pages = new Pagination(['totalCount' => $countQuery->count()]);
-        $models = $activity->offset($pages->offset)
-            ->limit($pages->limit)
-            ->asArray()
-            ->all();
-        foreach ($models as $key => $activity) {
-            $models[$key]['answer_count'] = count($activity['answerList']);
-            $models[$key]['feedback_count'] = count($activity['feedbackList']);
+                        ['and',
+                            ['in', 'activity.status', [
+                                Activity::STATUS_DRAFT,
+                                Activity::STATUS_RELEASE,
+                                Activity::STATUS_PREVENT,
+                                Activity::STATUS_SHUT,
+                                Activity::STATUS_CANCEL,
+                            ]
+                            ],
+                            ['or',
+                                ['like','desc',$title],
+                                ['like','content',$title],
+                                ['like','user.username',$title]
+                            ]
+                            
+                        ]
+                    );
+                $activityExists = $query->exists();
+                $countQuery = clone $query;
+                $pagination = new Pagination([
+                'totalCount' => $countQuery->count(),
+                'pageSize' => $perPage
+                ]);
+
+                // 总页数
+                $totalCount =  $pagination->totalCount;
+
+                // 活动的数据
+                $activities = $query->offset($pagination->offset)
+                ->limit($pagination->limit)
+                ->all();
+
+
+        foreach ($activities as $key => $activity) {
+            // $activities[$key]['answer_count'] = count($activity['answerList']);
+            // $activities[$key]['feedback_count'] = count($activity['feedbackList']);
         }
         if ($activityExists) {
             return [
                 'status' => 1,
-                'models' => $models,
-                'pages' => $pages,
+                'models' => $activities,
+                'totalCount' => $totalCount,
             ];
         } else {
             return [
