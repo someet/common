@@ -295,6 +295,9 @@ class ActivityController extends BackendController
             foreach ($activities as $key => $activity) {
                 $activities[$key]['answer_count'] = count($activity['answerList']);
                 $activities[$key]['feedback_count'] = count($activity['feedbackList']);
+                $activities[$key]['preview_url'] = Yii::$app->params['domain'].'preview/'.$activity['id'];
+                $activities[$key]['filter_url'] = Yii::$app->params['domain'].'filter/'.$activity['id'];
+                $activities[$key]['this_week'] = getLastEndTime() < $activity['end_time'] ? 1 : 0;
             }
             return [
                 'status' => 1,
