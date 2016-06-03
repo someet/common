@@ -22,7 +22,6 @@ class UserService extends BaseService
     public function getUserinfoByUnionId($unionid)
     {
         $user = User::find()
-            ->select(['id', 'username', 'created_at','updated_at','flags','allow_join_times','punish_score','mobile','status','wechat_id','last_login_at','last_active_at','join_count','attend_count','reject_count','activities_count','black_label','black_time'])
             ->where(['unionid' => $unionid])
             ->one();
         if (!$user) {

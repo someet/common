@@ -199,7 +199,7 @@ class Answer extends \yii\db\ActiveRecord
     
     public function extraFields()
     {
-        return ['user'];
+        return ['user', 'activity', 'answerItemList'];
     }
     /**
      * 回答项列表
