@@ -199,7 +199,9 @@ class Answer extends \yii\db\ActiveRecord
     
     public function extraFields()
     {
-        return ['user', 'activity', 'answerItemList'];
+        return ['user', 'activity', 'answerItemList',  'user.profile' => function() {
+            return $this->user ? $this->user->profile: null;
+        }];
     }
     /**
      * 回答项列表
