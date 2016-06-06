@@ -246,23 +246,27 @@ class MemberController extends BackendController
         }
 
 
+        if ($id) {
+            $users = User::find()->where(['id' => $id])->with(['profile', 'assignment'])->asArray()->one();
+            return $users;
+        } else {
+            $countQuery = clone $query;
+            $pagination = new Pagination([
+                'totalCount' => $countQuery->count(),
+                'pageSize' => $perPage,
+            ]);
 
-        $countQuery = clone $query;
-        $pagination = new Pagination([
-            'totalCount' => $countQuery->count(),
-            'pageSize' => $perPage,
-        ]);
+            $totalCount =  $pagination->totalCount;
 
-        $totalCount =  $pagination->totalCount;
+            $users = $query->offset($pagination->offset)
+                ->limit($pagination->limit)
+                ->all();
 
-        $users = $query->offset($pagination->offset)
-            ->limit($pagination->limit)
-            ->all();
-
-        return [
-                'users'=> $users,
-                'totalCount'=> $totalCount,
-            ];
+            return [
+                    'users'=> $users,
+                    'totalCount'=> $totalCount,
+                ];
+        }
     }
 
     /**
