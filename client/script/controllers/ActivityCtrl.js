@@ -24,7 +24,7 @@ angular.module('controllers', ['ngTagsInput'])
                     totalItems: 0,
                     currentPage: 1,
                     maxSize: 5,
-                    itemsPerPage: 10, //每页多少条
+                    itemsPerPage: 20, //每页多少条
                 };
                 fetchPage();
             }
@@ -41,7 +41,14 @@ angular.module('controllers', ['ngTagsInput'])
             //搜索活动按钮 页面使用
             $scope.getActivity = function(query) {
                 $scope.modelPagination.currentPage = 1;
-                searchActivity($scope.search,1);
+                if (typeof $scope.search == 'undefined' || $scope.search == '') {
+                    $mdToast.show($mdToast.simple()
+                            .content('搜索内容不能为空')
+                            .hideDelay(5000)
+                            .position("top right"));
+                } else {
+                    searchActivity($scope.search,1);
+                }
             }
 
             //搜索活动函数 分页调用 活动按钮调用
