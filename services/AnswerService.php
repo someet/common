@@ -67,8 +67,7 @@ class AnswerService extends BaseService
         }
 
         if (Answer::find()->where(['question_id' => $question_id, 'user_id' => $user_id])->exists()) {
-            $this->setError('无法重新报名');
-            return false;
+            return true;
         }
 
         $user = User::findOne($user_id);
@@ -347,7 +346,7 @@ class AnswerService extends BaseService
     }
 
     /**
-     * 取消报名
+     * 取消报名, 前提是未审核状态
      *
      * @param integer $id 报名编号
      * @return bool
@@ -363,8 +362,15 @@ class AnswerService extends BaseService
             $this->setError('报名不存在');
             return false;
         }
+
         if (Answer::APPLY_STATUS_YET == $answer->apply_status) {
             return true;
+        }
+
+        //如果不是未审核
+        if (Answer::STATUS_REVIEW_YET != $answer->status) {
+            $this->setError('您报名状态不是未审核状态，此时不能取消');
+            return false;
         }
 
         $transaction = $answer->getDb()->beginTransaction();
@@ -417,7 +423,7 @@ class AnswerService extends BaseService
     }
 
     /**
-     * 请假
+     * 请假, 前提是报名通过并且活动还未开始
      *
      * @param integer $id 报名编号
      * @return array
@@ -432,8 +438,21 @@ class AnswerService extends BaseService
             $this->setError('报名不存在');
             return false;
         }
+
         if (Answer::STATUS_LEAVE_YES == $answer->leave_status) {
             return true;
+        }
+
+        //如果不是通过状态则不能请假
+        if (Answer::STATUS_REVIEW_PASS != $answer->status) {
+            $this->setError('您报名的活动未通过，此时不能请假');
+            return false;
+        }
+
+        //如果现在已经是活动开始了则无法请假
+        if (time() > $answer->start_time) {
+            $this->setError('活动已经开始,此时不能请假');
+            return false;
         }
 
         $answer->leave_status = Answer::STATUS_LEAVE_YES;
