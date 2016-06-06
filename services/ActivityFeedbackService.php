@@ -41,8 +41,7 @@ class ActivityFeedbackService extends BaseService
             )
             ->exists();
         if ($exists) {
-            $this->setError('已经反馈过');
-            return false;
+            return true;
         }
 
         $feedback = new ActivityFeedback();
