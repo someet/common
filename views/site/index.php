@@ -15,7 +15,8 @@ use yii\helpers\Url;
         <?= Html::csrfMetaTags() ?>
     </head>
 
-    <body ng-controller="MainCtrl">
+    <body class="main_css layout-column flex" flex="" layout="column" ng-controller="MainCtrl">
+        <md-toolbar class="site-content-toolbar" aria-hidden="false" style="background-color:#FFF;">
             <nav class="navbar navbar-default">
                     <div class="container">
                         <!-- Brand and toggle get grouped for better mobile display -->
@@ -80,6 +81,7 @@ use yii\helpers\Url;
                     </div>
                     <!-- /.container-fluid -->
                 </nav>
+        </md-toolbar>
         <!-- /container -->
         <md-content ng-view>
         </md-content>
