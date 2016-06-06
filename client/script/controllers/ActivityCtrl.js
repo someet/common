@@ -171,6 +171,8 @@ angular.module('controllers', ['ngTagsInput'])
                     originActivity.title = activityData.title + " 副本";
                     originActivity.status = 10; //活动状态10为草稿
                     $activityManage.create(originActivity).then(function(newActivity) {
+                        // $location.path('/activity/list/' + activityData.type_id);
+                        // console.log(newActivity);
                         // 复制表单
                         $questionManage.fetchByActivityId(originActivityID).then(function(originQuestion) {
 
@@ -198,7 +200,8 @@ angular.module('controllers', ['ngTagsInput'])
                                         .content('活动和问题复制成功')
                                         .hideDelay(5000)
                                         .position("top right"));
-                                    $location.path('/activity/list/' + activityData.type_id);
+                                    fetchPage();
+                                    // $location.path('/activity/list/' + activityData.type_id);
                                 }, function(err) {
                                     alert(err);
                                 });
@@ -207,10 +210,9 @@ angular.module('controllers', ['ngTagsInput'])
                                     .content('活动复制成功')
                                     .hideDelay(5000)
                                     .position("top right"));
-                                $location.path('/activity/list/' + activityData.type_id);
+                                fetchPage();
                             }
-
-
+                            // 重新请求数据
                         }, function(err) {
                             alert(err);
                         });
