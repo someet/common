@@ -450,7 +450,7 @@ class AnswerService extends BaseService
         }
 
         //如果现在已经是活动开始了则无法请假
-        if (time() > $answer->start_time) {
+        if (time() > $answer->activity->start_time) {
             $this->setError('活动已经开始,此时不能请假');
             return false;
         }
