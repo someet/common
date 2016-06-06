@@ -2,6 +2,7 @@
   "name": "someet",
   "version": "0.1.0",
   "dependencies": {
+    "gulp-uglify": "^1.5.3"
   },
   "devDependencies": {
     "del": "^2.0.2",

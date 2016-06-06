@@ -155,137 +155,73 @@ class ActivityController extends BackendController
 
     /**
      * 活动列表
-     * @param integer $id
-     * @param string $scenario 场景
-     * @param string $type 类型,例如黑白名单或所有名单
      * @param int $perPage 每页多少条
+     * @param string $type 活动类型，0 全部 ，其他数字是单独指定的活动
      * @param int $isWeek  是否是本周活动  0 本周 1 非本周
      * @return array|int|null|\yii\db\ActiveRecord|\yii\db\ActiveRecord[]
      */
-    public function actionIndex($id = null, $scenario = null, $perPage = 20, $type = null, $isWeek = 0)
-    {
+    public function actionIndex($perPage = 20, $type = null, $isWeek = 0)
+    {   
+        Yii::$app->response->format = Response::FORMAT_JSON;            
+        //判断周末非周末
+        $weekWhere = $isWeek == 0 ? ['>','start_time',getLastEndTime()]: ['<','start_time',getLastEndTime()];
+        // 判断互动的类型是否为全部或单独的活动类型
+        $typeWhere = $type > 0 ? ['type_id' => $type]: '';
 
-        Yii::$app->response->format = Response::FORMAT_JSON;
-
-        // only show draft and release activities
-
-            $andwhere = ['in', 'status', [
-            Activity::STATUS_DRAFT,
-            Activity::STATUS_RELEASE,
-            Activity::STATUS_PREVENT,
-            Activity::STATUS_SHUT,
-            Activity::STATUS_CANCEL,
-            ]];
-    
-            if ($type>0) {
-                //判断周末非周末
-                if ($isWeek == 0) {
-                    $where = ['type_id' => $type];
-                    $query = Activity::find()
-                    ->with([
-                    'type',
-                    'tags',
-                    'question',
-                    'user',
-                    'answerList',
-                    'feedbackList'
-                    ])
-                    ->asArray()
-                    ->where($where)
-                    ->andWhere('start_time > '.getLastEndTime())
-                    ->andWhere($andwhere)
-                    ->orderBy($this->activity_order);
-                } else {
-                    $where = ['type_id' => $type];
-                    $query = Activity::find()
-                    ->with([
-                    'type',
-                    'question',
-                    'user',
-                    'answerList',
-                    'feedbackList'
-                    ])
-                    ->asArray()
-                    ->where($where)
-                    ->andWhere('start_time < '.getLastEndTime())
-                    ->andWhere($andwhere)
-                    ->orderBy($this->activity_order);
-                }
-            } else {
-                //判断周末非周末
-                if ($isWeek == 0) {
-                    $query = Activity::find()
-                    ->with([
-                    'type',
-                    'question',
-                    'user',
-                    'answerList',
-                    'feedbackList'
-                    ])
-                    ->where($andwhere)
-                    ->andWhere('start_time > '.getLastEndTime())
-                    ->asArray()
-                    ->orderBy($this->activity_order);
-                } else {
-                    $query = Activity::find()
-                    ->with([
-                    'type',
-                    'tags',
-                    'question',
-                    'user',
-                    'answerList',
-                    'feedbackList'
-                    ])
-                    ->where($andwhere)
-                    ->andWhere('start_time < '.getLastEndTime())
-                    ->asArray()
-                    ->orderBy($this->activity_order);
-                }
-            }
-
-            if ($id) {
-                $query = Activity::find()
-                ->where(['id' => $id])
+        $query = Activity::find()
                 ->with([
-                    'type',
-                    'question',
-                    'answerList',
-                    'feedbackList',
-                    'user',
+                'type',
+                'tags',
+                'question',
+                'user',
+                'answerList',
+                'feedbackList'
                 ])
                 ->asArray()
-                ->one();
-            } elseif ($scenario == "total") {
-                $countQuery = clone $query;
-                $pagination = new Pagination([
-                'totalCount' => $countQuery->count(),
-                'pageSize' => $perPage
-                ]);
+                ->where(
+                        ['and',
+                            ['in', 'status', [
+                                Activity::STATUS_DRAFT,
+                                Activity::STATUS_RELEASE,
+                                Activity::STATUS_PREVENT,
+                                Activity::STATUS_SHUT,
+                                Activity::STATUS_CANCEL,
+                            ]],
+                            $weekWhere,
+                            $typeWhere,
+                        ]
+                    )
+                ->orderBy($this->activity_order);        
 
-                return $pagination->totalCount;
-            } elseif ($scenario == "page") {
-                $countQuery = clone $query;
-                $pagination = new Pagination([
-                'totalCount' => $countQuery->count(),
-                'pageSize' => $perPage
-                ]);
+        $countQuery = clone $query;
+        $pagination = new Pagination([
+            'totalCount' => $countQuery->count(),
+            'pageSize' => $perPage
+        ]);
 
-                $activities = $query->offset($pagination->offset)
-                ->limit($pagination->limit)
-                ->all();
+        // 总页数
+        $totalCount =  $pagination->totalCount;
 
+        // 活动的数据
+        $activities = $query->offset($pagination->offset)
+        ->limit($pagination->limit)
+        ->all();
 
-                foreach ($activities as $key => $activity) {
-                    $activities[$key]['answer_count'] = count($activity['answerList']);
-                    $activities[$key]['feedback_count'] = count($activity['feedbackList']);
-                    $activities[$key]['preview_url'] = Yii::$app->params['domain'].'preview/'.$activity['id'];
-                    $activities[$key]['filter_url'] = Yii::$app->params['domain'].'filter/'.$activity['id'];
+        foreach ($activities as $key => $activity) {
+            $activities[$key]['answer_count'] = count($activity['answerList']);
+            $activities[$key]['feedback_count'] = count($activity['feedbackList']);
+            $activities[$key]['preview_url'] = Yii::$app->params['domain'].'preview/'.$activity['id'];
+            $activities[$key]['filter_url'] = Yii::$app->params['domain'].'filter/'.$activity['id'];
 
-                    //set last week days
-                    $activities[$key]['this_week'] = getLastEndTime() < $activity['end_time'] ? 1 : 0;
-                }
-            }
-            return $activities;
+            //set last week days
+            $activities[$key]['this_week'] = getLastEndTime() < $activity['end_time'] ? 1 : 0;
+        }
+
+        return [
+            'totalCount' => $totalCount,
+            'activities' => $activities,
+        ]; 
+
     }
 
 
@@ -294,10 +230,23 @@ class ActivityController extends BackendController
      * @param string $username 标题
      * @return array
      */
-    public function actionSearch($title)
+    public function actionSearch($search, $perPage = 20)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $activity = Activity::find()
+
+        if (empty($search)) {
+            return false;
+        }
+
+        $where = ['in', 'activity.status', [
+            Activity::STATUS_DRAFT,
+            Activity::STATUS_RELEASE,
+            Activity::STATUS_PREVENT,
+            Activity::STATUS_SHUT,
+            Activity::STATUS_CANCEL,
+            ]];
+
+        $query = Activity::find()
                     ->with([
                             'type',
                             'tags',
@@ -306,29 +255,55 @@ class ActivityController extends BackendController
                             'answerList',
                             'feedbackList'
                         ])
+                    ->asArray()
                     ->join('LEFT JOIN', 'user', 'user.id = activity.created_by')
                     ->where(
-                        ['like', 'title', $title]
-                    )
-                    ->orWhere(['like','desc',$title])
-                    ->orWhere(['like','content',$title])
-                    ->orWhere(['like','user.username',$title]);
-        $activityExists = $activity->exists();
-        $countQuery = clone $activity;
-        $pages = new Pagination(['totalCount' => $countQuery->count()]);
-        $models = $activity->offset($pages->offset)
-            ->limit($pages->limit)
-            ->asArray()
-            ->all();
-        foreach ($models as $key => $activity) {
-            $models[$key]['answer_count'] = count($activity['answerList']);
-            $models[$key]['feedback_count'] = count($activity['feedbackList']);
-        }
+                        ['and',
+                            ['in', 'activity.status', [
+                                Activity::STATUS_DRAFT,
+                                Activity::STATUS_RELEASE,
+                                Activity::STATUS_PREVENT,
+                                Activity::STATUS_SHUT,
+                                Activity::STATUS_CANCEL,
+                            ]
+                            ],
+                            ['or',
+                                ['like','activity.id',$search],
+                                ['like','desc',$search],
+                                ['like','content',$search],
+                                ['like','user.username',$search]
+                            ]
+                            
+                        ]
+                    );
+                $activityExists = $query->exists();
+                $countQuery = clone $query;
+                $pagination = new Pagination([
+                'totalCount' => $countQuery->count(),
+                'pageSize' => $perPage
+                ]);
+
+                // 总页数
+                $totalCount =  $pagination->totalCount;
+
+                // 活动的数据
+                $activities = $query->offset($pagination->offset)
+                ->limit($pagination->limit)
+                ->all();
+
+
         if ($activityExists) {
+            foreach ($activities as $key => $activity) {
+                $activities[$key]['answer_count'] = count($activity['answerList']);
+                $activities[$key]['feedback_count'] = count($activity['feedbackList']);
+                $activities[$key]['preview_url'] = Yii::$app->params['domain'].'preview/'.$activity['id'];
+                $activities[$key]['filter_url'] = Yii::$app->params['domain'].'filter/'.$activity['id'];
+                $activities[$key]['this_week'] = getLastEndTime() < $activity['end_time'] ? 1 : 0;
+            }
             return [
                 'status' => 1,
-                'models' => $models,
-                'pages' => $pages,
+                'models' => $activities,
+                'totalCount' => $totalCount,
             ];
         } else {
             return [

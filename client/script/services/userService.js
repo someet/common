@@ -1,6 +1,12 @@
 angular.module('backendServices')
   .factory('$userManage', ['$http', '$q', function($http, $q) {
     return {
+      // 获取登陆用户的权限
+      fetchUserRole: function(params) {
+        return $http.get('/member/user-role').then(function(data){
+          return data;
+        });
+      },
       //联系人列表
       fetch: function(params) {
         return $http.get('/member', {
@@ -96,8 +102,17 @@ angular.module('backendServices')
         });
       },
       //搜索用户
-      search: function(username) {
-        return $http.get('/member/search?username='+username);
+      search: function(search,page) {
+        if (typeof search == 'undefined') {
+          search = '';
+        }
+        page = page || 1;
+
+        var params = {
+          'page': page,
+          'perPage': 20  //每页20条
+        };
+        return $http.get('/member/search?search='+search,{params:params});
       },
       userPageMeta: function(type, pageNum) {
         return $http.get('/member?scenario=total&perPage='+pageNum+'&type='+type).then(function(data) {
@@ -105,6 +120,7 @@ angular.module('backendServices')
         });
       },
       fetchPage: function(type, page) {
+        console.log(page);
         page = page || 1;
 
         var params = {
@@ -112,7 +128,7 @@ angular.module('backendServices')
           'page': page,
           'perPage': 20  //每页20条
         };
-        return $http.get('/member?scenario=page', {
+        return $http.get('/member', {
           params: params
         }).then(function(data) {
           return data;

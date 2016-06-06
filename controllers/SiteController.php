@@ -50,7 +50,16 @@ class SiteController extends BackendController
      */
     public function actionIndex()
     {
-        return $this->renderPartial('index');
+        $auth = Yii::$app->authManager;
+        $current_user_id = Yii::$app->user->getId();
+        $assignments = $auth->getAssignments($current_user_id);
+        $isManager = array_key_exists('admin', $assignments);
+        $isFounder = array_key_exists('founder', $assignments) || !array_key_exists('admin', $assignments);
+        if ($isManager) {
+            return $this->renderPartial('index');
+        }elseif ($isFounder) {
+            return $this->renderPartial('founder');
+        }
     }
     /**
     *站点首页信息

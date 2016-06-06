@@ -13,10 +13,7 @@ use yii\web\Response;
 use yii\web\ServerErrorHttpException;
 
 /**
- *
  * 表单控制器
- *
- * @author Maxwell Du <maxwelldu@someet.so>
  * @package app\controllers
  */
 class QuestionController extends BackendController
@@ -109,17 +106,14 @@ class QuestionController extends BackendController
 
         //开启事务
         $transaction = $model->getDb()->beginTransaction();
-        // $model->load($data, '');
-        // $model->save();
+
         //问题标记
         $questionFlag = true;
-        // echo "<pre>";
-        //尝试保存问题主记录
 
-        // print_r($data);
-        // die;
+        //尝试保存问题主记录
         if ($model->load($data, '') && $model->save()) {
             $question_id = $model->id;
+
             //遍历三个问题
             foreach ($questionItemList as $questionItem) {
                 $questionItemModel = new QuestionItem();
@@ -250,38 +244,6 @@ class QuestionController extends BackendController
             ->asArray()
             ->with('questionItemList')
             ->one();
-    }
-
-    /**
-     * 删除问题
-     * POST 请求 /question/delete?id=10
-     *
-     * @param $id
-     * @return array
-     *
-     * 成功
-     *
-     * ~~~
-     * {
-     *   "success": "1",
-     *   "data": [],
-     *   "status_code": 200
-     * }
-     * ~~~
-     *
-     * @throws NotFoundHttpException
-     * @throws ServerErrorHttpException
-     * @throws \Exception
-     */
-    public function actionDelete($id)
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $model = $this->findModel($id);
-        if ($model->delete() === false) {
-            throw new ServerErrorHttpException('删除失败');
-        }
-
-        return [];
     }
 
     /**

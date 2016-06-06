@@ -61,6 +61,8 @@ class Activity extends \yii\db\ActiveRecord
 
     /* 删除 */
     const STATUS_DELETE   = 0;
+    /* 发起人创建的活动的草稿 */
+    const STATUS_FOUNDER_DRAFT = 5;    
     /* 草稿 */
     const STATUS_DRAFT    = 10;
     /* 预发布 */

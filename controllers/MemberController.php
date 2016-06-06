@@ -48,10 +48,29 @@ class MemberController extends BackendController
                 'allowActions' => [
                    'index',
                    'page',
-                   'update-category'
+                   'update-category',
+                   'user-role'
                 ]
             ],
         ];
+    }
+
+    /**
+     * 登陆用户的权限
+     */
+    public function actionUserRole()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $auth = Yii::$app->authManager;
+        $current_user_id = Yii::$app->user->getId();
+        $assignments = $auth->getAssignments($current_user_id);
+        $isManager = array_key_exists('admin', $assignments);
+        $isFounder = array_key_exists('founder', $assignments) || !array_key_exists('admin', $assignments);
+        if ($isManager) {
+            return 1;
+        }elseif ($isFounder) {
+            return 0;
+        }
     }
 
     /**
@@ -197,9 +216,8 @@ class MemberController extends BackendController
                     ->where($where)
                     ->orderBy(['id' => SORT_DESC]);
                 break;
-            //已删除的用户
+            //已申请投诉的用户
             case 'appeal':
-                // $where = ['appeal_status' => YellowCard::APPEAL_STATUS_YES];
                 $userAppeal = YellowCard::find()
                 ->select('user_id')
                 ->where(['appeal_status' => YellowCard::APPEAL_STATUS_YES])
@@ -210,7 +228,6 @@ class MemberController extends BackendController
                 foreach ($userAppeal as $key => $value) {
                     $userArr[$key] = $value['user_id'];
                 }
-                // print_r($userArr);
                 $query = User::find()
                     ->with(['profile'])
                     ->asArray()
@@ -228,35 +245,75 @@ class MemberController extends BackendController
                 break;
         }
 
-        if ($id) {
-            $users = User::find()->where(['id' => $id])->with(['profile', 'assignment'])->asArray()->one();
-            // $joinActity = Answer::find()
-            //         ->where(['user_id' => $id ])
-            //         ->with(['user','user.profile','user.assignment'])
-            //         ->asArray()
-            //         ->one();
-        } elseif ($scenario == 'total') {
+
+
+        $countQuery = clone $query;
+        $pagination = new Pagination([
+            'totalCount' => $countQuery->count(),
+            'pageSize' => $perPage,
+        ]);
+
+        $totalCount =  $pagination->totalCount;
+
+        $users = $query->offset($pagination->offset)
+            ->limit($pagination->limit)
+            ->all();
+
+        return [
+                'users'=> $users,
+                'totalCount'=> $totalCount,
+            ];
+    }
+
+    /**
+     * 搜索用户, 供给活动分配发起人的自动完成功能使用.
+     *
+     * @param string $username 用户名
+     *
+     * @return array
+     */
+    public function actionSearch($search, $perPage = 20)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        if (empty($search)) {
+            return false;
+        }
+        
+        $query = User::find()
+            ->with(['profile'])
+            ->where(
+                ['and',
+                    ['status' => User::STATUS_ACTIVE],
+                    ['or',
+                        ['like', 'id', $search],
+                        ['like', 'username', $search],
+                        ['like', 'mobile', $search],
+                    ]
+                ]
+            )
+            ->asArray()
+            ->limit(50)
+            ->orderBy(['id' => SORT_DESC]);
+
             $countQuery = clone $query;
             $pagination = new Pagination([
                 'totalCount' => $countQuery->count(),
                 'pageSize' => $perPage,
             ]);
 
-            return $pagination->totalCount;
-        } elseif ($scenario == 'page') {
-            $countQuery = clone $query;
-            $pagination = new Pagination([
-                'totalCount' => $countQuery->count(),
-                'pageSize' => $perPage,
-            ]);
+            $totalCount =  $pagination->totalCount;
 
             $users = $query->offset($pagination->offset)
                 ->limit($pagination->limit)
                 ->all();
-        }
 
-        return $users;
+        return [
+                'users'=> $users,
+                'totalCount'=> $totalCount,
+            ];
     }
+
 
     /**
      * 用户参加过的活动.
@@ -504,35 +561,7 @@ class MemberController extends BackendController
         }
     }
 
-    /**
-     * 搜索用户, 供给活动分配发起人的自动完成功能使用.
-     *
-     * @param string $username 用户名
-     *
-     * @return array
-     */
-    public function actionSearch($username)
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
 
-        $users = User::find()
-            ->where(
-                ['like', 'username', $username]
-            )
-            ->orWhere(
-                ['like', 'mobile', $username]
-            )
-            ->andWhere([
-                'status' => User::STATUS_ACTIVE,
-            ])
-            ->with(['profile'])
-            ->limit(50)
-            ->orderBy(['id' => SORT_DESC])
-            ->asArray()
-            ->all();
-
-        return $users;
-    }
 
     /**
      * 搜索PMA, 供通知时使用.

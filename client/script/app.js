@@ -29,3 +29,21 @@ function getTimestamp(str) {
 function getTimeByTimestamp(timestamp) {
   return new Date(parseInt(timestamp) * 1000).toLocaleString().replace(/:\d{1,2}$/,' ');
 }
+
+
+angular.module('controllers')
+  .controller('UserRoleCtrl', ['$scope', '$rootScope','$mdSidenav', '$location','$userManage', function($scope, $rootScope, $mdSidenav, $location, $userManage) {
+    $scope.toggleSidenav = function(menuId) {
+      $mdSidenav(menuId).toggle();
+    };
+
+    $userManage.fetchUserRole().then(function(data){
+      console.log(data);
+      $rootScope.userRole = data;
+      console.log($rootScope);
+    });
+
+    $scope.isActive = function(route) {
+      return $location.path().indexOf(route) != -1;
+    }
+  }]);
