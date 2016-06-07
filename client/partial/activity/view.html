@@ -3,8 +3,8 @@
     <form name="entityForm" ng-submit="save()">
         <div>
             <md-input-container layout="row" class="btn-float-right">
-                <md-button class="md-raised md-primary" ng-disabled="entityForm.$invalid">保存</md-button>
-                <md-button class="md-raised md-primary" ng-disabled="entity.isweek == 1">保存</md-button>
+                <md-button ng-if="entity.is_week == 1" class="md-raised md-primary" ng-disabled="true">保存</md-button>
+                <md-button ng-if="entity.is_week !== 1" class="md-raised md-primary" ng-disabled="entityForm.$invalid">保存</md-button>
                 <md-button class="md-raised md-warn" ng-click="cancel()">取消</md-button>
             </md-input-container>
         </div>
@@ -385,7 +385,8 @@
                     <text-angular ng-model="entity.field2" placeholder="Tips"></text-angular>
                 </md-input-container>
                 <md-input-container layout="row" class="btn-float-right">
-                    <md-button class="md-raised md-primary" ng-disabled="entityForm.$invalid">保存</md-button>
+                    <md-button ng-if="entity.is_week == 1" class="md-raised md-primary" ng-disabled="true">保存</md-button>
+                    <md-button ng-if="entity.is_week !== 1" class="md-raised md-primary" ng-disabled="entityForm.$invalid">保存</md-button>
                     <md-button class="md-raised md-warn" ng-click="cancel()">取消</md-button>
                 </md-input-container>
             </div>

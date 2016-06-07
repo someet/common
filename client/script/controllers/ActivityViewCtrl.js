@@ -190,7 +190,7 @@ angular.module('controllers')
             // $scope.pma_type = { pma_type: 0, name: '线上' };
 
             // qiniu upload 群二维码 end //
-
+            $scope.isweek = true;
             var id = $routeParams.id;
             if (id > 0) {
                 $activityManage.fetch(id).then(function(data) {
@@ -213,7 +213,6 @@ angular.module('controllers')
                     $scope.entity.peoples = parseInt(data.peoples);
                     $scope.entity.ideal_number = parseInt(data.ideal_number);
                     $scope.entity.ideal_number_limit = parseInt(data.ideal_number_limit);
-console.log($scope.entity);
                     // 场地的id
                     $scope.selectedSection = [];
                     angular.forEach(data.sections, function(value, key) {
