@@ -58,33 +58,7 @@ class SpaceSpotController extends BackendController
             return false;
         }
 
-        // $where = ['in', 'activity.status', [
-        //     Activity::STATUS_DRAFT,
-        //     Activity::STATUS_RELEASE,
-        //     Activity::STATUS_PREVENT,
-        //     Activity::STATUS_SHUT,
-        //     Activity::STATUS_CANCEL,
-        //     ]];
-        // var_dump($search);
-        // die;
-        // $activities = SpaceSpot::find()
-        //         ->where(['type_id' => $type_id])
-        //         ->with([
-        //             'type',
-        //             'sections',
-        //         ])
-        //         ->asArray()
-        //         ->all();
         $query = SpaceSpot::find()
-                    // ->with([
-                    //         'type',
-                    //         'tags',
-                    //         'question',
-                    //         'user',
-                    //         'answerList',
-                    //         'feedbackList'
-                    //     ])
-                    // ->join('LEFT JOIN', 'user', 'user.id = activity.created_by')
                     ->where(
                              ['or',
                                 ['like','space_spot.id',$search],
@@ -92,7 +66,6 @@ class SpaceSpotController extends BackendController
                                 ['like','address',$search],
                                 ['like','area',$search]
                              ]
-                        //]
                     )
                     ->asArray();
                 $spaceExists = $query->exists();
@@ -104,31 +77,16 @@ class SpaceSpotController extends BackendController
 
                 // 总页数
                 $totalCount =  $pagination->totalCount;
-
+                // var_dump($totalCount);
+                // die;
                 // 场地的数据
                 $spaceSpot = $query->offset($pagination->offset)
                 ->limit($pagination->limit)
                 ->all();
-        // if ($spaceExists) {
-        //     foreach ($spaceExists as $key => $space) {
-        //         $activities[$key]['answer_count'] = count($activity['answerList']);
-        //         $activities[$key]['feedback_count'] = count($activity['feedbackList']);
-        //         $activities[$key]['preview_url'] = Yii::$app->params['domain'].'preview/'.$activity['id'];
-        //         $activities[$key]['filter_url'] = Yii::$app->params['domain'].'filter/'.$activity['id'];
-        //         $activities[$key]['this_week'] = getLastEndTime() < $activity['end_time'] ? 1 : 0;
-        //     }
             return [
-                // 'status' => 1,
-                'models' => $spaceSpot
-                // 'totalCount' => $totalCount,
-            ];
-        // } else {
-        //     return [
-        //         'status' => 0,
-        //     ];
-        // }
-
-
+                'models' => $spaceSpot,
+                'totalCount' => $totalCount
+                ];
     }
     /**
      * 活动列表

@@ -84,7 +84,7 @@ angular.module('backendServices')
             //搜索空间
             searchSection: function(query) {
                 return $http.get('/space-spot/search?name=' + query).then(function(data) {
-                    console.log(data);
+                    // console.log(data);
                     return data.models;
                 });
             },
@@ -122,7 +122,7 @@ angular.module('backendServices')
                     'type': type,
                     'page': page,
                     'isWeek': isWeek,
-                    'perPage': 20 //每页20条
+                    'perPage': 2 //每页20条
                 };
                 return $http.get('/activity', {
                     params: params
