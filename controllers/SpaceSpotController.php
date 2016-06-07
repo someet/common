@@ -50,7 +50,86 @@ class SpaceSpotController extends BackendController
             */
         ];
     }
+    public function actionSearch($search, $perPage = 20)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
 
+        if (empty($search)) {
+            return false;
+        }
+
+        // $where = ['in', 'activity.status', [
+        //     Activity::STATUS_DRAFT,
+        //     Activity::STATUS_RELEASE,
+        //     Activity::STATUS_PREVENT,
+        //     Activity::STATUS_SHUT,
+        //     Activity::STATUS_CANCEL,
+        //     ]];
+        // var_dump($search);
+        // die;
+        // $activities = SpaceSpot::find()
+        //         ->where(['type_id' => $type_id])
+        //         ->with([
+        //             'type',
+        //             'sections',
+        //         ])
+        //         ->asArray()
+        //         ->all();
+        $query = SpaceSpot::find()
+                    // ->with([
+                    //         'type',
+                    //         'tags',
+                    //         'question',
+                    //         'user',
+                    //         'answerList',
+                    //         'feedbackList'
+                    //     ])
+                    // ->join('LEFT JOIN', 'user', 'user.id = activity.created_by')
+                    ->where(
+                             ['or',
+                                ['like','space_spot.id',$search],
+                                ['like','name',$search],
+                                ['like','address',$search],
+                                ['like','area',$search]
+                             ]
+                        //]
+                    )
+                    ->asArray();
+                $spaceExists = $query->exists();
+                $countQuery = clone $query;
+                $pagination = new Pagination([
+                'totalCount' => $countQuery->count(),
+                'pageSize' => $perPage
+                ]);
+
+                // 总页数
+                $totalCount =  $pagination->totalCount;
+
+                // 场地的数据
+                $spaceSpot = $query->offset($pagination->offset)
+                ->limit($pagination->limit)
+                ->all();
+        // if ($spaceExists) {
+        //     foreach ($spaceExists as $key => $space) {
+        //         $activities[$key]['answer_count'] = count($activity['answerList']);
+        //         $activities[$key]['feedback_count'] = count($activity['feedbackList']);
+        //         $activities[$key]['preview_url'] = Yii::$app->params['domain'].'preview/'.$activity['id'];
+        //         $activities[$key]['filter_url'] = Yii::$app->params['domain'].'filter/'.$activity['id'];
+        //         $activities[$key]['this_week'] = getLastEndTime() < $activity['end_time'] ? 1 : 0;
+        //     }
+            return [
+                // 'status' => 1,
+                'models' => $spaceSpot
+                // 'totalCount' => $totalCount,
+            ];
+        // } else {
+        //     return [
+        //         'status' => 0,
+        //     ];
+        // }
+
+
+    }
     /**
      * 活动列表
      * @param integer $id
@@ -60,9 +139,8 @@ class SpaceSpotController extends BackendController
      * @param int $isWeek  是否是本周活动  0 本周 1 非本周
      * @return array|int|null|\yii\db\ActiveRecord|\yii\db\ActiveRecord[]
      */
-    public function actionIndex($id = null, $scenario = null, $perPage = 20, $type = null, $isWeek = 0)
+    public function actionIndex( $perPage = 20, $type = null)
     {
-
         Yii::$app->response->format = Response::FORMAT_JSON;
 
         // only show draft and release activities
@@ -70,101 +148,34 @@ class SpaceSpotController extends BackendController
         //$andwhere = ['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE, Activity::STATUS_PREVENT ,Activity::STATUS_SHUT]];
 
 
-        if ($type>0) {
-                $where = ['type_id' => $type];
-                $query = SpaceSpot::find()
-                    ->with([
-                        'type',
-                        'sections',
-                    ])
-                    ->asArray()
-                    ->where($where);
-        } else {
-                $query = SpaceSpot::find()
-                    ->with([
-                        'type',
-                        'sections',
-                    ])
-                    ->asArray();
-        }
-
-        if ($id) {
-            $query = SpaceSpot::find()
-                ->where(['id' => $id])
+        $where = $type>0 ? ['type_id' => $type] :'';
+        $query = SpaceSpot::find()
                 ->with([
-                    'type',
-                    'sections',
-                ])
+                        'type',
+                        'sections',
+                    ])
                 ->asArray()
-                ->one();
-        } elseif ($scenario == "total") {
+                ->where($where);
+
+        
             $countQuery = clone $query;
             $pagination = new Pagination([
                 'totalCount' => $countQuery->count(),
                 'pageSize' => $perPage
             ]);
 
-            return $pagination->totalCount;
-        } elseif ($scenario == "page") {
-            $countQuery = clone $query;
-            $pagination = new Pagination([
-                'totalCount' => $countQuery->count(),
-                'pageSize' => $perPage
-            ]);
-
-            $activities = $query->offset($pagination->offset)
+            $totalCount = $pagination->totalCount;
+            $model = $query->offset($pagination->offset)
                 ->limit($pagination->limit)
                 ->all();
-        }
-        return $activities;
-    }
-
-
-    /**
-     * 搜索场地, 供给活动分配发起人的自动完成功能使用
-     * @param string $name 名称
-     * @return array
-     */
-    public function actionSearch($name)
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        $models = SpaceSpot::find()
-            ->with([
-                'type',
-                'sections',
-            ])
-            //->join('LEFT JOIN', 'user', 'user.id = activity.created_by')
-            ->where(
-                ['like', 'name', $name]
-            )
-            ->orWhere(['like','detail',$name])
-            ->asArray()
-            ->all();
-
-            return [
-                'models' => $models,
+        
+        return [
+               'totalCount' => $totalCount,
+               'model' => $model
             ];
-        // $activityExists = $activity->exists();
-        // $countQuery = clone $activity;
-        // $pages = new Pagination(['totalCount' => $countQuery->count()]);
-        // $models = $activity->offset($pages->offset)
-        //     ->limit($pages->limit)
-        //     ->asArray()
-        //     ->all();
-        // if ($activityExists) {
-            // return [
-            // 'status' => 1,
-            // 'models' => $models,
-            // 'pages' => $pages,
-            // ];
-        // } else {
-        //     return [
-        //         'status' => 0,
-        //     ];
-        // }
-
 
     }
+
     /**
      * 根据活动类型查询场地列表
      *

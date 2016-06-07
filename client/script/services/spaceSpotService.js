@@ -28,10 +28,21 @@ angular.module('backendServices')
           return data;
         });
       },
-      //搜索活动名字
-      search: function(query){
-        return $http.get('/space-spot/search?name=' + query);
-      },
+      //搜索场地名字
+      // search: function(search){
+      //   return $http.get('/space-spot?search='+ search);
+      // },
+      search: function(search, page) {
+                if (typeof search == 'undefined') {
+                    search = '';
+                }
+                page = page || 1;
+                var params = {
+                    'page': page,
+                    'perPage': 2 //每页20条
+                };
+                return $http.get('/space-spot/search?search=' + search,{params: params});
+            },
       //搜索用户
       searchUser: function(query) {
         return $http.get('/member/search?username=' + query);
@@ -49,13 +60,19 @@ angular.module('backendServices')
           return data;
         });
       },
+      searchSpace: function(query) {
+                return $http.get('/space-spot/search?name=' + query).then(function(data) {
+
+                    return data.models;
+                });
+            },
       fetchPage: function(type, page) {
         page = page || 1;
 
         var params = {
           'type': type,
           'page': page,
-          'perPage': 20  //每页20条
+          'perPage': 2  //每页20条
         };
 
         return $http.get('/space-spot?scenario=page', {

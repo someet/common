@@ -91,52 +91,69 @@ angular.module('controllers')
 
           $scope.userList = fetchPage(type, $scope.modelPagination.currentPage);
         }
+        modelPagination();
 
-        function fetchPage(type, page) {
-          $spaceSpotManage.fetchPage(type, page).then(function(modelList) {
-            $scope.list = modelList;
-            $scope.modelPagination.currentPage = page;
-            //纯js分页
-            if ($scope.modelPagination.currentPage > 1 && $scope.modelPagination.currentPage < $scope.modelPagination.totalItems) {
-              $scope.pages = [
-                $scope.modelPagination.currentPage - 1,
-                $scope.modelPagination.currentPage,
-                $scope.modelPagination.currentPage + 1
-              ];
-            } else if ($scope.modelPagination.currentPage <= 1 && $scope.modelPagination.totalItems > 1) {
-              $scope.modelPagination.currentPage = 1;
-              $scope.pages = [
-                $scope.modelPagination.currentPage,
-                $scope.modelPagination.currentPage + 1
-              ];
-            } else if ($scope.modelPagination.currentPage >= $scope.modelPagination.totalItems && $scope.modelPagination.totalItems > 1) {
-              $scope.modelPagination.currentPage = $scope.modelPagination.totalItems;
-              $scope.pages = [
-                $scope.modelPagination.currentPage - 1,
-                $scope.modelPagination.currentPage
-              ];
+        $scope.pageChange = function(){
+                        if (!$scope.search) {
+                            fetchPage();
+                        }else{
+                            searchSplit($scope.search,$scope.modelPagination.currentPage)
+                        }
+                    }
+
+        function modelPagination(){
+                $scope.modelPagination = {
+                    totalItems: 0,
+                    currentPage: 1,
+                    maxSize: 5,
+                    itemsPerPage: 2, //每页多少条
+                };
+                fetchPage();
             }
-          });
-        }
+        
+        //搜索活动按钮 页面使用
+            $scope.getSpace = function(query) {
+                $scope.modelPagination.currentPage = 1;
+                searchSpot($scope.search,1);
+            }
+       
 
-        // 增加新场地
-        $scope.createPage = function() {
-          $location.path('/space-spot/add');
-        }
+        $scope.spotType = $routeParams.type_id;
+
+        function fetchPage() {
+                $spaceSpotManage.fetchPage($scope.spotType,$scope.modelPagination.currentPage ).then(function(data) {
+                    console.log(data);
+                    $scope.list = data.model;
+                    $scope.modelPagination.totalItems = data.totalCount;
+                });
+            }
+
+        //搜索活动函数 分页调用 活动按钮调用
+        function searchspot(query,page) {
+            $spaceSpotManage.search(query,page).then(function(data) {
+                    $scope.list = data.model;
+                    $scope.modelPagination.totalItems = data.totalCount;
+                });
+            }
+        // // 增加新场地
+        // $scope.createPage = function() {
+        //   $location.path('/space-spot/add');
+        // }
+        // function fetchPage() {
+        //         $activityManage.fetchPage($scope.activityType, $scope.modelPagination.currentPage, $scope.isWeek).then(function(data) {
+        //             $scope.list = data.activities;
+        //             $scope.modelPagination.totalItems = data.totalCount;
+        //         });
+        //     }
 
         //搜索场地
         $scope.getSpace = function(query) {
-          var name = $scope.name;
-          $spaceSpotManage.search(name).then(function(data) {
-            if (data.status == 1) {
-              $scope.list = data.models;
-            } else {
-              $scope.list = '';
-            }
-          });
+            var name = $scope.name;
+            $spaceSpotManage.search(name).then(function(data) {
+            $scope.list = data.models;
+        });
         }
-
-      }
+    }
   ])
   .controller('SpaceSpotViewCtrl', ['$scope', '$routeParams', '$location', '$spaceTypeManage', '$spaceSpotManage', '$qupload', '$qiniuManage', '$mdToast',
     function($scope, $routeParams, $location, $spaceTypeManage, $spaceSpotManage, $qupload, $qiniuManage, $mdToast) {
