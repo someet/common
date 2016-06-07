@@ -1,10 +1,115 @@
 angular.module('controllers', ['ngTagsInput'])
-    .controller('ActivityListCtrl', ['$scope', '$routeParams', '$location', '$questionManage', '$activityManage', '$activityTypeManage', '$mdDialog', 'lodash', '$mdToast',
-        function($scope, $routeParams, $location, $questionManage, $activityManage, $activityTypeManage, $mdDialog, lodash, $mdToast) {
+    .controller('ActivityListCtrl', [
+        '$scope', 
+        '$routeParams', 
+        '$location', 
+        '$questionManage', 
+        '$activityManage', 
+        '$activityTypeManage', 
+        '$mdDialog', 
+        'lodash', 
+        '$mdToast',
+        '$qiniuManage',
+        '$qupload',
+        '$uibModal', 
+        '$log',
+        function(
+        $scope, 
+        $routeParams, 
+        $location, 
+        $questionManage, 
+        $activityManage, 
+        $activityTypeManage, 
+        $mdDialog, 
+        lodash, 
+        $mdToast,
+        $qiniuManage,
+        $qupload,
+        $uibModal, 
+        $log
+    ) {
            
             // 默认为本周
             $scope.isWeek = 0;
             $scope.activityType = $routeParams.type_id;
+
+
+            // 二维码上传
+            // qiniu upload 群二维码 start //
+            $scope.selectCode = null;
+
+            $scope.codeAbort = function() {
+                $scope.selectCode.upload.abort();
+                $scope.selectCode = null;
+            };
+
+            $scope.listQrcode = function($files,entity) {
+                $scope.selectCode = {
+                    file: $files[0],
+                    progress: {
+                        p: 0
+                    }
+                };
+                $qiniuManage.fetchUploadToken().then(function(token) {
+
+                    $qupload.upload({
+                        key: '',
+                        file: $scope.selectCode.file,
+                        token: token
+                    }).then(function(response) {
+                        $qiniuManage.completelyUrl(response.key).then(function(url) {
+                            entity.group_code = url;
+                            updateActivity(entity);
+                        });
+                    }, function(response) {}, function(evt) {
+                        if ($scope.selectCode !== null) {
+                            $scope.selectCode.progress.p = Math.floor(100 * evt.loaded / evt.totalSize);
+                        }
+                    });
+
+                });
+
+
+            };
+            // qiniu upload 群二维码 end //
+
+            function updateActivity (entity){
+                $activityManage.update(entity.id, entity).then(function(data) {
+                        $mdToast.show($mdToast.simple()
+                            .content('二维码更新成功')
+                            .hideDelay(5000)
+                            .position("top right"));
+                    }, function(err) {
+                        $mdToast.show($mdToast.simple()
+                            .content(err.toString())
+                            .hideDelay(5000)
+                            .position("top right"));
+                });
+            } 
+
+
+            // 弹出问题表单
+            $scope.open = function(entity) {
+                // console.log(entity);
+                var modalInstance = $uibModal.open({
+                    animation: $scope.animationsEnabled,
+                    templateUrl: 'question.html',
+                    controller: 'ModalInstanceCtrl',
+                    entity: entity,
+                    resolve: {
+                        entity: function() {
+                            return entity;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function(data) {
+                    console.log(data);
+                }, function() {
+                    $log.info('Modal dismissed at: ' + new Date());
+                });
+            };
+
 
             //活动列表开始
             modelPagination();
@@ -33,6 +138,13 @@ angular.module('controllers', ['ngTagsInput'])
             // 正常分页
             function fetchPage() {
                 $activityManage.fetchPage($scope.activityType, $scope.modelPagination.currentPage, $scope.isWeek).then(function(data) {
+                    angular.forEach(data.activities,function(index,value){
+                        // 当标题长度超过35个字符就省略
+                        if (index.title.length > 35) {
+                            index.title = index.title.substr(0,35) + '...';
+                        }
+                    });
+
                     $scope.list = data.activities;
                     $scope.modelPagination.totalItems = data.totalCount;
                 });
@@ -177,6 +289,8 @@ angular.module('controllers', ['ngTagsInput'])
                     originActivity.id = null;
                     originActivity.title = activityData.title + " 副本";
                     originActivity.status = 10; //活动状态10为草稿
+                    originActivity.start_time = Date.parse(new Date())/1000 + 86400; 
+                    originActivity.end_time = Date.parse(new Date())/1000 + 86400;
                     $activityManage.create(originActivity).then(function(newActivity) {
                         // $location.path('/activity/list/' + activityData.type_id);
                         // console.log(newActivity);

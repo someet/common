@@ -993,10 +993,10 @@ class ActivityController extends BackendController
         foreach ($founder as $key => $value) {
             $new_founder[$key] = $value['user'];
         }
-
         foreach ($model as $key => $value) {
             $model['sections'] = $section;
             $model['founder'] = $new_founder;
+            $model['is_week'] = getLastEndTime() < $model['end_time'] ? 0 : 1;
         }
         return $model;
     }

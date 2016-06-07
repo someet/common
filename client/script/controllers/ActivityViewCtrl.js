@@ -208,6 +208,12 @@ angular.module('controllers')
                     $scope.selectedSpaceSpot = data.space;
                     $scope.selectedSpace = data.space;
                     $scope.founder = data.founder;
+                     // 转化为number类型
+                    $scope.entity.cost = parseInt(data.cost);
+                    $scope.entity.peoples = parseInt(data.peoples);
+                    $scope.entity.ideal_number = parseInt(data.ideal_number);
+                    $scope.entity.ideal_number_limit = parseInt(data.ideal_number_limit);
+console.log($scope.entity);
                     // 场地的id
                     $scope.selectedSection = [];
                     angular.forEach(data.sections, function(value, key) {
