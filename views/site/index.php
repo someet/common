@@ -83,6 +83,9 @@ use yii\helpers\Url;
                 </nav>
         </md-toolbar>
         <!-- /container -->
+        <div>
+            
+        </div>
         <md-content ng-view>
         </md-content>
         <!-- /container -->

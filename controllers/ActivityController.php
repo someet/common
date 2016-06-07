@@ -558,6 +558,13 @@ class ActivityController extends BackendController
             if (!$model->validate('ideal_number_limit')) {
                 throw new DataValidationFailedException($model->getFirstError('ideal_number_limit'));
             }
+        }        
+
+        if (isset($data['address_assign'])) {
+            $model->address_assign = $data['address_assign'];
+            if (!$model->validate('address_assign')) {
+                throw new DataValidationFailedException($model->getFirstError('address_assign'));
+            }
         }
 
         // 如果改变了报名总数的时候，修改一下活动的是否报满的这个字段

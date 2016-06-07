@@ -346,15 +346,18 @@
                         </md-autocomplete>
                     </div>
                     <div flex="20">
+                        <label>空间</label>
                         <md-input-container>
-                            <label>空间</label>
                             <md-select ng-model="selectedSection" multiple>
                                 <md-option ng-value="section.id" ng-repeat="section in selectedSpaceSpot.sections">{{section.name}}</md-option>
                             </md-select>
                         </md-input-container>
                     </div>
                     <div flex="50">
-                        空间不选择默认为全部
+                        <label>场地是否内部安排</label>
+                        <md-input-container>
+                            <input type="text" name="address_assign" ng-model="entity.address_assign" value="{{entity.address_assign}}" max="200" />
+                        </md-input-container>
                     </div>
                 </div>
                 <md-input-container>

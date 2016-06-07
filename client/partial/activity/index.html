@@ -46,12 +46,6 @@
                 <div class="alert alert-danger" role="alert">没有搜到活动</div>
             </li>
             <li ng-if="list" ng-repeat="entity in list | filter:query">
-                <!--
-                针对过往的活动显示一个灰色的背景,如果活动的结束时间小于当周一之前 orderBy: 'display_order' 
-                ng-class="{'panel-default': entity.status==10, 'panel-danger': entity.status==20, 'panel-info': entity.status==30, 'panel-warning': entity.status==40, 'panel-danger':entity.status==15}" 
-
-                ng-class="{true: 'panel-default', false: 'panel-danger'}[entity.status==10]"
-                -->
                 <div ng-class="{
                 'panel-default': entity.status == 10,
                 'panel-success': entity.status == 20,

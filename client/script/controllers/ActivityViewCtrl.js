@@ -204,8 +204,7 @@ angular.module('controllers')
                     $scope.user = data.user;
                     $scope.dts = data.dts;
                     $scope.pma = data.pma;
-                    $scope.co_founder1 = data.cofounder1;
-                    $scope.co_founder2 = data.cofounder2;
+                    $scope.address_assign = data.address_assign;
                     $scope.selectedSpaceSpot = data.space;
                     $scope.selectedSpace = data.space;
                     $scope.founder = data.founder;
