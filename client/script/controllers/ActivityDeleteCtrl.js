@@ -160,7 +160,19 @@ angular.module('controllers')
                     }
                 });
             }
-
+            // 活动还原
+            $scope.updateStatus = function(id, status) {
+                var confirm = $mdDialog.confirm()
+                    .title('确定要还原吗？')
+                    .ariaLabel('delete activity item')
+                    .ok('确定还原')
+                    .cancel('点错了，再看看');
+                $mdDialog.show(confirm).then(function() {
+                    $activityManage.updateStatus(id, status).then(function(data) {
+                        fetchPage();
+                    });
+                });
+            }
 
             // 本周活动
             $scope.weekActivity = function() {
@@ -172,13 +184,6 @@ angular.module('controllers')
             $scope.historyActivity = function() {
                 $scope.isWeek = 1;
                 fetchPage();
-            }
-
-            // 更新活动状态
-            $scope.updateStatus = function(id, status) {
-                $activityManage.updateStatus(id, status).then(function(data) {
-                    fetchPage();
-                })
             }
 
             // 活动类型列表
