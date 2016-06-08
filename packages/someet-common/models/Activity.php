@@ -114,7 +114,7 @@ class Activity extends \yii\db\ActiveRecord
             ['start_time', 'default', 'value' => time()],
             ['end_time', 'default', 'value' => time()+7200],
             [['title'], 'string', 'max' => 80],
-            [['desc', 'poster', 'group_code', 'address', 'cost_list', 'tagNames'], 'string', 'max' => 255],
+            [['address_assign','desc', 'poster', 'group_code', 'address', 'cost_list', 'tagNames'], 'string', 'max' => 255],
             [['area'], 'string', 'max' => 10],
             [['tagNames'], 'safe'],
             [['status'], 'default', 'value' => 10],
@@ -195,6 +195,7 @@ class Activity extends \yii\db\ActiveRecord
             'space_section_id' => '空间id',
             'ideal_number' => '理想人数',
             'ideal_number_limit' => '理想人数限制',
+            'address_assign' => '场地是否分配',
         ];
     }
 
