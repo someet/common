@@ -2,7 +2,7 @@ app.config(
     ['$routeProvider',
         function($routeProvider) {
             $routeProvider
-            // 面板
+                // 面板
                 .when('/dashboard', {
                     templateUrl: '/partial/dashboard.html',
                     controller: 'DashboardCtrl'
@@ -67,12 +67,16 @@ app.config(
                     templateUrl: '/partial/activity-tag/view.html',
                     controller: 'ActivityTagViewCtrl'
                 })
-
-            //根据分类id查询活动列表
-            .when('/activity/list/:type_id', {
-                    templateUrl: '/partial/activity/index.html',
-                    controller: 'ActivityListCtrl'
+                //回收站
+                .when('/activity/recovery/:status',{
+                    templateUrl: '/partial/activity/delete.html',
+                    controller:'ActivityDeleteCtrl'
                 })
+                //根据分类id查询活动列表
+                .when('/activity/list/:type_id', {
+                        templateUrl: '/partial/activity/index.html',
+                        controller: 'ActivityListCtrl'
+                    })
                 //添加活动
                 .when('/activity/add', {
                     templateUrl: '/partial/activity/view.html',

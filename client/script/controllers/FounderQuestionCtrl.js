@@ -1,9 +1,10 @@
 angular.module('controllers').controller('ModalInstanceCtrl', ['$scope', '$uibModalInstance', 'entity', '$questionManage', '$mdDialog', 'lodash',
     '$mdToast',
-    function($scope, $uibModalInstance, entity, $questionManage, $mdDialog, lodash,
+    function($scope, $uibModalInstance, activityData, $questionManage, $mdDialog, lodash,
         $mdToast) {
         $scope.questionItem = {};
-        $questionManage.fetchByActivityId(entity.id).then(function(data) {
+        $scope.activity = activityData;
+        $questionManage.fetchByActivityId(activityData.id).then(function(data) {
             $scope.entity = data;
         }, function(err) {
             alert(err);

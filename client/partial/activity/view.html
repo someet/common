@@ -3,7 +3,8 @@
     <form name="entityForm" ng-submit="save()">
         <div>
             <md-input-container layout="row" class="btn-float-right">
-                <md-button class="md-raised md-primary" ng-disabled="entityForm.$invalid">保存</md-button>
+                <md-button ng-if="entity.is_week == 1" class="md-raised md-primary" ng-disabled="true">保存</md-button>
+                <md-button ng-if="entity.is_week !== 1" class="md-raised md-primary" ng-disabled="entityForm.$invalid">保存</md-button>
                 <md-button class="md-raised md-warn" ng-click="cancel()">取消</md-button>
             </md-input-container>
         </div>
@@ -322,14 +323,14 @@
                 <div layout="row">
                     <md-input-container>
                         <label>地区(商圈)</label>
-                        <input type="text" name="area" ng-model="entity.area" md-maxlength="6" ng-disabled="true" />
+                        <input type="text" name="area" ng-model="entity.area" md-maxlength="6" ng-disabled="false" />
                         <div ng-messages="entityForm.area.$error">
                             <div ng-message="md-maxlength">地区文字不能超过6个字符</div>
                         </div>
                     </md-input-container>
                     <md-input-container flex="">
                         <label>详细地址</label>
-                        <textarea name="address" ng-model="entity.address" md-maxlength="60" ng-disabled="true"></textarea>
+                        <textarea name="address" ng-model="entity.address" md-maxlength="60" ng-disabled="false"></textarea>
                         <div ng-messages="entityForm.address.$error">
                             <div ng-message="md-maxlength">详细地址文字不能超过60个字符</div>
                         </div>
@@ -346,15 +347,18 @@
                         </md-autocomplete>
                     </div>
                     <div flex="20">
+                        <label>空间</label>
                         <md-input-container>
-                            <label>空间</label>
                             <md-select ng-model="selectedSection" multiple>
                                 <md-option ng-value="section.id" ng-repeat="section in selectedSpaceSpot.sections">{{section.name}}</md-option>
                             </md-select>
                         </md-input-container>
                     </div>
                     <div flex="50">
-                        空间不选择默认为全部
+                        <label>场地是否内部安排</label>
+                        <md-input-container>
+                            <input type="text" name="address_assign" ng-model="entity.address_assign" value="{{entity.address_assign}}" max="200" />
+                        </md-input-container>
                     </div>
                 </div>
                 <md-input-container>
@@ -381,7 +385,8 @@
                     <text-angular ng-model="entity.field2" placeholder="Tips"></text-angular>
                 </md-input-container>
                 <md-input-container layout="row" class="btn-float-right">
-                    <md-button class="md-raised md-primary" ng-disabled="entityForm.$invalid">保存</md-button>
+                    <md-button ng-if="entity.is_week == 1" class="md-raised md-primary" ng-disabled="true">保存</md-button>
+                    <md-button ng-if="entity.is_week !== 1" class="md-raised md-primary" ng-disabled="entityForm.$invalid">保存</md-button>
                     <md-button class="md-raised md-warn" ng-click="cancel()">取消</md-button>
                 </md-input-container>
             </div>
