@@ -62,14 +62,15 @@ angular.module('backendServices')
                 return $http.get('/activity-tag/list?query=' + query);
             },
             //搜索活动名字
-            search: function(search, page) {
+            search: function(search, page, status) {
                 if (typeof search == 'undefined') {
                     search = '';
                 }
                 page = page || 1;
                 var params = {
                     'page': page,
-                    'perPage': 20 //每页20条
+                    'perPage': 20, //每页20条
+                    'status' : status
                 };
                 return $http.get('/activity/search?search=' + search,{params: params});
             },
@@ -116,13 +117,14 @@ angular.module('backendServices')
                     return data;
                 });
             },
-            fetchPage: function(type, page, isWeek) {
+            fetchPage: function(type, page, isWeek,status) {
                 page = page || 1;
                 var params = {
                     'type': type,
                     'page': page,
                     'isWeek': isWeek,
-                    'perPage': 2 //每页20条
+                    'perPage': 20 ,//每页20条
+                    'status' : status
                 };
                 return $http.get('/activity', {
                     params: params

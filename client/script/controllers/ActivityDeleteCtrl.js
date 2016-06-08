@@ -1,5 +1,5 @@
-angular.module('controllers', ['ngTagsInput'])
-    .controller('ActivityListCtrl', [
+angular.module('controllers')
+    .controller('ActivityDeleteCtrl', [
         '$scope', 
         '$routeParams', 
         '$location', 
@@ -32,8 +32,7 @@ angular.module('controllers', ['ngTagsInput'])
             // 默认为本周
             $scope.isWeek = 0;
             $scope.activityType = $routeParams.type_id;
-
-
+            $scope.status = $routeParams.status;
             // 二维码上传
             // qiniu upload 群二维码 start //
             $scope.selectCode = null;
@@ -137,7 +136,7 @@ angular.module('controllers', ['ngTagsInput'])
 
             // 正常分页
             function fetchPage() {
-                $activityManage.fetchPage($scope.activityType, $scope.modelPagination.currentPage, $scope.isWeek).then(function(data) {
+                $activityManage.fetchPage($scope.activityType, $scope.modelPagination.currentPage, $scope.isWeek, $scope.status).then(function(data) {
                     angular.forEach(data.activities,function(index,value){
                         // 当标题长度超过35个字符就省略
                         if (index.title.length > 35) {
@@ -148,12 +147,6 @@ angular.module('controllers', ['ngTagsInput'])
                     $scope.list = data.activities;
                     $scope.modelPagination.totalItems = data.totalCount;
                 });
-            }
-
-            //搜索活动按钮 页面使用
-            $scope.getActivity = function(query) {
-                $scope.modelPagination.currentPage = 1;
-                searchActivity($scope.search,1);
             }
 
             //搜索活动函数 分页调用 活动按钮调用
@@ -167,7 +160,19 @@ angular.module('controllers', ['ngTagsInput'])
                     }
                 });
             }
-
+            // 活动还原
+            $scope.updateStatus = function(id, status) {
+                var confirm = $mdDialog.confirm()
+                    .title('确定要还原吗？')
+                    .ariaLabel('delete activity item')
+                    .ok('确定还原')
+                    .cancel('点错了，再看看');
+                $mdDialog.show(confirm).then(function() {
+                    $activityManage.updateStatus(id, status).then(function(data) {
+                        fetchPage();
+                    });
+                });
+            }
 
             // 本周活动
             $scope.weekActivity = function() {
@@ -179,17 +184,6 @@ angular.module('controllers', ['ngTagsInput'])
             $scope.historyActivity = function() {
                 $scope.isWeek = 1;
                 fetchPage();
-            }
-
-            // 更新活动状态
-            $scope.updateStatus = function(id, status) {
-                $activityManage.updateStatus(id, status).then(function(data) {
-                    angular.forEach($scope.list, function(index, value) {
-                        if (index.id == data.id) {
-                            index.status = data.status;
-                        }
-                    })
-                })
             }
 
             // 活动类型列表

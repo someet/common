@@ -36,7 +36,7 @@ angular.module('backendServices')
                 page = page || 1;
                 var params = {
                     'page': page,
-                    'perPage': 2 //每页20条
+                    'perPage': 20 //每页20条
                 };
                 return $http.get('/space-spot/search?search=' + search, { params: params });
             },

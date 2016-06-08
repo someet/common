@@ -21,7 +21,7 @@
     <ul class="nav nav-tabs">
         <li ng-class="{active:isActive('0')}">
             <a href="#/activity/list/0">全部</a>
-        </li>
+        </li>        
         <li ng-class="{active:isActive(entity.id)}" ng-repeat="entity in activityTypeList | orderBy: display_order ">
             <a href="#/activity/list/{{entity.id}}">{{entity.name}}</a>
         </li>
@@ -35,6 +35,9 @@
                 <button class="btn-default" ng-click="cancelAddType()">取消</button>
             </div>
         </li>
+        <li ng-class="{active:isActive('delete')}">
+            <a href="#/activity/recovery/delete">回收站</a>
+        </li>
     </ul>
 </div>
 <!-- 活动分类tab end -->
@@ -46,12 +49,6 @@
                 <div class="alert alert-danger" role="alert">没有搜到活动</div>
             </li>
             <li ng-if="list" ng-repeat="entity in list | filter:query">
-                <!--
-                针对过往的活动显示一个灰色的背景,如果活动的结束时间小于当周一之前 orderBy: 'display_order' 
-                ng-class="{'panel-default': entity.status==10, 'panel-danger': entity.status==20, 'panel-info': entity.status==30, 'panel-warning': entity.status==40, 'panel-danger':entity.status==15}" 
-
-                ng-class="{true: 'panel-default', false: 'panel-danger'}[entity.status==10]"
-                -->
                 <div ng-class="{
                 'panel-default': entity.status == 10,
                 'panel-success': entity.status == 20,
@@ -98,8 +95,8 @@
                         <button class="btn btn-info" class="btn" ng-click="copyActivityUrl(entity)">活动链接</button>
                         <button class="btn btn-info" class="btn" ng-click="copyFilterUrl(entity)">筛选链接</button>
                         <a class="btn btn-info" target="_blank" href="http://bshare.optimix.asia/barCode?site=weixin&url=https://m.someet.cc/activity/{{entity.id}}">活动二维码</a>
-                        <button ng-if="!entity.question" class="btn" ng-click="viewQuestion(entity)">设置表单</button>
-                        <button ng-if="entity.question" class="btn" ng-click="viewQuestion(entity)">修改表单</button>
+                        <button ng-if="!entity.question" class="btn" ng-click="open(entity)">设置表单</button>
+                        <button ng-if="entity.question" class="btn" ng-click="open(entity)">修改表单</button>
                         <!-- <button class="btn" ng-click="groupQrcode(entity)">设置群二维码</button> -->
                         <div class="btn-group">
                             <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
@@ -107,8 +104,14 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
+                                <li ng-if="entity.status == 15">
+                                    <a ng-click="updateStatus(entity.id, 10)">草稿</a>
+                                </li>
+                                <li ng-if="entity.status == 10">
+                                    <a ng-click="updateStatus(entity.id, 15)">预发布</a>
+                                </li>
                                 <li>
-                                    <a ng-show="entity.status >= 20" ng-click="updateStatus(entity.id,20)">启用活动</a>
+                                    <a ng-show="entity.status > 20" ng-click="updateStatus(entity.id,20)">启用活动</a>
                                 </li>
                                 <li>
                                     <a ng-show="entity.status >= 20" ng-click="updateStatus(entity.id,30)">关闭活动</a>
@@ -131,21 +134,9 @@
                             <span class="badge">{{entity.feedback_count}}</span>
                         </a>
                         </span>
-                        <!-- 下拉功能 -->
-                        <div ng-if="entity.status == 10 ||  entity.status == 15" class="btn-group">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                切换状态
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a ng-click="draft(entity)">草稿</a>
-                                </li>
-                                <li>
-                                    <a ng-click="prevent(entity)">预发布</a>
-                                </li>
-                            </ul>
-                        </div>
+                        <button ng-file-select="listQrcode($files,entity)" data-multiple="false" title="上传群二维码" onclick="this.value = null" class="btn btn-info">
+                            群二维码上传
+                        </button>
                         <a class="btn btn-success" href="#/activity/{{entity.id}}" target="_blank">编辑</a>
                         <button ng-if="entity.status==10 || entity.status==15" class="btn btn-primary btn-float-right" ng-click="release(entity)" type="button">发布</button>
                     </div>
@@ -159,4 +150,54 @@
         </uib-pagination>
     </div>
 </md-content>
-<!-- 活动列表 end
+<!-- 活动列表 end -->
+
+    <script type="text/ng-template" id="question.html">
+        <div class="modal-content">
+            <form name="entityForm" ng-submit="questionSave()">
+            <div class="modal-header" >
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">{{activity.id}}#{{activity.title}}</h4>
+            </div>
+
+                <div class="modal-body">
+
+                    <!-- 更新问题时 -->
+                    <div class="form-group" ng-repeat="(k, questionItem) in entity.questionItemList">
+                        <label for="recipient-name" class="control-label">问题{{k+1}}</label>
+                        <input type="text" class="form-control" ng-model="questionItem.label" required>
+                    </div>
+
+                    <!-- 当没新建问题时 -->
+                     <div class="form-group" ng-if="!entity.id">
+                        <label for="recipient-name" class="control-label">问题一:</label>
+                        <input name="q1" type="text" class="form-control" id="recipient-name" required minlength="5" ng-model="questionItem.q1">
+                        <div ng-messages="entityForm.q1.$error">
+                            <div ng-message="required">必填项目</div>
+                            <div ng-message="minlength">问题文字不能少于5个字符</div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-if="!entity.id">
+                        <label for="recipient-name" class="control-label">问题二:</label>
+                        <input type="text" class="form-control" id="recipient-name" name="q2" type="text" required minlength="5" ng-model="questionItem.q2">
+                        <div ng-messages="entityForm.q2.$error">
+                            <div ng-message="required">必填项目</div>
+                            <div ng-message="minlength">问题文字不能少于5个字符</div>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-if="!entity.id">
+                        <label for="recipient-name" class="control-label">问题三:</label>
+                        <input type="text" class="form-control" id="recipient-name" name="q3" type="text" required minlength="5" ng-model="questionItem.q3">
+                        <div ng-messages="entityForm.q3.$error">
+                            <div ng-message="required">必填项目</div>
+                            <div ng-message="minlength">问题文字不能少于5个字符</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-warning" type="button" ng-click="cancel()">取消</button>
+                    <input class="btn btn-primary" type="submit" ng-click="ok()" ng-disabled="entityForm.$invalid" value="保存"></input>
+                </div>
+            </form>
+        </div>
+    </script>

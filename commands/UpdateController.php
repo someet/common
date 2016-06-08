@@ -174,7 +174,7 @@ class UpdateController extends \yii\console\Controller
                 if ($value['card_count'] >= 3) {
                     User::updateAll([
                         'black_label' => User::BLACK_LIST_YES,
-                        'black_time' => time(),
+                        'black_time' => getLastEndTime(),
                         ], ['id' => $value['user_id']]);
                 }
             }
@@ -185,7 +185,7 @@ class UpdateController extends \yii\console\Controller
          // 如黑牌创建时间超过了28天则解禁
          $userBlack = User::find()
                         ->where(['black_label' => User::BLACK_LIST_YES])
-                        ->andWhere('('.getLastEndTime() .' - 2419200 ) > black_time')
+                        ->andWhere('('.getLastEndTime() .' - 2408400 ) > black_time')
                         ->all();
 
         if (!empty($userBlack)) {
