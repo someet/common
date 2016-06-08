@@ -129,46 +129,22 @@ class ActivityController extends BackendController
     }
 
     /**
-     * 查询过滤预发布活动
-     * @param  integer $id
-     * @param  int $status
-     * @return
-     */
-    public function actionFilterPrevent()
-    {
-        Yii::$app->response->format = Response::FORMAT_JSON;
-
-        $activity = Activity::find()
-                    ->with([
-                        'type',
-                        'tags',
-                        'question',
-                        'user',
-                        'answerList',
-                        'feedbackList'
-                    ])
-                    ->where(['status' => Activity::STATUS_PREVENT])
-                    ->asArray()
-                    ->all();
-        return $activity;
-    }
-
-    /**
      * 活动列表
      * @param int $perPage 每页多少条
      * @param string $type 活动类型，0 全部 ，其他数字是单独指定的活动
      * @param int $isWeek  是否是本周活动  0 本周 1 非本周
      * @return array|int|null|\yii\db\ActiveRecord|\yii\db\ActiveRecord[]
      */
-    public function actionIndex($perPage = 20, $type = null, $isWeek = 0)
+    public function actionIndex($perPage = 20, $type = null, $isWeek = 0,$status =null)
     {   
         Yii::$app->response->format = Response::FORMAT_JSON;            
         //判断周末非周末
         $weekWhere = $isWeek == 0 ? ['>','start_time',getLastEndTime()]: ['<','start_time',getLastEndTime()];
         // 判断互动的类型是否为全部或单独的活动类型
         $typeWhere = $type > 0 ? ['type_id' => $type]: '';
-
-        $query = Activity::find()
+        
+        if($status=='delete'){
+            $query = Activity::find()
                 ->with([
                 'type',
                 'tags',
@@ -181,18 +157,37 @@ class ActivityController extends BackendController
                 ->where(
                         ['and',
                             ['in', 'status', [
-                                Activity::STATUS_DRAFT,
-                                Activity::STATUS_RELEASE,
-                                Activity::STATUS_PREVENT,
-                                Activity::STATUS_SHUT,
-                                Activity::STATUS_CANCEL,
+                                Activity::STATUS_DELETE,
                             ]],
-                            $weekWhere,
-                            $typeWhere,
                         ]
                     )
                 ->orderBy($this->activity_order);        
-
+        } else {
+            $query = Activity::find()
+                    ->with([
+                    'type',
+                    'tags',
+                    'question',
+                    'user',
+                    'answerList',
+                    'feedbackList'
+                    ])
+                    ->asArray()
+                    ->where(
+                            ['and',
+                                ['in', 'status', [
+                                    Activity::STATUS_DRAFT,
+                                    Activity::STATUS_RELEASE,
+                                    Activity::STATUS_PREVENT,
+                                    Activity::STATUS_SHUT,
+                                    Activity::STATUS_CANCEL,
+                                ]],
+                                $weekWhere,
+                                $typeWhere,
+                            ]
+                        )
+                    ->orderBy($this->activity_order); 
+                }
         $countQuery = clone $query;
         $pagination = new Pagination([
             'totalCount' => $countQuery->count(),
@@ -223,7 +218,6 @@ class ActivityController extends BackendController
         ]; 
 
     }
-
 
     /**
      * 搜索活动, 供给活动分配发起人的自动完成功能使用
