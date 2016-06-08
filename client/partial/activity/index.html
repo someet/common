@@ -107,8 +107,14 @@
                                 <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
+                                <li ng-if="entity.status == 15">
+                                    <a ng-click="updateStatus(entity.id, 10)">草稿</a>
+                                </li>
+                                <li ng-if="entity.status == 10">
+                                    <a ng-click="updateStatus(entity.id, 15)">预发布</a>
+                                </li>
                                 <li>
-                                    <a ng-show="entity.status >= 20" ng-click="updateStatus(entity.id,20)">启用活动</a>
+                                    <a ng-show="entity.status > 20" ng-click="updateStatus(entity.id,20)">启用活动</a>
                                 </li>
                                 <li>
                                     <a ng-show="entity.status >= 20" ng-click="updateStatus(entity.id,30)">关闭活动</a>
@@ -131,21 +137,6 @@
                             <span class="badge">{{entity.feedback_count}}</span>
                         </a>
                         </span>
-                        <!-- 下拉功能 -->
-                        <div ng-if="entity.status == 10 ||  entity.status == 15" class="btn-group">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                切换状态
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a ng-click="draft(entity)">草稿</a>
-                                </li>
-                                <li>
-                                    <a ng-click="prevent(entity)">预发布</a>
-                                </li>
-                            </ul>
-                        </div>
                         <a class="btn btn-success" href="#/activity/{{entity.id}}" target="_blank">编辑</a>
                         <button ng-if="entity.status==10 || entity.status==15" class="btn btn-primary btn-float-right" ng-click="release(entity)" type="button">发布</button>
                     </div>
