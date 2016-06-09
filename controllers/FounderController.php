@@ -128,12 +128,12 @@ class FounderController extends BackendController
         $user = User::findOne($user_id);
 
             $andwhere = ['in', 'status', [
-            Activity::STATUS_DRAFT,
             Activity::STATUS_FOUNDER_DRAFT,
             Activity::STATUS_RELEASE,
             Activity::STATUS_PREVENT,
             Activity::STATUS_SHUT,
             Activity::STATUS_CANCEL,
+            Activity::STATUS_CHECK,
             ]];
     
             $query = Activity::find()

@@ -33,7 +33,6 @@ angular.module('controllers', ['ngTagsInput'])
             $scope.isWeek = 0;
             $scope.activityType = $routeParams.type_id;
 
-
             // 二维码上传
             // qiniu upload 群二维码 start //
             $scope.selectCode = null;
@@ -86,8 +85,6 @@ angular.module('controllers', ['ngTagsInput'])
                         .position("top right"));
                 });
             }
-
-
             // 弹出问题表单
             $scope.open = function(entity) {
                 // console.log(entity);

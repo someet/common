@@ -72,6 +72,11 @@ app.config(
                     templateUrl: '/partial/activity/delete.html',
                     controller:'ActivityDeleteCtrl'
                 })
+                //审核发起人提交的活动
+                .when('/activity-check/:status',{
+                    templateUrl: '/partial/activity/check.html',
+                    controller:'ActivityCheckCtrl'
+                })
                 //根据分类id查询活动列表
                 .when('/activity/list/:type_id', {
                         templateUrl: '/partial/activity/index.html',

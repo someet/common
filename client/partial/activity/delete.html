@@ -28,6 +28,9 @@
             </div>
         </li>
         <li ng-class="{active:isActive('0')}">
+            <a href="#/activity-check/check">活动审核</a>
+        </li>
+        <li ng-class="{active:isActive('0')}">
             <a href="#/activity/recovery/delete">回收站</a>
         </li>
     </ul>
@@ -59,13 +62,9 @@
                             </ul>
                         </div>
                         <div class="btn-group">
-                            <!-- <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-                                还原
-                            </button> -->
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-click="updateStatus(entity.id,10)">
                                 还原
                             </button>
-                            <!-- <a ng-click="updateStatus(entity.id,10)">启用活动</a> -->
                     </div>
                 </div>
             </li>

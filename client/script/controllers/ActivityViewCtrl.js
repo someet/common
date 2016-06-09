@@ -1,6 +1,6 @@
 angular.module('controllers')
-	.controller('ActivityViewCtrl', ['$scope', '$routeParams', '$location', '$activityManage', '$activityTypeManage', '$qupload', '$qiniuManage', '$mdToast',
-        function($scope, $routeParams, $location, $activityManage, $activityTypeManage, $qupload, $qiniuManage, $mdToast) {
+	.controller('ActivityViewCtrl', ['$scope', '$routeParams', '$location', '$activityManage', '$activityTypeManage', '$qupload', '$qiniuManage', '$mdToast','$mdDialog',
+        function($scope, $routeParams, $location, $activityManage, $activityTypeManage, $qupload, $qiniuManage, $mdToast, $mdDialog) {
             $scope.$parent.pageName = '活动详情';
 
             // 添加发起人
@@ -41,6 +41,28 @@ angular.module('controllers')
                     }
                 }
 
+            }
+            //审核活动是否通过
+            $scope.updateStatus = function(id, status) {
+                if(status == 10) {
+                    var confirm = $mdDialog.confirm()
+                    .title('确定要通过吗？')
+                    .ariaLabel('delete activity item')
+                    .ok('确定通过')
+                    .cancel('点错了，再看看');
+                } else {
+                    var confirm = $mdDialog.confirm()
+                    .title('确定不通过吗？')
+                    .ariaLabel('delete activity item')
+                    .ok('确定不通过')
+                    .cancel('点错了，再看看');
+                }
+                $mdDialog.show(confirm).then(function() {
+                    $activityManage.updateStatus(id, status).then(function(data) {
+                        $location.path("/activity-check/check");
+                        console.log('test');
+                    });
+                });
             }
 
             // 删除发起人

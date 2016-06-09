@@ -28,9 +28,9 @@ angular.module('controllers')
             var listtype = $routeParams.type_id;
 
             if (listtype > 0) {
-                normalPagination(listtype, 0);
+                normalPagination(listtype);
             } else {
-                normalPagination(0, 0);
+                normalPagination(0);
             }
 
             // 初始化分页数据开始
@@ -83,6 +83,7 @@ angular.module('controllers')
                 });
 
                 modalInstance.result.then(function(data) {
+                    normalPagination(listtype);
                     console.log(data);
                 }, function() {
                     $log.info('Modal dismissed at: ' + new Date());
@@ -91,15 +92,19 @@ angular.module('controllers')
 
 
 
-            // 更新活动状态
+            //提交审核
             $scope.updateStatus = function(id, status) {
-                $founderManage.updateStatus(id, status).then(function(data) {
-                    angular.forEach($scope.list, function(index, value) {
-                        if (index.id == data.id) {
-                            index.status = data.status;
-                        }
-                    })
-                })
+
+                    var confirm = $mdDialog.confirm()
+                    .title('确定要提交审核吗？')
+                    .ariaLabel('delete activity item')
+                    .ok('确定提交')
+                    .cancel('点错了，再看看');
+                $mdDialog.show(confirm).then(function() {
+                    $founderManage.updateStatus(id, status).then(function(data) {
+                        normalPagination(listtype);
+                    });
+                });
             }
 
             // 活动类型列表
@@ -191,7 +196,7 @@ angular.module('controllers')
             };
 
 
-            // 发布活动
+            //提交审核  状态8为提交审核
             $scope.release = function(entity) {
                 if (entity.question) {
                     var confirm = $mdDialog.confirm()
@@ -201,9 +206,7 @@ angular.module('controllers')
                         .cancel('点错了，再看看');
 
                     $mdDialog.show(confirm).then(function() {
-                        var newEntity = entity;
-                        newEntity.status = 10; //活动状态10为提交审核
-                        $founderManage.update(newEntity.id, newEntity).then(function(data) {
+                        $founderManage.updateStatus(entity.id, 8).then(function(data) {
                             $mdToast.show($mdToast.simple()
                                 .content('活动 “' + entity.title + '” 已提交审核')
                                 .hideDelay(5000)
