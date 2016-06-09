@@ -73,7 +73,8 @@ class Activity extends \yii\db\ActiveRecord
     const STATUS_SHUT  = 30;
     /* 取消 */
     const STATUS_CANCEL = 40;
-
+    /* 待审核 */
+    const STATUS_CHECK = 8;
     /* 好评 */
     const GOOD_SCORE = 1;
     /* 中评 */
