@@ -102,12 +102,6 @@ angular.module('controllers', ['ngTagsInput'])
                         }
                     }
                 });
-
-                modalInstance.result.then(function(data) {
-                    console.log(data);
-                }, function() {
-                    $log.info('Modal dismissed at: ' + new Date());
-                });
             };
 
 
