@@ -77,8 +77,6 @@ class SpaceSpotController extends BackendController
 
                 // 总页数
                 $totalCount =  $pagination->totalCount;
-                // var_dump($totalCount);
-                // die;
                 // 场地的数据
                 $spaceSpot = $query->offset($pagination->offset)
                 ->limit($pagination->limit)
