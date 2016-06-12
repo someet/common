@@ -1,38 +1,37 @@
-angular.module('controllers', ['ngTagsInput'])
-    .controller('ActivityListCtrl', [
-        '$scope',
-        '$routeParams',
-        '$location',
-        '$questionManage',
-        '$activityManage',
-        '$activityTypeManage',
-        '$mdDialog',
-        'lodash',
+app.controller('ActivityCheckCtrl', [
+        '$scope', 
+        '$routeParams', 
+        '$location', 
+        '$questionManage', 
+        '$activityManage', 
+        '$activityTypeManage', 
+        '$mdDialog', 
+        'lodash', 
         '$mdToast',
         '$qiniuManage',
         '$qupload',
-        '$uibModal',
+        '$uibModal', 
         '$log',
         function(
-            $scope,
-            $routeParams,
-            $location,
-            $questionManage,
-            $activityManage,
-            $activityTypeManage,
-            $mdDialog,
-            lodash,
-            $mdToast,
-            $qiniuManage,
-            $qupload,
-            $uibModal,
-            $log
-        ) {
-
+        $scope, 
+        $routeParams, 
+        $location, 
+        $questionManage, 
+        $activityManage, 
+        $activityTypeManage, 
+        $mdDialog, 
+        lodash, 
+        $mdToast,
+        $qiniuManage,
+        $qupload,
+        $uibModal, 
+        $log
+    ) {
+           
             // 默认为本周
             $scope.isWeek = 0;
             $scope.activityType = $routeParams.type_id;
-
+            $scope.status = $routeParams.status;
             // 二维码上传
             // qiniu upload 群二维码 start //
             $scope.selectCode = null;
@@ -42,7 +41,7 @@ angular.module('controllers', ['ngTagsInput'])
                 $scope.selectCode = null;
             };
 
-            $scope.listQrcode = function($files, entity) {
+            $scope.listQrcode = function($files,entity) {
                 $scope.selectCode = {
                     file: $files[0],
                     progress: {
@@ -72,19 +71,21 @@ angular.module('controllers', ['ngTagsInput'])
             };
             // qiniu upload 群二维码 end //
 
-            function updateActivity(entity) {
+            function updateActivity (entity){
                 $activityManage.update(entity.id, entity).then(function(data) {
-                    $mdToast.show($mdToast.simple()
-                        .content('二维码更新成功')
-                        .hideDelay(5000)
-                        .position("top right"));
-                }, function(err) {
-                    $mdToast.show($mdToast.simple()
-                        .content(err.toString())
-                        .hideDelay(5000)
-                        .position("top right"));
+                        $mdToast.show($mdToast.simple()
+                            .content('二维码更新成功')
+                            .hideDelay(5000)
+                            .position("top right"));
+                    }, function(err) {
+                        $mdToast.show($mdToast.simple()
+                            .content(err.toString())
+                            .hideDelay(5000)
+                            .position("top right"));
                 });
-            }
+            } 
+
+
             // 弹出问题表单
             $scope.open = function(entity) {
                 // console.log(entity);
@@ -99,6 +100,12 @@ angular.module('controllers', ['ngTagsInput'])
                         }
                     }
                 });
+
+                modalInstance.result.then(function(data) {
+                    console.log(data);
+                }, function() {
+                    $log.info('Modal dismissed at: ' + new Date());
+                });
             };
 
 
@@ -106,16 +113,16 @@ angular.module('controllers', ['ngTagsInput'])
             modelPagination();
 
             // 改变页数
-            $scope.pageChange = function() {
+            $scope.pageChange = function(){
                 if (!$scope.search) {
                     fetchPage();
-                } else {
-                    searchActivity($scope.search, $scope.modelPagination.currentPage)
+                }else{
+                    searchActivity($scope.search,$scope.modelPagination.currentPage)
                 }
             }
 
             // 初始化分页
-            function modelPagination() {
+            function modelPagination(){
                 $scope.modelPagination = {
                     totalItems: 0,
                     currentPage: 1,
@@ -128,11 +135,11 @@ angular.module('controllers', ['ngTagsInput'])
 
             // 正常分页
             function fetchPage() {
-                $activityManage.fetchPage($scope.activityType, $scope.modelPagination.currentPage, $scope.isWeek).then(function(data) {
-                    angular.forEach(data.activities, function(index, value) {
+                $activityManage.fetchPage($scope.activityType, $scope.modelPagination.currentPage, $scope.isWeek, $scope.status).then(function(data) {
+                    angular.forEach(data.activities,function(index,value){
                         // 当标题长度超过35个字符就省略
                         if (index.title.length > 35) {
-                            index.title = index.title.substr(0, 35) + '...';
+                            index.title = index.title.substr(0,35) + '...';
                         }
                     });
 
@@ -141,22 +148,9 @@ angular.module('controllers', ['ngTagsInput'])
                 });
             }
 
-            //搜索活动按钮 页面使用
-            $scope.getActivity = function(query) {
-                $scope.modelPagination.currentPage = 1;
-                if (typeof $scope.search == 'undefined' || $scope.search == '') {
-                    $mdToast.show($mdToast.simple()
-                        .content('搜索内容不能为空')
-                        .hideDelay(5000)
-                        .position("top right"));
-                } else {
-                    searchActivity($scope.search, 1);
-                }
-            }
-
             //搜索活动函数 分页调用 活动按钮调用
-            function searchActivity(query, page) {
-                $activityManage.search(query, page).then(function(data) {
+            function searchActivity(query,page) {
+                $activityManage.search(query,page).then(function(data) {
                     if (data.status == 1) {
                         $scope.list = data.models;
                         $scope.modelPagination.totalItems = data.totalCount;
@@ -165,7 +159,19 @@ angular.module('controllers', ['ngTagsInput'])
                     }
                 });
             }
-
+            // 活动还原
+            $scope.updateStatus = function(id, status) {
+                var confirm = $mdDialog.confirm()
+                    .title('确定要还原吗？')
+                    .ariaLabel('delete activity item')
+                    .ok('确定还原')
+                    .cancel('点错了，再看看');
+                $mdDialog.show(confirm).then(function() {
+                    $activityManage.updateStatus(id, status).then(function(data) {
+                        fetchPage();
+                    });
+                });
+            }
 
             // 本周活动
             $scope.weekActivity = function() {
@@ -177,17 +183,6 @@ angular.module('controllers', ['ngTagsInput'])
             $scope.historyActivity = function() {
                 $scope.isWeek = 1;
                 fetchPage();
-            }
-
-            // 更新活动状态
-            $scope.updateStatus = function(id, status) {
-                $activityManage.updateStatus(id, status).then(function(data) {
-                    angular.forEach($scope.list, function(index, value) {
-                        if (index.id == data.id) {
-                            index.status = data.status;
-                        }
-                    })
-                })
             }
 
             // 活动类型列表
@@ -280,8 +275,8 @@ angular.module('controllers', ['ngTagsInput'])
                     originActivity.id = null;
                     originActivity.title = activityData.title + " 副本";
                     originActivity.status = 10; //活动状态10为草稿
-                    originActivity.start_time = Date.parse(new Date()) / 1000 + 86400;
-                    originActivity.end_time = Date.parse(new Date()) / 1000 + 86400;
+                    originActivity.start_time = Date.parse(new Date())/1000 + 86400; 
+                    originActivity.end_time = Date.parse(new Date())/1000 + 86400;
                     $activityManage.create(originActivity).then(function(newActivity) {
                         // $location.path('/activity/list/' + activityData.type_id);
                         // console.log(newActivity);
@@ -622,3 +617,4 @@ angular.module('controllers', ['ngTagsInput'])
 
         }
     ])
+    

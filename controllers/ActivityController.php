@@ -162,6 +162,25 @@ class ActivityController extends BackendController
                         ]
                     )
                 ->orderBy($this->activity_order);        
+        }elseif($status=='check'){
+            $query = Activity::find()
+                ->with([
+                'type',
+                'tags',
+                'question',
+                'user',
+                'answerList',
+                'feedbackList'
+                ])
+                ->asArray()
+                ->where(
+                        ['and',
+                            ['in', 'status', [
+                                Activity::STATUS_CHECK,
+                            ]],
+                        ]
+                    )
+                ->orderBy($this->activity_order);  
         } else {
             $query = Activity::find()
                     ->with([

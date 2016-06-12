@@ -3,7 +3,7 @@
     <button type="button" class="btn btn-success btn-lg" ng-click="createPage()">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 新建活动
     </button>
-    <button type="button" class="btn btn-info btn-lg" ng-click="weekActivity()">本周活动</button>
+    <button type="button" class="btn btn-info btn-lg" ng-click="weekActivity()">1本周活动</button>
     <button type="button" class="btn btn-info btn-lg" ng-click="historyActivity()">历史活动</button>
     <button type="button" class="btn btn-info btn-lg" ng-click="preventActivity()">预发布活动</button>
     <button type="button" class="btn btn-info btn-lg" ng-click="prevenIssuetActivity()">一键发布预发布活动</button>
@@ -44,12 +44,12 @@
                 <div class="alert alert-danger" role="alert">没有搜到活动</div>
             </li>
             <li ng-if="list" ng-repeat="entity in list | filter:query">
-                <div class="panel panel-default">
+                <div class="panel-warning">
                     <div class="panel-heading">
                         <h3 class="panel-title">
               <!-- 活动标题 -->
               {{entity.id}}#
-              <span>{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[已删除]</span>
+              <span>{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[等待审核]</span>
             </h3>
                     </div>
                     <div class="panel-body">
@@ -62,9 +62,17 @@
                             </ul>
                         </div>
                         <div class="btn-group">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-click="updateStatus(entity.id,10)">
+                            <!-- <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown">
                                 还原
-                            </button>
+                            </button> -->
+                            <!-- <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" ng-click="updateStatus(entity.id,10)">
+                                查看详情
+                            </button> -->
+                            <!-- <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" >
+                                查看详情
+                            </button> -->
+                             <a class="btn btn-success" class="btn btn-default dropdown-toggle" href="#/activity/{{entity.id}}" target="_blank">查看详情</a>
+                            <!-- <a ng-click="updateStatus(entity.id,10)">启用活动</a> -->
                     </div>
                 </div>
             </li>

@@ -1,9 +1,14 @@
 <!-- 编辑活动内容页面 -->
 <div class="container" id="content">
+    <md-input-container ng-if="entity.status == 8" layout="row" class="btn-float-right">
+        <md-button  class="md-raised md-primary" ng-click="updateStatus(entity.id,10)">审核通过</md-button>
+        <md-button class="md-raised md-warn" ng-click="updateStatus(entity.id,5)">不通过</md-button>
+    </md-input-container>
     <form name="entityForm" ng-submit="save()">
         <div>
-            <md-input-container layout="row" class="btn-float-right">
+            <md-input-container ng-if="entity.status !=8" layout="row" class="btn-float-right">
                 <md-button ng-if="entity.is_week == 1" class="md-raised md-primary" ng-disabled="true">保存</md-button>
+                
                 <md-button ng-if="entity.is_week !== 1" class="md-raised md-primary" ng-disabled="entityForm.$invalid">保存</md-button>
                 <md-button class="md-raised md-warn" ng-click="cancel()">取消</md-button>
             </md-input-container>
@@ -385,9 +390,11 @@
                     <text-angular ng-model="entity.field2" placeholder="Tips"></text-angular>
                 </md-input-container>
                 <md-input-container layout="row" class="btn-float-right">
-                    <md-button ng-if="entity.is_week == 1" class="md-raised md-primary" ng-disabled="true">保存</md-button>
-                    <md-button ng-if="entity.is_week !== 1" class="md-raised md-primary" ng-disabled="entityForm.$invalid">保存</md-button>
-                    <md-button class="md-raised md-warn" ng-click="cancel()">取消</md-button>
+                    <md-button ng-if="entity.is_week == 1 && entity.status !=8" class="md-raised md-primary" ng-disabled="true">保存</md-button>
+                    <md-button ng-if="entity.status == 8" class="md-raised md-primary" ng-disabled="entityForm.$invalid">审核通过</md-button>
+                    <md-button ng-if="entity.status == 8" class="md-raised md-warn" ng-disabled="entityForm.$invalid">不通过</md-button>
+                    <md-button ng-if="entity.is_week !== 1 && entity.status !=8" class="md-raised md-primary" ng-disabled="entityForm.$invalid">保存</md-button>
+                    <md-button ng-if="entity.status !=8" class="md-raised md-warn" ng-click="cancel()">取消</md-button>
                 </md-input-container>
             </div>
         </div>

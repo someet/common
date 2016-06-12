@@ -1,7 +1,6 @@
-angular.module('controllers').controller('ModalInstanceCtrl', ['$scope', '$uibModalInstance', 'entity', '$questionManage', '$mdDialog', 'lodash',
+angular.module('controllers').controller('ModalInstanceCtrl', ['$scope', '$uibModalInstance', 'entity', '$questionManage', '$mdDialog', 'lodash', '$location' ,
     '$mdToast',
-    function($scope, $uibModalInstance, entity, $questionManage, $mdDialog, lodash,
-        $mdToast) {
+    function($scope, $uibModalInstance, entity, $questionManage, $mdDialog, lodash,$location,$mdToast) {
         $scope.questionItem = {};
         $scope.activity = entity;
         $questionManage.fetchByActivityId(entity.id).then(function(data) {
@@ -54,12 +53,12 @@ angular.module('controllers').controller('ModalInstanceCtrl', ['$scope', '$uibMo
                         .content('问题添加成功')
                         .hideDelay(5000)
                         .position("top right"));
+                    $uibModalInstance.close(data);
                 }, function(err) {
                     alert(err);
                 });
             }
             // 关闭摸态框
-            $uibModalInstance.close();
         };
 
         $scope.cancel = function() {
