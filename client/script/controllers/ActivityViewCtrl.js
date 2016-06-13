@@ -72,11 +72,13 @@ angular.module('controllers')
 
             // 搜索场地功能
             $scope.getSpace = function(spacename) {
+                console.log('test11111');
                     $scope.space_spot = $activityManage.searchSpace(spacename);
                     return $scope.space_spot;
-                }
+            }
                 // 获取场地
             $activityManage.searchSpace('').then(function(data) {
+                console.log('test');
                 $scope.spaceSpots = data;
             });
 
