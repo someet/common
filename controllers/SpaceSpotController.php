@@ -50,7 +50,39 @@ class SpaceSpotController extends BackendController
             */
         ];
     }
-    public function actionSearch($search, $perPage = 20)
+    
+    /**
+     * 搜索场地, 供给活动分配发起人的自动完成功能使用
+     * @param string $name 名称
+     * @return array
+     */
+    public function actionSearchSpot($name)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $models = SpaceSpot::find()
+            ->with([
+                'type',
+                'sections',
+            ])
+            //->join('LEFT JOIN', 'user', 'user.id = activity.created_by')
+            ->where(
+                ['like', 'name', $name]
+            )
+            ->orWhere(['like','detail',$name])
+            ->asArray()
+            ->all();
+            return [
+                'models' => $models,
+            ];
+    }
+
+    /**
+     * 场地搜索
+     * @param  [type]  $search  [description]
+     * @param  integer $perPage [description]
+     * @return [type]           [description]
+     */
+    public function actionSearch($search = null, $perPage = 20)
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
 

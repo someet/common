@@ -76,8 +76,7 @@ angular.module('backendServices')
             },
             //搜索场地
             searchSpace: function(query) {
-                return $http.get('/space-spot/search?search=' + query).then(function(data) {
-
+                return $http.get('/space-spot/search-spot?name=' + query).then(function(data) {
                     return data.models;
                 });
             },
