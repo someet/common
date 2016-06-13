@@ -67,6 +67,11 @@ app.config(
                     templateUrl: '/partial/activity-tag/view.html',
                     controller: 'ActivityTagViewCtrl'
                 })
+                //DTS
+                .when('/activity-dts/:status',{
+                    templateUrl:'/partial/activity/index.html',
+                    controller:'ActivityDtsCtrl'
+                })
                 //回收站
                 .when('/activity/recovery/:status',{
                     templateUrl: '/partial/activity/delete.html',

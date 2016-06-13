@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" name="name" content="content">
+	<title></title>
+	<style type="text/css">
+		#text1::-webkit-input-placeholder::after {
+		    display:block;
+		    content:"Line 2\A Line 3";
+		}
+
+		#text2::-webkit-input-placeholder::before {
+		    color:#666;
+		    content:"Line 1\A Line 2\A Line 3\A";
+		}
+
+	</style> 
+</head>
+<body>
+	<textarea id="text1" placeholder="Line 1" rows="5"></textarea>
+	<textarea id="text2" placeholder="."  rows="5"></textarea>
+</body>
+</html>

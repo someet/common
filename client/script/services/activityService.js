@@ -117,14 +117,15 @@ angular.module('backendServices')
                     return data;
                 });
             },
-            fetchPage: function(type, page, isWeek,status) {
+            fetchPage: function(type, page, isWeek,status,user_id) {
                 page = page || 1;
                 var params = {
                     'type': type,
                     'page': page,
                     'isWeek': isWeek,
                     'perPage': 20 ,//每页20条
-                    'status' : status
+                    'status' : status,
+                    'user_id' : user_id
                 };
                 return $http.get('/activity', {
                     params: params
