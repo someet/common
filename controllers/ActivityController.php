@@ -111,7 +111,30 @@ class ActivityController extends BackendController
         return $activities;
 
     }
-
+    /**
+     * 查出所有的预发布活动
+     * @return
+     */
+     public function actionFilterPrevent(){
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        // 查出所有预发布的活动
+        $activities = Activity::find()
+                    ->with([
+                        'type',
+                        'tags',
+                        'question',
+                        'user',
+                        'answerList',
+                        'feedbackList'
+                    ])
+                    ->where([
+                        'activity.status' => Activity::STATUS_PREVENT,
+                        ])
+                    //->andWhere(['question.activity_id' => $activity])
+                    ->asArray()
+                    ->all();
+            return $activities;
+     }
     /**
      * 活动状态更新 更新预发布，与草稿之间切换
      * @param  integer $id
@@ -202,7 +225,7 @@ class ActivityController extends BackendController
                                 Activity::STATUS_SHUT,
                                 Activity::STATUS_CANCEL,
                             ]],
-                            ['created_by' =>$user_id]
+                            ['updated_by' =>$user_id]
                         ]
                     )
                 ->orderBy($this->activity_order); 
