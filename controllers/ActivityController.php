@@ -137,7 +137,8 @@ class ActivityController extends BackendController
      */
     public function actionIndex($perPage = 20, $type = null, $isWeek = 0,$status =null)
     {   
-        Yii::$app->response->format = Response::FORMAT_JSON;            
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $user_id = Yii::$app->user->id;            
         //判断周末非周末
         $weekWhere = $isWeek == 0 ? ['>','start_time',getLastEndTime()]: ['<','start_time',getLastEndTime()];
         // 判断互动的类型是否为全部或单独的活动类型
@@ -181,6 +182,30 @@ class ActivityController extends BackendController
                         ]
                     )
                 ->orderBy($this->activity_order);  
+        }elseif($status=='dts'){
+            $query = Activity::find()
+                ->with([
+                'type',
+                'tags',
+                'question',
+                'user',
+                'answerList',
+                'feedbackList'
+                ])
+                ->asArray()
+                ->where(
+                        ['and',
+                            ['in', 'status', [
+                                Activity::STATUS_DRAFT,
+                                Activity::STATUS_RELEASE,
+                                Activity::STATUS_PREVENT,
+                                Activity::STATUS_SHUT,
+                                Activity::STATUS_CANCEL,
+                            ]],
+                            ['created_by' =>$user_id]
+                        ]
+                    )
+                ->orderBy($this->activity_order); 
         } else {
             $query = Activity::find()
                     ->with([
@@ -282,6 +307,7 @@ class ActivityController extends BackendController
                             ],
                             ['or',
                                 ['like','activity.id',$search],
+                                ['like','title',$search],
                                 ['like','desc',$search],
                                 ['like','content',$search],
                                 ['like','user.username',$search]

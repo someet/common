@@ -29,7 +29,7 @@
                 -->
                 <div ng-class="{
                 'panel-default' : entity.status == 5, 
-                'panel-info': entity.status == 8,
+                'panel-info': entity.status == 8 || entity.status == 10,
                 'panel-success' : entity.status == 20, 
                 'panel-danger' : entity.status == 30, 
                 'panel-warning' :entity.status == 40
@@ -40,6 +40,7 @@
                             {{entity.id}}#
                             <span ng-if="entity.status==5" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[草稿]</span>
                             <span ng-if="entity.status==8" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[已提交审核]</span>
+                            <span ng-if="entity.status==10" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[已提交审核]</span>
                             <span ng-if="entity.status==20" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[发布成功]</span>
                             <span ng-if="entity.status==30" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[关闭活动]</span>
                             <span ng-if="entity.status==40" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[取消活动]</span>

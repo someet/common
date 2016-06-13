@@ -526,9 +526,11 @@ app.controller('ActivityCheckCtrl', [
             }
 
             // tab
-            $scope.isActive = function(type_id) {
-                var route = "/activity/list/" + type_id
-                return route === $location.path() || $location.path() === '/question' || $location.path() === '/answer';
+            $scope.isActive = function(type) {
+                if (type == 'check') {
+                    return true;
+                }
+                return false;
             }
 
             //点击增加类型按钮

@@ -32,6 +32,7 @@ angular.module('controllers').controller('ModalInstanceCtrl', ['$scope', '$uibMo
                         .content('问题保存成功')
                         .hideDelay(5000)
                         .position("top right"));
+                    $uibModalInstance.close(data);
                 }, function(err) {
                     alert(err);
                 });

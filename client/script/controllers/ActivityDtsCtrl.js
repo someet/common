@@ -1,5 +1,5 @@
 angular.module('controllers')
-    .controller('ActivityDeleteCtrl', [
+    .controller('ActivityDtsCtrl', [
         '$scope', 
         '$routeParams', 
         '$location', 
@@ -147,6 +147,19 @@ angular.module('controllers')
                     $scope.list = data.activities;
                     $scope.modelPagination.totalItems = data.totalCount;
                 });
+            }
+
+            //搜索活动按钮 页面使用
+            $scope.getActivity = function(query) {
+                $scope.modelPagination.currentPage = 1;
+                if (typeof $scope.search == 'undefined' || $scope.search == '') {
+                    $mdToast.show($mdToast.simple()
+                        .content('搜索内容不能为空')
+                        .hideDelay(5000)
+                        .position("top right"));
+                } else {
+                    searchActivity($scope.search, 1);
+                }
             }
 
             //搜索活动函数 分页调用 活动按钮调用
@@ -526,13 +539,7 @@ angular.module('controllers')
                 $location.path('/answer/view/' + entity.id);
             }
 
-            // tab
-            $scope.isActive = function(type) {
-                if (type == 'delete') {
-                    return true;
-                }
-                return false;
-            }
+           
 
             //点击增加类型按钮
             $scope.onTypeAddClicked = function() {
@@ -550,8 +557,6 @@ angular.module('controllers')
             //         }
             //     });
             // } 
-
-
 
             //ng-if会增加新的child，需要设置初始值
             $scope.addForm = {
@@ -591,7 +596,7 @@ angular.module('controllers')
                     newType: ""
                 };
             };
-
+            
             // 增加新的类型
             $scope.commitTypeName = function(typeName) {
 
