@@ -208,7 +208,13 @@ angular.module('controllers')
 
             // 一键发布预发布活动
             $scope.prevenIssuetActivity = function() {
-                    $activityManage.updateAllPrevent().then(function(data) {
+                    var confirm = $mdDialog.confirm()
+                        .title('确定要一键发布预发布活动吗？')
+                        .ariaLabel('delete activity item')
+                        .ok('确定发布')
+                        .cancel('点错了，再看看');
+                    $mdDialog.show(confirm).then(function(data){
+                        $activityManage.updateAllPrevent().then(function(data) {
                         $mdToast.show($mdToast.simple()
                             .content('一键发布预发布活动成功')
                             .hideDelay(5000)
@@ -220,7 +226,8 @@ angular.module('controllers')
                             .hideDelay(5000)
                             .position("top right"));
                     });
-                }
+                }); 
+            }
                 // 预发布活动
             $scope.preventActivity = function() {
                 $activityManage.filterPrevent().then(function(data) {
