@@ -85,6 +85,12 @@ angular.module('controllers', ['ngTagsInput'])
                         .position("top right"));
                 });
             }
+
+            $activityManage.checkNum().then(function(data) {
+                $scope.checkNum = data;
+                console.log(data);
+            });
+
             // 弹出问题表单
             $scope.open = function(entity) {
                 // console.log(entity);
