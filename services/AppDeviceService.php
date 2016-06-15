@@ -8,7 +8,7 @@
 
 namespace someet\common\services;
 
-
+use Yii;
 use someet\common\models\AppDevice;
 
 class AppDeviceService extends BaseService
