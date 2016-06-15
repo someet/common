@@ -14,3 +14,4 @@ composer.lock
 *.swp
 .vimrc
 .DS_Store
+jpush.log

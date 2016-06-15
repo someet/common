@@ -315,14 +315,25 @@ class CronController extends \yii\console\Controller
     }
 
     /**
-     * 测试发短信
+     * 测试发push
      */
     public function actionTest()
     {
-        $mobile = '18518368050';
-        $smsData = "test in cron/test";
-        //尝试发送短消息
-        $res = Yii::$app->sms->sendSms($mobile, $smsData);
+        //尝试发送push
+        $res = Yii::$app->jpush->push()
+                ->setPlatform(['ios', 'android'])
+                ->addAllAudience()
+                //->addRegistrationId(['171976fa8a80e7ce083'])
+                    //->addTag(['北京'])
+                //->addAlias('alias1')
+                        ->addAndroidNotification('Hi, android notification', 'notification title', 1, ['key1' => 'value1', 'key2' => 'value2'])
+                    ->addIosNotification('🍡CandyZ🍉 , Shaye🔆💯✔️ Hi, iOS notification', null, "+1", true, "ios category", ['key1' => 'value1'])
+                ->setNotificationAlert('test'.date('Y-m-d H:i:s', time()))
+                ->send();
+        var_dump($res);
+
+        $res = Yii::$app->jpush->report();
         var_dump($res);
     }
+
 }

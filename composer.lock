@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "09fb5086a1db80811ed71bfe496bf562",
-    "content-hash": "de654e646bf3178b747d8bbad52eb68c",
+    "hash": "0d3c4900a18c1667fe935f6e2903c3f7",
+    "content-hash": "7c5bc6b0ea7d939799065f1cb6c7b233",
     "packages": [
         {
             "name": "bazilio/yii2-newrelic",
@@ -102,16 +102,16 @@
         },
         {
             "name": "bower-asset/jquery",
-            "version": "2.2.3",
+            "version": "2.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jquery/jquery-dist.git",
-                "reference": "af22a351b2ea5801ffb1695abb3bb34d5bed9198"
+                "reference": "c0185ab7c75aab88762c5aae780b9d83b80eda72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/af22a351b2ea5801ffb1695abb3bb34d5bed9198",
-                "reference": "af22a351b2ea5801ffb1695abb3bb34d5bed9198",
+                "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/c0185ab7c75aab88762c5aae780b9d83b80eda72",
+                "reference": "c0185ab7c75aab88762c5aae780b9d83b80eda72",
                 "shasum": ""
             },
             "type": "bower-asset-library",
@@ -270,12 +270,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/callmez/yii2-wechat-sdk.git",
-                "reference": "ba29d3d285840daa114fb81b8f8c4dc8848bdce5"
+                "reference": "cd983eb01de5c26b9c54f453255b3be1c5f9604d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/callmez/yii2-wechat-sdk/zipball/ba29d3d285840daa114fb81b8f8c4dc8848bdce5",
-                "reference": "ba29d3d285840daa114fb81b8f8c4dc8848bdce5",
+                "url": "https://api.github.com/repos/callmez/yii2-wechat-sdk/zipball/cd983eb01de5c26b9c54f453255b3be1c5f9604d",
+                "reference": "cd983eb01de5c26b9c54f453255b3be1c5f9604d",
                 "shasum": ""
             },
             "require": {
@@ -304,7 +304,7 @@
                 "weixin",
                 "yii2"
             ],
-            "time": "2016-02-29 13:43:59"
+            "time": "2016-06-04 03:11:34"
         },
         {
             "name": "cebe/markdown",
@@ -519,17 +519,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/E96/yii2-sentry.git",
-                "reference": "1f5c63054b086c050934b1a3da8a40e86f5fbd6b"
+                "reference": "dcfda660f34c0236253409ed99bae6208837cad9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/E96/yii2-sentry/zipball/1f5c63054b086c050934b1a3da8a40e86f5fbd6b",
-                "reference": "1f5c63054b086c050934b1a3da8a40e86f5fbd6b",
+                "url": "https://api.github.com/repos/E96/yii2-sentry/zipball/dcfda660f34c0236253409ed99bae6208837cad9",
+                "reference": "dcfda660f34c0236253409ed99bae6208837cad9",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4.0",
-                "raven/raven": "~0.10",
+                "sentry/sentry": "~0.10",
                 "yiisoft/yii2": "*"
             },
             "type": "yii2-extension",
@@ -556,7 +556,7 @@
                 "sentry",
                 "yii2"
             ],
-            "time": "2015-05-08 05:51:30"
+            "time": "2016-05-24 07:20:54"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -603,17 +603,59 @@
             "time": "2013-11-30 08:25:19"
         },
         {
-            "name": "kartik-v/yii2-krajee-base",
-            "version": "v1.8.4",
+            "name": "jpush/jpush",
+            "version": "v3.3.8",
             "source": {
                 "type": "git",
-                "url": "https://github.com/kartik-v/yii2-krajee-base.git",
-                "reference": "3115b09aeb15a5e06f38dc16860baf153d9bf70e"
+                "url": "https://github.com/jpush/jpush-api-php-client.git",
+                "reference": "9902e8415c4d46acb67f627178c95e0f4803604c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/3115b09aeb15a5e06f38dc16860baf153d9bf70e",
-                "reference": "3115b09aeb15a5e06f38dc16860baf153d9bf70e",
+                "url": "https://api.github.com/repos/jpush/jpush-api-php-client/zipball/9902e8415c4d46acb67f627178c95e0f4803604c",
+                "reference": "9902e8415c4d46acb67f627178c95e0f4803604c",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "jpush": "src/"
+                },
+                "files": [
+                    "src/JPush/JPush.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache"
+            ],
+            "authors": [
+                {
+                    "name": "JPush",
+                    "email": "support@jpush.cn",
+                    "homepage": "https://www.jpush.cn/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "JPush API PHP Client",
+            "homepage": "http://docs.jpush.cn/display/dev/Push-API-v3",
+            "time": "2016-03-09 11:58:24"
+        },
+        {
+            "name": "kartik-v/yii2-krajee-base",
+            "version": "1.8.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-krajee-base.git",
+                "reference": "7f7a45ffe193fe673f72b9effc01b08499f2a454"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/7f7a45ffe193fe673f72b9effc01b08499f2a454",
+                "reference": "7f7a45ffe193fe673f72b9effc01b08499f2a454",
                 "shasum": ""
             },
             "require": {
@@ -651,7 +693,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2016-04-11 09:07:40"
+            "time": "2016-05-07 19:45:52"
         },
         {
             "name": "kartik-v/yii2-widget-select2",
@@ -707,6 +749,47 @@
             "time": "2016-02-17 11:49:30"
         },
         {
+            "name": "lspbupt/yii2-jpush",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/buptlsp/yii2-jpush.git",
+                "reference": "33080ff0c12abdfc7f1f4eb525ddd740f0d9f42c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/buptlsp/yii2-jpush/zipball/33080ff0c12abdfc7f1f4eb525ddd740f0d9f42c",
+                "reference": "33080ff0c12abdfc7f1f4eb525ddd740f0d9f42c",
+                "shasum": ""
+            },
+            "require": {
+                "jpush/jpush": "v3.3.8"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "lspbupt\\jpush\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "李仕鹏",
+                    "email": "lishipeng@honglinjin.xyz"
+                }
+            ],
+            "description": "a jpush encapsulation for yii2",
+            "keywords": [
+                "extension",
+                "jpush",
+                "yii2"
+            ],
+            "time": "2016-04-01 07:09:26"
+        },
+        {
             "name": "maxwelldu/yii2-sms",
             "version": "v1.1",
             "source": {
@@ -751,6 +834,84 @@
                 "yii2"
             ],
             "time": "2016-04-20 08:15:53"
+        },
+        {
+            "name": "monolog/monolog",
+            "version": "1.19.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Seldaek/monolog.git",
+                "reference": "5f56ed5212dc509c8dc8caeba2715732abb32dbf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/5f56ed5212dc509c8dc8caeba2715732abb32dbf",
+                "reference": "5f56ed5212dc509c8dc8caeba2715732abb32dbf",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "psr/log": "~1.0"
+            },
+            "provide": {
+                "psr/log-implementation": "1.0.0"
+            },
+            "require-dev": {
+                "aws/aws-sdk-php": "^2.4.9",
+                "doctrine/couchdb": "~1.0@dev",
+                "graylog2/gelf-php": "~1.0",
+                "jakub-onderka/php-parallel-lint": "0.9",
+                "php-amqplib/php-amqplib": "~2.4",
+                "php-console/php-console": "^3.1.3",
+                "phpunit/phpunit": "~4.5",
+                "phpunit/phpunit-mock-objects": "2.3.0",
+                "raven/raven": "^0.13",
+                "ruflin/elastica": ">=0.90 <3.0",
+                "swiftmailer/swiftmailer": "~5.3"
+            },
+            "suggest": {
+                "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
+                "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
+                "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
+                "ext-mongo": "Allow sending log messages to a MongoDB server",
+                "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
+                "mongodb/mongodb": "Allow sending log messages to a MongoDB server via PHP Driver",
+                "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
+                "php-console/php-console": "Allow sending log messages to Google Chrome",
+                "raven/raven": "Allow sending log messages to a Sentry server",
+                "rollbar/rollbar": "Allow sending log messages to Rollbar",
+                "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Monolog\\": "src/Monolog"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http://seld.be"
+                }
+            ],
+            "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
+            "homepage": "http://github.com/Seldaek/monolog",
+            "keywords": [
+                "log",
+                "logging",
+                "psr-3"
+            ],
+            "time": "2016-04-12 18:29:35"
         },
         {
             "name": "pda/pheanstalk",
@@ -801,6 +962,44 @@
                 "beanstalkd"
             ],
             "time": "2015-08-07 21:42:41"
+        },
+        {
+            "name": "psr/log",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Psr\\Log\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
+            ],
+            "time": "2012-12-21 11:40:51"
         },
         {
             "name": "qiniu/php-sdk",
@@ -854,34 +1053,38 @@
             "time": "2016-01-11 13:20:52"
         },
         {
-            "name": "raven/raven",
-            "version": "0.13.0",
+            "name": "sentry/sentry",
+            "version": "0.21.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/getsentry/raven-php.git",
-                "reference": "1d5be07afc001df98a3528d1f928eeb2241afce6"
+                "url": "https://github.com/getsentry/sentry-php.git",
+                "reference": "eb2b89a2e10bec76d9110772cf0f7d3fe8c2f82c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/getsentry/raven-php/zipball/1d5be07afc001df98a3528d1f928eeb2241afce6",
-                "reference": "1d5be07afc001df98a3528d1f928eeb2241afce6",
+                "url": "https://api.github.com/repos/getsentry/sentry-php/zipball/eb2b89a2e10bec76d9110772cf0f7d3fe8c2f82c",
+                "reference": "eb2b89a2e10bec76d9110772cf0f7d3fe8c2f82c",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
+                "monolog/monolog": "*",
                 "php": ">=5.2.4"
+            },
+            "conflict": {
+                "raven/raven": "*"
             },
             "require-dev": {
                 "fabpot/php-cs-fixer": "^1.8.0",
                 "phpunit/phpunit": "^4.6.6"
             },
             "bin": [
-                "bin/raven"
+                "bin/sentry"
             ],
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.13.x-dev"
+                    "dev-master": "0.21.x-dev"
                 }
             },
             "autoload": {
@@ -891,7 +1094,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "BSD"
+                "BSD-3-Clause"
             ],
             "authors": [
                 {
@@ -905,7 +1108,7 @@
                 "log",
                 "logging"
             ],
-            "time": "2015-09-09 18:12:58"
+            "time": "2016-06-10 17:35:17"
         },
         {
             "name": "sobanvuex/php-newrelic",
@@ -979,16 +1182,16 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.4.1",
+            "version": "v5.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "0697e6aa65c83edf97bb0f23d8763f94e3f11421"
+                "reference": "d8db871a54619458a805229a057ea2af33c753e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/0697e6aa65c83edf97bb0f23d8763f94e3f11421",
-                "reference": "0697e6aa65c83edf97bb0f23d8763f94e3f11421",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/d8db871a54619458a805229a057ea2af33c753e8",
+                "reference": "d8db871a54619458a805229a057ea2af33c753e8",
                 "shasum": ""
             },
             "require": {
@@ -1028,7 +1231,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2015-06-06 14:19:39"
+            "time": "2016-05-01 08:45:47"
         },
         {
             "name": "udokmeci/yii2-beanstalk",
@@ -1553,33 +1756,29 @@
         },
         {
             "name": "fzaninotto/faker",
-            "version": "v1.5.0",
+            "version": "v1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fzaninotto/Faker.git",
-                "reference": "d0190b156bcca848d401fb80f31f504f37141c8d"
+                "reference": "44f9a286a04b80c76a4e5fb7aad8bb539b920123"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/d0190b156bcca848d401fb80f31f504f37141c8d",
-                "reference": "d0190b156bcca848d401fb80f31f504f37141c8d",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/44f9a286a04b80c76a4e5fb7aad8bb539b920123",
+                "reference": "44f9a286a04b80c76a4e5fb7aad8bb539b920123",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": "^5.3.3|^7.0"
             },
             "require-dev": {
+                "ext-intl": "*",
                 "phpunit/phpunit": "~4.0",
                 "squizlabs/php_codesniffer": "~1.5"
             },
-            "suggest": {
-                "ext-intl": "*"
-            },
             "type": "library",
             "extra": {
-                "branch-alias": {
-                    "dev-master": "1.5.x-dev"
-                }
+                "branch-alias": []
             },
             "autoload": {
                 "psr-4": {
@@ -1601,7 +1800,7 @@
                 "faker",
                 "fixtures"
             ],
-            "time": "2015-05-29 06:29:14"
+            "time": "2016-04-29 12:21:54"
         },
         {
             "name": "phpspec/php-diff",

@@ -36,6 +36,7 @@ return [
         'redis' => $web['components']['redis'],
         'cache' => $web['components']['cache'],
         'weather' => $web['components']['weather'],
+        'jpush' => $web['components']['jpush'],
     ],
     'modules' => [
         'user' => $web['modules']['user'],

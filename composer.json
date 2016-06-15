@@ -23,7 +23,8 @@
         "callmez/yii2-wechat-sdk": "dev-master",
         "maxwelldu/yii2-sms": "1.1",
         "bazilio/yii2-newrelic": "~0.0.1",
-		"udokmeci/yii2-beanstalk" : "dev-master"
+		"udokmeci/yii2-beanstalk" : "dev-master",
+		"lspbupt/yii2-jpush": "*"
 	},
 	"require-dev": {
 		"yiisoft/yii2-debug": "~2.0.0",

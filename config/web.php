@@ -37,6 +37,11 @@ $config = [
             'connectTimeout'=> 1,
             'sleep' => false, // or int for usleep after every job
         ],
+        'jpush' => [
+            'class' => 'lspbupt\jpush\Jpush',
+            'app_key' => \DockerEnv::get('JIGUANG_APP_KEY'), //极光推送的appkey
+            'app_secret' => \DockerEnv::get('JIGUANG_APP_SECRET'), //极光推送的appsecret
+        ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
