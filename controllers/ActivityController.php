@@ -54,12 +54,12 @@ class ActivityController extends BackendController
             ],
             'access' => [
                 'class' => '\app\components\AccessControl',
-                // 'allowActions' => [
-                // 'update-all-prevent',
-                // 'update-status',
-                // 'filter-prevent',
-                // 'add-founder',
-                // ]
+                'allowActions' => [
+                'update-all-prevent',
+                'update-status',
+                'filter-prevent',
+                'add-founder',
+                ]
             ],
         ];
     }
@@ -150,7 +150,16 @@ class ActivityController extends BackendController
         return $activity;
 
     }
+    /*待审核活动数获取*/
+    public function actionCheckNum()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $checkNum = Activity::find()
+                        ->where(['status' => Activity::STATUS_CHECK])
+                        ->count();
 
+        return $checkNum;
+    }
     /**
      * 活动列表
      * @param int $perPage 每页多少条
@@ -228,7 +237,7 @@ class ActivityController extends BackendController
                             ['updated_by' =>$user_id]
                         ]
                     )
-                ->orderBy($this->activity_order); 
+                ->orderBy(['id' => SORT_DESC]);
         } else {
             $query = Activity::find()
                     ->with([
@@ -337,7 +346,8 @@ class ActivityController extends BackendController
                             ]
                             
                         ]
-                    );
+                    )
+                    ->orderBy(['activity.id' => SORT_DESC]);
                 $activityExists = $query->exists();
                 $countQuery = clone $query;
                 $pagination = new Pagination([
