@@ -69,6 +69,10 @@ app.controller('ActivityCheckCtrl', [
 
 
             };
+            $activityManage.checkNum().then(function(data) {
+                $scope.checkNum = data;
+                console.log(data);
+            });
             // qiniu upload 群二维码 end //
 
             function updateActivity (entity){

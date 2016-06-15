@@ -26,7 +26,6 @@ angular.module('controllers')
             ) {
             //活动列表开始
             var listtype = $routeParams.type_id;
-
             if (listtype > 0) {
                 normalPagination(listtype);
             } else {
@@ -90,21 +89,27 @@ angular.module('controllers')
                 });
             };
 
-
-
             //提交审核
-            $scope.updateStatus = function(id, status) {
-
+            $scope.updateStatus = function(id, status, entity) {
+                if (entity.question) {
                     var confirm = $mdDialog.confirm()
                     .title('确定要提交审核吗？')
                     .ariaLabel('delete activity item')
                     .ok('确定提交')
                     .cancel('点错了，再看看');
-                $mdDialog.show(confirm).then(function() {
-                    $founderManage.updateStatus(id, status).then(function(data) {
-                        normalPagination(listtype);
+                    $mdDialog.show(confirm).then(function() {
+                        $founderManage.updateStatus(id, status).then(function(data) {
+                            normalPagination(listtype);
                     });
                 });
+                } else {
+                    var noquestion = $mdDialog.alert()
+                        .title('请先设置问题表单然后再发布活动！')
+                        .clickOutsideToClose(true)
+                        .ariaLabel('delete activity item')
+                        .ok('知道了');
+                    $mdDialog.show(noquestion);
+                }   
             }
 
             // 活动类型列表
