@@ -914,24 +914,26 @@ class ActivityController extends BackendController
         }
 
         if ($model->save()) {
-            // 更新发起人
-            if (empty($data['founder'])) {
-                $delete_founder = RActivityFounder::deleteAll(['activity_id'=> $model->id]);
-                if ($delete_founder) {
-                    AdminLog::saveLog('删除全部联合发起人', $model->primaryKey);
+
+                // 更新发起人
+                if (!empty($data['founder'])) {
+                //     $delete_founder = RActivityFounder::deleteAll(['activity_id'=> $model->id]);
+                //     if ($delete_founder) {
+                //         AdminLog::saveLog('删除全部联合发起人', $model->primaryKey);
+                //     }
+                // } else {
+                    $delete_founder = RActivityFounder::deleteAll(['activity_id'=> $model->id]);
+                    foreach ($data['founder'] as $founder) {
+                        $r_activity_founder = new RActivityFounder();
+                        $r_activity_founder->activity_id = $model->id;
+                        $r_activity_founder->founder_id = $founder['id'];
+                        $r_activity_founder->save();
+                    }
+                    if ($delete_founder && $r_activity_founder) {
+                        AdminLog::saveLog('更新联合发起人', $model->primaryKey);
+                    }
                 }
-            } else {
-                $delete_founder = RActivityFounder::deleteAll(['activity_id'=> $model->id]);
-                foreach ($data['founder'] as $founder) {
-                    $r_activity_founder = new RActivityFounder();
-                    $r_activity_founder->activity_id = $model->id;
-                    $r_activity_founder->founder_id = $founder['id'];
-                    $r_activity_founder->save();
-                }
-                if ($delete_founder && $r_activity_founder) {
-                    AdminLog::saveLog('更新联合发起人', $model->primaryKey);
-                }
-            }
+
 
             // 当场地id不为空时
             if (!empty($data['space_spot_id']) && isset($data['space_section_id'])) {
