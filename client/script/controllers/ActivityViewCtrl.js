@@ -293,7 +293,7 @@ angular.module('controllers')
                 newEntity.poster = $scope.poster;
                 newEntity.group_code = $scope.group_code;
                 newEntity.pma_type = $scope.entity.pma_type;
-                // 创建发起人
+                // 创建联合发起人
                 if ($scope.founder) {
                     newEntity.founder = $scope.founder;
                 }
@@ -323,17 +323,7 @@ angular.module('controllers')
                 if ($scope.pma) {
                     newEntity.principal = $scope.pma.id;
                 }
-                if ($scope.co_founder1) {
-                    newEntity.co_founder1 = $scope.co_founder1.id;
-                } else {
-                    newEntity.co_founder1 = 0;
-                }
-                if ($scope.co_founder2) {
-                    newEntity.co_founder2 = $scope.co_founder2.id;
-                } else {
-                    newEntity.co_founder2 = 0;
-                }
-
+                
                 var tags = [];
                 for (var k in $scope.tags) {
                     var tag = $scope.tags[k].text;
