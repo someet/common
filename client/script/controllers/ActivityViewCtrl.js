@@ -38,10 +38,36 @@ angular.module('controllers')
 
                     if (founderBull) {
                         $scope.founder.push(obj);
+                        if ($routeParams.id > 0 ) {
+                            // 更新联合发起人
+                            $activityManage.updateCoFounder(id,$scope.founder).then(function(data) {
+                                $mdToast.show($mdToast.simple()
+                                .content('联合发起人添加成功')
+                                .hideDelay(5000)
+                                .position("top right"));
+                            })
+
+                        }
                     }
                 }
 
             }
+
+            // 删除联合发起人
+            $scope.deteFounder = function(founder) {
+                $scope.founder.splice(founder, 1);
+                if ($routeParams.id > 0 ) {
+                        // 更新联合发起人
+                        $activityManage.updateCoFounder(id,$scope.founder).then(function(data) {
+                            $mdToast.show($mdToast.simple()
+                            .content('联合发起人删除成功')
+                            .hideDelay(5000)
+                            .position("top right"));
+                        })
+                    }
+
+            }
+
             //审核活动是否通过
             $scope.updateStatus = function(id, status) {
                 if(status == 10) {
@@ -63,11 +89,6 @@ angular.module('controllers')
                         console.log('test');
                     });
                 });
-            }
-
-            // 删除发起人
-            $scope.deteFounder = function(founder) {
-                $scope.founder.splice(founder, 1);
             }
 
             // 搜索场地功能

@@ -54,12 +54,13 @@ class ActivityController extends BackendController
             ],
             'access' => [
                 'class' => '\app\components\AccessControl',
-                // 'allowActions' => [
-                // 'update-all-prevent',
-                // 'update-status',
-                // 'filter-prevent',
-                // 'add-founder',
-                // ]
+                'allowActions' => [
+                'update-all-prevent',
+                'update-status',
+                'filter-prevent',
+                'add-founder',
+                'update-co-founder',
+                ]
             ],
         ];
     }
@@ -835,77 +836,8 @@ class ActivityController extends BackendController
                 throw new DataValidationFailedException($model->getFirstError('field2'));
             }
         }
-        //扩展字段三
-        if (isset($data['field3'])) {
-            $model->field1= $data['field3'];
-            if (!$model->validate('field3')) {
-                throw new DataValidationFailedException($model->getFirstError('field3'));
-            }
-        }
-        //扩展字段四
-        if (isset($data['field4'])) {
-            $model->field1= $data['field4'];
-            if (!$model->validate('field4')) {
-                throw new DataValidationFailedException($model->getFirstError('field4'));
-            }
-        }
-        //扩展字段五
-        if (isset($data['field5'])) {
-            $model->field1= $data['field5'];
-            if (!$model->validate('field5')) {
-                throw new DataValidationFailedException($model->getFirstError('field5'));
-            }
-        }
-        //扩展字段六
-        if (isset($data['field6'])) {
-            $model->field1= $data['field6'];
-            if (!$model->validate('field6')) {
-                throw new DataValidationFailedException($model->getFirstError('field6'));
-            }
-        }
-        //扩展字段七
-        if (isset($data['field7'])) {
-            $model->field1= $data['field7'];
-            if (!$model->validate('field7')) {
-                throw new DataValidationFailedException($model->getFirstError('field7'));
-            }
-        }
-        //扩展字段八
-        if (isset($data['field8'])) {
-            $model->field1= $data['field8'];
-            if (!$model->validate('field8')) {
-                throw new DataValidationFailedException($model->getFirstError('field8'));
-            }
-        }
-        //联合发起人1
-        if (isset($data['co_founder1'])) {
-            $model->co_founder1= $data['co_founder1'];
-            if (!$model->validate('co_founder1')) {
-                throw new DataValidationFailedException($model->getFirstError('co_founder1'));
-            }
-        }
-        //联合发起人2
-        if (isset($data['co_founder2'])) {
-            $model->co_founder2= $data['co_founder2'];
-            if (!$model->validate('co_founder2')) {
-                throw new DataValidationFailedException($model->getFirstError('co_founder2'));
-            }
-        }
-        //联合发起人3
-        if (isset($data['co_founder3'])) {
-            $model->co_founder3= $data['co_founder3'];
-            if (!$model->validate('co_founder3')) {
-                throw new DataValidationFailedException($model->getFirstError('co_founder3'));
-            }
-        }
-        //联合发起人4
-        if (isset($data['co_founder4'])) {
-            $model->co_founder4= $data['co_founder4'];
-            if (!$model->validate('co_founder4')) {
-                throw new DataValidationFailedException($model->getFirstError('co_founder4'));
-            }
-        }
 
+        
         if (isset($data['space_spot_id'])) {
             $model->space_spot_id= $data['space_spot_id'];
             if (!$model->validate('space_spot_id')) {
@@ -914,26 +846,6 @@ class ActivityController extends BackendController
         }
 
         if ($model->save()) {
-
-                // 更新发起人
-                if (!empty($data['founder'])) {
-                //     $delete_founder = RActivityFounder::deleteAll(['activity_id'=> $model->id]);
-                //     if ($delete_founder) {
-                //         AdminLog::saveLog('删除全部联合发起人', $model->primaryKey);
-                //     }
-                // } else {
-                    $delete_founder = RActivityFounder::deleteAll(['activity_id'=> $model->id]);
-                    foreach ($data['founder'] as $founder) {
-                        $r_activity_founder = new RActivityFounder();
-                        $r_activity_founder->activity_id = $model->id;
-                        $r_activity_founder->founder_id = $founder['id'];
-                        $r_activity_founder->save();
-                    }
-                    if ($delete_founder && $r_activity_founder) {
-                        AdminLog::saveLog('更新联合发起人', $model->primaryKey);
-                    }
-                }
-
 
             // 当场地id不为空时
             if (!empty($data['space_spot_id']) && isset($data['space_section_id'])) {
@@ -972,6 +884,37 @@ class ActivityController extends BackendController
         return $this->findModel($id);
     }
 
+
+    /**
+     * 更新联合发起人
+     * @return 是否成功
+     */
+    public function actionUpdateCoFounder($id){
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $model = $this->findModel($id);
+        $data = Yii::$app->getRequest()->post();
+        // 更新发起人
+        if (empty($data)) {
+            $delete_founder = RActivityFounder::deleteAll(['activity_id'=> $model->id]);
+            if ($delete_founder) {
+                AdminLog::saveLog('删除全部联合发起人', $model->primaryKey);
+            }
+        } else {
+            $delete_founder = RActivityFounder::deleteAll(['activity_id'=> $model->id]);
+            foreach ($data as $founder) {
+                $r_activity_founder = new RActivityFounder();
+                $r_activity_founder->activity_id = $model->id;
+                $r_activity_founder->founder_id = $founder['id'];
+                $r_activity_founder->save();
+            }
+            if ($delete_founder && $r_activity_founder) {
+                AdminLog::saveLog('更新联合发起人', $model->primaryKey);
+            }
+        }
+
+        return $model;
+    }
     /**
      * 删除活动
      * POST 请求 /activity/delete?id=10

@@ -7,7 +7,12 @@ angular.module('backendServices')
                     return data;
                 })
             },
-
+            // 添加联合发起人
+            updateCoFounder: function(id, newEntity) {
+                return $http.post('/activity/update-co-founder?id=' + id, newEntity).then(function(data) {
+                    return data;
+                });
+            },
             //删除发起人
             deteFounder: function(id){
                 return $http.get('/activity/dete-founder?id=' + id).then(function(data){

@@ -254,16 +254,6 @@ angular.module('controllers', ['ngTagsInput'])
                 });
             };
 
-            // 内部编辑状态
-            $scope.onEditStatusChangeClick = function(activity, edit_status) {
-                var newActivity = activity;
-                newActivity.edit_status = edit_status;
-                $activityManage.update(newActivity.id, newActivity).then(function(data) {
-                    $location.path('/activity/list/' + activity.type_id);
-                }, function(err) {
-                    alert(err);
-                })
-            };
 
             // 设置报名表单状态 20关闭 10打开
             $scope.applyStatus = function(entity, status) {
