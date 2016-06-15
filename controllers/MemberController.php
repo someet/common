@@ -293,6 +293,7 @@ class MemberController extends BackendController
                         ['like', 'id', $search],
                         ['like', 'username', $search],
                         ['like', 'mobile', $search],
+                        ['like','wechat_id', $search],
                     ]
                 ]
             )
