@@ -211,7 +211,7 @@
                                 </div>
                             </a>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="endLabel">
-                                <datetimepicker data-on-set-time="onStopTimeSet(newDate, oldDate)" ng-model="end_time_str"></datetimepicker>
+                                <datetimepicker data-datetimepicker-config="{ minuteStep:1 }" data-on-set-time="onStopTimeSet(newDate, oldDate)" ng-model="end_time_str"></datetimepicker>
                             </ul>
                         </div>
                     </md-input-container>

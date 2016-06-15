@@ -96,7 +96,7 @@ angular.module('controllers')
                 // newEntity.field2 = $scope.tips1 + $scope.tips2 + $scope.entity.field2;
                 
                 if (newEntity.id > 0) { // 更新活动
-                    newEntity.field2 = $scope.entity.field2;
+                    // newEntity.field2 = $scope.entity.field2;
                     console.log(newEntity.field2);
                     $founderManage.update(newEntity.id, newEntity).then(function(data) {
                         $mdToast.show($mdToast.simple()
