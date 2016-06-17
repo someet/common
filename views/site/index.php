@@ -33,27 +33,30 @@ use yii\helpers\Url;
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav h4">
                                 <?php echo Yii::$app->request->getQueryString(); ?>
-                                <li ng-class="{active:isActive('/special')}">
+                                <!-- <li ng-class="{active:isActive('/special')}">
                                     <a target="_parent" href="#/special">专题</a>
-                                </li>
-                                <li ng-class="{active:isActive('/activity')||isActive('/answer')||isActive('/question')}">
+                                </li> -->
+                                <li ng-class="{active:isActive('activity')||isActive('answer')||isActive('question')}">
                                     <a target="_parent" href="#/activity/list/0">活动</a>
                                 </li>
-                                <li ng-class="{active:isActive('/member')}">
+                                <li ng-class="{active:isActive('check')}">
+                                    <a href="#/check/check">活动审核&nbsp;<span style="color:red;font-size:16px;margin-top:1px;"><?=$checkNum ?></span></a>
+                                </li>
+                                <li ng-class="{active:isActive('member')}">
                                     <a target="_parent" href="#/member">联系人</a>
                                 </li>
-                                <li ng-class="{active:isActive('/uga')}">
-                                    <a target="_parent" href="#/uga">UGA问题系统</a>
-                                </li>
-                                <li ng-class="{active:isActive('/share')}">
+                                <li ng-class="{active:isActive('share')}">
                                     <a target="_parent" href="#/share">分享</a>
                                 </li>
-                                <li ng-class="{active:isActive('/space-spot')}">
+                                <li ng-class="{active:isActive('space-spot')}">
                                     <a target="_parent" href="#/space-spot/list/0">场地</a>
                                 </li>
-                                <li ng-class="{active:isActive('/space-spot-device')}">
-                                    <a target="_parent" href="#/space-spot-device">设备</a>
+                                <li ng-class="{active:isActive('uga')}">
+                                    <a target="_parent" href="#/uga">UGA问题系统</a>
                                 </li>
+                                <!-- <li ng-class="{active:isActive('/space-spot-device')}">
+                                    <a target="_parent" href="#/space-spot-device">设备</a>
+                                </li> -->
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
                                 <li class="dropdown">

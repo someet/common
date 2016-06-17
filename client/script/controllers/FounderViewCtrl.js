@@ -1,6 +1,6 @@
 angular.module('controllers')
-.controller('FounderViewCtrl', ['$scope', '$routeParams', '$location', '$founderManage', '$activityTypeManage', '$qupload', '$qiniuManage', '$mdToast',
-        function($scope, $routeParams, $location, $founderManage, $activityTypeManage, $qupload, $qiniuManage, $mdToast) {
+.controller('FounderViewCtrl', ['$scope', '$routeParams', '$location', '$activityManage','$founderManage', '$activityTypeManage', '$qupload', '$qiniuManage', '$mdToast', '$mdDialog',
+        function($scope, $routeParams, $location, $activityManage,$founderManage, $activityTypeManage, $qupload, $qiniuManage, $mdToast, $mdDialog) {
             $scope.$parent.pageName = '活动详情';
             // $scope.tips1 = "1.活动不允许空降,如果有同行的小伙伴请把活动分享给TA让TA自行报名哟;";
             // $scope.tips2 = "2.活动若无法照常参加,请进入Someet服务平台中的个人界面自行请假;";
@@ -50,6 +50,28 @@ angular.module('controllers')
 
                 });
             };
+             //审核活动是否通过
+            $scope.changeStatus = function(id, status) {
+                if(status == 12) {
+                    var confirm = $mdDialog.confirm()
+                    .title('确定要通过吗？')
+                    .ariaLabel('delete activity item')
+                    .ok('确定通过')
+                    .cancel('点错了，再看看');
+                } else {
+                    var confirm = $mdDialog.confirm()
+                    .title('确定不通过吗？')
+                    .ariaLabel('delete activity item')
+                    .ok('确定不通过')
+                    .cancel('点错了，再看看');
+                }
+                $mdDialog.show(confirm).then(function() {
+                    $activityManage.changeStatus(id, status).then(function(data) {
+                        $location.path("/check/check");
+
+                    });
+                });
+            }
 
             $scope.posterAbort = function() {
                 $scope.selectPoster.upload.abort();
@@ -97,7 +119,6 @@ angular.module('controllers')
                 
                 if (newEntity.id > 0) { // 更新活动
                     // newEntity.field2 = $scope.entity.field2;
-                    console.log(newEntity.field2);
                     $founderManage.update(newEntity.id, newEntity).then(function(data) {
                         $mdToast.show($mdToast.simple()
                             .content('活动保存成功')
