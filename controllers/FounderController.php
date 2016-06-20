@@ -134,6 +134,9 @@ class FounderController extends BackendController
             Activity::STATUS_SHUT,
             Activity::STATUS_CANCEL,
             Activity::STATUS_CHECK,
+            Activity::STATUS_REFUSE,
+            Activity::STATUS_PASS,
+
             ]];
     
             $query = Activity::find()

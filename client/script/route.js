@@ -78,7 +78,7 @@ app.config(
                     controller:'ActivityDeleteCtrl'
                 })
                 //审核发起人提交的活动
-                .when('/activity-check/:status',{
+                .when('/check/:status',{
                     templateUrl: '/partial/activity/check.html',
                     controller:'ActivityCheckCtrl'
                 })

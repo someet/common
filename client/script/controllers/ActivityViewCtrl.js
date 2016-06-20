@@ -85,7 +85,7 @@ angular.module('controllers')
                 }
                 $mdDialog.show(confirm).then(function() {
                     $activityManage.updateStatus(id, status).then(function(data) {
-                        $location.path("/activity-check/check");
+                        $location.path("/check/check");
                         console.log('test');
                     });
                 });

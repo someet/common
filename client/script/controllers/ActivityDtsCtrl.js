@@ -108,11 +108,6 @@ angular.module('controllers')
                 });
             };
 
-            $activityManage.checkNum().then(function(data) {
-                $scope.checkNum = data;
-                console.log(data);
-            });
-
             //活动列表开始
             modelPagination();
 

@@ -15,7 +15,10 @@ angular.module('controllers')
 		});
 	}
 
-    $scope.isActive = function(route) {
-      return $location.path().indexOf(route) != -1;
-    }
+
+    $scope.isActive = function(type) {
+    // console.log($location.path().indexOf(type));
+    return $location.path().indexOf(type) != -1;	
+
+	}
   }]);

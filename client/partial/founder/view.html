@@ -1,9 +1,15 @@
 <!-- 编辑活动内容页面 -->
 <div class="container" id="content">
+    <md-input-container ng-if="entity.status == 8" layout="row" class="btn-float-right">
+        <md-button  class="md-raised md-primary" ng-click="changeStatus(entity.id,12)">审核通过</md-button>
+        <md-button class="md-raised md-warn" ng-click="changeStatus(entity.id,3)">不通过</md-button>
+    </md-input-container>
     <form name="entityForm" ng-submit="save()">
         <div>
-            <md-input-container layout="row" class="btn-float-right">
-                <md-button class="md-raised md-primary" ng-disabled="entityForm.$invalid">保存</md-button>
+            <md-input-container ng-if="entity.status !=8" layout="row" class="btn-float-right">
+                <md-button ng-if="entity.is_week == 1" class="md-raised md-primary" ng-disabled="true">保存</md-button>
+                
+                <md-button ng-if="entity.is_week !== 1" class="md-raised md-primary" ng-disabled="entityForm.$invalid">保存</md-button>
                 <md-button class="md-raised md-warn" ng-click="cancel()">取消</md-button>
             </md-input-container>
         </div>
@@ -40,7 +46,9 @@
                     <div class="detail-host">
                         <label>发起人</label>
                         <div class="hoster">
-                            <div class="name"> <strong>{{entity.user.username}}</strong></div>
+                            <div ng-if="entity.user.username==undefined" class="name"> <strong>{{user.username}}</strong></div>
+
+                            <div ng-if="entity.user.username" class="name"> <strong>{{entity.user.username}}</strong></div>
                             <div>
                                 <span>“</span>
                                 <img ng-src="{{entity.user.profile.headimgurl}}" />
@@ -133,9 +141,13 @@
             <!-- 预览 end -->
             <div class="col-md-7">
                 <input type="hidden" ng-model="entity.id" />
-                <div class="page-header">
-                  <h1>发起人 {{user.username}}</h1>
+                <div  ng-if="entity.user.username" class="page-header">
+                  <h1>发起人 {{entity.user.username}}</h1>
                 </div>
+                <div  ng-if="entity.user.username==undefined" class="page-header">
+                  <h1>发起人{{user.username}}</h1>
+                </div>
+             
                 <div class="row">
                     <div class="col-md-6 margin-top-10">
                         <label>活动类型</label>
@@ -253,9 +265,12 @@
                     <label>Tips</label>
                     <text-angular ta-toolbar="[['h1','h2','h3'],['bold','italics','colourRed']]" ng-model="entity.field2" >1.活动不允许空降,如果有同行的小伙伴请把活动分享给TA让TA自行报名哟;<p>2.活动若无法照常参加,请进入Someet服务平台中的个人界面自行请假;</p></text-angular>
                 </md-input-container>
-                <md-input-container layout="row" class="btn-float-right">
-                    <md-button class="md-raised md-primary" ng-disabled="entityForm.$invalid">保存</md-button>
-                    <md-button class="md-raised md-warn" ng-click="cancel()">取消</md-button>
+               <md-input-container layout="row" class="btn-float-right">
+                    <md-button ng-if="entity.is_week == 1 && entity.status !=8" class="md-raised md-primary" ng-disabled="true">保存</md-button>
+                    <md-button ng-if="entity.status == 8" class="md-raised md-primary" ng-disabled="entityForm.$invalid">审核通过</md-button>
+                    <md-button ng-if="entity.status == 8" class="md-raised md-warn" ng-disabled="entityForm.$invalid">不通过</md-button>
+                    <md-button ng-if="entity.is_week !== 1 && entity.status !=8" class="md-raised md-primary" ng-disabled="entityForm.$invalid">保存</md-button>
+                    <md-button ng-if="entity.status !=8" class="md-raised md-warn" ng-click="cancel()">取消</md-button>
                 </md-input-container>
             </div>
         </div>

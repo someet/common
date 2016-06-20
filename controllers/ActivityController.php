@@ -60,6 +60,7 @@ class ActivityController extends BackendController
                 'filter-prevent',
                 'add-founder',
                 'update-co-founder',
+                'change-status',
                 ]
             ],
         ];
@@ -151,15 +152,22 @@ class ActivityController extends BackendController
         return $activity;
 
     }
-    /*待审核活动数获取*/
-    public function actionCheckNum()
+      /**
+     * 审核发起人提交的活动
+     * @param  integer $id
+     * @param  int $status
+     * @return
+     */
+    public function actionChangeStatus($id, $status)
     {
+        $user_id = Yii::$app->user->id; 
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $checkNum = Activity::find()
-                        ->where(['status' => Activity::STATUS_CHECK])
-                        ->count();
+        $activity = Activity::findOne($id);
+        $activity->status = $status;
+        $activity->updated_by = $user_id;
+        $activity->save();
+        return $activity;
 
-        return $checkNum;
     }
     /**
      * 活动列表
@@ -234,6 +242,8 @@ class ActivityController extends BackendController
                                 Activity::STATUS_PREVENT,
                                 Activity::STATUS_SHUT,
                                 Activity::STATUS_CANCEL,
+                                Activity::STATUS_PASS,
+
                             ]],
                             ['updated_by' =>$user_id]
                         ]
@@ -258,6 +268,8 @@ class ActivityController extends BackendController
                                     Activity::STATUS_PREVENT,
                                     Activity::STATUS_SHUT,
                                     Activity::STATUS_CANCEL,
+                                    Activity::STATUS_PASS,
+                                    
                                 ]],
                                 $weekWhere,
                                 $typeWhere,
@@ -315,6 +327,8 @@ class ActivityController extends BackendController
             Activity::STATUS_PREVENT,
             Activity::STATUS_SHUT,
             Activity::STATUS_CANCEL,
+            Activity::STATUS_PASS ,
+
             ]];
 
         $query = Activity::find()
@@ -336,6 +350,7 @@ class ActivityController extends BackendController
                                 Activity::STATUS_PREVENT,
                                 Activity::STATUS_SHUT,
                                 Activity::STATUS_CANCEL,
+                                Activity::STATUS_PASS ,
                             ]
                             ],
                             ['or',
@@ -396,7 +411,7 @@ class ActivityController extends BackendController
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         // only show draft and release activities
-        $andwhere = ['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE, Activity::STATUS_PREVENT ,Activity::STATUS_SHUT]];
+        $andwhere = ['in', 'status', [Activity::STATUS_DRAFT, Activity::STATUS_RELEASE, Activity::STATUS_PREVENT ,Activity::STATUS_SHUT ,Activity::STATUS_PASS]];
 
         if ($type_id > 0) {
             $activities = Activity::find()

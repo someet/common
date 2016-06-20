@@ -26,18 +26,18 @@ angular.module('backendServices')
                     return data;
                 })
             },
+            //审核发起人提交的活动
+            changeStatus: function(id,status) {
+                return $http.get('/activity/change-status?id=' + id + '&status=' + status).then(function(data) {
+                    return data;
+                })
+            },
             updateAllPrevent: function(newEntity) {
                 return $http.get('/activity/update-all-prevent').then(function(data) {
                     return data;
                 })
             },
-            //待审核活动数
-            checkNum: function(newEntity){
-                return $http.get('/activity/check-num').then(function(data) {
-                    console.log(data);
-                    return data;
-                })
-            },
+
             filterPrevent: function(newEntity) {
                 return $http.get('/activity/filter-prevent').then(function(data) {
                     return data;

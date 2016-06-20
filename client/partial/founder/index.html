@@ -30,8 +30,8 @@
                 <div ng-class="{
                 'panel-default' : entity.status == 5, 
                 'panel-info': entity.status == 8 || entity.status == 10 || entity.status == 15,
-                'panel-success' : entity.status == 20, 
-                'panel-danger' : entity.status == 30, 
+                'panel-success' : entity.status == 20 || entity.status ==12, 
+                'panel-danger' : entity.status == 30 || entity.status == 3, 
                 'panel-warning' :entity.status == 40
                 }" class="panel">
                     <div class="panel-heading">
@@ -40,6 +40,8 @@
                             {{entity.id}}#
                             <span ng-if="entity.status==5" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[草稿]</span>
                             <span ng-if="entity.status==8" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[已提交审核]</span>
+                            <span ng-if="entity.status==12" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[已通过审核]</span>
+                            <span ng-if="entity.status==3" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[审核未通过]</span>
                             <span ng-if="entity.status==10" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[已提交审核]</span>
                             <span ng-if="entity.status==15" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[已提交审核]</span>
                             <span ng-if="entity.status==20" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[发布成功]</span>
@@ -52,9 +54,9 @@
                         <a class="btn btn-info" target="_blank" href="http://bshare.optimix.asia/barCode?site=weixin&url=https://m.someet.cc/activity/{{entity.id}}">生成活动二维码</a>
                         <button ng-if="entity.question" class="btn" ng-click="open(entity)">修改表单</button>
                         <button ng-if="!entity.question" class="btn btn-primary" ng-click="open(entity)">设置表单</button>
-                        <a ng-if="entity.status==5" class="btn btn-success" href="#/founder/{{entity.id}}" target="_blank">编辑</a>
+                        <a ng-if="entity.status==5 || entity.status==3" class="btn btn-success" href="#/founder/{{entity.id}}" target="_blank">编辑</a>
                         <button class="btn btn-default" ng-click="copy(entity)">复制活动</button>
-                        <button ng-if="entity.status==5" class="btn btn-success btn-float-right" ng-click="updateStatus(entity.id,8,entity)" type="button">提交审核</button>
+                        <button ng-if="entity.status==5 || entity.status==3" class="btn btn-success btn-float-right" ng-click="updateStatus(entity.id,8,entity)" type="button">提交审核</button>
                     </div>
                 </div>
             </li>
