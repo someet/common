@@ -315,4 +315,13 @@ class Activity extends \yii\db\ActiveRecord
     {
         return $this->hasMany(ActivityCheckIn::className(), ['activity_id' => 'id']);
     }
+    /**
+     * 联合发起人列表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRActivityFounder()
+    {
+        return $this->hasMany(RActivityFounder::className(), ['activity_id' => 'id']);
+    }
+
 }
