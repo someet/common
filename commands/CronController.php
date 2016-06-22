@@ -20,7 +20,7 @@ class CronController extends \yii\console\Controller
     {
         //查询所有的未发送的通知
         $noties = Noti::find()
-                ->where(["sended_at" => 0])
+                ->where(["sended_at" => 0, 'in_tube' => Noti::IN_TUBE_YET])
                 ->with(['user'])
                 ->asArray()
                 ->all();
@@ -54,8 +54,12 @@ class CronController extends \yii\console\Controller
                 // 放入队列
                 $wechat_template = Yii::$app->beanstalk->putInTube('wechatofficial', ['templateData' => $templateData, 'noti' => $noti]);
                 if (!$wechat_template) {
+                    Noti::updateAll(['in_tube' => Noti::IN_TUBE_FAIL], ['id' => $noti['id']]);
+
                     Yii::error('微信消息加到队列失败，请检查');
                 } else {
+                    Noti::updateAll(['in_tube' => Noti::IN_TUBE_YES], ['id' => $noti['id']]);
+
                     Yii::info($noti['user_id'].' 微信模板消息到消息队列成功');
                 }
 
