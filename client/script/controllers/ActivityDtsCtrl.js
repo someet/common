@@ -102,7 +102,7 @@ angular.module('controllers')
                 });
 
                 modalInstance.result.then(function(data) {
-                    console.log(data);
+                    modelPagination();
                 }, function() {
                     $log.info('Modal dismissed at: ' + new Date());
                 });
@@ -171,18 +171,11 @@ angular.module('controllers')
                     }
                 });
             }
-            // 活动还原
+            // 切换为预发布
             $scope.updateStatus = function(id, status) {
-                var confirm = $mdDialog.confirm()
-                    .title('确定要还原吗？')
-                    .ariaLabel('delete activity item')
-                    .ok('确定还原')
-                    .cancel('点错了，再看看');
-                $mdDialog.show(confirm).then(function() {
-                    $activityManage.updateStatus(id, status).then(function(data) {
+               $activityManage.updateStatus(id, status).then(function(data) {
                         fetchPage();
                     });
-                });
             }
 
             // 本周活动
