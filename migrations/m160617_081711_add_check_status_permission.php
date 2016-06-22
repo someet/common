@@ -3,7 +3,7 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m160617_081711_add_check_change_status_permission extends Migration
+class m160617_081711_add_check_status_permission extends Migration
 {
     public function up()
     {
