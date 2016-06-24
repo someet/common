@@ -8,7 +8,7 @@ angular.module('backendServices')
         });
       },
       create: function(params) {
-      	return $http.get('/wechat/create?wechatReply='+params,{wechatReply:params}).then(function(data){
+      	return $http.get('/wechat/create',{wechatReply:params}).then(function(data){
       		return data;
       	})
       }
