@@ -3,11 +3,14 @@
 namespace app\controllers;
 
 use app\components\DataValidationFailedException;
+use dektrium\user\models\User;
 use someet\common\models\Activity;
+use someet\common\models\ActivityType;
 use someet\common\models\RActivitySpace;
 use someet\common\models\SpaceSection;
 use someet\common\models\AdminLog;
 use someet\common\models\RActivityFounder;
+use someet\common\models\SpaceSpot;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -61,6 +64,7 @@ class ActivityController extends BackendController
                 'add-founder',
                 'update-co-founder',
                 'change-status',
+                    'log'
                 ]
             ],
         ];
@@ -149,6 +153,11 @@ class ActivityController extends BackendController
         $activity = Activity::findOne($id);
         $activity->status = $status;
         $activity->save();
+        if (Activity::STATUS_PREVENT == $status) {
+            AdminLog::saveLog('更新活动状态为预发布', $id);
+        } elseif (Activity::STATUS_DRAFT == $status) {
+            AdminLog::saveLog('更新活动状态为草稿', $id);
+        }
         return $activity;
 
     }
@@ -166,6 +175,7 @@ class ActivityController extends BackendController
         $activity->status = $status;
         $activity->updated_by = $user_id;
         $activity->save();
+        AdminLog::saveLog('审核活动', $id);
         return $activity;
 
     }
@@ -561,7 +571,7 @@ class ActivityController extends BackendController
                 }
             }
             // 保存操作记录
-            \someet\common\models\AdminLog::saveLog('添加活动', $model->primaryKey);
+            AdminLog::saveLog('创建活动', $model->primaryKey);
             return Activity::findOne($model->id);
         } elseif ($model->hasErrors()) {
             $errors = $model->getFirstErrors();
@@ -619,8 +629,10 @@ class ActivityController extends BackendController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = $this->findModel($id);
         $data = Yii::$app->getRequest()->post();
+        $resultStr = "";
 
         if (isset($data['title'])) {
+            $resultStr .= $model->title == $data['title'] ? '' : ' 旧标题为: ' . $model->title;
             $model->title = $data['title'];
             if (!$model->validate('title')) {
                 throw new DataValidationFailedException($model->getFirstError('title'));
@@ -628,6 +640,7 @@ class ActivityController extends BackendController
         }
 
         if (isset($data['desc'])) {
+            $resultStr .= $model->desc == $data['desc'] ? '' : ' 旧副标题为:' . $model->desc;
             $model->desc = $data['desc'];
             if (!$model->validate('desc')) {
                 throw new DataValidationFailedException($model->getFirstError('desc'));
@@ -635,6 +648,7 @@ class ActivityController extends BackendController
         }        
 
         if (isset($data['ideal_number'])) {
+            $resultStr .= $model->ideal_number == $data['ideal_number'] ? '' : ' 旧理想人数是: ' . $model->ideal_number;
             $model->ideal_number = $data['ideal_number'];
             if (!$model->validate('ideal_number')) {
                 throw new DataValidationFailedException($model->getFirstError('ideal_number'));
@@ -642,6 +656,7 @@ class ActivityController extends BackendController
         }        
 
         if (isset($data['ideal_number_limit'])) {
+            $resultStr .= $model->ideal_number_limit == $data['ideal_number_limit'] ? '' : ' 旧理想人数限制是: ' . $model->ideal_number_limit;
             $model->ideal_number_limit = $data['ideal_number_limit'];
             if (!$model->validate('ideal_number_limit')) {
                 throw new DataValidationFailedException($model->getFirstError('ideal_number_limit'));
@@ -649,6 +664,7 @@ class ActivityController extends BackendController
         }        
 
         if (isset($data['address_assign'])) {
+            $resultStr .= $model->address_assign == $data['address_assign'] ? '' : ' 旧场地是否内部安排是: ' . $model->address_assign;
             $model->address_assign = $data['address_assign'];
             if (!$model->validate('address_assign')) {
                 throw new DataValidationFailedException($model->getFirstError('address_assign'));
@@ -657,6 +673,7 @@ class ActivityController extends BackendController
 
         // 如果改变了报名总数的时候，修改一下活动的是否报满的这个字段
         if (isset($data['peoples'])) {
+            $resultStr .= $model->peoples == $data['peoples'] ? '' : ' 旧人数限制是: ' . $model->peoples;
             $model->peoples = $data['peoples'];
             if (!$model->validate('peoples')) {
                 throw new DataValidationFailedException($model->getFirstError('peoples'));
@@ -678,6 +695,7 @@ class ActivityController extends BackendController
         }
 
         if (isset($data['cost'])) {
+            $resultStr .= $model->cost == $data['cost'] ? '' : ' 旧收费金额是: ' . $model->cost;
             $model->cost = $data['cost'];
             if (!$model->validate('cost')) {
                 throw new DataValidationFailedException($model->getFirstError('cost'));
@@ -685,6 +703,7 @@ class ActivityController extends BackendController
         }
 
         if (isset($data['cost_list'])) {
+            $resultStr .= $model->cost_list == $data['cost_list'] ? '' : ' 旧收费明细是: ' . $model->cost_list;
             $model->cost_list = $data['cost_list'];
             if (!$model->validate('cost_list')) {
                 throw new DataValidationFailedException($model->getFirstError('cost_list'));
@@ -692,6 +711,7 @@ class ActivityController extends BackendController
         }
 
         if (isset($data['start_time'])) {
+            $resultStr .= $model->start_time == $data['start_time'] ? '' : ' 旧开始时间是: ' . date('Y-m-d H:i:s', $model->start_time);
             $model->start_time = $data['start_time'];
             if (!$model->validate('start_time')) {
                 throw new DataValidationFailedException($model->getFirstError('start_time'));
@@ -702,6 +722,7 @@ class ActivityController extends BackendController
         }
 
         if (isset($data['end_time'])) {
+            $resultStr .= $model->end_time == $data['end_time'] ? '' : ' 旧结束时间是: ' . date('Y-m-d H:i:s', $model->end_time);
             $model->end_time = $data['end_time'];
             if (!$model->validate('end_time')) {
                 throw new DataValidationFailedException($model->getFirstError('end_time'));
@@ -709,6 +730,7 @@ class ActivityController extends BackendController
         }
 
         if (isset($data['area'])) {
+            $resultStr .= $model->area == $data['area'] ? '' : ' 旧地区（商圈）是: ' . $model->area;
             $model->area = $data['area'];
             if (!$model->validate('area')) {
                 throw new DataValidationFailedException($model->getFirstError('area'));
@@ -716,6 +738,7 @@ class ActivityController extends BackendController
         }
 
         if (isset($data['address'])) {
+            $resultStr .= $model->address == $data['address'] ? '' : ' 旧详细地址是: ' . $model->address;
             $model->address = $data['address'];
             if (!$model->validate('address')) {
                 throw new DataValidationFailedException($model->getFirstError('address'));
@@ -723,6 +746,7 @@ class ActivityController extends BackendController
         }
 
         if (isset($data['details'])) {
+            $resultStr .= $model->details == $data['details'] ? '' : ' 旧详情为:' . $model->details;
             $model->details = $data['details'];
             if (!$model->validate('details')) {
                 throw new DataValidationFailedException($model->getFirstError('details'));
@@ -730,6 +754,7 @@ class ActivityController extends BackendController
         }
 
         if (isset($data['poster'])) {
+            $resultStr .= $model->poster == $data['poster'] ? '' : ' 旧标题图片地址是: ' . $model->poster;
             $model->poster = $data['poster'];
             if (!$model->validate('poster')) {
                 throw new DataValidationFailedException($model->getFirstError('poster'));
@@ -737,6 +762,7 @@ class ActivityController extends BackendController
         }
 
         if (isset($data['group_code'])) {
+            $resultStr .= $model->group_code == $data['group_code'] ? '' : ' 旧群二维码图片地址是: ' . $model->group_code;
             $model->group_code = $data['group_code'];
             if (!$model->validate('group_code')) {
                 throw new DataValidationFailedException($model->getFirstError('group_code'));
@@ -744,6 +770,7 @@ class ActivityController extends BackendController
         }
 
         if (isset($data['review'])) {
+            $resultStr .= $model->review == $data['review'] ? '' : ' 旧活动流程是: ' . $model->review;
             $model->review = $data['review'];
             if (!$model->validate('review')) {
                 throw new DataValidationFailedException($model->getFirstError('review'));
@@ -758,6 +785,8 @@ class ActivityController extends BackendController
         }
 
         if (isset($data['is_top'])) {
+            $is_top_str = $model->is_top== 1 ? '置顶' : '不置顶';
+            $resultStr .= $model->is_top == $data['is_top'] ? '' : ' 旧置顶状态是: ' . $is_top_str;
             $model->is_top = $data['is_top'];
             if (!$model->validate('is_top')) {
                 throw new DataValidationFailedException($model->getFirstError('is_top'));
@@ -780,6 +809,12 @@ class ActivityController extends BackendController
         }
 
         if (isset($data['type_id'])) {
+            $typename = '';
+            if ($model->type_id>0) {
+                $type = ActivityType::find()->select(['name'])->where(['id' => $model->type_id])->one();
+                $typename = $type ? $type->name : '';
+            }
+            $resultStr .= $model->type_id == $data['type_id'] ? '' : ' 旧活动类型为:' . $typename;
             $model->type_id = $data['type_id'];
             if (!$model->validate('type_id')) {
                 throw new DataValidationFailedException($model->getFirstError('type_id'));
@@ -802,6 +837,7 @@ class ActivityController extends BackendController
         }
 
         if (isset($data['content'])) {
+            $resultStr .= $model->content == $data['content'] ? '' : ' 旧文案为:' . $model->content;
             $model->content = $data['content'];
             if (!$model->validate('content')) {
                 throw new DataValidationFailedException($model->getFirstError('content'));
@@ -810,6 +846,12 @@ class ActivityController extends BackendController
 
         //DTS
         if (isset($data['updated_by'])) {
+            $dtsname = '';
+            if ($model->updated_by>0) {
+                $dts = User::find()->select(['username'])->where(['id' => $model->updated_by])->one();
+                $dtsname = $dts ? $dts->username : '';
+            }
+            $resultStr .= $model->updated_by == $data['updated_by'] ? '' : ' 旧DTS为:' . $dtsname;
             $model->updated_by = $data['updated_by'];
             if (!$model->validate('updated_by')) {
                 throw new DataValidationFailedException($model->getFirstError('updated_by'));
@@ -818,6 +860,12 @@ class ActivityController extends BackendController
 
         //发起人
         if (isset($data['created_by'])) {
+            $foundername = '';
+            if ($model->created_by>0) {
+                $founder = User::find()->select(['username'])->where(['id' => $model->created_by])->one();
+                $foundername = $founder ? $founder->username : '';
+            }
+            $resultStr .= $model->created_by == $data['created_by'] ? '' : ' 旧发起人为:' . $foundername;
             $model->created_by = $data['created_by'];
             if (!$model->validate('created_by')) {
                 throw new DataValidationFailedException($model->getFirstError('created_by'));
@@ -826,6 +874,12 @@ class ActivityController extends BackendController
 
         //负责人(PMA)
         if (isset($data['principal'])) {
+            $princial_name = '';
+            if ($model->principal>0) {
+                $princial = User::find()->select(['username'])->where(['id' => $model->principal])->one();
+                $princial_name = $princial ? $princial->username : '';
+            }
+            $resultStr .= $model->principal == $data['principal'] ? '' : ' 旧PMA为:' . $princial_name;
             $model->principal= $data['principal'];
             if (!$model->validate('principal')) {
                 throw new DataValidationFailedException($model->getFirstError('principal'));
@@ -834,6 +888,8 @@ class ActivityController extends BackendController
 
         //负责人(PMA) 类型
         if (isset($data['pma_type'])) {
+            $pma_type_str = $model->pma_type == 0 ? '线上' : '线下';
+            $resultStr .= $model->pma_type == $data['pma_type'] ? '' : ' 旧PMA类型为:' . $pma_type_str;
             $model->pma_type = $data['pma_type'];
             if (!$model->validate('pma_type')) {
                 throw new DataValidationFailedException($model->getFirstError('pma_type'));
@@ -842,6 +898,7 @@ class ActivityController extends BackendController
 
         //排序更新
         if (isset($data['display_order'])) {
+            $resultStr .= $model->display_order == $data['display_order'] ? '' : ' 旧排序为:' . $model->display_order;
             $model->display_order= $data['display_order'];
             if (!$model->validate('display_order')) {
                 throw new DataValidationFailedException($model->getFirstError('display_order'));
@@ -856,6 +913,7 @@ class ActivityController extends BackendController
         }
         //扩展字段二
         if (isset($data['field2'])) {
+            $resultStr .= $model->field2 == $data['field2'] ? '' : ' 旧Tips为:' . $model->field2;
             $model->field2= $data['field2'];
             if (!$model->validate('field2')) {
                 throw new DataValidationFailedException($model->getFirstError('field2'));
@@ -864,6 +922,12 @@ class ActivityController extends BackendController
 
         
         if (isset($data['space_spot_id'])) {
+            $space_spot_str = '';
+            if ($model->space_spot_id>0) {
+                $spaceSpot = SpaceSpot::find()->select(['name'])->where(['id' => $model->space_spot_id])->one();
+                $space_spot_str = $spaceSpot ? $spaceSpot->name : '';
+            }
+            $resultStr .= $model->space_spot_id == $data['space_spot_id'] ? '' : ' 旧场地为:' . $space_spot_str;
             $model->space_spot_id= $data['space_spot_id'];
             if (!$model->validate('space_spot_id')) {
                 throw new DataValidationFailedException($model->getFirstError('space_spot_id'));
@@ -904,7 +968,13 @@ class ActivityController extends BackendController
             throw new ServerErrorHttpException();
         }
 
-        \someet\common\models\AdminLog::saveLog('更新活动', $model->primaryKey);
+        if (empty($resultStr)) {
+            $logstr = '更新活动，没有更新任何内容';
+        } else {
+            $logstr = '更新活动, 受影响的内容有: '.$resultStr;
+        }
+
+        AdminLog::saveLog($logstr, $model->primaryKey);
 
         return $this->findModel($id);
     }
@@ -927,14 +997,17 @@ class ActivityController extends BackendController
             }
         } else {
             $delete_founder = RActivityFounder::deleteAll(['activity_id'=> $model->id]);
-            foreach ($data as $founder) {
-                $r_activity_founder = new RActivityFounder();
-                $r_activity_founder->activity_id = $model->id;
-                $r_activity_founder->founder_id = $founder['id'];
-                $r_activity_founder->save();
-            }
-            if ($delete_founder && $r_activity_founder) {
-                AdminLog::saveLog('更新联合发起人', $model->primaryKey);
+            if (is_array($data)) {
+                foreach ($data as $founder) {
+                    $r_activity_founder = new RActivityFounder();
+                    $r_activity_founder->activity_id = $model->id;
+                    $r_activity_founder->founder_id = $founder['id'];
+                    $r_activity_founder->save();
+                }
+                $founder_ids = array_column($data, 'id');
+                $founders = User::find()->where(['in', 'id', $founder_ids])->asArray()->all();
+                $founders_name = join(',', array_column($founders, 'username'));
+                AdminLog::saveLog('更新联合发起人: ' . $founders_name, $model->primaryKey);
             }
         }
 
@@ -969,7 +1042,7 @@ class ActivityController extends BackendController
         if ($model->save() === false) {
             throw new ServerErrorHttpException('删除失败');
         }
-        \someet\common\models\AdminLog::saveLog('删除活动', $model->primaryKey);
+        \someet\common\models\AdminLog::saveLog('更新活动状态为删除', $model->primaryKey);
 
         return [];
     }
@@ -1031,6 +1104,13 @@ class ActivityController extends BackendController
             $model['is_week'] = getLastEndTime() < $model['end_time'] ? 0 : 1;
         }
         return $model;
+    }
+
+    public function actionLog($id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $activity = Activity::findOne($id);
+        return $activity->logs;
     }
 
     /**

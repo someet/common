@@ -142,6 +142,8 @@
                             群二维码上传
                         </button>
                         <a class="btn btn-success" href="#/activity/{{entity.id}}" target="_blank">编辑</a>
+                        <a class="btn btn-success" href="#/activity/log/{{entity.id}}" target="_blank">操作日志</a>
+
                         <button ng-if="entity.status==10 || entity.status==15 || entity.status==12" class="btn btn-primary btn-float-right" ng-click="release(entity)" type="button">发布</button>
                     </div>
                 </div>
