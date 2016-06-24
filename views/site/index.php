@@ -53,6 +53,9 @@ use yii\helpers\Url;
                                 </li>
                                 <li ng-class="{active:isActive('uga')}">
                                     <a target="_parent" href="#/uga">UGA问题系统</a>
+                                </li>                                
+                                <li ng-class="{active:isActive('wechat')}">
+                                    <a target="_parent" href="#/wechat">微信回复</a>
                                 </li>
                                 <!-- <li ng-class="{active:isActive('/space-spot-device')}">
                                     <a target="_parent" href="#/space-spot-device">设备</a>
@@ -89,8 +92,11 @@ use yii\helpers\Url;
         <div>
             
         </div>
+        <!-- <div class="container"> -->
+            
         <md-content ng-view>
         </md-content>
+        <!-- </div> -->
         <!-- /container -->
         <script src="/static/js/bundle.js"></script>
         <script src="/static/js/all.js"></script>
