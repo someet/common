@@ -21,7 +21,56 @@ class WorkerController extends BeanstalkController
     // sms 发送审核结果  wechat 发送审核结果 noti 发送活动前开始提醒 notiwechat 发送活动前开始提醒 checkinwechat 签到成功的微信通知
     public function listenTubes()
     {
-        return ["sms", "wechat", "noti", "notiwechat", "wechatofficial"];
+        return ["moblieMsg", "wechat", "noti", "notiwechat", "wechatofficial"];
+    }
+
+    /**
+     * 发送活动是否通完
+     * @param Pheanstalk\Job $job
+     * @return string  self::BURY
+     *                 self::RELEASE
+     *                 self::DELAY
+     *                 self::DELETE
+     *                 self::NO_ACTION
+     *                 self::DECAY
+     */
+    public function actionMoblieMsg($job)
+    {
+        $sentData = $job->getData();
+        try {
+            $mobile = $sentData->mobile;
+            $smsData = $sentData->smsData;
+            $mobileMsg = $sentData->mobileMsg;
+
+            //尝试发送短消息
+            $sms = Yii::$app->sms;
+            $smsRes = $sms->sendSms($mobile, $smsData);
+
+            //如果是未审核,则只修改发送时间
+            if ($smsRes) {
+                //修改短信发送状态为成功, 以及修改发送时间
+                MobileMsg::updateAll(
+                    ['is_send' => MobileMsg::STATUS_SMS_SUCC, 'send_at' => time()],
+                    ['id' => $answer->id]
+                );
+            } elseif ($sms->hasError()) {
+                $error = $sms->getError();
+
+                Yii::error('短信发送失败, 请检查'. is_array($error) ? json_encode($error) : $error);
+
+                //修改短信发送状态为失败, 以及修改发送时间[方便以后单独发送短信]
+                MobileMsg::updateAll(
+                    ['send_at' => time()],
+                    ['id' => $answer->id]
+                );
+            }
+
+            fwrite(STDOUT, Console::ansiFormat("Sms - Everything is allright"."\n", [Console::FG_GREEN]));
+            return self::DELETE;
+        } catch (\Exception $e) {
+            fwrite(STDERR, Console::ansiFormat($e."\n", [Console::FG_RED]));
+            return self::BURY;
+        }
     }
 
     /**

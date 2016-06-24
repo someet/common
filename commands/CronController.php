@@ -73,6 +73,32 @@ class CronController extends \yii\console\Controller
         }
     }
 
+
+    public function actionSendMoblie()
+    {
+        //查询所有的未发送的通知
+        $mobileMsg = MobileMsg::find()
+                ->where(["is_send" => MobileMsg::STATUS_SMS_YET, 'is_join_queue' => MobileMsg::STATUS_SMS_YET])
+                ->all();
+        $mobile = $mobileMsg->mobile_num;
+        $smsData = $mobileMsg->content;
+        $mixedData = [
+            'mobile' => $mobile,
+            'smsData' => $smsData,
+            'mobileMsg' => $mobileMsg
+        ];
+
+        $sms = Yii::$app->beanstalk
+            ->putInTube('moblieMsg', $mixedData);
+        if (!$sms) {
+            Yii::error('短信添加到消息队列失败, 请检查');
+        }else{
+           MobileMsg::updateAll(
+                ['is_join_queue' => MobileMsg::STATUS_SMS_SUCC, 'send_at' => time()],
+                ['id' => $answer->id]
+            );
+        }
+    }
     /**
      * 发送审核通知
      * 每天晚上8点执行
