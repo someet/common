@@ -46,7 +46,7 @@ class WorkerController extends BeanstalkController
             if ($smsRes) {
                 //修改短信发送状态为成功, 以及修改发送时间
                 MobileMsg::updateAll(
-                    ['is_send' => MobileMsg::STATUS_SMS_SUCC, 'send_at' => time()],
+                    ['is_send' => MobileMsg::QUEUE_SEND_SUCC, 'send_at' => time()],
                     ['id' => $msg->id]
                 );
             } elseif ($sms->hasError()) {

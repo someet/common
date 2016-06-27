@@ -27,6 +27,18 @@ class MobileMsg extends \yii\db\ActiveRecord
 
     const STATUS_SMS_SUCC = 1;
     const STATUS_SMS_YET = 0;
+
+    // 队列发送成功
+    const QUEUE_SEND_SUCC = 1;
+    // 队列发送失败
+    const QUEUE_SEND_YET = 0;
+
+    // 加入队列成功
+    const QUEUE_JOIN_SUCC = 1;
+    // 加入队列失败
+    const QUEUE_JOIN_YET = 0;
+
+
     /**
      * @inheritdoc
      */

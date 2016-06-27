@@ -80,7 +80,7 @@ class CronController extends \yii\console\Controller
     {
         //查询所有的未发送的通知
         $mobileMsg = MobileMsg::find()
-                ->where(["is_send" => MobileMsg::STATUS_SMS_YET, 'is_join_queue' => MobileMsg::STATUS_SMS_YET])
+                ->where(["is_send" => MobileMsg::QUEUE_JOIN_YET, 'is_join_queue' => MobileMsg::QUEUE_JOIN_YET])
                 ->asArray()
                 ->all();
 
@@ -107,7 +107,7 @@ class CronController extends \yii\console\Controller
                 }else{
                     echo "短信添加到消息队列成功";
                    MobileMsg::updateAll(
-                        ['is_join_queue' => MobileMsg::STATUS_SMS_SUCC, 'send_at' => time()],
+                        ['is_join_queue' => MobileMsg::QUEUE_JOIN_SUCC, 'send_at' => time()],
                         ['id' => $msg['id']]
                     );
                 }
