@@ -82,14 +82,15 @@ class CronController extends \yii\console\Controller
                 ->all();
 
         foreach ($mobileMsg as $msg) {
-                        //判断报名的用户是否存在
+            //判断报名的用户是否存在
             if (!$msg['user_id']) {
                 //记录一个错误, 提示计划任务中报名的用户不存在, 请检查
                 Yii::error('计划任务中活动id为'.$msg['user_id'].' 的报名的用户不存在, 请检查');
                 //继续下一个
                 continue;
             }
-                        // 用户的手机号码不为空, 并且手机号码是合法的手机号
+            
+            // 用户的手机号码不为空, 并且手机号码是合法的手机号
             if (!empty($msg['mobile_num']) && SomeetValidator::isTelNumber($msg['mobile_num'])) {
                 $mixedData = [
                     'mobile' => $msg['mobile_num'],
@@ -121,7 +122,7 @@ class CronController extends \yii\console\Controller
     public function actionTest()
     {
         $mobile = '18518368050';
-        $smsData = "抱歉你报名的6月26日“只言片语——一款猜心的桌游1111111111111";
+        $smsData = "抱歉你报名的6月26日“只言片语——一款猜心的桌游";
         //尝试发送短消息
         $res = Yii::$app->sms->sendSms($mobile, $smsData);
         var_dump($res);
