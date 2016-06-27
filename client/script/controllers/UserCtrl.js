@@ -70,7 +70,7 @@ angular.module('controllers')
         // 改变页数
         $scope.pageChange = function(){
             if (!$scope.search) {
-                fetchPage();
+                fetchPage(listtype);
             }else{
                 $scope.searchUser();
             }
