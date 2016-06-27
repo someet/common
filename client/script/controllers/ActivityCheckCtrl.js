@@ -282,6 +282,7 @@ app.controller('ActivityCheckCtrl', [
                     var originActivity = activityData;
                     originActivity.id = null;
                     originActivity.title = activityData.title + " 副本";
+                    originActivity.group_code = "";
                     originActivity.status = 10; //活动状态10为草稿
                     originActivity.start_time = Date.parse(new Date())/1000 + 86400; 
                     originActivity.end_time = Date.parse(new Date())/1000 + 86400;

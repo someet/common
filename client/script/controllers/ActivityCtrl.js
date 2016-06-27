@@ -282,7 +282,7 @@ angular.module('controllers', ['ngTagsInput'])
                 $mdDialog.show(confirm).then(function() {
                     var originActivity = activityData;
                     originActivity.id = null;
-                    originActivity.poster = "http://7xn8h3.com2.z0.glb.qiniucdn.com/FtlMz_y5Pk8xMEPQCw5MGKCRuGxe";
+                    originActivity.group_code = "";
                     originActivity.title = activityData.title + " 副本";
                     originActivity.status = 10; //活动状态10为草稿
                     originActivity.start_time = Date.parse(new Date()) / 1000 + 86400;
