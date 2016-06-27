@@ -24,7 +24,6 @@ use Yii;
  */
 class MobileMsg extends \yii\db\ActiveRecord
 {
-
     const STATUS_SMS_SUCC = 1;
     const STATUS_SMS_YET = 0;
 
@@ -37,8 +36,6 @@ class MobileMsg extends \yii\db\ActiveRecord
     const QUEUE_JOIN_SUCC = 1;
     // 加入队列失败
     const QUEUE_JOIN_YET = 0;
-
-
     /**
      * @inheritdoc
      */
@@ -70,7 +67,7 @@ class MobileMsg extends \yii\db\ActiveRecord
             'user_id' => 'User ID',
             'username' => 'Username',
             'mobile_num' => 'Mobile Num',
-            'mobile_model' => 'Mobile  Model',
+            'mobile_model' => 'Mobile Model',
             'activity_id' => 'Activity ID',
             'content' => 'Content',
             'is_join_queue' => 'Is Join Queue',
