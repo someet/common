@@ -138,7 +138,7 @@
                             <span class="badge">{{entity.feedback_count}}</span>
                         </a>
                         </span>
-                        <button ng-if="entity.poster == 'http://7xn8h3.com2.z0.glb.qiniucdn.com/FtlMz_y5Pk8xMEPQCw5MGKCRuGxe'" ng-file-select="listQrcode($files,entity)" data-multiple="false" title="上传群二维码" onclick="this.value = null" class="btn btn-danger">
+                        <button ng-if="entity.group_code == ''" ng-file-select="listQrcode($files,entity)" data-multiple="false" title="上传群二维码" onclick="this.value = null" class="btn btn-danger">
                             群二维码上传
                         </button>
                         <a class="btn btn-success" href="#/activity/{{entity.id}}" target="_blank">编辑</a>
