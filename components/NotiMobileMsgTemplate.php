@@ -1,1 +1,0 @@
-NotiMobileMsgTemplate.php
