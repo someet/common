@@ -138,10 +138,12 @@
                             <span class="badge">{{entity.feedback_count}}</span>
                         </a>
                         </span>
-                        <button ng-file-select="listQrcode($files,entity)" data-multiple="false" title="上传群二维码" onclick="this.value = null" class="btn btn-info">
+                        <button ng-if="entity.poster == 'http://7xn8h3.com2.z0.glb.qiniucdn.com/FtlMz_y5Pk8xMEPQCw5MGKCRuGxe'" ng-file-select="listQrcode($files,entity)" data-multiple="false" title="上传群二维码" onclick="this.value = null" class="btn btn-danger">
                             群二维码上传
                         </button>
                         <a class="btn btn-success" href="#/activity/{{entity.id}}" target="_blank">编辑</a>
+                        <a class="btn btn-success" href="#/activity/log/{{entity.id}}" target="_blank">操作日志</a>
+
                         <button ng-if="entity.status==10 || entity.status==15 || entity.status==12" class="btn btn-primary btn-float-right" ng-click="release(entity)" type="button">发布</button>
                     </div>
                 </div>

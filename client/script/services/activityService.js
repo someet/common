@@ -1,6 +1,10 @@
 angular.module('backendServices')
     .factory('$activityManage', ['$http', '$q', '$rootScope', function($http, $q, $rootScope) {
         return {
+            //查看某个活动的日志
+            fetchLogByActivityId: function (activity_id) {
+                return $http.get('/activity/log?id='+activity_id);
+            },
             // 创建发起人
             createFounder: function(activity_id, founder_id) {
                 return $http.get('/activity/add-founder', { activity_id: 'activity_id', founder_id: 'founder_id' }).then(function(data) {

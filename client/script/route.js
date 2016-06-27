@@ -102,6 +102,11 @@ app.config(
                     templateUrl: '/partial/activity/view.html',
                     controller: 'ActivityViewCtrl'
                 })
+                //查看活动日志
+                .when('/activity/log/:id', {
+                    templateUrl: '/partial/activity/log.html',
+                    controller: 'ActivityLogCtrl'
+                })
                 // 发起人查看活动列表
                 .when('/founder', {
                     templateUrl: '/partial/founder/index.html',
