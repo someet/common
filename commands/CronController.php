@@ -72,7 +72,10 @@ class CronController extends \yii\console\Controller
         }
     }
 
-
+    /**
+     * 主要负责短信发送
+     * @return 短信是否成功
+     */
     public function actionSendMoblie()
     {
         //查询所有的未发送的通知
@@ -110,7 +113,7 @@ class CronController extends \yii\console\Controller
                 }
             } else {
                 //报一个错误, 用户手机号码有误, 无法发送短信
-                Yii::error('报名用户id: '.$answer['user']['id'].' 的用户手机号码未设置, 或者设置的不正确');
+                Yii::error('报名用户id: '.$msg['user_id'].' 的用户手机号码未设置, 或者设置的不正确');
             }
         }
     }
