@@ -11,7 +11,7 @@ use Yii;
  * @property integer $user_id
  * @property string $username
  * @property string $mobile_num
- * @property integer $mobile_ model
+ * @property integer $mobile_model
  * @property integer $activity_id
  * @property string $content
  * @property integer $is_join_queue
@@ -41,7 +41,7 @@ class MobileMsg extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'mobile_ model', 'activity_id', 'is_join_queue', 'join_queue_at', 'is_send', 'send_at', 'create_at', 'msg_type'], 'integer'],
+            [['user_id', 'mobile_model', 'activity_id', 'is_join_queue', 'join_queue_at', 'is_send', 'send_at', 'create_at', 'msg_type'], 'integer'],
             [['content'], 'string'],
             [['username', 'status'], 'string', 'max' => 255],
             [['mobile_num'], 'string', 'max' => 45]
@@ -58,7 +58,7 @@ class MobileMsg extends \yii\db\ActiveRecord
             'user_id' => 'User ID',
             'username' => 'Username',
             'mobile_num' => 'Mobile Num',
-            'mobile_ model' => 'Mobile  Model',
+            'mobile_model' => 'Mobile  Model',
             'activity_id' => 'Activity ID',
             'content' => 'Content',
             'is_join_queue' => 'Is Join Queue',
