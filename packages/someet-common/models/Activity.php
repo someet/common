@@ -358,8 +358,6 @@ class Activity extends \yii\db\ActiveRecord
         return $this->hasMany(User::className(), ['id' => 'founder_id'])->viaTable('r_activity_founder', ['activity_id' => 'id']);
     }
 
-
-
     /**
      * 活动对应的日志列表
      * @return $this
