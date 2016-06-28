@@ -609,10 +609,10 @@ angular.module('controllers', ['ngTagsInput'])
                         .content("分组名称不能少于2个字符")
                         .hideDelay(5000)
                         .position("top right"));
-                } else if (typeName.length > 20) {
+                } else if (typeName.length > 60) {
                     $mdToast.show(
                         $mdToast.simple()
-                        .content("分组名称不能超过20个字符")
+                        .content("分组名称不能超过60个字符")
                         .hideDelay(5000)
                         .position("top right"));
                 } else {
