@@ -133,6 +133,15 @@ class YellowCard extends \yii\db\ActiveRecord
     }
 
     /**
+     * 可以通过 expand 获取的数据
+     * @return array
+     */
+    public function extraFields()
+    {
+        return ['activity', 'answer','user'];
+    }
+
+    /**
      * 属于一个活动
      * @return \yii\db\ActiveQuery
      */
@@ -148,5 +157,15 @@ class YellowCard extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * 获取报名信息
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAnswer()
+    {
+        return $this->hasOne(Answer::className(), ['activity_id' => 'activity_id', 'user_id' => 'user_id']);
     }
 }
