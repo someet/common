@@ -62,6 +62,12 @@ class Activity extends \yii\db\ActiveRecord
 
     /* 删除 */
     const STATUS_DELETE   = 0;
+    /* 不通过的发起人创建的活动 */
+    const STATUS_REFUSE = 3;
+    /* 通过的发起人创建的活动 */
+    const STATUS_PASS = 12;
+    /* 发起人创建的活动的草稿 */
+    const STATUS_FOUNDER_DRAFT = 5;    
     /* 草稿 */
     const STATUS_DRAFT    = 10;
     /* 预发布 */
@@ -72,7 +78,8 @@ class Activity extends \yii\db\ActiveRecord
     const STATUS_SHUT  = 30;
     /* 取消 */
     const STATUS_CANCEL = 40;
-
+    /* 待审核 */
+    const STATUS_CHECK = 8;
     /* 好评 */
     const GOOD_SCORE = 1;
     /* 中评 */
@@ -108,13 +115,13 @@ class Activity extends \yii\db\ActiveRecord
             [['longitude', 'latitude'], 'number'],
             [['longitude', 'latitude','pma_type'], 'default', 'value' => 0],
             [['ideal_number','ideal_number_limit','peoples'], 'default', 'value' => 10],
-            ['group_code', 'default', 'value' => '0'],
-            [['area','desc','address','details'], 'default', 'value' => '0'],
+            ['group_code', 'default', 'value' => ''],
+            [['area','desc','address','details'], 'default', 'value' => ''],
             ['poster', 'default', 'value' => 'http://7xn8h3.com2.z0.glb.qiniucdn.com/FtlMz_y5Pk8xMEPQCw5MGKCRuGxe'],
             ['start_time', 'default', 'value' => time()],
             ['end_time', 'default', 'value' => time()+7200],
             [['title'], 'string', 'max' => 80],
-            [['desc', 'poster', 'group_code', 'address', 'cost_list', 'tagNames'], 'string', 'max' => 255],
+            [['address_assign','desc', 'poster', 'group_code', 'address', 'cost_list', 'tagNames'], 'string', 'max' => 255],
             [['area'], 'string', 'max' => 10],
             [['tagNames'], 'safe'],
             [['status'], 'default', 'value' => 10],
@@ -193,6 +200,7 @@ class Activity extends \yii\db\ActiveRecord
             'space_section_id' => '空间id',
             'ideal_number' => '理想人数',
             'ideal_number_limit' => '理想人数限制',
+            'address_assign' => '场地是否分配',
         ];
     }
 
@@ -350,4 +358,12 @@ class Activity extends \yii\db\ActiveRecord
         return $this->hasMany(User::className(), ['id' => 'founder_id'])->viaTable('r_activity_founder', ['activity_id' => 'id']);
     }
 
+    /**
+     * 活动对应的日志列表
+     * @return $this
+     */
+    public function getLogs()
+    {
+        return $this->hasMany(AdminLog::className(), ['handle_id' => 'id'])->where(['controller' => 'activity'])->orderBy(['id' => SORT_DESC]);
+    }
 }
