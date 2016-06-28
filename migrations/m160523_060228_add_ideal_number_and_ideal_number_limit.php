@@ -8,7 +8,8 @@ class m160523_060228_add_ideal_number_and_ideal_number_limit extends Migration
     public function up()
     {
         $sql = <<<SQL
-        ALTER TABLE `activity` ADD COLUMN `ideal_number` int(11) UNSIGNED NOT NULL DEFAULT 10 COMMENT '理想人数' AFTER `peoples`, ADD COLUMN `ideal_number_limit` int(11) UNSIGNED NOT NULL DEFAULT 10 COMMENT '理想人数限制' AFTER `ideal_number`;
+        ALTER TABLE `activity` ADD COLUMN `ideal_number` int(11) UNSIGNED NOT NULL DEFAULT 10 COMMENT '理想人数' AFTER `peoples`,
+                                ADD COLUMN `ideal_number_limit` int(11) UNSIGNED NOT NULL DEFAULT 10 COMMENT '理想人数限制' AFTER `ideal_number`;
 SQL;
         $this->execute($sql);
         return true;
