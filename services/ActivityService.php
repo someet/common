@@ -1,23 +1,15 @@
 <?php
 namespace someet\common\services;
 
-// use dektrium\user\models\Account;
-// use app\components\DataValidationFailedException;
-// use app\components\ObjectNotExistsException;
-// use someet\common\models\Activity;
-// use someet\common\models\ActivityFeedback;
-// use someet\common\models\ActivityType;
 use someet\common\models\Answer;
-// use someet\common\models\Profile;
 use someet\common\models\Activity;
-// use someet\common\models\RActivityFounder;
 use Yii;
 
-class ActivityService  //extends \someet\common\models\Activity
+class ActivityService  
 {
 	/**
-	 * 更新报名率
-	 * @return 
+	 * 更新报名率 
+     * @param $activity_id 活动id
 	 */
 	public static function updateRepalyRate($activity_id)
 	{
@@ -59,10 +51,7 @@ class ActivityService  //extends \someet\common\models\Activity
             $apply_rate = ( $answerNum - $cancelApplyNum - $rejectNum - $leaveNum ) /  $activity->ideal_number;
             $apply_rate = round($apply_rate,2) * 100;
             Activity::updateAll(['apply_rate' => $apply_rate],['id' => $activity_id]);
-            return $apply_rate;
         }
-
-
 
 	}
 
