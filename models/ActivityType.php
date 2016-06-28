@@ -44,8 +44,8 @@ class ActivityType extends \yii\db\ActiveRecord
                 'name',
                 'string',
                 'min' => 2,
-                'max' => 10,
-                'tooLong' => '{attribute}长度不得超过10个字符',
+                'max' => 60,
+                'tooLong' => '{attribute}长度不得超过60个字符',
                 'tooShort' => '{attribute}最少含有2个字符',
             ],
         ];
