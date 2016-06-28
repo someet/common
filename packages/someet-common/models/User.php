@@ -130,15 +130,20 @@ class User extends BaseUser
             $fields['in_white_list'],
             $fields['is_email_verified'],
             $fields['unconfirmed_email'],
+            $fields['access_token'],
             $fields['unionid']
         );
 
         return $fields;
     }
 
+    /**
+     * 可以通过 expand 获取的数据
+     * @return array
+     */
     public function extraFields()
     {
-        return ['profile'];
+        return ['profile', 'checkInList','ugaPraiseList', 'ugaAnswerList', 'ugaQuestionList', 'answerList', 'assignment', 'activity'];
     }
 
     /**

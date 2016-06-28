@@ -37,6 +37,7 @@ use Yii;
  * @property integer $edit_status
  * @property integer $content
  * @property integer $display_order
+ * @property integer $apply_rate
  * @property string $field1
  * @property string $field2
  * @property string $field3
@@ -108,6 +109,7 @@ class Activity extends \yii\db\ActiveRecord
     {
         return [
             [['title'], 'required'],
+
             [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'pma_type','created_at', 'created_by', 'updated_at', 'updated_by', 'status', 'edit_status', 'display_order', 'co_founder1', 'co_founder2', 'co_founder3', 'co_founder4', 'is_full', 'join_people_count','space_spot_id','ideal_number','ideal_number_limit'], 'integer'],
             [['details', 'review', 'content', 'field1', 'field2', 'field3', 'field4', 'field5', 'field6', 'field7', 'field8'], 'string'],
             [['longitude', 'latitude'], 'number'],
@@ -139,11 +141,8 @@ class Activity extends \yii\db\ActiveRecord
 
     public function extraFields()
     {
-        return ['type', 'user','pma', 'spot', 'founders', 'profile' => function() {
-            if ($this->user) {
-                return $this->user->profile;
-            }
-            return null;
+        return ['type', 'user','pma', 'spot', 'founders', 'user.profile' => function() {
+            return $this->user ? $this->user->profile : null;
         }];
     }
 
@@ -182,6 +181,7 @@ class Activity extends \yii\db\ActiveRecord
             'edit_status' => '扩展字段, 前端自定义状态',
             'content' => '文案',
             'display_order' => '显示排序',
+            'apply_rate' => '报名率',
             'field1' => '扩展字段1',
             'field2' => '扩展字段2',
             'field3' => '扩展字段3',
@@ -336,6 +336,15 @@ class Activity extends \yii\db\ActiveRecord
     }
 
     /**
+     * 联合发起人列表
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRActivityFounder()
+    {
+        return $this->hasMany(RActivityFounder::className(), ['activity_id' => 'id']);
+    }
+
+    /**
      * 场地
      * @return \yii\db\ActiveQuery
      */
@@ -348,6 +357,7 @@ class Activity extends \yii\db\ActiveRecord
     {
         return $this->hasMany(User::className(), ['id' => 'founder_id'])->viaTable('r_activity_founder', ['activity_id' => 'id']);
     }
+
 
 
     /**
