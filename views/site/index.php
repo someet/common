@@ -57,6 +57,9 @@ use yii\helpers\Url;
                                 <li ng-class="{active:isActive('wechat')}">
                                     <a target="_parent" href="#/wechat">微信回复</a>
                                 </li>
+                                <li ng-class="{active:isActive('channel')}">
+                                    <a target="_parent" href="#/channel">频道</a>
+                                </li>
                                 <!-- <li ng-class="{active:isActive('/space-spot-device')}">
                                     <a target="_parent" href="#/space-spot-device">设备</a>
                                 </li> -->

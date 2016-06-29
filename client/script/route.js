@@ -6,11 +6,16 @@ app.config(
                 .when('/dashboard', {
                     templateUrl: '/partial/dashboard.html',
                     controller: 'DashboardCtrl'
-                })                
+                })
                 // 微信回复
                 .when('/wechat', {
                     templateUrl: '/partial/wechat/index.html',
                     controller: 'WechatCtrl'
+                })
+                // 频道
+                .when('/channel', {
+                    templateUrl: '/partial/channel/index.html',
+                    controller: 'ChannelCtrl'
                 })
                 //分享
                 .when('/share', {
