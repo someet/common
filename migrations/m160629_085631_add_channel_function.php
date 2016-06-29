@@ -33,7 +33,7 @@ SQL;
 
     public function down()
     {
-        echo "m160617_081711_add_check_change_status_permission cannot be reverted.\n";
+        echo "m160629_085631_add_channel_function cannot be reverted.\n";
 
         return false;
     }
