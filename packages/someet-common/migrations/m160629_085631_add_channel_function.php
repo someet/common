@@ -11,6 +11,7 @@ class m160629_085631_add_channel_function extends Migration
             '/mobile/activity/channel-view' => ['user'],
             '/mobile/activity/channel' => ['user'],
             '/mobile/activity/channel-page' => ['user'],
+            '/mobile/activity/channel-data' => ['user'],
         ];
 
         $authItemTemplate = <<<SQL
