@@ -285,6 +285,7 @@ angular.module('controllers', ['ngTagsInput'])
                     originActivity.group_code = "";
                     originActivity.join_people_count = 0;
                     originActivity.is_full = 0;
+                    originActivity.apply_rate = 0;
                     originActivity.is_top = '';
                     originActivity.display_order = 99;
                     originActivity.title = activityData.title + " 副本";
