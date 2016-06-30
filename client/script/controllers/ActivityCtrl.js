@@ -283,6 +283,10 @@ angular.module('controllers', ['ngTagsInput'])
                     var originActivity = activityData;
                     originActivity.id = null;
                     originActivity.group_code = "";
+                    originActivity.join_people_count = 0;
+                    originActivity.is_full = 0;
+                    originActivity.is_top = '';
+                    originActivity.display_order = 99;
                     originActivity.title = activityData.title + " 副本";
                     originActivity.status = 10; //活动状态10为草稿
                     originActivity.start_time = Date.parse(new Date()) / 1000 + 86400;
