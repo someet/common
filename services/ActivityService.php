@@ -56,7 +56,6 @@ class ActivityService  extends BaseService
 	}
 
 
-
     /**
      * 更新活动的状态
      *
