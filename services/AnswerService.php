@@ -75,7 +75,6 @@ class AnswerService extends BaseService
         //获取问题列表
         $questionItemList = QuestionItem::findAll(['question_id' => $question_id]);
         if (3 != count($questionItemList)) {
-
             $this->setError('活动设置的问题不是三个');
             return false;
         }
@@ -187,6 +186,9 @@ class AnswerService extends BaseService
             $this->setError('该报名信息不存在');
             return false;
         }
+        if ($status_arrive == $answer->arrive_status) {
+            return true;
+        }
 
         if ($status_arrive == $answer->arrive_status) {
             return true;
@@ -228,7 +230,6 @@ class AnswerService extends BaseService
             $this->setError('该报名信息不存在');
             return false;
         }
-
 
         if ($pass_or_not == $answer->status) {
             return true;
