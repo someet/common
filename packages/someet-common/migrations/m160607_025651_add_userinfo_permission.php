@@ -3,20 +3,19 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m160208_055718_add_activity_by_role_permission extends Migration
+class m160607_025651_add_userinfo_permission extends Migration
 {
     public function up()
     {
         $items = [
-            '/mobile/member/activity-by-role' => ['founder'],
-            '/mobile/member/activity-by-role' => ['pma'],
+            '/api/v1/user/userinfo' => ['user'],
         ];
 
         $authItemTemplate = <<<SQL
-INSERT INTO auth_item (name, type, description, rule_name, data, created_at, updated_at) VALUES ('%s', '2', '', null, null, null, null);
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`) VALUES ('%s', '2', '', null, null, null, null);
 SQL;
         $itemChildTemplate = <<<SQL
-        INSERT INTO auth_item_child (parent, child) VALUES ('%s', '%s');
+        INSERT INTO `auth_item_child` (`parent`, `child`) VALUES ('%s', '%s');
 SQL;
         $sql = '';
         foreach ($items as $item => $roles) {
@@ -31,7 +30,7 @@ SQL;
 
     public function down()
     {
-        echo "m160208_055718_add_activity_by_role_permission cannot be reverted.\n";
+        echo "m160607_025651_add_userinfo_permission cannot be reverted.\n";
 
         return false;
     }
@@ -47,4 +46,3 @@ SQL;
     }
     */
 }
-
