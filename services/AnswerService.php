@@ -163,8 +163,8 @@ class AnswerService extends BaseService
 
 
     /**
+
      * 更新用户到场情况
-     *
      * @param int $id 报名的ID
      * @param int $status_arrive 0|1|2 到达的状态
      * @return array|null|\yii\db\ActiveRecord
@@ -186,6 +186,10 @@ class AnswerService extends BaseService
             $this->setError('该报名信息不存在');
             return false;
         }
+        if ($status_arrive == $answer->arrive_status) {
+            return true;
+        }
+
         if ($status_arrive == $answer->arrive_status) {
             return true;
         }
