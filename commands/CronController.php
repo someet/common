@@ -322,12 +322,12 @@ class CronController extends \yii\console\Controller
         //尝试发送push
         $res = Yii::$app->jpush->push()
                 ->setPlatform(['ios', 'android'])
-                ->addAllAudience()
-                //->addRegistrationId(['171976fa8a80e7ce083'])
+                // ->addAllAudience()
+                ->addRegistrationId(['18171adc030d472b04b'])
                     //->addTag(['北京'])
                 //->addAlias('alias1')
-                        ->addAndroidNotification('Hi, android notification', 'notification title', 1, ['key1' => 'value1', 'key2' => 'value2'])
-                    ->addIosNotification('🍡CandyZ🍉 , Shaye🔆💯✔️ Hi, iOS notification', null, "+1", true, "ios category", ['key1' => 'value1'])
+                        // ->addAndroidNotification('Hi, android notification', 'notification title', 1, ['key1' => 'value1', 'key2' => 'value2'])
+                    ->addIosNotification('🍡CandyZ🍉aaaaaaaaaaa , Shaye🔆💯✔️ Hi, iOS notification', null, "+1", true, "ios category", ['key1' => 'value1'])
                 ->setNotificationAlert('test'.date('Y-m-d H:i:s', time()))
                 ->send();
         var_dump($res);
