@@ -6,6 +6,7 @@ use someet\common\models\Noti;
 use someet\common\models\MobileMsg;
 use someet\common\components\SomeetValidator;
 use someet\common\models\Activity;
+use someet\common\models\AppPush;
 use someet\common\services\AppPushService;
 use Yii;
 use someet\common\models\Answer;
@@ -85,6 +86,7 @@ class CronController extends \yii\console\Controller
                 ->asArray()
                 ->all();
 
+
         foreach ($mobileMsg as $msg) {
             //判断报名的用户是否存在
             if (!$msg['user_id']) {
@@ -122,13 +124,16 @@ class CronController extends \yii\console\Controller
     /**
     *极光推送
     */
-    public function actionJiguangPush()
+    public function actionJPush()
     {
         // 查询所有未发送的push
-        $app_push = Apppush::find()
-        ->where(["is_send" => MobileMsg::QUEUE_JOIN_YET, 'is_join_queue' => MobileMsg::QUEUE_JOIN_YET])
-        ->asArray()
-        ->all();
+        $app_push = AppPush::find()
+                    // ->where(['is_push' => AppPush::QUEUE_SEND_YET, 'is_join_queue' => AppPush::QUEUE_JOIN_YET])
+                    ->asArray()
+                    ->all();
+                    echo "string";
+print_r($app_push);
+        die;
         // 遍历所有push
         foreach ($app_push as $key => $value) {
             $id = $value['jiguang_id'];
@@ -148,7 +153,7 @@ class CronController extends \yii\console\Controller
                 Yii::error('极光推送添加到消息队列失败, 请检查');
             }else{
                 echo "极光推送添加到消息队列成功";
-               Apppush::updateAll(
+               AppPush::updateAll(
                     ['is_join_queue' => Apppush::QUEUE_JOIN_SUCC, 'send_at' => time()],
                     ['id' => $value['id']]
                 );
