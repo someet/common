@@ -34,6 +34,12 @@ class ActivityFeedback extends \yii\db\ActiveRecord
         return 'activity_feedback';
     }
 
+    public function extraFields()
+    {
+        return ['user', 'activity', 'answer', 'user.profile' => function() {
+            return $this->user ? $this->user->profile: null;
+        }];
+    }
     /**
      * @inheritdoc
      */

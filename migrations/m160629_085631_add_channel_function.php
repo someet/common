@@ -3,13 +3,15 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m160208_055718_add_activity_by_role_permission extends Migration
+class m160629_085631_add_channel_function extends Migration
 {
     public function up()
     {
         $items = [
-            '/mobile/member/activity-by-role' => ['founder'],
-            '/mobile/member/activity-by-role' => ['pma'],
+            '/mobile/activity/channel-view' => ['user'],
+            '/mobile/activity/channel' => ['user'],
+            '/mobile/activity/channel-page' => ['user'],
+            '/mobile/activity/channel-data' => ['user'],
         ];
 
         $authItemTemplate = <<<SQL
@@ -31,7 +33,7 @@ SQL;
 
     public function down()
     {
-        echo "m160208_055718_add_activity_by_role_permission cannot be reverted.\n";
+        echo "m160629_085631_add_channel_function cannot be reverted.\n";
 
         return false;
     }
@@ -47,4 +49,3 @@ SQL;
     }
     */
 }
-

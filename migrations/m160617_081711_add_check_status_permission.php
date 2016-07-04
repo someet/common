@@ -3,13 +3,12 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m160208_055718_add_activity_by_role_permission extends Migration
+class m160617_081711_add_check_status_permission extends Migration
 {
     public function up()
     {
         $items = [
-            '/mobile/member/activity-by-role' => ['founder'],
-            '/mobile/member/activity-by-role' => ['pma'],
+            '/backend/activity/check-status' => ['founder'],
         ];
 
         $authItemTemplate = <<<SQL
@@ -31,7 +30,7 @@ SQL;
 
     public function down()
     {
-        echo "m160208_055718_add_activity_by_role_permission cannot be reverted.\n";
+        echo "m160617_081711_add_check_change_status_permission cannot be reverted.\n";
 
         return false;
     }
@@ -47,4 +46,3 @@ SQL;
     }
     */
 }
-
