@@ -3,20 +3,20 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m160208_055718_add_activity_by_role_permission extends Migration
+class m160603_102349_add_cancel_join_and_leave_request_permission extends Migration
 {
     public function up()
     {
         $items = [
-            '/mobile/member/activity-by-role' => ['founder'],
-            '/mobile/member/activity-by-role' => ['pma'],
+            '/api/v1/answer/cancel-join' => ['user'],
+            '/api/v1/answer/leave-request' => ['user'],
         ];
 
         $authItemTemplate = <<<SQL
-INSERT INTO auth_item (name, type, description, rule_name, data, created_at, updated_at) VALUES ('%s', '2', '', null, null, null, null);
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`) VALUES ('%s', '2', '', null, null, null, null);
 SQL;
         $itemChildTemplate = <<<SQL
-        INSERT INTO auth_item_child (parent, child) VALUES ('%s', '%s');
+        INSERT INTO `auth_item_child` (`parent`, `child`) VALUES ('%s', '%s');
 SQL;
         $sql = '';
         foreach ($items as $item => $roles) {
@@ -31,7 +31,7 @@ SQL;
 
     public function down()
     {
-        echo "m160208_055718_add_activity_by_role_permission cannot be reverted.\n";
+        echo "m160603_102349_add_cancel_join_and_leave_request_permission cannot be reverted.\n";
 
         return false;
     }
@@ -47,4 +47,3 @@ SQL;
     }
     */
 }
-

@@ -54,6 +54,13 @@ class Noti extends \yii\db\ActiveRecord
     /* 通知发送状态失败 */
     const CALLBACK_STATUS_FAILURE    = 20;
 
+    /* 未进队列 */
+    const IN_TUBE_YET = 0;
+    /* 进队列成功 */
+    const IN_TUBE_YES = 1;
+    /* 进队列失败 */
+    const IN_TUBE_FAIL = 2;
+
     /**
      * @inheritdoc
      */

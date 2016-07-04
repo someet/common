@@ -71,6 +71,15 @@ class Question extends \yii\db\ActiveRecord
     }
 
     /**
+     * 可以通过 expand 获取的数据
+     * @return array
+     */
+    public function extraFields()
+    {
+        return ['questionItemList'];
+    }
+
+    /**
      * 问题项列表
      * @return \yii\db\ActiveQuery
      */
