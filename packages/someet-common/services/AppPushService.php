@@ -42,6 +42,8 @@ class AppPushService extends BaseService
                     ->addIosNotification($content, null, "+1", true, "ios category", ['key1' => 'value1'])
                 ->setNotificationAlert('test'.date('Y-m-d H:i:s', time()))
                 ->send();
+
+        return $res;
     }
 
 }
