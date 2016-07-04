@@ -85,6 +85,7 @@ angular.module('controllers', ['ngTagsInput'])
                         .position("top right"));
                 });
             }
+
             // 弹出问题表单
             $scope.open = function(entity) {
                 // console.log(entity);
@@ -254,16 +255,6 @@ angular.module('controllers', ['ngTagsInput'])
                 });
             };
 
-            // 内部编辑状态
-            $scope.onEditStatusChangeClick = function(activity, edit_status) {
-                var newActivity = activity;
-                newActivity.edit_status = edit_status;
-                $activityManage.update(newActivity.id, newActivity).then(function(data) {
-                    $location.path('/activity/list/' + activity.type_id);
-                }, function(err) {
-                    alert(err);
-                })
-            };
 
             // 设置报名表单状态 20关闭 10打开
             $scope.applyStatus = function(entity, status) {
@@ -291,6 +282,12 @@ angular.module('controllers', ['ngTagsInput'])
                 $mdDialog.show(confirm).then(function() {
                     var originActivity = activityData;
                     originActivity.id = null;
+                    originActivity.group_code = "";
+                    originActivity.join_people_count = 0;
+                    originActivity.is_full = 0;
+                    originActivity.apply_rate = 0;
+                    originActivity.is_top = '';
+                    originActivity.display_order = 99;
                     originActivity.title = activityData.title + " 副本";
                     originActivity.status = 10; //活动状态10为草稿
                     originActivity.start_time = Date.parse(new Date()) / 1000 + 86400;
@@ -617,10 +614,10 @@ angular.module('controllers', ['ngTagsInput'])
                         .content("分组名称不能少于2个字符")
                         .hideDelay(5000)
                         .position("top right"));
-                } else if (typeName.length > 20) {
+                } else if (typeName.length > 60) {
                     $mdToast.show(
                         $mdToast.simple()
-                        .content("分组名称不能超过20个字符")
+                        .content("分组名称不能超过60个字符")
                         .hideDelay(5000)
                         .position("top right"));
                 } else {

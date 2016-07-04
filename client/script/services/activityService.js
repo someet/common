@@ -1,13 +1,22 @@
 angular.module('backendServices')
     .factory('$activityManage', ['$http', '$q', '$rootScope', function($http, $q, $rootScope) {
         return {
+            //查看某个活动的日志
+            fetchLogByActivityId: function (activity_id) {
+                return $http.get('/activity/log?id='+activity_id);
+            },
             // 创建发起人
             createFounder: function(activity_id, founder_id) {
                 return $http.get('/activity/add-founder', { activity_id: 'activity_id', founder_id: 'founder_id' }).then(function(data) {
                     return data;
                 })
             },
-
+            // 添加联合发起人
+            updateCoFounder: function(id, newEntity) {
+                return $http.post('/activity/update-co-founder?id=' + id, newEntity).then(function(data) {
+                    return data;
+                });
+            },
             //删除发起人
             deteFounder: function(id){
                 return $http.get('/activity/dete-founder?id=' + id).then(function(data){
@@ -21,11 +30,18 @@ angular.module('backendServices')
                     return data;
                 })
             },
+            //审核发起人提交的活动
+            changeStatus: function(id,status) {
+                return $http.get('/activity/change-status?id=' + id + '&status=' + status).then(function(data) {
+                    return data;
+                })
+            },
             updateAllPrevent: function(newEntity) {
                 return $http.get('/activity/update-all-prevent').then(function(data) {
                     return data;
                 })
             },
+
             filterPrevent: function(newEntity) {
                 return $http.get('/activity/filter-prevent').then(function(data) {
                     return data;

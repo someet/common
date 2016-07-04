@@ -1,8 +1,8 @@
 <!-- 编辑活动内容页面 -->
 <div class="container" id="content">
     <md-input-container ng-if="entity.status == 8" layout="row" class="btn-float-right">
-        <md-button  class="md-raised md-primary" ng-click="updateStatus(entity.id,10)">审核通过</md-button>
-        <md-button class="md-raised md-warn" ng-click="updateStatus(entity.id,5)">不通过</md-button>
+        <md-button  class="md-raised md-primary" ng-click="updateStatus(entity.id,12)">审核通过</md-button>
+        <md-button class="md-raised md-warn" ng-click="updateStatus(entity.id,3)">不通过</md-button>
     </md-input-container>
     <form name="entityForm" ng-submit="save()">
         <div>

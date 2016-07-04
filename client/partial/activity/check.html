@@ -3,10 +3,6 @@
     <button type="button" class="btn btn-success btn-lg" ng-click="createPage()">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 新建活动
     </button>
-   <!--  <button type="button" class="btn btn-info btn-lg" ng-click="weekActivity()">本周活动</button>
-    <button type="button" class="btn btn-info btn-lg" ng-click="historyActivity()">历史活动</button>
-    <button type="button" class="btn btn-info btn-lg" ng-click="preventActivity()">预发布活动</button>
-    <button type="button" class="btn btn-info btn-lg btn-danger" ng-click="prevenIssuetActivity()">一键发布预发布活动</button> -->
 </div>
 <!-- 活动分类tab -->
 <div class="container">
@@ -26,9 +22,6 @@
                 <button class="btn-success" ng-click="commitTypeName(addForm.newType)">确认添加</button>
                 <button class="btn-default" ng-click="cancelAddType()">取消</button>
             </div>
-        </li>
-        <li ng-class="{active:isActive('check')}">
-            <a href="#/activity-check/check">活动审核</a>
         </li>
         <li ng-class="{active:isActive('delete')}">
             <a href="#/activity/recovery/delete">回收站</a>
@@ -74,7 +67,7 @@
                             <!-- <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" >
                                 查看详情
                             </button> -->
-                             <a class="btn btn-success" class="btn btn-default dropdown-toggle" href="#/activity/{{entity.id}}" target="_blank">查看详情</a>
+                             <a class="btn btn-success" class="btn btn-default dropdown-toggle" href="#/founder/{{entity.id}}" target="_blank">查看详情</a>
                             <!-- <a ng-click="updateStatus(entity.id,10)">启用活动</a> -->
                     </div>
                 </div>

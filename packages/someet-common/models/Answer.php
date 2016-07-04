@@ -139,8 +139,8 @@ class Answer extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'question_id' => 'Question ID',
-            'activity_id' => 'Activity ID',
             'user_id' => 'User ID',
+            'wechat_id' => 'Wechat Id',
             'is_finish' => 'Is Finish',
             'is_send' => 'Is Send',
             'is_feedback' => 'Is Feedback',
@@ -196,7 +196,13 @@ class Answer extends \yii\db\ActiveRecord
 
         return $fields;
     }
-
+    
+    public function extraFields()
+    {
+        return ['user', 'activity', 'answerItemList',  'user.profile' => function() {
+            return $this->user ? $this->user->profile: null;
+        }];
+    }
     /**
      * 回答项列表
      * @return \yii\db\ActiveQuery

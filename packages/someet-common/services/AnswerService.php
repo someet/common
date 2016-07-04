@@ -9,11 +9,12 @@ use someet\common\models\QuestionItem;
 use someet\common\models\AnswerItem;
 use someet\common\models\Answer;
 use someet\common\models\User;
+use someet\common\models\YellowCard;
 use Yii;
+use yii\db\ActiveQuery;
 
-class AnswerService extends \someet\common\models\Answer
+class AnswerService extends BaseService
 {
-    use ServiceError;
 
     /**
      * 报名
@@ -66,8 +67,7 @@ class AnswerService extends \someet\common\models\Answer
         }
 
         if (Answer::find()->where(['question_id' => $question_id, 'user_id' => $user_id])->exists()) {
-            $this->setError('无法重新报名');
-            return false;
+            return true;
         }
 
         $user = User::findOne($user_id);
@@ -75,7 +75,7 @@ class AnswerService extends \someet\common\models\Answer
         //获取问题列表
         $questionItemList = QuestionItem::findAll(['question_id' => $question_id]);
         if (3 != count($questionItemList)) {
-            $this->setError('问题不是三个');
+            $this->setError('活动设置的问题不是三个');
             return false;
         }
 
@@ -146,13 +146,25 @@ class AnswerService extends \someet\common\models\Answer
         }
 
         $transaction->commit();
-        return true;
+        return Answer::find()
+            ->select(['id', 'question_id', 'activity_id', 'user_id'])
+            ->where(['id' => $model->id])
+            ->with([
+                'user' => function(ActiveQuery $query) {
+                    $query->select(['id', 'username', 'mobile', 'wechat_id']);
+                },
+                'answerItemList' => function(ActiveQuery $query) {
+                    $query->select(['id', 'user_id', 'question_item_id', 'question_id', 'question_label', 'question_value']);
+                }
+            ])
+            ->asArray()
+            ->one();
     }
 
 
     /**
-     * 报名状态修改
-     *
+
+     * 更新用户到场情况
      * @param int $id 报名的ID
      * @param int $status_arrive 0|1|2 到达的状态
      * @return array|null|\yii\db\ActiveRecord
@@ -173,6 +185,13 @@ class AnswerService extends \someet\common\models\Answer
         if (!$answer) {
             $this->setError('该报名信息不存在');
             return false;
+        }
+        if ($status_arrive == $answer->arrive_status) {
+            return true;
+        }
+
+        if ($status_arrive == $answer->arrive_status) {
+            return true;
         }
 
         $answer->arrive_status = $status_arrive;
@@ -210,6 +229,10 @@ class AnswerService extends \someet\common\models\Answer
         if (!$answer) {
             $this->setError('该报名信息不存在');
             return false;
+        }
+
+        if ($pass_or_not == $answer->status) {
+            return true;
         }
 
         $user = $answer->user;
@@ -320,6 +343,202 @@ class AnswerService extends \someet\common\models\Answer
                 }
             }
 
+        }
+
+        $transaction->commit();
+        return true;
+    }
+
+    /**
+     * 取消报名, 前提是未审核状态
+     *
+     * @param integer $id 报名编号
+     * @return bool
+     * @throws \yii\db\Exception
+     */
+    public function cancelJoin($id)
+    {
+        $answer = Answer::find()
+            ->with(['activity'])
+            ->where(['id' => $id])
+            ->one();
+        if (!$answer) {
+            $this->setError('报名不存在');
+            return false;
+        }
+
+        if (Answer::APPLY_STATUS_YET == $answer->apply_status) {
+            return true;
+        }
+
+        //如果不是未审核
+        if (Answer::STATUS_REVIEW_YET != $answer->status) {
+            $this->setError('您报名状态不是未审核状态，此时不能取消');
+            return false;
+        }
+
+        $transaction = $answer->getDb()->beginTransaction();
+
+        $answer->apply_status = Answer::APPLY_STATUS_YET;
+        $answer->cancel_apply_time = time();
+
+        if (!$answer->save()) {
+            $transaction->rollBack();
+            $this->setError('取消报名失败');
+            return false;
+        }
+
+        /*
+         * push系统
+         * 来源id:  微信渠道 TUNNEL_WECHAT 1; 短信渠道 TUNNEL_SMS 2;
+         * 来源类型: 活动类型 FROM_ACTIVITY 1; 用户类型 FROM_USER 2; 系统类型 FROM_SYSTEM  3; 场地类型 FROM_SPACE 4;
+         */
+        // 微信公开id 用于给指定的用户发送消息
+        $account = Account::find()
+            ->where(['user_id' => $answer->user_id])
+            ->one();
+        if (!$account) {
+            $transaction->rollBack();
+            $this->setError('您的帐号未关联微信');
+            return false;
+        }
+        $openid = $account->client_id;
+
+        $noti = new noti();
+        $noti->tunnel_id = Noti::TUNNEL_WECHAT;
+        $noti->user_id = $answer->user_id;
+        $noti->from_id_type = Noti::FROM_ACTIVITY;
+        $noti->from_id = $answer->activity_id;
+        $template = NotificationTemplate::fetchUpdateCancelActivityWechatTemplateData($openid, $answer);
+        if (!is_array($template)) {
+            $transaction->rollBack();
+            $this->setError('取消报名的消息模板格式不正确');
+            return false;
+        }
+        $noti->note = json_encode($template);
+        if (!$noti->save()) {
+            $transaction->rollBack();
+            $this->setError('通知添加失败');
+            return false;
+        }
+
+        $transaction->commit();
+        return true;
+    }
+
+    /**
+     * 请假, 前提是报名通过并且活动还未开始
+     *
+     * @param integer $id 报名编号
+     * @return array
+     */
+    public function leaveRequest($id)
+    {
+        $answer = Answer::find()
+            ->where(['id' => $id])
+            ->with(['user','user.profile','activity'])
+            ->one();
+        if (!$answer) {
+            $this->setError('报名不存在');
+            return false;
+        }
+
+        if (Answer::STATUS_LEAVE_YES == $answer->leave_status) {
+            return true;
+        }
+
+        //如果不是通过状态则不能请假
+        if (Answer::STATUS_REVIEW_PASS != $answer->status) {
+            $this->setError('您报名的活动未通过，此时不能请假');
+            return false;
+        }
+
+        //如果现在已经是活动开始了则无法请假
+        if (time() > $answer->activity->start_time) {
+            $this->setError('活动已经开始,此时不能请假');
+            return false;
+        }
+
+        $answer->leave_status = Answer::STATUS_LEAVE_YES;
+        $answer->leave_time = time();
+
+        // 如果在24小时之内增加两个黄牌，在24小时之外增加一个黄牌
+        $card_num = ($answer->activity->start_time - time()) < 86400 ? YellowCard::CARD_NUM_LEAVE_2 : YellowCard::CARD_NUM_LEAVE_1;
+        $card_category = ($answer->activity->start_time - time()) < 86400 ? YellowCard::CARD_CATEGOTY_LEAVE_2 : YellowCard::CARD_CATEGOTY_LEAVE_1;
+
+        $transaction = $answer->getDb()->beginTransaction();
+        if (!$answer->save()) {
+            $errors = $answer->getFirstErrors();
+            Yii::error(array_pop($errors));
+            $transaction->rollBack();
+            return ['message'=> '请假失败,系统错误'];
+        }
+
+        // 判断之前有没有插入过黄牌 user_id  and  activity_id 唯一
+        $yellowExists = YellowCard::find()
+            ->where(
+                [
+                    'user_id' => $answer->user_id,
+                    'activity_id' => $answer->activity_id,
+                ]
+            )
+            ->exists();
+
+        if ($yellowExists) {
+            $transaction->commit();
+            return true;
+        }
+
+        // 更新黄牌的一些数据
+        $yellowCard = new YellowCard();
+        $yellowCard->user_id = $answer->user_id;
+        $yellowCard->username = $answer->user->username;
+        $yellowCard->activity_id = $answer->activity_id;
+        $yellowCard->activity_title = $answer->activity->title;
+        $yellowCard->card_num = $card_num;
+        $yellowCard->card_category = $card_category;
+        $yellowCard->created_at = time();
+        $yellowCard->status = YellowCard::STATUS_NORMAL;
+        if (!$yellowCard->save()) {
+            $transaction->rollBack();
+            $this->setError('添加黄牌失败');
+            return false;
+        }
+
+        $account = Account::find()
+            ->where(['user_id' => $answer->user_id])
+            ->one();
+        if (!$account) {
+            $transaction->rollBack();
+            $this->setError('用户未关联微信');
+            return false;
+        }
+
+        $openid = $account->client_id;
+
+        $noti = new noti();
+        // 来源id  微信渠道 TUNNEL_WECHAT 1; 短信渠道 TUNNEL_SMS 2;
+        $noti->tunnel_id = Noti::TUNNEL_WECHAT;
+        $noti->user_id = $answer->user_id;
+        // 来源类型 活动类型 FROM_ACTIVITY 1; 用户类型 FROM_USER 2; 系统类型 FROM_SYSTEM  3; 场地类型 FROM_SPACE 4;
+        $noti->from_id_type = Noti::FROM_ACTIVITY;
+        // 活动类型id 例如 如果是活动 activity_id
+        $noti->from_id = $answer->activity_id;
+
+        $template = NotificationTemplate::fetchUpdateCreditWechatTemplateData($openid, $answer->activity, $yellowCard);
+        if (!is_array($template)) {
+            $transaction->rollBack();
+            $this->setError('请假的消息模板不正确');
+            return false;
+        }
+
+        $noti->note = json_encode($template);
+        if (!$noti->save()) {
+            $transaction->rollBack();
+            $errors = $noti->getFirstErrors();
+            Yii::error(array_pop($errors));
+            $this->setError('发送通知错误');
+            return false;
         }
 
         $transaction->commit();

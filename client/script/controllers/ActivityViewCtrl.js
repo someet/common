@@ -38,10 +38,36 @@ angular.module('controllers')
 
                     if (founderBull) {
                         $scope.founder.push(obj);
+                        if ($routeParams.id > 0 ) {
+                            // 更新联合发起人
+                            $activityManage.updateCoFounder(id,$scope.founder).then(function(data) {
+                                $mdToast.show($mdToast.simple()
+                                .content('联合发起人添加成功')
+                                .hideDelay(5000)
+                                .position("top right"));
+                            })
+
+                        }
                     }
                 }
 
             }
+
+            // 删除联合发起人
+            $scope.deteFounder = function(founder) {
+                $scope.founder.splice(founder, 1);
+                if ($routeParams.id > 0 ) {
+                        // 更新联合发起人
+                        $activityManage.updateCoFounder(id,$scope.founder).then(function(data) {
+                            $mdToast.show($mdToast.simple()
+                            .content('联合发起人删除成功')
+                            .hideDelay(5000)
+                            .position("top right"));
+                        })
+                    }
+
+            }
+
             //审核活动是否通过
             $scope.updateStatus = function(id, status) {
                 if(status == 10) {
@@ -59,15 +85,10 @@ angular.module('controllers')
                 }
                 $mdDialog.show(confirm).then(function() {
                     $activityManage.updateStatus(id, status).then(function(data) {
-                        $location.path("/activity-check/check");
+                        $location.path("/check/check");
                         console.log('test');
                     });
                 });
-            }
-
-            // 删除发起人
-            $scope.deteFounder = function(founder) {
-                $scope.founder.splice(founder, 1);
             }
 
             // 搜索场地功能
@@ -272,7 +293,7 @@ angular.module('controllers')
                 newEntity.poster = $scope.poster;
                 newEntity.group_code = $scope.group_code;
                 newEntity.pma_type = $scope.entity.pma_type;
-                // 创建发起人
+                // 创建联合发起人
                 if ($scope.founder) {
                     newEntity.founder = $scope.founder;
                 }
@@ -302,17 +323,7 @@ angular.module('controllers')
                 if ($scope.pma) {
                     newEntity.principal = $scope.pma.id;
                 }
-                if ($scope.co_founder1) {
-                    newEntity.co_founder1 = $scope.co_founder1.id;
-                } else {
-                    newEntity.co_founder1 = 0;
-                }
-                if ($scope.co_founder2) {
-                    newEntity.co_founder2 = $scope.co_founder2.id;
-                } else {
-                    newEntity.co_founder2 = 0;
-                }
-
+                
                 var tags = [];
                 for (var k in $scope.tags) {
                     var tag = $scope.tags[k].text;

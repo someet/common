@@ -21,6 +21,36 @@ use someet\common\models\RActivityFounder;
 class UpdateController extends \yii\console\Controller
 {
     /**
+    * 更新活动已经报名的人数,以及更新活动是否已经报满
+    * 执行方式 在命令行 
+    * 如： docker exec -i mobileweb_app_1 ./yii update/join-people-count（控制器/方法） 
+    * 可以用 yii help 来提示帮助
+    */
+    public function actionJoinPeopleCount()
+    {
+        $answerNum = Answer::find()
+                    ->select([
+                            'activity_id', 'COUNT(id) as answer_num'
+                    ])
+                    ->asArray()
+                    ->groupBy('activity_id')
+                    ->all();
+        foreach ($answerNum as $answer) {
+            if (empty($answer['activity_id'])) {
+                continue;
+            }
+
+            $activity_id = $answer['activity_id'];
+            $activity = Activity::findOne($activity_id);
+            $join_people_count = $answer['answer_num'];
+            $is_full = $activity->peoples > $join_people_count ? Activity::IS_FULL_NO : Activity::IS_FULL_YES;
+            Activity::updateAll(['is_full' => $is_full, 'join_people_count' => $join_people_count],['id' => $activity_id]);
+        }
+
+        return true;
+    }
+
+    /**
      * 更新发起人数据 与 新建立的表保持一致
      * docker exec -i backend_app_1 ./yii update/update-founder
      */

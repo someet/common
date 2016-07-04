@@ -7,6 +7,16 @@ app.config(
                     templateUrl: '/partial/dashboard.html',
                     controller: 'DashboardCtrl'
                 })
+                // 微信回复
+                .when('/wechat', {
+                    templateUrl: '/partial/wechat/index.html',
+                    controller: 'WechatCtrl'
+                })
+                // 频道
+                .when('/channel', {
+                    templateUrl: '/partial/channel/index.html',
+                    controller: 'ChannelCtrl'
+                })
                 //分享
                 .when('/share', {
                     templateUrl: '/partial/share/index.html',
@@ -78,7 +88,7 @@ app.config(
                     controller:'ActivityDeleteCtrl'
                 })
                 //审核发起人提交的活动
-                .when('/activity-check/:status',{
+                .when('/check/:status',{
                     templateUrl: '/partial/activity/check.html',
                     controller:'ActivityCheckCtrl'
                 })
@@ -96,6 +106,11 @@ app.config(
                 .when('/activity/:id', {
                     templateUrl: '/partial/activity/view.html',
                     controller: 'ActivityViewCtrl'
+                })
+                //查看活动日志
+                .when('/activity/log/:id', {
+                    templateUrl: '/partial/activity/log.html',
+                    controller: 'ActivityLogCtrl'
                 })
                 // 发起人查看活动列表
                 .when('/founder', {

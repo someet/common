@@ -109,7 +109,7 @@ class User extends BaseUser
             ['password_reset_token', 'string', 'max' => 60],
             ['email_confirmation_token', 'string', 'max' => 60],
 
-            ['access_token', 'default', 'value' => Yii::$app->security->generateRandomString()],
+            ['access_token', 'default', 'value' => Yii::$app->security->generateRandomString(), 'on' => ['register', 'create']],
             [['last_login_at', 'password_reset_token', 'email_confirmation_token'], 'safe'],
         ];
     }
@@ -130,15 +130,20 @@ class User extends BaseUser
             $fields['in_white_list'],
             $fields['is_email_verified'],
             $fields['unconfirmed_email'],
+            $fields['access_token'],
             $fields['unionid']
         );
 
         return $fields;
     }
 
+    /**
+     * 可以通过 expand 获取的数据
+     * @return array
+     */
     public function extraFields()
     {
-        return ['profile'];
+        return ['profile', 'checkInList','ugaPraiseList', 'ugaAnswerList', 'ugaQuestionList', 'answerList', 'assignment', 'activity'];
     }
 
     /**
@@ -389,7 +394,16 @@ class User extends BaseUser
      */
     public function getFeedbackList()
     {
-        return $this->hasMany(ActivityFeedback::className(), ['user_id', 'id']);
+        return $this->hasMany(ActivityFeedback::className(), ['user_id' => 'id']);
+    }
+
+    /**
+     * 设备
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDevices()
+    {
+        return $this->hasMany(AppDevice::className(), ['user_id' => 'id']);
     }
 
 }

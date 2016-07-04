@@ -14,4 +14,8 @@ composer.lock
 *.swp
 .vimrc
 .DS_Store
+<<<<<<< HEAD
 jpush.log
+=======
+start.sh
+>>>>>>> master

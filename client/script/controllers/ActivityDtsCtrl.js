@@ -86,7 +86,6 @@ angular.module('controllers')
                 });
             } 
 
-
             // 弹出问题表单
             $scope.open = function(entity) {
                 // console.log(entity);
@@ -103,12 +102,11 @@ angular.module('controllers')
                 });
 
                 modalInstance.result.then(function(data) {
-                    console.log(data);
+                    modelPagination();
                 }, function() {
                     $log.info('Modal dismissed at: ' + new Date());
                 });
             };
-
 
             //活动列表开始
             modelPagination();
@@ -173,18 +171,11 @@ angular.module('controllers')
                     }
                 });
             }
-            // 活动还原
+            // 切换为预发布
             $scope.updateStatus = function(id, status) {
-                var confirm = $mdDialog.confirm()
-                    .title('确定要还原吗？')
-                    .ariaLabel('delete activity item')
-                    .ok('确定还原')
-                    .cancel('点错了，再看看');
-                $mdDialog.show(confirm).then(function() {
-                    $activityManage.updateStatus(id, status).then(function(data) {
+               $activityManage.updateStatus(id, status).then(function(data) {
                         fetchPage();
                     });
-                });
             }
 
             // 本周活动
@@ -294,6 +285,7 @@ angular.module('controllers')
                 $mdDialog.show(confirm).then(function() {
                     var originActivity = activityData;
                     originActivity.id = null;
+                    originActivity.group_code = "";
                     originActivity.title = activityData.title + " 副本";
                     originActivity.status = 10; //活动状态10为草稿
                     originActivity.start_time = Date.parse(new Date())/1000 + 86400; 

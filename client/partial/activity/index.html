@@ -35,9 +35,6 @@
                 <button class="btn-default" ng-click="cancelAddType()">取消</button>
             </div>
         </li>
-        <li ng-class="{active:isActive('check')}">
-            <a href="#/activity-check/check">活动审核</a>
-        </li>
         <li ng-class="{active:isActive('delete')}">
             <a href="#/activity/recovery/delete">回收站</a>
         </li>
@@ -56,7 +53,7 @@
             </li>
             <li ng-if="list" ng-repeat="entity in list | filter:query">
                 <div ng-class="{
-                'panel-default': entity.status == 10,
+                'panel-default': entity.status == 10 ||entity.status ==12,
                 'panel-success': entity.status == 20,
                 'panel-info': entity.status == 30,
                 'panel-warning': entity.status == 40, 
@@ -78,6 +75,7 @@
               <!-- 活动标题 -->
               {{entity.id}}#
               <span ng-if="entity.status==10" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[草稿]</span>
+              <span ng-if="entity.status==12" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[发起人草稿]</span>
               <span ng-if="entity.status==20" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[启用]</span>
               <span ng-if="entity.status==15" >[预发布]{{entity.user.username}}：{{entity.title}} - {{entity.desc}}</span>
               <span ng-if="entity.status==30" >{{entity.user.username}}：{{entity.title}} - {{entity.desc}}[关闭]</span>
@@ -140,11 +138,13 @@
                             <span class="badge">{{entity.feedback_count}}</span>
                         </a>
                         </span>
-                        <button ng-file-select="listQrcode($files,entity)" data-multiple="false" title="上传群二维码" onclick="this.value = null" class="btn btn-info">
+                        <button ng-if="entity.group_code == ''" ng-file-select="listQrcode($files,entity)" data-multiple="false" title="上传群二维码" onclick="this.value = null" class="btn btn-danger">
                             群二维码上传
                         </button>
                         <a class="btn btn-success" href="#/activity/{{entity.id}}" target="_blank">编辑</a>
-                        <button ng-if="entity.status==10 || entity.status==15" class="btn btn-primary btn-float-right" ng-click="release(entity)" type="button">发布</button>
+                        <a class="btn btn-success" href="#/activity/log/{{entity.id}}" target="_blank">操作日志</a>
+
+                        <button ng-if="entity.status==10 || entity.status==15 || entity.status==12" class="btn btn-primary btn-float-right" ng-click="release(entity)" type="button">发布</button>
                     </div>
                 </div>
             </li>
@@ -162,7 +162,7 @@
         <div class="modal-content">
             <form name="entityForm" ng-submit="questionSave()">
             <div class="modal-header" >
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> -->
                 <h4 class="modal-title" id="exampleModalLabel">{{activity.id}}#{{activity.title}}</h4>
             </div>
 

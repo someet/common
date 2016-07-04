@@ -134,6 +134,9 @@ class FounderController extends BackendController
             Activity::STATUS_SHUT,
             Activity::STATUS_CANCEL,
             Activity::STATUS_CHECK,
+            Activity::STATUS_REFUSE,
+            Activity::STATUS_PASS,
+
             ]];
     
             $query = Activity::find()
@@ -376,6 +379,12 @@ class FounderController extends BackendController
             }
         }
 
+        if (isset($data['field2'])) {
+            $model->field2 = $data['field2'];
+            if (!$model->validate('field2')) {
+                throw new DataValidationFailedException($model->getFirstError('field2'));
+            }
+        }
         //发布活动的时候有值
         if (isset($data['status'])) {
             $model->status = $data['status'];

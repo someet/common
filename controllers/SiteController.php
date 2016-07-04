@@ -55,11 +55,39 @@ class SiteController extends BackendController
         $assignments = $auth->getAssignments($current_user_id);
         $isManager = array_key_exists('admin', $assignments);
         $isFounder = array_key_exists('founder', $assignments) || !array_key_exists('admin', $assignments);
+        
+        $checkNum = Activity::find()
+                        ->where(['status' => Activity::STATUS_CHECK])
+                        ->count();
         if ($isManager) {
-            return $this->renderPartial('index');
+             return $this->renderPartial(
+            'index',
+                [
+                    'checkNum' => $checkNum,
+                ]
+            );
         }elseif ($isFounder) {
             return $this->renderPartial('founder');
+
         }
+
+        // Yii::$app->response->format = Response::FORMAT_JSON;
+        // $checkNum = Activity::find()
+        //                 ->where(['status' => Activity::STATUS_CHECK])
+        //                 ->count();
+
+        // return $checkNum
+        // return [
+        //    'countUser' => $countUser,
+        // ];
+        //  return $this->render(
+        //     'index',
+        //     [
+        //         'share' => $model,
+        //         'week' => $week,
+        //         'cost' => $cost,
+        //     ]
+        // );
     }
     /**
     *站点首页信息
