@@ -127,11 +127,12 @@ class CronController extends \yii\console\Controller
     public function actionJPush()
     {
         // 查询所有未发送的push
-        $app_push = AppPush::find()
+        $app_push = answer::find()
                     // ->where(['is_push' => AppPush::QUEUE_SEND_YET, 'is_join_queue' => AppPush::QUEUE_JOIN_YET])
                     ->asArray()
                     ->all();
                     echo "string";
+
 print_r($app_push);
         die;
         // 遍历所有push
@@ -154,7 +155,7 @@ print_r($app_push);
             }else{
                 echo "极光推送添加到消息队列成功";
                AppPush::updateAll(
-                    ['is_join_queue' => Apppush::QUEUE_JOIN_SUCC, 'send_at' => time()],
+                    ['is_join_queue' => AppPush::QUEUE_JOIN_SUCC, 'send_at' => time()],
                     ['id' => $value['id']]
                 );
             }
