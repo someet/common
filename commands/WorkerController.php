@@ -33,13 +33,22 @@ class WorkerController extends BeanstalkController
     public function actionJpush($job)
     {
         $sentData = $job->getData();
+        $jiguang_id = $job->jiguang_id;
+        $content = $job->content;
+        $app_push = $app_push;
 
         try {
 
-            AppPushService::jpush($id, $content);
-            
-        } catch (\Exception $e) {
+            // 极光推送
+            $jpush = AppPushService::jpush($id, $content);
 
+            echo 'Result=' . json_encode($jpush) . $br;
+
+
+
+        } catch (\Exception $e) {
+            fwrite(STDERR, Console::ansiFormat($e."\n", [Console::FG_RED]));
+            return self::BURY;
         }
 
     }
