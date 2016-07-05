@@ -68,7 +68,6 @@ class JiguangService  extends BaseService
     {
         $start_time = $start_time > 0 ? date('n月j日', $start_time) : '';
         //获取拒绝的模板
-        // return "Shit happens！{$reason}很抱歉你报名的{$start_time}“{$activity_name}”活动未通过筛选。祝下次好运。详情请到微信公众号(SomeetInc)查看。";
         return "抱歉您未通过筛选,点击本条消息可查看本周其他好玩活动。\r{$activity_name} \r{$start_time}\r{$reason} \r";
     }
 }
