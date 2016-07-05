@@ -10,6 +10,7 @@ namespace someet\common\services;
 
 
 use someet\common\models\AppPush;
+use Yii;
 
 class AppPushService extends BaseService
 {
