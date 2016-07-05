@@ -1,13 +1,3 @@
-<!--
-@Author: stark <wangshudong>
-@Date:   2016-07-04T13:34:07+08:00
-@Email:  wsd312@163.com
-@Last modified by:   wangshudong
-@Last modified time: 2016-07-05T15:31:28+08:00
--->
-
-
-
 <?php
 namespace someet\common\services;
 
@@ -30,14 +20,14 @@ class AppPushService extends BaseService
     }
 
     /**
-     * 极光推送
+     * 极光推送Yii::error('msg');
      * @param  integer $jpush 极光推送数据
      * @return bool    推送是否成功
      */
     public static function jpush($jpush)
     {
         // 当数据为空时返回值为0
-        if(empty($jpush)){
+        if (empty($jpush)) {
             return AppPush::QUEUE_SEND_YET;
         }
         //推送
@@ -57,9 +47,8 @@ class AppPushService extends BaseService
                 ->setNotificationAlert('test'.date('Y-m-d H:i:s', time()))
                 ->send();
         if ($res) {
-            echo 'Result=' . json_encode($res)."\n";
+            // echo 'Result=' . json_encode($res)."\n";
             return AppPush::QUEUE_SEND_SUCC;
         }
     }
-
 }
