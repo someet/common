@@ -15,4 +15,3 @@ composer.lock
 .vimrc
 .DS_Store
 jpush.log
-start.sh
