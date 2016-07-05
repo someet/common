@@ -4,6 +4,7 @@ namespace someet\common\services;
 use someet\common\models\YellowCard;
 use someet\common\models\Answer;
 use someet\common\models\AppPush;
+use someet\common\models\AppDevice;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
 use Yii;
@@ -28,10 +29,12 @@ class JiguangService  extends BaseService
         $msgExists = AppPush::find()->where(['from_id' => $model->activity->id, 'user_id' => $user->id, 'from_status' => $type])->exists();
         if (!$msgExists) {
             if (!empty($content)) {
+                $device = AppDevice::find()->where(['user_id' => $user->id])->one();
                 $AppPush = new AppPush();
                 $AppPush->content = $content;
                 $AppPush->created_at = time();
                 $AppPush->user_id = $user->id;
+                $AppPush->jiguang_id = $device->jiguang_id;
                 $AppPush->from_type = $from_type;
                 $AppPush->from_status = $type;
                 $AppPush->from_id = $model->activity->id;
@@ -52,11 +55,7 @@ class JiguangService  extends BaseService
     {
         $start_time = $start_time > 0 ? date('n月j日', $start_time) : '';
         //获取通过的模板
-        return "
-		抱歉您未通过筛选,点击本条消息可查看本周其他好玩的活动。\n
-		{$activity_name} \n
-		{$start_time} \n
-		";
+        return "抱歉您未通过筛选,报名活动成功,点击本条消息保存本次活动群二维码\r{$activity_name}\r{$start_time}\r";
     }
     /**
      * 获取失败的内容
@@ -70,10 +69,6 @@ class JiguangService  extends BaseService
         $start_time = $start_time > 0 ? date('n月j日', $start_time) : '';
         //获取拒绝的模板
         // return "Shit happens！{$reason}很抱歉你报名的{$start_time}“{$activity_name}”活动未通过筛选。祝下次好运。详情请到微信公众号(SomeetInc)查看。";
-        return "抱歉您未通过筛选,点击本条消息可查看本周其他好玩活动。\n
-				{$activity_name} \n
-				{$start_time}\n
-				{$reason} \n
-				";
+        return "抱歉您未通过筛选,点击本条消息可查看本周其他好玩活动。\r{$activity_name} \r{$start_time}\r{$reason} \r";
     }
 }
