@@ -3,12 +3,13 @@
 use yii\db\Schema;
 use yii\db\Migration;
 
-class m160614_070355_add_check_num_prevent_migrate extends Migration
+class m160705_092512_add_complete_founder_page_permission extends Migration
 {
     public function up()
     {
         $items = [
-            '/backend/activity/check-num' => ['founder'],
+            '/mobile/member/complete-founder' => ['user'],
+            '/mobile/member/remind-founder' => ['user'],
         ];
 
         $authItemTemplate = <<<SQL
@@ -30,7 +31,7 @@ SQL;
 
     public function down()
     {
-        echo "m160614_070355_add_check_num_prevent_migrate cannot be reverted.\n";
+        echo "m160705_092512_add_complete_founder_page_permission cannot be reverted.\n";
 
         return false;
     }
