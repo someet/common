@@ -55,7 +55,7 @@ class JiguangService  extends BaseService
     {
         $start_time = $start_time > 0 ? date('n月j日', $start_time) : '';
         //获取通过的模板
-        return "抱歉您未通过筛选,报名活动成功,点击本条消息保存本次活动群二维码\r{$activity_name}\r{$start_time}\r";
+        return "报名活动成功,点击本条消息保存本次活动群二维码\r{$activity_name}\r{$start_time}\r";
     }
     /**
      * 获取失败的内容
