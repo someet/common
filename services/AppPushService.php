@@ -30,6 +30,7 @@ class AppPushService extends BaseService
         if (empty($jpush)) {
             return AppPush::QUEUE_SEND_YET;
         }
+
         //推送
         $res = Yii::$app->jpush->push()
                 ->setPlatform(['ios', 'android'])
@@ -44,11 +45,10 @@ class AppPushService extends BaseService
                         'from_status' => $jpush->from_status,
                         'push_at' => $jpush->push_at,
                 ])
-                ->setNotificationAlert('test'.date('Y-m-d H:i:s', time()))
                 ->send();
         if ($res) {
-            // echo 'Result=' . json_encode($res)."\n";
             return AppPush::QUEUE_SEND_SUCC;
         }
+        return AppPush::QUEUE_SEND_YET;
     }
 }
