@@ -50,7 +50,7 @@ class ActivityFeedback extends \yii\db\ActiveRecord
             [['activity_id', 'user_id', 'stars', 'created_at', 'updated_at', 'status', 'sponsor_stars', 'sponsor_id', 'sponsor_start1', 'sponsor_start2', 'sponsor_start3', 'grade'], 'integer'],
             ['stars', 'default', 'value' => '0'],
             ['status', 'default', 'value' => '10'],
-            [['feedback'], 'string', 'max' => 255]
+            [['feedback'], 'string', 'max' => 2000]
         ];
     }
 
