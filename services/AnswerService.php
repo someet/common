@@ -25,7 +25,7 @@ class AnswerService extends BaseService
     public static function checkApply($id)
     {
         $model = Activity::findOne($id);
-        $is_apply = self::applyIsfull($id) == Activity::IS_FULL_YES //活动报满的情况
+        $is_apply = self::applyIsfull($id)['isfull'] == Activity::IS_FULL_YES //活动报满的情况
                     || self::applyConflict($id)['has_conflict'] == 1 // 活动冲突
                     || $model->status == Activity::STATUS_SHUT //活动关闭
                     || $model->status == Activity::STATUS_CANCEL // 活动取消
