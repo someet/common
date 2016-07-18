@@ -14,6 +14,11 @@ use Yii;
  */
 class City extends \yii\db\ActiveRecord
 {
+    /* 显示 */
+    const STATUS_SHOW = 1;
+    /* 隐藏 */
+    const STATUS_HIDDEN = 0;
+
     /**
      * @inheritdoc
      */
