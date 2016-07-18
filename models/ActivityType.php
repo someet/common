@@ -38,7 +38,6 @@ class ActivityType extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
-            ['name', 'unique', 'message' => '{attribute}已存在'],
             [['display_order', 'status', 'city_id'], 'integer'],
             [['city'], 'string', 'max' => 60],
             ['display_order', 'default', 'value' => '99'],
