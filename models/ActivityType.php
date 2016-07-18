@@ -8,6 +8,8 @@ use Yii;
  * This is the model class for table "activity_type".
  *
  * @property integer $id
+ * @property integer $city_id
+ * @property string $city
  * @property string $name
  * @property integer $display_order
  * @property integer $status
@@ -37,7 +39,8 @@ class ActivityType extends \yii\db\ActiveRecord
         return [
             [['name'], 'required'],
             ['name', 'unique', 'message' => '{attribute}已存在'],
-            [['display_order', 'status'], 'integer'],
+            [['display_order', 'status', 'city_id'], 'integer'],
+            [['city'], 'string', 'max' => 60],
             ['display_order', 'default', 'value' => '99'],
             ['status', 'default', 'value' => '10'],
             [
@@ -58,6 +61,8 @@ class ActivityType extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'city_id' => '城市编号',
+            'city' => '城市',
             'name' => '名称',
             'display_order' => '显示顺序',
             'status' => 'Status',
