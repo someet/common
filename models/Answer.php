@@ -222,6 +222,16 @@ class Answer extends \yii\db\ActiveRecord
     }
 
     /**
+     * 活动
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNoti()
+    {
+        return $this->hasOne(Noti::className(), ['from_id' => 'activity_id' ,'user_id' => 'user_id']);
+    }
+
+
+    /**
      * 用户
      * @return \yii\db\ActiveQuery
      */
