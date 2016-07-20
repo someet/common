@@ -116,9 +116,10 @@ class Noti extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
-    // 被通知的用户
+    //报名通知的发送情况
     public function getAnswer()
     {
-        return $this->hasOne(Answer::className(), ['user_id' => 'user_id', 'from_id' =>'activity_id']);
+        return $this->hasMany(Answer::classname(), ['activity_id' => 'from_id', 'user_id' => 'user_id']);
     }
+
 }
