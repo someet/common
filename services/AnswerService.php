@@ -34,6 +34,54 @@ class AnswerService extends BaseService
     }
 
     /**
+     * 已通过人数 - 已经请假人数 = 理想报名人数上限 不能再报名
+     * （通过人数为零）待筛选人数 = 报名名额 不能再报名
+     * （通过人数 - 请假人数 = N，N小于理想人数上限 即未达到2的标准）
+     * 	待筛选人数不超过 min （（理想人数上限-N）*2，报名名额 - 理想人数上限）
+     * @param  init $id 活动id
+     * @return bool 返回布尔值
+     */
+    public static function applyExcludeLeave($activity_id)
+    {
+        // 已通过人数
+        $pass = Answer::find()
+                ->where([
+                    'activity_id' => $activity_id,
+                    'status' => Answer::STATUS_REVIEW_PASS,
+                    ])
+                ->exists();
+
+        //通过后请假人数
+        $leave = Answer::find()
+                ->where([
+                    'activity_id' => $activity_id,
+                    'status' => Answer::STATUS_REVIEW_PASS,
+                    'leave_status' => Answer::STATUS_LEAVE_YES
+                    ])
+                ->exists();
+
+        // 待筛选人数
+        $answer_filter = Answer::find()->where([
+                    'activity_id' => $activity_id,
+                    'status' => STATUS_REVIEW_YET
+                    ])
+                    ->count();
+        $activity = Activity::findOne($id);
+
+        // 真实报名的人数
+        $actualPass = $pass - $leave;
+
+        $answer_filter < ($activity->ideal_number_limit - $actualPass) * 2 &&
+        $answer_filter < $activity->peoples - $activity->ideal_number_limit ?
+        return Answer::APPLY_YES : return Answer::APPLY_NO;
+
+        if ($actualPass >= $activity->ideal_number_limit || $answer_filter >= $activity->peoples) {
+            return Answer::APPLY_NO;
+        }
+        return Answer::APPLY_YES;
+    }
+
+    /**
      * 活动报名时检测活动是否报满
      * @param  integer $id 活动id
      * @return json  返回与报名冲突的活动
