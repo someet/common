@@ -29,11 +29,25 @@ class AnswerService extends BaseService
                     || self::applyConflict($id)['has_conflict'] == 2 // 活动冲突
                     || $model->status == Activity::STATUS_SHUT //活动关闭
                     || $model->status == Activity::STATUS_CANCEL // 活动取消
+                    || self::applyExcludeLeave($id) == Answer::APPLY_NO
                     ;
         return $is_apply;
     }
 
     /**
+     * 更新活动是否已满
+     * @param  init $activity_id 活动id
+     * @return bool 返回布尔值
+     */
+    public static function updataIsfull($activity_id)
+    {
+        if($this->applyExcludeLeave($activity_id) == Answer::APPLY_NO){
+            Activity::updataAll(['is_full' => Activity::IS_FULL_YES],['activity_id' => $activity_id]);
+        }
+    }
+
+    /**
+     * 判断活动是否已满
      * 已通过人数 - 已经请假人数 = 理想报名人数上限 不能再报名
      * （通过人数为零）待筛选人数 = 报名名额 不能再报名
      * （通过人数 - 请假人数 = N，N小于理想人数上限 即未达到2的标准）
@@ -41,7 +55,7 @@ class AnswerService extends BaseService
      * @param  init $id 活动id
      * @return bool 返回布尔值
      */
-    public static function applyExcludeLeave($activity_id)
+    public function applyExcludeLeave($activity_id)
     {
         // 已通过人数
         $pass = Answer::find()
@@ -66,6 +80,7 @@ class AnswerService extends BaseService
                     'status' => STATUS_REVIEW_YET
                     ])
                     ->count();
+
         $activity = Activity::findOne($id);
 
         // 真实报名的人数
