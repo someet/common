@@ -25,7 +25,7 @@ class AnswerService extends BaseService
     public static function checkApply($id)
     {
         $model = Activity::findOne($id);
-        $is_apply = self::applyIsfull($id)['isfull'] == Activity::IS_FULL_YES //活动报满的情况
+        $is_apply = self::applyIsfull($id) == Activity::IS_FULL_YES //活动报满的情况
                     || self::applyConflict($id)['has_conflict'] == 2 // 活动冲突
                     || $model->status == Activity::STATUS_SHUT //活动关闭
                     || $model->status == Activity::STATUS_CANCEL // 活动取消
@@ -102,13 +102,16 @@ class AnswerService extends BaseService
      * @param  integer $id 活动id
      * @return json  返回与报名冲突的活动
      */
-    public static function applyIsfull($id)
+    public static function applyIsfull($activity_id)
     {
-        $model = Activity::find()->where(['is_full' => Activity::IS_FULL_YES, 'id' => $id])->exists();
-        if ($model) {
-            return ['isfull' => Activity::IS_FULL_YES];
-        }
-        return ['isfull' => Activity::IS_FULL_NO];
+
+        // $model = Activity::find()->where(['is_full' => Activity::IS_FULL_YES, 'id' => $activity_id])->exists();
+
+        $activity = Activity::findOne($activity_id);
+        $count_join = Answer::find()->where(['activity_id' => $activity_id])->count();
+        $isfull = $activity->peoples > $count_join ? Activity::IS_FULL_NO : Activity::IS_FULL_YES;
+
+        return $isfull;
     }
 
 
