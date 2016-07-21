@@ -38,13 +38,14 @@ class AnswerService extends BaseService
      * @param  integer $id 活动id
      * @return json  返回与报名冲突的活动
      */
-    public static function applyIsfull($id)
+    public static function applyIsfull($activity_id)
     {
-        $model = Activity::find()->where(['is_full' => Activity::IS_FULL_YES, 'id' => $id])->exists();
-        if ($model) {
-            return ['isfull' => Activity::IS_FULL_YES];
-        }
-        return ['isfull' => Activity::IS_FULL_NO];
+
+        // $model = Activity::find()->where(['is_full' => Activity::IS_FULL_YES, 'id' => $activity_id])->exists();
+        
+        $activity = Activity::findOne($activity_id);
+        $count_join = Answer::find()->where(['status' => Answer::STATUS_REVIEW_PASS, 'activity_id' => $activity_id])->exists();
+        $activity->peoples > $count_join ? return Activity::IS_FULL_YES : return Activity::IS_FULL_NO;
     }
 
 
