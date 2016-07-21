@@ -199,7 +199,7 @@ class Answer extends \yii\db\ActiveRecord
     
     public function extraFields()
     {
-        return ['user', 'activity', 'answerItemList',  'user.profile' ,'mobile_msg' => function() {
+        return ['user', 'activity', 'answerItemList',  'user.profile'  => function() {
             return $this->user ? $this->user->profile: null;
         }];
     }
@@ -220,16 +220,6 @@ class Answer extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Activity::className(), ['id' => 'activity_id']);
     }
-
-    /**
-     * 活动
-     * @return \yii\db\ActiveQuery
-     */
-    public function getNoti()
-    {
-        return $this->hasOne(Noti::className(), ['from_id' => 'activity_id' ,'user_id' => 'user_id']);
-    }
-
 
     /**
      * 用户
