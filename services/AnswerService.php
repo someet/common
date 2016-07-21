@@ -25,13 +25,14 @@ class AnswerService extends BaseService
     public static function checkApply($id)
     {
         $model = Activity::findOne($id);
-        $is_apply = self::applyIsfull($id) == Activity::IS_FULL_YES //活动报满的情况
+        $is_apply =
+                    // $model->is_full == Activity::IS_FULL_YES //活动报满的情况
+                    self::Isfull($activity_id) == Answer::IS_FULL_YES
+                    // self::applyIsfull($id) == Activity::IS_FULL_YES //活动报满的情况
                     || self::applyConflict($id)['has_conflict'] == 2 // 活动冲突
-                    || $model->status == Activity::STATUS_SHUT //活动关闭
-                    || $model->status == Activity::STATUS_CANCEL // 活动取消
-                    || self::applyExcludeLeave($id) == Answer::APPLY_NO
+                    || $model->status != Activity::STATUS_RELEASE //只要活动不是发布状态都不可以报名
                     ;
-        return $is_apply;
+        return $is_apply ? Answer::APPLY_NO : Answer::APPLY_YES;
     }
 
     /**
@@ -41,8 +42,12 @@ class AnswerService extends BaseService
      */
     public static function updateIsfull($activity_id)
     {
-        if($this->applyExcludeLeave($activity_id) == Answer::APPLY_NO){
-            Activity::updateAll(['is_full' => Activity::IS_FULL_YES],['activity_id' => $activity_id]);
+        print($activity_id);
+        if (self::Isfull($activity_id) == Answer::IS_FULL_YES) {
+            $isfull = Activity::updateAll(['is_full' => Activity::IS_FULL_YES], ['id' => $activity_id]);
+            if ($isfull <= 0) {
+                return false;
+            }
         }
         return true;
     }
@@ -54,26 +59,28 @@ class AnswerService extends BaseService
      * （通过人数 - 请假人数 = N，N小于理想人数上限 即未达到2的标准）
      * 	待筛选人数不超过 min （（理想人数上限-N）*2，报名名额 - 理想人数上限）
      * @param  init $id 活动id
-     * @return bool 返回布尔值
+     * @return 返回 1不可以报名 或 0可以报名
      */
-    public function applyExcludeLeave($activity_id)
+    public static function Isfull($activity_id)
     {
+        $activity = Activity::findOne($activity_id);
+
         // 已通过人数
-        $pass = Answer::find()
+        $passCount = Answer::find()
                 ->where([
                     'activity_id' => $activity_id,
                     'status' => Answer::STATUS_REVIEW_PASS,
                     ])
-                ->exists();
+                ->count();
 
         //通过后请假人数
-        $leave = Answer::find()
+        $leaveCount = Answer::find()
                 ->where([
                     'activity_id' => $activity_id,
                     'status' => Answer::STATUS_REVIEW_PASS,
                     'leave_status' => Answer::STATUS_LEAVE_YES
                     ])
-                ->exists();
+                ->count();
 
         // 待筛选人数
         $answer_filter = Answer::find()->where([
@@ -82,19 +89,35 @@ class AnswerService extends BaseService
                     ])
                     ->count();
 
-        $activity = Activity::findOne($id);
+        // 通过人数为零的情况下待筛选人数
+        if ($passCount == 0) {
+            $answer_filter = Answer::find()->where([
+                        'activity_id' => $activity_id,
+                        'status' => STATUS_REVIEW_YET
+                        ])
+                        ->count();
+            // （通过人数为零）待筛选人数 = 报名名额 不能再报名
+            if ($answer_filter == $activity->peoples) {
+                return Answer::IS_FULL_YES;
+            }
+        }
+
+        // 已通过人数 - 已经请假人数 = 理想报名人数上限 不能再报名
+        if ($passCount - $leaveCount == $activity->ideal_number_limit) {
+            return Answer::IS_FULL_YES;
+        };
 
         // 真实报名的人数
-        $actualPass = $pass - $leave;
+        $actualPass = $passCount - $leaveCount;
 
-        $answer_filter < ($activity->ideal_number_limit - $actualPass) * 2 &&
-        $answer_filter < $activity->peoples - $activity->ideal_number_limit ?
-        return Answer::APPLY_YES : return Answer::APPLY_NO;
-
-        if ($actualPass >= $activity->ideal_number_limit || $answer_filter >= $activity->peoples) {
-            return Answer::APPLY_NO;
-        }
-        return Answer::APPLY_YES;
+        // （通过人数 - 请假人数 = N，N小于理想人数上限 即未达到2的标准）待筛选人数不超过 min （（理想人数上限-N）*2，报名名额 - 理想人数上限）
+        $is_full =  $answer_filter < min(
+                        (($activity->ideal_number_limit - $actualPass) * 2),
+                        ($activity->peoples - $activity->ideal_number_limit)
+                    )
+                    ? Answer::IS_FULL_YES
+                    : Answer::IS_FULL_NO;
+        return $is_full;
     }
 
     /**
