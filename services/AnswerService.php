@@ -42,10 +42,12 @@ class AnswerService extends BaseService
     {
 
         // $model = Activity::find()->where(['is_full' => Activity::IS_FULL_YES, 'id' => $activity_id])->exists();
-        
+
         $activity = Activity::findOne($activity_id);
         $count_join = Answer::find()->where(['status' => Answer::STATUS_REVIEW_PASS, 'activity_id' => $activity_id])->exists();
-        $activity->peoples > $count_join ? return Activity::IS_FULL_YES : return Activity::IS_FULL_NO;
+        $isfull = $activity->peoples > $count_join ? Activity::IS_FULL_YES : Activity::IS_FULL_NO;
+
+        return $isfull;
     }
 
 
