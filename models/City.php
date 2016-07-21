@@ -11,6 +11,11 @@ use Yii;
  * @property string $city
  * @property integer $city_id
  * @property integer $status
+ * @property string $img
+ * @property string $share_title
+ * @property string $share_desc
+ * @property string $share_link
+ * @property string $share_img
  */
 class City extends \yii\db\ActiveRecord
 {
@@ -36,6 +41,7 @@ class City extends \yii\db\ActiveRecord
             [['city', 'city_id'], 'required'],
             [['city_id', 'status'], 'integer'],
             [['city'], 'string', 'max' => 60],
+            [['img', 'share_title', 'share_desc', 'share_link', 'share_img'], 'string', 'max' => 255],
             [['city'], 'unique'],
             [['city_id'], 'unique'],
         ];
@@ -51,6 +57,11 @@ class City extends \yii\db\ActiveRecord
             'city' => 'City',
             'city_id' => 'City ID',
             'status' => 'Status',
+            'img' => 'img',
+            'share_title' => 'share_title',
+            'share_desc' => 'share_desc',
+            'share_link' => 'share_link',
+            'share_img' => 'share_img',
         ];
     }
 }
