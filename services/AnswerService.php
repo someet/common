@@ -45,7 +45,7 @@ class AnswerService extends BaseService
 
         $activity = Activity::findOne($activity_id);
         $count_join = Answer::find()->where(['activity_id' => $activity_id])->count();
-        $isfull = $activity->peoples > $count_join ? Activity::IS_FULL_YES : Activity::IS_FULL_NO;
+        $isfull = $activity->peoples > $count_join ? Activity::IS_FULL_NO : Activity::IS_FULL_YES;
 
         return $isfull;
     }
