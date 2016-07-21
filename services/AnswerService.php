@@ -39,11 +39,12 @@ class AnswerService extends BaseService
      * @param  init $activity_id 活动id
      * @return bool 返回布尔值
      */
-    public static function updataIsfull($activity_id)
+    public static function updateIsfull($activity_id)
     {
         if($this->applyExcludeLeave($activity_id) == Answer::APPLY_NO){
-            Activity::updataAll(['is_full' => Activity::IS_FULL_YES],['activity_id' => $activity_id]);
+            Activity::updateAll(['is_full' => Activity::IS_FULL_YES],['activity_id' => $activity_id]);
         }
+        return true;
     }
 
     /**
