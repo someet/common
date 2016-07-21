@@ -13,6 +13,7 @@ use Yii;
  * @property string $name
  * @property integer $display_order
  * @property integer $status
+ * @property string $img
  */
 class ActivityType extends \yii\db\ActiveRecord
 {
@@ -40,6 +41,7 @@ class ActivityType extends \yii\db\ActiveRecord
             [['name'], 'required'],
             [['display_order', 'status', 'city_id'], 'integer'],
             [['city'], 'string', 'max' => 60],
+            [['img'], 'string', 'max' => 255],
             ['display_order', 'default', 'value' => '99'],
             ['status', 'default', 'value' => '10'],
             [
@@ -65,6 +67,7 @@ class ActivityType extends \yii\db\ActiveRecord
             'name' => '名称',
             'display_order' => '显示顺序',
             'status' => 'Status',
+            'img' => '图片',
         ];
     }
 
