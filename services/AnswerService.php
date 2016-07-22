@@ -9,12 +9,212 @@ use someet\common\models\QuestionItem;
 use someet\common\models\AnswerItem;
 use someet\common\models\Answer;
 use someet\common\models\User;
+use someet\common\models\ActivityType;
+use someet\common\models\YellowCard;
+use yii\web\Response;
 use someet\common\models\YellowCard;
 use Yii;
 use yii\db\ActiveQuery;
 
 class AnswerService extends BaseService
 {
+    /**
+     * 活动报名时检测 活动是否报名 活动是与已报名的活动冲突 活动是否关闭 取消
+     * @param  init $id 活动id
+     * @return bool 返回布尔值
+     */
+    public static function checkApply($id)
+    {
+        $model = Activity::findOne($id);
+        $is_apply =
+                    // $model->is_full == Activity::IS_FULL_YES //活动报满的情况
+                    self::Isfull($activity_id) == Activity::IS_FULL_YES
+                    // self::applyIsfull($id) == Activity::IS_FULL_YES //活动报满的情况
+                    || self::applyConflict($id)['has_conflict'] == 2 // 活动冲突
+                    || $model->status != Activity::STATUS_RELEASE //只要活动不是发布状态都不可以报名
+                    ;
+        return $is_apply ? Answer::APPLY_NO : Answer::APPLY_YES;
+    }
+
+    /**
+     * 更新活动是否已满
+     * @param  init $activity_id 活动id
+     * @return bool 返回布尔值
+     */
+    public static function updateIsfull($activity_id)
+    {
+        print($activity_id);
+        if (self::Isfull($activity_id) == Activity::IS_FULL_YES) {
+            $isfull = Activity::updateAll(['is_full' => Activity::IS_FULL_YES], ['id' => $activity_id]);
+            if ($isfull <= 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 判断活动是否已满
+     * 已通过人数 - 已经请假人数 = 理想报名人数上限 不能再报名
+     * （通过人数为零）待筛选人数 = 报名名额 不能再报名
+     * （通过人数 - 请假人数 = N，N小于理想人数上限 即未达到2的标准）
+     * 	待筛选人数不超过 min （（理想人数上限-N）*2，报名名额 - 理想人数上限）
+     * @param  init $id 活动id
+     * @return 返回 1不可以报名 或 0可以报名
+     */
+    public static function Isfull($activity_id)
+    {
+        $activity = Activity::findOne($activity_id);
+
+        // 已通过人数
+        $passCount = Answer::find()
+                ->where([
+                    'activity_id' => $activity_id,
+                    'status' => Answer::STATUS_REVIEW_PASS,
+                    ])
+                ->count();
+
+        //通过后请假人数
+        $leaveCount = Answer::find()
+                ->where([
+                    'activity_id' => $activity_id,
+                    'status' => Answer::STATUS_REVIEW_PASS,
+                    'leave_status' => Answer::STATUS_LEAVE_YES
+                    ])
+                ->count();
+
+        // 待筛选人数
+        $answer_filter = Answer::find()->where([
+                    'activity_id' => $activity_id,
+                    'status' => STATUS_REVIEW_YET
+                    ])
+                    ->count();
+
+        // 通过人数为零的情况下待筛选人数
+        if ($passCount == 0) {
+            $answer_filter = Answer::find()->where([
+                        'activity_id' => $activity_id,
+                        'status' => STATUS_REVIEW_YET
+                        ])
+                        ->count();
+            // （通过人数为零）待筛选人数 = 报名名额 不能再报名
+            if ($answer_filter == $activity->peoples) {
+                return Activity::IS_FULL_YES;
+            }
+        }
+
+        // 已通过人数 - 已经请假人数 = 理想报名人数上限 不能再报名
+        if ($passCount - $leaveCount == $activity->ideal_number_limit) {
+            return Activity::IS_FULL_YES;
+        };
+
+        // 真实报名的人数
+        $actualPass = $passCount - $leaveCount;
+
+        // （通过人数 - 请假人数 = N，N小于理想人数上限 即未达到2的标准）待筛选人数不超过 min （（理想人数上限-N）*2，报名名额 - 理想人数上限）
+        $is_full =  $answer_filter < min(
+                        (($activity->ideal_number_limit - $actualPass) * 2),
+                        ($activity->peoples - $activity->ideal_number_limit)
+                    )
+                    ? Activity::IS_FULL_YES
+                    : Activity::IS_FULL_NO;
+        return $is_full;
+    }
+
+    /**
+     * 活动报名时检测活动是否报满
+     * @param  integer $id 活动id
+     * @return json  返回与报名冲突的活动
+     */
+    public static function applyIsfull($activity_id)
+    {
+
+        // $model = Activity::find()->where(['is_full' => Activity::IS_FULL_YES, 'id' => $activity_id])->exists();
+
+        $activity = Activity::findOne($activity_id);
+        $count_join = Answer::find()->where(['activity_id' => $activity_id])->count();
+        $isfull = $activity->peoples > $count_join ? Activity::IS_FULL_NO : Activity::IS_FULL_YES;
+
+        return $isfull;
+    }
+
+
+    /**
+     * 活动报名的冲突检测 检测与自己已经报名的活动是否冲突
+     * @param  integer $id 活动id
+     * @return json  返回与报名冲突的活动
+     */
+    public static function applyConflict($id)
+    {
+        $user_id = Yii::$app->user->id;
+        //检查参数
+        if (!is_numeric($id)) {
+            throw new DataValidationFailedException('参数错误');
+        }
+
+        $timeDistinct = 1790; //1个小时
+
+        //查询前活动的开始时间和结束时间分别是多少
+        $currentActivity = Activity::findOne($id);
+        if (empty($currentActivity)) {
+            throw new ObjectNotExistsException('当前活动不存在');
+        }
+
+        //将开始时间-1小时，将结束时间添加1小时
+        $startTime = $currentActivity->start_time - $timeDistinct;
+        $endTime = $currentActivity->end_time + $timeDistinct;
+
+        //获取隐藏的活动分类编号
+        $activity_test_type_ids = ActivityType::find()->select('id')->where(['status' => ActivityType::STATUS_HIDDEN])->all();
+        $activity_test_type_ids = is_array($activity_test_type_ids) ? array_column($activity_test_type_ids, 'id') : [];
+
+        $activity = Activity::findOne($id);
+        if (in_array($activity->type_id, $activity_test_type_ids)) {
+            return ['has_conflict' => 0, 'activities' => null];
+        }
+        //查询活动开始时间-1小时大于最小时间，或者结束时间加1小时小于最大时间, 并且id不是当前活动id
+
+        $conflictActivities = Activity::find()
+            ->joinWith('type')
+            ->where(['activity_type.status' => ActivityType::STATUS_NORMAL])
+            ->andwhere(['between', 'start_time', $startTime, $endTime])
+            ->orWhere(['between', 'end_time', $startTime, $endTime])
+            ->andWhere('activity.id != ' . $id)
+            ->andWhere(['activity.status'=>Activity::STATUS_RELEASE])
+            ->asArray()
+            ->all();
+
+        //如果存在冲突的活动
+        if (count($conflictActivities) > 0) {
+            //获取活动id
+            $activityIds = array_column($conflictActivities, 'id');
+
+            //查询冲突相关的活动,有哪些是已经报名了的
+            $answer = Answer::find()
+                ->where(['in', 'activity_id', $activityIds])
+                ->andWhere(['user_id' => $user_id])
+                ->andWhere(['status' => Answer::STATUS_REVIEW_PASS])
+                ->andWhere(['leave_status' => Answer::STATUS_LEAVE_YET])
+                ->one();
+
+            //如果已报名了活动, 返回已报名的列表
+            if ($answer) {
+                //获取冲突的活动
+                foreach ($conflictActivities as $act) {
+                    if ($act['id'] == $answer->activity_id) {
+                        $activity = $act;
+                        break;
+                    }
+                }
+                return ['has_conflict' => 2, 'activities' => null, 'activity' => $activity];
+            } else {
+                return ['has_conflict' => 1, 'activities' => $conflictActivities];
+            }
+        } else {
+            //不存在冲突的活动，可以正常进行报名
+            return ['has_conflict' => 0, 'activities' => null];
+        }
+    }
 
     /**
      * 报名
@@ -150,10 +350,10 @@ class AnswerService extends BaseService
             ->select(['id', 'question_id', 'activity_id', 'user_id'])
             ->where(['id' => $model->id])
             ->with([
-                'user' => function(ActiveQuery $query) {
+                'user' => function (ActiveQuery $query) {
                     $query->select(['id', 'username', 'mobile', 'wechat_id']);
                 },
-                'answerItemList' => function(ActiveQuery $query) {
+                'answerItemList' => function (ActiveQuery $query) {
                     $query->select(['id', 'user_id', 'question_item_id', 'question_id', 'question_label', 'question_value']);
                 }
             ])
@@ -342,7 +542,6 @@ class AnswerService extends BaseService
                     }
                 }
             }
-
         }
 
         $transaction->commit();
@@ -436,7 +635,7 @@ class AnswerService extends BaseService
     {
         $answer = Answer::find()
             ->where(['id' => $id])
-            ->with(['user','user.profile','activity'])
+            ->with(['user', 'user.profile', 'activity'])
             ->one();
         if (!$answer) {
             $this->setError('报名不存在');
