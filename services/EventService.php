@@ -60,5 +60,21 @@ class EventService extends BaseService
      */
     public function managerFilter()
     {
+    }    
+
+    /**
+     * 后台：报名名额改动
+     * @return 是否执行成功
+     */
+    public function managerFilter()
+    {
+    }    
+
+    /**
+     * 后台：理想人数改动
+     * @return 是否执行成功
+     */
+    public function managerFilter()
+    {
     }
 }
