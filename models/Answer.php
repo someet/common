@@ -213,7 +213,7 @@ class Answer extends \yii\db\ActiveRecord
     {
         return $this->hasMany(AnswerItem::className(), ['question_id' => 'question_id', 'user_id' => 'user_id']);
     }
-
+  
     /**
      * 活动
      * @return \yii\db\ActiveQuery
