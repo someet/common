@@ -43,12 +43,13 @@ class AnswerService extends BaseService
      */
     public static function updateIsfull($activity_id)
     {
-        print($activity_id);
         if (self::Isfull($activity_id) == Activity::IS_FULL_YES) {
             $isfull = Activity::updateAll(['is_full' => Activity::IS_FULL_YES], ['id' => $activity_id]);
             if ($isfull <= 0) {
                 return false;
             }
+        } else if (self::Isfull($activity_id) == Activity::IS_FULL_NO) {
+            $isfull = Activity::updateAll(['is_full' => Activity::IS_FULL_NO], ['id' => $activity_id]);
         }
         return true;
     }
