@@ -35,6 +35,12 @@ class EventService extends BaseService
 
         // 更新活动的报名率
         ActivityService::updateRepalyRate($activity_id);
+
+        //发送短信
+
+        //发送微信push
+
+        //极光push
     }
 
     /**
