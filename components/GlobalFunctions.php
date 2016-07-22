@@ -73,3 +73,14 @@ function getWeekBefore()
     $get_week_before = $last_end_time - 604800;
     return $get_week_before;
 }
+
+/**
+ * 获取 对应的城市名
+ * @return mixed
+ */
+function getIpCity(){
+    $ipContent  = file_get_contents("http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js");
+    $jsonData = explode("=",$ipContent);
+    $jsonAddress = substr($jsonData[1], 0, -1);
+    return json_decode($jsonAddress)->city;
+}
