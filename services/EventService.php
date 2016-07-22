@@ -17,6 +17,7 @@ use yii\web\Response;
 use Yii;
 use yii\db\ActiveQuery;
 
+// use someet\common\services\EventService;
 /**
  * 在报名时触发事件
  * @author  stark
@@ -59,6 +60,16 @@ class EventService extends BaseService
         return AnswerService::checkApply($activity_id);
     }
 
+    /**
+     * 前台：请假事件
+     * @param  init $activity_id 活动id
+     * @return 是否执行成功
+     */
+    public static function askForLeave($activity_id)
+    {
+        // 更新活动是否报满
+        AnswerService::updateIsfull($activity_id);
+    }
 
     /**
      * 前台：pma和发起人筛选执行的事件
