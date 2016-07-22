@@ -201,7 +201,8 @@ class Answer extends \yii\db\ActiveRecord
 
     public function extraFields()
     {
-        return ['user', 'activity', 'answerItemList',  'user.profile' => function () {
+
+        return ['user', 'activity', 'answerItemList',  'user.profile'  => function() {
             return $this->user ? $this->user->profile: null;
         }];
     }
@@ -213,7 +214,7 @@ class Answer extends \yii\db\ActiveRecord
     {
         return $this->hasMany(AnswerItem::className(), ['question_id' => 'question_id', 'user_id' => 'user_id']);
     }
-
+  
     /**
      * 活动
      * @return \yii\db\ActiveQuery

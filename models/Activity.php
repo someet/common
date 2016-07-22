@@ -8,6 +8,8 @@ use Yii;
  * This is the model class for table "activity".
  *
  * @property integer $id
+ * @property integer $city_id
+ * @property string $city
  * @property integer $type_id
  * @property string $title
  * @property string $desc
@@ -110,7 +112,7 @@ class Activity extends \yii\db\ActiveRecord
         return [
             [['title'], 'required'],
 
-            [['type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'pma_type','created_at', 'created_by', 'updated_at', 'updated_by', 'status', 'edit_status', 'display_order', 'co_founder1', 'co_founder2', 'co_founder3', 'co_founder4', 'is_full', 'join_people_count','space_spot_id','ideal_number','ideal_number_limit'], 'integer'],
+            [['city_id', 'type_id', 'week', 'start_time', 'end_time', 'cost', 'peoples', 'is_volume', 'is_digest', 'is_top', 'principal', 'pma_type','created_at', 'created_by', 'updated_at', 'updated_by', 'status', 'edit_status', 'display_order', 'co_founder1', 'co_founder2', 'co_founder3', 'co_founder4', 'is_full', 'join_people_count','space_spot_id','ideal_number','ideal_number_limit'], 'integer'],
             [['details', 'review', 'content', 'field1', 'field2', 'field3', 'field4', 'field5', 'field6', 'field7', 'field8'], 'string'],
             [['longitude', 'latitude'], 'number'],
             [['longitude', 'latitude','pma_type'], 'default', 'value' => 0],
@@ -125,6 +127,7 @@ class Activity extends \yii\db\ActiveRecord
             [['area'], 'string', 'max' => 10],
             [['tagNames'], 'safe'],
             [['status'], 'default', 'value' => 10],
+            [['city'], 'string', 'max' => 60],
             [['display_order'], 'default', 'value' => 99]
         ];
     }
@@ -153,6 +156,8 @@ class Activity extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'city_id' => '城市编号',
+            'city' => '城市',
             'type_id' => '分类ID',
             'title' => '标题',
             'desc' => '描述',

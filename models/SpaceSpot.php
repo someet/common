@@ -9,6 +9,8 @@ use Yii;
  * This is the model class for table "space_spot".
  *
  * @property integer $id
+ * @property integer $city_id
+ * @property string $city
  * @property string $name
  * @property string $area
  * @property string $address
@@ -43,10 +45,11 @@ class SpaceSpot extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['type_id', 'principal', 'status'], 'integer'],
+            [['city_id', 'type_id', 'principal', 'status'], 'integer'],
             [['detail'], 'string'],
             [['longitude', 'latitude'], 'number'],
             [['name', 'area', 'address', 'image', 'router', 'map_pic', 'contact', 'base_fee', 'owner', 'open_time'], 'string', 'max' => 180],
+            [['city'], 'string', 'max' => 60],
             [['logo'], 'string', 'max' => 45],
         ];
     }
@@ -58,6 +61,8 @@ class SpaceSpot extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'city_id' => '城市编号',
+            'city' => '城市',
             'name' => '地点名称',
             'area' => '商圈',
             'address' => '详细地址',
