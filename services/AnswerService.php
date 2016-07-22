@@ -27,7 +27,7 @@ class AnswerService extends BaseService
         $model = Activity::findOne($id);
         $is_apply =
                     // $model->is_full == Activity::IS_FULL_YES //活动报满的情况
-                    self::Isfull($activity_id) == Answer::IS_FULL_YES
+                    self::Isfull($activity_id) == Activity::IS_FULL_YES
                     // self::applyIsfull($id) == Activity::IS_FULL_YES //活动报满的情况
                     || self::applyConflict($id)['has_conflict'] == 2 // 活动冲突
                     || $model->status != Activity::STATUS_RELEASE //只要活动不是发布状态都不可以报名
@@ -43,7 +43,7 @@ class AnswerService extends BaseService
     public static function updateIsfull($activity_id)
     {
         print($activity_id);
-        if (self::Isfull($activity_id) == Answer::IS_FULL_YES) {
+        if (self::Isfull($activity_id) == Activity::IS_FULL_YES) {
             $isfull = Activity::updateAll(['is_full' => Activity::IS_FULL_YES], ['id' => $activity_id]);
             if ($isfull <= 0) {
                 return false;
@@ -98,13 +98,13 @@ class AnswerService extends BaseService
                         ->count();
             // （通过人数为零）待筛选人数 = 报名名额 不能再报名
             if ($answer_filter == $activity->peoples) {
-                return Answer::IS_FULL_YES;
+                return Activity::IS_FULL_YES;
             }
         }
 
         // 已通过人数 - 已经请假人数 = 理想报名人数上限 不能再报名
         if ($passCount - $leaveCount == $activity->ideal_number_limit) {
-            return Answer::IS_FULL_YES;
+            return Activity::IS_FULL_YES;
         };
 
         // 真实报名的人数
@@ -115,8 +115,8 @@ class AnswerService extends BaseService
                         (($activity->ideal_number_limit - $actualPass) * 2),
                         ($activity->peoples - $activity->ideal_number_limit)
                     )
-                    ? Answer::IS_FULL_YES
-                    : Answer::IS_FULL_NO;
+                    ? Activity::IS_FULL_YES
+                    : Activity::IS_FULL_NO;
         return $is_full;
     }
 
