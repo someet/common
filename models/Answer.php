@@ -165,8 +165,7 @@ class Answer extends \yii\db\ActiveRecord
             'apply_status' => 'Apply Status',
             'cancel_apply_time' => 'Cancel Apply Time',
             'leave_time' => 'Leave Time',
-            'reject_reason' => 'Reject Reason',
-
+            'reject_reason' => 'Reject Reason', 
         ];
     }
 

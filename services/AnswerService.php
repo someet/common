@@ -12,6 +12,7 @@ use someet\common\models\User;
 use someet\common\models\ActivityType;
 use someet\common\models\YellowCard;
 use yii\web\Response;
+use someet\common\models\YellowCard;
 use Yii;
 use yii\db\ActiveQuery;
 
