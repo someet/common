@@ -12,7 +12,6 @@ use someet\common\models\User;
 use someet\common\models\ActivityType;
 use someet\common\models\YellowCard;
 use yii\web\Response;
-use someet\common\models\YellowCard;
 use Yii;
 use yii\db\ActiveQuery;
 
@@ -28,7 +27,7 @@ class AnswerService extends BaseService
         $model = Activity::findOne($id);
         $is_apply =
                     // $model->is_full == Activity::IS_FULL_YES //活动报满的情况
-                    self::Isfull($activity_id) == Activity::IS_FULL_YES
+                    self::Isfull($id) == Activity::IS_FULL_YES
                     // self::applyIsfull($id) == Activity::IS_FULL_YES //活动报满的情况
                     || self::applyConflict($id)['has_conflict'] == 2 // 活动冲突
                     || $model->status != Activity::STATUS_RELEASE //只要活动不是发布状态都不可以报名
@@ -529,6 +528,7 @@ class AnswerService extends BaseService
                 ->where(['user_id' => $user_id])
                 ->andWhere(['activity_id' => $conflict_activity_ids])
                 ->andWhere(['apply_status' => Answer::APPLY_STATUS_YES])
+                ->andWhere(['status' => Answer::STATUS_REVIEW_YET])
                 ->all();
 
             if (count($conflict_answer) > 0) {
