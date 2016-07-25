@@ -240,7 +240,7 @@ class NotificationTemplate
         if (!empty($activity['group_code'])) {
             $url = Yii::$app->params['domain'].'join/'.$activity['id'];
         } else {
-            $url = Yii::$app->params['domain'].'activity/'.$activity['id'];
+            $url = Yii::$app->params['domain'].'activity/view?id='.$activity['id'];
         }
         if (empty($template_id)) {
             //记录一个错误, 请设置成功的模板消息id
@@ -254,7 +254,6 @@ class NotificationTemplate
             "touser" => "{$openid}",
             "template_id" => $template_id,
             "url" => $url,
-            // "url" => Yii::$app->params['domain'].'activity/'.$activity['id'],
             "topcolor" => "#FF0000",
             "data" => [
                 "first" => [
