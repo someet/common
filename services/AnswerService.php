@@ -31,6 +31,14 @@ class AnswerService extends BaseService
                     || self::applyConflict($activity_id)['has_conflict'] == 2 // 活动冲突
                     || $model->status != Activity::STATUS_RELEASE //只要活动不是发布状态都不可以报名
                     ;
+//                     echo "<pre>gggggggggg";
+//         print_r(self::applyConflict($activity_id)['has_conflict']);
+//                             echo "<pre>hhhhhhhh";
+// self::Isfull($activity_id);
+//                             echo "<pre>sssssssss";
+
+//         print_r($is_apply);
+        // die;
         return $is_apply ? Answer::APPLY_NO : Answer::APPLY_YES;
     }
 
@@ -117,6 +125,18 @@ class AnswerService extends BaseService
                     )
                     ? Activity::IS_FULL_NO 
                     : Activity::IS_FULL_YES;
+// print_r(min(
+//                         (($activity->ideal_number_limit - $actualPass) * 2),
+//                         ($activity->peoples - $activity->ideal_number_limit)
+//                     ));
+// echo "jjjjjjjjjjjj";
+// print_r((($activity->ideal_number_limit - $actualPass) * 2));
+// echo "kkkkkkkkkkk";
+
+// print_r(($activity->peoples - $activity->ideal_number_limit));
+// echo "mmmmmmmmmmmm";
+// print_r($answer_filter);
+// die;
         return $is_full;
     }
 
