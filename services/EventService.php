@@ -16,8 +16,6 @@ use someet\common\models\YellowCard;
 use yii\web\Response;
 use Yii;
 use yii\db\ActiveQuery;
-
-// use someet\common\services\EventService;
 /**
  * 在报名时触发事件
  * @author  stark
@@ -42,6 +40,7 @@ class EventService extends BaseService
         //发送微信push
 
         //极光push
+
     }
 
     /**
@@ -90,6 +89,7 @@ class EventService extends BaseService
 
         // 更新活动的报名率
         ActivityService::updateRepalyRate($activity_id);
+
     }
 
     /**
