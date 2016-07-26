@@ -93,7 +93,8 @@ class AnswerService extends BaseService
         // 待筛选人数
         $answer_filter = Answer::find()->where([
                     'activity_id' => $activity_id,
-                    'status' => Answer::STATUS_REVIEW_YET
+                    'status' => Answer::STATUS_REVIEW_YET,
+                    'apply_status' => Answer::APPLY_STATUS_YES,
                     ])
                     ->count();
 
@@ -101,7 +102,8 @@ class AnswerService extends BaseService
         if ($passCount == 0) {
             $answer_filter = Answer::find()->where([
                         'activity_id' => $activity_id,
-                        'status' => Answer::STATUS_REVIEW_YET
+                        'status' => Answer::STATUS_REVIEW_YET,
+                        'apply_status' => Answer::APPLY_STATUS_YES,
                         ])
                         ->count();
             // （通过人数为零）待筛选人数 = 报名名额 不能再报名
@@ -125,18 +127,6 @@ class AnswerService extends BaseService
                     )
                     ? Activity::IS_FULL_NO 
                     : Activity::IS_FULL_YES;
-// print_r(min(
-//                         (($activity->ideal_number_limit - $actualPass) * 2),
-//                         ($activity->peoples - $activity->ideal_number_limit)
-//                     ));
-// echo "jjjjjjjjjjjj";
-// print_r((($activity->ideal_number_limit - $actualPass) * 2));
-// echo "kkkkkkkkkkk";
-
-// print_r(($activity->peoples - $activity->ideal_number_limit));
-// echo "mmmmmmmmmmmm";
-// print_r($answer_filter);
-// die;
         return $is_full;
     }
 
