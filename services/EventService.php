@@ -49,7 +49,7 @@ class EventService extends BaseService
      * @param  init $activity_id 活动id
      * @return 是否执行成功
      */
-    public static function applyBefore()
+    public static function applyBefore($activity_id)
     {
         /*
         报名前执行的事件 检测
@@ -85,7 +85,7 @@ class EventService extends BaseService
      */
     public static function applyLimit($activity_id)
     {
-        // 更新活动是否报满字段
+        // 更新活动是否报满
         AnswerService::updateIsfull($activity_id);
 
         // 更新活动的报名率
@@ -96,7 +96,7 @@ class EventService extends BaseService
      * 后台：理想人数改动
      * @return 是否执行成功
      */
-    public static function idealLimit()
+    public static function idealLimit($activity_id)
     {
         // 更新活动是否报满字段
         AnswerService::updateIsfull($activity_id);
