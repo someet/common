@@ -52,7 +52,19 @@ class EventService extends BaseService
         */
         return AnswerService::checkApply($activity_id);
     }
+    /**
+     * 前台：取消报名
+     * @param  init $activity_id 活动id
+     * @return 是否执行成功
+     */
+    public static function cancelApply($activity_id)
+    {
+        // 更新活动是否报满
+        AnswerService::updateIsfull($activity_id);
 
+        // 更新活动的报名率
+        ActivityService::updateRepalyRate($activity_id);
+    }
 
     /**
      * 前台：pma和发起人筛选执行的事件
