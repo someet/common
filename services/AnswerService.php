@@ -25,20 +25,10 @@ class AnswerService extends BaseService
     public static function checkApply($activity_id)
     {
         $model = Activity::findOne($activity_id);
-        $is_apply =
-                    // $model->is_full == Activity::IS_FULL_YES //活动报满的情况
-                    self::Isfull($activity_id) == Activity::IS_FULL_YES
+        $is_apply = self::Isfull($activity_id) == Activity::IS_FULL_YES
                     || self::applyConflict($activity_id)['has_conflict'] == 2 // 活动冲突
                     || $model->status != Activity::STATUS_RELEASE //只要活动不是发布状态都不可以报名
                     ;
-//                     echo "<pre>gggggggggg";
-//         print_r(self::applyConflict($activity_id)['has_conflict']);
-//                             echo "<pre>hhhhhhhh";
-// self::Isfull($activity_id);
-//                             echo "<pre>sssssssss";
-
-//         print_r($is_apply);
-        // die;
         return $is_apply ? Answer::APPLY_NO : Answer::APPLY_YES;
     }
 
