@@ -37,7 +37,10 @@ use Yii;
 class Answer extends \yii\db\ActiveRecord
 {
 
-
+    /* 不可以报名 */
+    const APPLY_NO = 1;
+    /* 可以报名 */
+    const APPLY_YES = 0;
     /* 未审核 */
     const STATUS_REVIEW_YET     = 10;
     /* 审核通过 */
@@ -162,8 +165,7 @@ class Answer extends \yii\db\ActiveRecord
             'apply_status' => 'Apply Status',
             'cancel_apply_time' => 'Cancel Apply Time',
             'leave_time' => 'Leave Time',
-            'reject_reason' => 'Reject Reason', 
-
+            'reject_reason' => 'Reject Reason',
         ];
     }
 
@@ -196,10 +198,10 @@ class Answer extends \yii\db\ActiveRecord
 
         return $fields;
     }
-    
+
     public function extraFields()
     {
-        return ['user', 'activity', 'answerItemList',  'user.profile' => function() {
+        return ['user', 'activity', 'answerItemList',  'user.profile'  => function () {
             return $this->user ? $this->user->profile: null;
         }];
     }

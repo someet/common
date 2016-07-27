@@ -79,4 +79,13 @@ class MobileMsg extends \yii\db\ActiveRecord
             'status' => 'Status',
         ];
     }
+    /**
+     * answer
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAnswer()
+    {
+        return $this->hasMany(Answer::className(), ['activity_id' => 'activity_id', 'user_id' => 'user_id']);
+    }
+
 }

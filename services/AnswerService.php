@@ -22,15 +22,102 @@ class AnswerService extends BaseService
      * @param  init $id 活动id
      * @return bool 返回布尔值
      */
-    public static function checkApply($id)
+    public static function checkApply($activity_id)
     {
-        $model = Activity::findOne($id);
-        $is_apply = self::applyIsfull($id) == Activity::IS_FULL_YES //活动报满的情况
-                    || self::applyConflict($id)['has_conflict'] == 2 // 活动冲突
-                    || $model->status == Activity::STATUS_SHUT //活动关闭
-                    || $model->status == Activity::STATUS_CANCEL // 活动取消
+        $model = Activity::findOne($activity_id);
+        $is_apply = self::Isfull($activity_id) == Activity::IS_FULL_YES
+                    || self::applyConflict($activity_id)['has_conflict'] == 2 // 活动冲突
+                    || $model->status != Activity::STATUS_RELEASE //只要活动不是发布状态都不可以报名
                     ;
-        return $is_apply;
+        return $is_apply ? Answer::APPLY_NO : Answer::APPLY_YES;
+    }
+
+    /**
+     * 更新活动是否已满
+     * @param  init $activity_id 活动id
+     * @return bool 返回布尔值
+     */
+    public static function updateIsfull($activity_id)
+    {
+        if (self::Isfull($activity_id) == Activity::IS_FULL_YES) {
+            $isfull = Activity::updateAll(['is_full' => Activity::IS_FULL_YES], ['id' => $activity_id]);
+            if ($isfull <= 0) {
+                return false;
+            }
+        } else if (self::Isfull($activity_id) == Activity::IS_FULL_NO) {
+            $isfull = Activity::updateAll(['is_full' => Activity::IS_FULL_NO], ['id' => $activity_id]);
+        }
+        return true;
+    }
+
+    /**
+     * 判断活动是否已满
+     * 已通过人数 - 已经请假人数 = 理想报名人数上限 不能再报名
+     * （通过人数为零）待筛选人数 = 报名名额 不能再报名
+     * （通过人数 - 请假人数 = N，N小于理想人数上限 即未达到2的标准）
+     * 	待筛选人数不超过 min （（理想人数上限-N）*2，报名名额 - 理想人数上限）
+     * @param  init $id 活动id
+     * @return 返回 1不可以报名 或 0可以报名
+     */
+    public static function Isfull($activity_id)
+    {
+        $activity = Activity::findOne($activity_id);
+
+        // 已通过人数
+        $passCount = Answer::find()
+                ->where([
+                    'activity_id' => $activity_id,
+                    'status' => Answer::STATUS_REVIEW_PASS,
+                    ])
+                ->count();
+
+        //通过后请假人数
+        $leaveCount = Answer::find()
+                ->where([
+                    'activity_id' => $activity_id,
+                    'status' => Answer::STATUS_REVIEW_PASS,
+                    'leave_status' => Answer::STATUS_LEAVE_YES
+                    ])
+                ->count();
+
+        // 待筛选人数
+        $answer_filter = Answer::find()->where([
+                    'activity_id' => $activity_id,
+                    'status' => Answer::STATUS_REVIEW_YET,
+                    'apply_status' => Answer::APPLY_STATUS_YES,
+                    ])
+                    ->count();
+
+        // 通过人数为零的情况下待筛选人数
+        if ($passCount == 0) {
+            $answer_filter = Answer::find()->where([
+                        'activity_id' => $activity_id,
+                        'status' => Answer::STATUS_REVIEW_YET,
+                        'apply_status' => Answer::APPLY_STATUS_YES,
+                        ])
+                        ->count();
+            // （通过人数为零）待筛选人数 = 报名名额 不能再报名
+            if ($answer_filter == $activity->peoples) {
+                return Activity::IS_FULL_YES;
+            }
+        }
+
+        // 已通过人数 - 已经请假人数 = 理想报名人数上限 不能再报名
+        if ($passCount - $leaveCount == $activity->ideal_number_limit) {
+            return Activity::IS_FULL_YES;
+        };
+
+        // 真实报名的人数
+        $actualPass = $passCount - $leaveCount;
+
+        // （通过人数 - 请假人数 = N，N小于理想人数上限 即未达到2的标准）待筛选人数不超过 min （（理想人数上限-N）*2，报名名额 - 理想人数上限）
+        $is_full =  $answer_filter < min(
+                        (($activity->ideal_number_limit - $actualPass) * 2),
+                        ($activity->peoples - $activity->ideal_number_limit)
+                    )
+                    ? Activity::IS_FULL_NO 
+                    : Activity::IS_FULL_YES;
+        return $is_full;
     }
 
     /**

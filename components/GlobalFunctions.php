@@ -11,6 +11,7 @@
  * @param int $numeric 数字,默认为字母
  * @return string
  */
+
 function random($length = 6, $numeric = 0)
 {
     PHP_VERSION < '4.2.0' && mt_srand((double)microtime() * 1000000);
@@ -20,6 +21,7 @@ function random($length = 6, $numeric = 0)
         $hash = '';
         $chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789abcdefghjkmnpqrstuvwxyz';
         $max = strlen($chars) - 1;
+
         for ($i = 0; $i < $length; $i++) {
             $hash .= $chars[mt_rand(0, 6)];
         }
@@ -71,4 +73,17 @@ function getWeekBefore()
     $last_end_time = strtotime($now_start." 00:00:00");
     $get_week_before = $last_end_time - 604800;
     return $get_week_before;
+}
+
+
+/**
+ * 获取 对应的城市名
+ * @return mixed
+ */
+function getIpCity()
+{
+    $ipContent  = file_get_contents("http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js");
+    $jsonData = explode("=", $ipContent);
+    $jsonAddress = substr($jsonData[1], 0, -1);
+    return json_decode($jsonAddress)->city;
 }
