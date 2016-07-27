@@ -88,6 +88,7 @@ class AnswerService extends BaseService
         $answer_filter = Answer::find()->where([
                     'activity_id' => $activity_id,
                     'status' => Answer::STATUS_REVIEW_YET,
+                    'apply_status' => Answer::APPLY_STATUS_YES,
                     ])
                     ->count();
 
@@ -96,6 +97,7 @@ class AnswerService extends BaseService
             $answer_filter = Answer::find()->where([
                         'activity_id' => $activity_id,
                         'status' => Answer::STATUS_REVIEW_YET,
+                        'apply_status' => Answer::APPLY_STATUS_YES,
                         ])
                         ->count();
             // （通过人数为零）待筛选人数 = 报名名额 不能再报名
