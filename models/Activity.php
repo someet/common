@@ -128,7 +128,8 @@ class Activity extends \yii\db\ActiveRecord
             [['tagNames'], 'safe'],
             [['status'], 'default', 'value' => 10],
             [['city'], 'string', 'max' => 60],
-            [['display_order'], 'default', 'value' => 99]
+            [['display_order'], 'default', 'value' => 99],
+            [['updated_by'], 'default', 'value' => 0]
         ];
     }
 
@@ -221,17 +222,18 @@ class Activity extends \yii\db\ActiveRecord
         ];
     }
 
-    public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-            if ($insert) {
-                $this->updated_by = Yii::$app->user->id;
-            }
-            return true;
-        } else {
-            return false;
-        }
-    }
+    // public function beforeSave($insert)
+    // {
+    //     var_dump($insert);die;
+    //     if (parent::beforeSave($insert)) {
+    //         if ($insert) {
+    //             $this->updated_by = Yii::$app->user->id;
+    //         }
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
 
     // 活动标签
     public function getTags()
