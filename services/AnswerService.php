@@ -446,6 +446,14 @@ class AnswerService extends BaseService
             $transaction->rollBack();
             $this->setError('审核报名失败');
             return false;
+        }else{
+            if ($pass_or_not == Answer::STATUS_REVIEW_PASS) {
+                // 通过后执行的事件
+                BackendEventService::filterPass($activity_id);
+            }else{
+                // 拒绝后执行的事件
+                BackendEventService::filterReject($activity_id);
+            }
         }
 
         //组装推送消息
