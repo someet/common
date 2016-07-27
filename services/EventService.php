@@ -14,8 +14,8 @@ use someet\common\services\AnswerService;
 use someet\common\models\ActivityType;
 use someet\common\models\YellowCard;
 use yii\web\Response;
-use Yii;
 use yii\db\ActiveQuery;
+use Yii;
 
 /**
  * 在报名时触发事件
@@ -65,7 +65,7 @@ class EventService extends BaseService
 
         // 更新活动的报名率
         ActivityService::updateRepalyRate($activity_id);
-    }    
+    }
 
     /**
      * 前台：请假事件
