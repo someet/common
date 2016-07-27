@@ -115,10 +115,6 @@ class AnswerService extends BaseService
                     )
                     ? Activity::IS_FULL_NO
                     : Activity::IS_FULL_YES;
-        echo "answer_filter=".$answer_filter;
-        echo "activity->ideal_number_limit=".$activity->ideal_number_limit;
-        echo "activity->peoples=".$activity->peoples;
-        echo "is_full=".$is_full;
         return $is_full;
     }
 
