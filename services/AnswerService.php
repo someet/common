@@ -26,10 +26,7 @@ class AnswerService extends BaseService
     public static function checkApply($id)
     {
         $model = Activity::findOne($id);
-        $is_apply =
-                    // $model->is_full == Activity::IS_FULL_YES //活动报满的情况
-                    self::Isfull($id) == Activity::IS_FULL_YES
-                    // self::applyIsfull($id) == Activity::IS_FULL_YES //活动报满的情况
+        $is_apply = self::Isfull($id) == Activity::IS_FULL_YES
                     || self::applyConflict($id)['has_conflict'] == 2 // 活动冲突
                     || $model->status != Activity::STATUS_RELEASE //只要活动不是发布状态都不可以报名
                     ;
@@ -48,7 +45,7 @@ class AnswerService extends BaseService
             if ($isfull <= 0) {
                 return false;
             }
-        } else if (self::Isfull($activity_id) == Activity::IS_FULL_NO) {
+        } elseif (self::Isfull($activity_id) == Activity::IS_FULL_NO) {
             $isfull = Activity::updateAll(['is_full' => Activity::IS_FULL_NO], ['id' => $activity_id]);
         }
         return true;
@@ -449,11 +446,11 @@ class AnswerService extends BaseService
             $transaction->rollBack();
             $this->setError('审核报名失败');
             return false;
-        }else{
+        } else {
             if ($pass_or_not == Answer::STATUS_REVIEW_PASS) {
                 // 通过后执行的事件
                 BackendEventService::filterPass($activity_id);
-            }else{
+            } else {
                 // 拒绝后执行的事件
                 BackendEventService::filterReject($activity_id);
             }
