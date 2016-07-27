@@ -16,6 +16,7 @@ use someet\common\models\YellowCard;
 use yii\web\Response;
 use Yii;
 use yii\db\ActiveQuery;
+
 /**
  * 在报名时触发事件
  * @author  stark
@@ -40,7 +41,6 @@ class EventService extends BaseService
         //发送微信push
 
         //极光push
-
     }
 
     /**
@@ -71,14 +71,6 @@ class EventService extends BaseService
     }
 
     /**
-     * 前台：pma和发起人筛选执行的事件
-     * @return 是否执行成功
-     */
-    public static function managerFilter()
-    {
-    }
-
-    /**
      * 后台：报名名额改动
      * @return 是否执行成功
      */
@@ -89,7 +81,6 @@ class EventService extends BaseService
 
         // 更新活动的报名率
         ActivityService::updateRepalyRate($activity_id);
-
     }
 
     /**
