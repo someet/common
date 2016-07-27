@@ -11,6 +11,7 @@ use someet\common\models\Answer;
 use someet\common\models\User;
 use someet\common\models\ActivityType;
 use someet\common\models\YellowCard;
+use someet\common\services\BackendEventService;
 use yii\web\Response;
 use Yii;
 use yii\db\ActiveQuery;

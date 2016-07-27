@@ -49,7 +49,7 @@ class ActivityService  extends BaseService
 
         if ($activity->ideal_number > 0) {
             $apply_rate = ( $answerNum - $cancelApplyNum - $rejectNum - $leaveNum ) /  $activity->ideal_number;
-            $apply_rate = round($apply_rate,2) * 100;
+            $apply_rate = abs(round($apply_rate,2) * 100);
             Activity::updateAll(['apply_rate' => $apply_rate],['id' => $activity_id]);
         }
 
