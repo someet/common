@@ -94,24 +94,24 @@ class AnswerService extends BaseService
                         'apply_status' => Answer::APPLY_STATUS_YES,
                         ])
                         ->count();
-            // （通过人数为零）待筛选人数 = 报名名额 不能再报名
-            if ($answer_filter == $activity->peoples) {
+            // （通过人数为零）待筛选人数 >= 报名名额 不能再报名
+            if ($answer_filter >= $activity->peoples) {
                 return Activity::IS_FULL_YES;
             }
         }
 
-        // 已通过人数 - 已经请假人数 = 理想报名人数上限 不能再报名
-        if ($passCount - $leaveCount == $activity->ideal_number_limit) {
+        // 已通过人数 - 已经请假人数 >= 理想报名人数上限 不能再报名
+        if ($passCount - $leaveCount >= $activity->ideal_number_limit) {
             return Activity::IS_FULL_YES;
         };
 
-        // 真实报名的人数
+        // 真实报名的人数 N
         $actualPass = $passCount - $leaveCount;
 
         // （通过人数 - 请假人数 = N，N小于理想人数上限 即未达到2的标准）待筛选人数不超过 min （（理想人数上限-N）*2，报名名额 - 理想人数上限）
         $is_full =  $answer_filter < min(
                         (($activity->ideal_number_limit - $actualPass) * 2),
-                        ($activity->peoples - $activity->ideal_number_limit)
+                        ($activity->peoples - $actualPass)
                     )
                     ? Activity::IS_FULL_NO
                     : Activity::IS_FULL_YES;
