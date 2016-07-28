@@ -94,7 +94,7 @@ class BackendEventService extends BaseService
 
         // 更新活动的报名率
         ActivityService::updateRepalyRate($activity_id);
-    }    
+    }
 
     /**
      * 后台：请假事件
@@ -136,4 +136,13 @@ class BackendEventService extends BaseService
         ActivityService::updateRepalyRate($activity_id);
     }
 
+    /**
+     * 后台：新建活动
+     * @return 是否执行成功
+     */
+    public static function createActivityAfter($activity_id)
+    {
+        // 更新活动是否报满字段
+        AnswerService::updateIsfull($activity_id);
+    }
 }
