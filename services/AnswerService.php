@@ -41,10 +41,7 @@ class AnswerService extends BaseService
     {
         if (self::Isfull($activity_id) == Activity::IS_FULL_YES) {
             $isfull = Activity::updateAll(['is_full' => Activity::IS_FULL_YES], ['id' => $activity_id]);
-            if ($isfull <= 0) {
-                return false;
-            }
-        } else if (self::Isfull($activity_id) == Activity::IS_FULL_NO) {
+        } elseif (self::Isfull($activity_id) == Activity::IS_FULL_NO) {
             $isfull = Activity::updateAll(['is_full' => Activity::IS_FULL_NO], ['id' => $activity_id]);
         }
         return true;
@@ -115,7 +112,7 @@ class AnswerService extends BaseService
                         (($activity->ideal_number_limit - $actualPass) * 2),
                         ($activity->peoples - $activity->ideal_number_limit)
                     )
-                    ? Activity::IS_FULL_NO 
+                    ? Activity::IS_FULL_NO
                     : Activity::IS_FULL_YES;
         return $is_full;
     }
