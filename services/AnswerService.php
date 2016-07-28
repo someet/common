@@ -100,13 +100,14 @@ class AnswerService extends BaseService
             }
         }
 
+        // 真实报名的人数 N
+        $actualPass = $passCount - $leaveCount;
+
         // 已通过人数 - 已经请假人数 >= 理想报名人数上限 不能再报名
-        if ($passCount - $leaveCount >= $activity->ideal_number_limit) {
+        if ($actualPass >= $activity->ideal_number_limit) {
             return Activity::IS_FULL_YES;
         };
 
-        // 真实报名的人数 N
-        $actualPass = $passCount - $leaveCount;
 
         // （通过人数 - 请假人数 = N，N小于理想人数上限 即未达到2的标准）待筛选人数不超过 min （（理想人数上限-N）*2，报名名额 - 理想人数上限）
         $is_full =  $answer_filter < min(
