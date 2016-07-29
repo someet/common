@@ -109,7 +109,6 @@ class AnswerService extends BaseService
             return Activity::IS_FULL_YES;
         };
 
-
         // （通过人数 - 请假人数 = N，N小于理想人数上限 即未达到2的标准）待筛选人数不超过 min （（理想人数上限-N）*2，报名名额 - 理想人数上限）
         $is_full =  $answer_filter < min(
                         (($activity->ideal_number_limit - $actualPass) * 2),

@@ -28,6 +28,7 @@ use dektrium\user\models\User as BaseUser;
  * @property string $wechat_id
  * @property integer $last_login_at
  * @property string $access_token
+ * @property integer $city_id
  */
 class User extends BaseUser
 {
@@ -105,7 +106,7 @@ class User extends BaseUser
 
             ['mobile', 'unique'],
             [['wechat_id'], 'unique'],
-            [['last_login_at','black_time', 'black_label'], 'integer'],
+            [['last_login_at','black_time', 'black_label', 'city_id'], 'integer'],
             ['password_reset_token', 'string', 'max' => 60],
             ['email_confirmation_token', 'string', 'max' => 60],
 

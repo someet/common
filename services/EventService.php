@@ -14,8 +14,8 @@ use someet\common\services\AnswerService;
 use someet\common\models\ActivityType;
 use someet\common\models\YellowCard;
 use yii\web\Response;
-use Yii;
 use yii\db\ActiveQuery;
+use Yii;
 
 /**
  * 在报名时触发事件
@@ -60,6 +60,20 @@ class EventService extends BaseService
     }
 
     /**
+     * 前台：取消报名
+     * @param  init $activity_id 活动id
+     * @return 是否执行成功
+     */
+    public static function cancelApply($activity_id)
+    {
+        // 更新活动是否报满
+        AnswerService::updateIsfull($activity_id);
+
+        // 更新活动的报名率
+        ActivityService::updateRepalyRate($activity_id);
+    }
+
+    /**
      * 前台：请假事件
      * @param  init $activity_id 活动id
      * @return 是否执行成功
@@ -68,6 +82,35 @@ class EventService extends BaseService
     {
         // 更新活动是否报满
         AnswerService::updateIsfull($activity_id);
+
+        // 更新活动的报名率
+        ActivityService::updateRepalyRate($activity_id);
+    }
+
+    /**
+     * 前台：发起人通过活动报名申请
+     * @return 是否执行成功
+     */
+    public static function filterPass($activity_id)
+    {
+        // 更新活动是否报满
+        AnswerService::updateIsfull($activity_id);
+
+        // 更新活动的报名率
+        ActivityService::updateRepalyRate($activity_id);
+    }
+
+    /**
+     * 前台：发起人拒绝活动报名申请
+     * @return 是否执行成功
+     */
+    public static function filterReject($activity_id)
+    {
+        // 更新活动是否报满
+        AnswerService::updateIsfull($activity_id);
+
+        // 更新活动的报名率
+        ActivityService::updateRepalyRate($activity_id);
     }
 
     /**

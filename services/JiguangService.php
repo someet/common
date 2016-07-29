@@ -30,6 +30,10 @@ class JiguangService  extends BaseService
         if (!$msgExists) {
             if (!empty($content)) {
                 $device = AppDevice::find()->where(['user_id' => $user->id])->one();
+                if(!$device){
+                    return '用户不存在!';
+                }
+
                 $AppPush = new AppPush();
                 $AppPush->content = $content;
                 $AppPush->created_at = time();
