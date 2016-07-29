@@ -133,3 +133,33 @@ function hasCityId()
     $session = Yii::$app->session;
     return $session->has('city_id');
 }
+
+/**
+ * 前台获取用户选择的城市
+ * @return int
+ */
+function getUserCityId()
+{
+    $user_id = Yii::$app->user->id;
+    if (!$user_id) {
+        return 2;
+    }
+
+    $user = \someet\common\models\User::findOne($user_id);
+    if (!$user) {
+        return 2;
+    }
+    return $user->city_id;
+}
+
+/**
+ * 前台设置用户选择的城市
+ * @param int $city_id
+ */
+function setUserCityId($city_id = 2)
+{
+    $user_id = Yii::$app->user->id;
+    if ($user_id > 0 && $city_id!=getUserCityId()) {
+        \someet\common\models\User::updateAll(['city_id' => $city_id], ['id' => $user_id]);
+    }
+}
