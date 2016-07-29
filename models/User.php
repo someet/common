@@ -28,6 +28,7 @@ use dektrium\user\models\User as BaseUser;
  * @property string $wechat_id
  * @property integer $last_login_at
  * @property string $access_token
+ * @property integer $city_id
  */
 class User extends BaseUser
 {
