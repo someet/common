@@ -11,6 +11,7 @@ use someet\common\models\Answer;
 use someet\common\models\User;
 use someet\common\models\ActivityType;
 use someet\common\models\YellowCard;
+use someet\common\services\BackendEventService;
 use yii\web\Response;
 use Yii;
 use yii\db\ActiveQuery;
@@ -93,24 +94,25 @@ class AnswerService extends BaseService
                         'apply_status' => Answer::APPLY_STATUS_YES,
                         ])
                         ->count();
-            // （通过人数为零）待筛选人数 = 报名名额 不能再报名
-            if ($answer_filter == $activity->peoples) {
+            // （通过人数为零）待筛选人数 >= 报名名额 不能再报名
+            if ($answer_filter >= $activity->peoples) {
                 return Activity::IS_FULL_YES;
             }
         }
 
-        // 已通过人数 - 已经请假人数 = 理想报名人数上限 不能再报名
-        if ($passCount - $leaveCount == $activity->ideal_number_limit) {
+        // 真实报名的人数 N
+        $actualPass = $passCount - $leaveCount;
+
+        // 已通过人数 - 已经请假人数 >= 理想报名人数上限 不能再报名
+        if ($actualPass >= $activity->ideal_number_limit) {
             return Activity::IS_FULL_YES;
         };
 
-        // 真实报名的人数
-        $actualPass = $passCount - $leaveCount;
 
         // （通过人数 - 请假人数 = N，N小于理想人数上限 即未达到2的标准）待筛选人数不超过 min （（理想人数上限-N）*2，报名名额 - 理想人数上限）
         $is_full =  $answer_filter < min(
                         (($activity->ideal_number_limit - $actualPass) * 2),
-                        ($activity->peoples - $activity->ideal_number_limit)
+                        ($activity->peoples - $actualPass)
                     )
                     ? Activity::IS_FULL_NO
                     : Activity::IS_FULL_YES;
@@ -442,6 +444,14 @@ class AnswerService extends BaseService
             $transaction->rollBack();
             $this->setError('审核报名失败');
             return false;
+        } else {
+            if ($pass_or_not == Answer::STATUS_REVIEW_PASS) {
+                // 通过后执行的事件
+                BackendEventService::filterPass($activity_id);
+            } else {
+                // 拒绝后执行的事件
+                BackendEventService::filterReject($activity_id);
+            }
         }
 
         //组装推送消息
@@ -524,6 +534,7 @@ class AnswerService extends BaseService
                 ->where(['user_id' => $user_id])
                 ->andWhere(['activity_id' => $conflict_activity_ids])
                 ->andWhere(['apply_status' => Answer::APPLY_STATUS_YES])
+                ->andWhere(['status' => Answer::STATUS_REVIEW_YET])
                 ->all();
 
             if (count($conflict_answer) > 0) {

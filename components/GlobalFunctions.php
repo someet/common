@@ -87,3 +87,49 @@ function getIpCity()
     $jsonAddress = substr($jsonData[1], 0, -1);
     return json_decode($jsonAddress)->city;
 }
+
+/**
+ * 获取城市编号
+ * @return mixed
+ */
+function getCityId()
+{
+    $session = Yii::$app->session;
+    return $session->get('city_id', '2');
+}
+
+/**
+ * 设置城市编号
+ * @param int $city_id
+ */
+function setCityId($city_id=2)
+{
+    $session = Yii::$app->session;
+    $session->set('city_id', $city_id);
+}
+
+/**
+ * 获取城市名称
+ * @return mixed
+ */
+function getCity()
+{
+    $session = Yii::$app->session;
+    return $session->get('city', '北京');
+}
+
+/**
+ * 设置城市
+ * @param string $city
+ */
+function setCity($city = '北京')
+{
+    $session = Yii::$app->session;
+    $session->set('city', $city);
+}
+
+function hasCityId()
+{
+    $session = Yii::$app->session;
+    return $session->has('city_id');
+}

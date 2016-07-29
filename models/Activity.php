@@ -69,7 +69,7 @@ class Activity extends \yii\db\ActiveRecord
     /* 通过的发起人创建的活动 */
     const STATUS_PASS = 12;
     /* 发起人创建的活动的草稿 */
-    const STATUS_FOUNDER_DRAFT = 5;    
+    const STATUS_FOUNDER_DRAFT = 5;
     /* 草稿 */
     const STATUS_DRAFT    = 10;
     /* 预发布 */
@@ -116,7 +116,8 @@ class Activity extends \yii\db\ActiveRecord
             [['details', 'review', 'content', 'field1', 'field2', 'field3', 'field4', 'field5', 'field6', 'field7', 'field8'], 'string'],
             [['longitude', 'latitude'], 'number'],
             [['longitude', 'latitude','pma_type'], 'default', 'value' => 0],
-            [['ideal_number','ideal_number_limit','peoples'], 'default', 'value' => 10],
+            [['ideal_number','ideal_number_limit'], 'default', 'value' => 10],
+            ['peoples', 'default', 'value' => 20],
             ['group_code', 'default', 'value' => ''],
             [['area','desc','address','details'], 'default', 'value' => ''],
             ['poster', 'default', 'value' => 'http://7xn8h3.com2.z0.glb.qiniucdn.com/FtlMz_y5Pk8xMEPQCw5MGKCRuGxe'],
@@ -128,7 +129,8 @@ class Activity extends \yii\db\ActiveRecord
             [['tagNames'], 'safe'],
             [['status'], 'default', 'value' => 10],
             [['city'], 'string', 'max' => 60],
-            [['display_order'], 'default', 'value' => 99]
+            [['display_order'], 'default', 'value' => 99],
+            [['updated_by'], 'default', 'value' => 0]
         ];
     }
 
@@ -144,7 +146,7 @@ class Activity extends \yii\db\ActiveRecord
 
     public function extraFields()
     {
-        return ['type', 'user','pma', 'spot', 'founders', 'user.profile' => function() {
+        return ['type', 'user','pma', 'spot', 'founders', 'user.profile' => function () {
             return $this->user ? $this->user->profile : null;
         }];
     }
@@ -221,17 +223,18 @@ class Activity extends \yii\db\ActiveRecord
         ];
     }
 
-    public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-            if ($insert) {
-                $this->updated_by = Yii::$app->user->id;
-            }
-            return true;
-        } else {
-            return false;
-        }
-    }
+    // public function beforeSave($insert)
+    // {
+    //     var_dump($insert);die;
+    //     if (parent::beforeSave($insert)) {
+    //         if ($insert) {
+    //             $this->updated_by = Yii::$app->user->id;
+    //         }
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
 
     // 活动标签
     public function getTags()
@@ -288,7 +291,7 @@ class Activity extends \yii\db\ActiveRecord
     {
         return $this->hasOne(ActivityType::className(), ['id' => 'type_id']);
     }
-    
+
     // 活动的场地
     public function getSpace()
     {
