@@ -23,11 +23,12 @@ class AnswerService extends BaseService
      * @param  init $id 活动id
      * @return bool 返回布尔值
      */
-    public static function checkApply($id)
+    public static function checkApply($activity_id)
     {
-        $model = Activity::findOne($id);
-        $is_apply = self::Isfull($id) == Activity::IS_FULL_YES
-                    || self::applyConflict($id)['has_conflict'] == 2 // 活动冲突
+        $model = Activity::findOne($activity_id);
+        $is_apply =
+                    self::Isfull($activity_id) == Activity::IS_FULL_YES
+                    || self::applyConflict($activity_id)['has_conflict'] == 2 // 活动冲突
                     || $model->status != Activity::STATUS_RELEASE //只要活动不是发布状态都不可以报名
                     ;
         return $is_apply ? Answer::APPLY_NO : Answer::APPLY_YES;
